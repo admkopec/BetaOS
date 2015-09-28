@@ -46,9 +46,9 @@ void kernel_main() {
     else {
         terminal.printf("Interrupts are errored");
     }
-    /*while (1) {
+    while (1) {
         const char* ch=terminal.read();
-        terminal.printf("/n");
-        terminal.printf(ch);
-    }*/
+        /*terminal.printf("/n");
+        terminal.printf(ch);*/
+    }
 }
