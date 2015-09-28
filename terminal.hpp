@@ -44,13 +44,6 @@ uint16_t make_vgaentry(char c, uint8_t color) {
     return c16 | color16 << 8;
 }
 
-size_t strlen(const char* str) {
-    size_t ret = 0;
-    while ( str[ret] != 0 )
-        ret++;
-    return ret;
-}
-
 class Terminal {
 private:
     Interrupts interrupts;
@@ -84,6 +77,10 @@ public:
     void clearScreen();
     
     void newLineCheck();
+    
+    size_t strlen(const char* str);
+    
+    bool streql(const char* str1, const char* str2);
     
 };
 

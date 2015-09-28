@@ -22,6 +22,27 @@ Terminal::Terminal() {
     }
 }
 
+size_t Terminal::strlen(const char* str) {
+    size_t ret = 0;
+    while ( str[ret] != 0 )
+        ret++;
+    return ret;
+}
+
+bool Terminal::streql(const char* str1, const char* str2) {
+    if (strlen(str1)!=strlen(str2)) {
+        return false;
+    }
+    else {
+        for (uint8_t i; i<=i; i++) {
+            if (str1[i] != str2[i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void Terminal::setcolor(uint8_t col) {
     color = col;
 }
@@ -35,6 +56,12 @@ void Terminal::putchar(char c) {
     if (c == '\n') {
         column = 0;
         row++;
+    }
+    else if (c == 0x08) {
+        if (row>0) {
+            column--;
+            buffer[(row*VGA_WIDTH+column)]=make_vgaentry(' ', color);
+        }
     }
     else {
         putentryat(c, color, column, row);

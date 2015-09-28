@@ -38,17 +38,21 @@ void kernel_main() {
     //terminal.clearScreen();
     terminal.printf("Hello, kernel World!\nThat's an end of line\n");
     if (interrupts.are_interrupts_enabled()==true) {
-        terminal.printf("Interrupts are enabled");
+        terminal.printf("Interrupts are enabled\n");
     }
     else if(interrupts.are_interrupts_enabled()==false) {
-        terminal.printf("Interrupts are disabled");
+        terminal.printf("Interrupts are disabled\n");
     }
     else {
-        terminal.printf("Interrupts are errored");
+        terminal.printf("Interrupts are errored\n");
     }
     while (1) {
-        const char* ch=terminal.read();
-        /*terminal.printf("/n");
-        terminal.printf(ch);*/
+        const char* command=terminal.read();
+        if (terminal.streql(command, "clear\n")) {
+            terminal.clearScreen();
+        }                                                  //Commands aren't working
+        else {
+            terminal.printf("Command not found\n");
+        }
     }
 }
