@@ -69,7 +69,7 @@ void Terminal::printf(const char* data) {
 void Terminal::clearLine(uint8_t from, uint8_t to) {
     uint16_t i = VGA_WIDTH*from;
     for (i; i<(VGA_WIDTH*to); i++) {
-        buffer[i]=0x0;
+        buffer[i]=make_vgaentry(' ', color);
     }
 }
 
