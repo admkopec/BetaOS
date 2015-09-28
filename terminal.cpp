@@ -45,8 +45,8 @@ void Terminal::putchar(char c) {
             }
         }
     }
-    /*cur();
-    newLineCheck();*/
+    cur();
+    newLineCheck();
 }
 
 void Terminal::printf(const char* data) {
@@ -55,7 +55,7 @@ void Terminal::printf(const char* data) {
         putchar(data[i]);
 }
 
-/*void Terminal::cur() {
+void Terminal::cur() {
     unsigned temp;
     
     temp = row*VGA_WIDTH+column;
@@ -181,7 +181,7 @@ const char* Terminal::read() {
                      buffstr[i] = '\t';
                      i++;
                      break;*/
-                /*case 16:
+                case 16:
                     printf("q");
                     buffstr[i] = 'q';
                     i++;
@@ -243,17 +243,17 @@ const char* Terminal::read() {
                     break;
                 case 28:
                     putchar('\n');
-                    /*buffstr[i] = '\n';
-                    i++;*/
-                    /*reading = 0;
+                    buffstr[i] = '\n';
+                    i++;
+                    reading = 0;
                     break;
                     /*  case 29:
                      printch('q');           Left Control
                      buffstr[i] = 'q';
                      i++;
                      break;*/
-                /*case 30:
-                    printf("a");
+                case 30:
+                    putchar('a');
                     buffstr[i] = 'a';
                     i++;
                     break;
@@ -303,12 +303,12 @@ const char* Terminal::read() {
                     i++;
                     break;
                 case 40:
-                    putchar((char)44);               //   Single quote (')
+                    putchar((char)39);               //   Single quote (')
                     buffstr[i] = (char)44;
                     i++;
                     break;
                 case 41:
-                    putchar((char)44);               // Back tick (`)
+                    putchar((char)96);               // Back tick (`)
                     buffstr[i] = (char)44;
                     i++;
                     break;
@@ -322,7 +322,7 @@ const char* Terminal::read() {
                      buffstr[i] = 'q';
                      i++;
                      break;*/
-                /*case 44:
+                case 44:
                     printf("z");
                     buffstr[i] = 'z';
                     i++;
@@ -387,7 +387,7 @@ const char* Terminal::read() {
                      buffstr[i] = ' ';
                      i++;
                      break;*/           
-                /*case 57:
+                case 57:
                     printf(" ");
                     buffstr[i] = ' ';
                     i++;
@@ -398,4 +398,4 @@ const char* Terminal::read() {
         }
     }
 }
-*/
+

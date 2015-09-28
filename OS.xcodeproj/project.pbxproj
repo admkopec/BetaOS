@@ -1,0 +1,108 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		3BC3633C1BB6F813001036A7 /* boot.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = boot.s; sourceTree = "<group>"; };
+		3BC3633D1BB6F829001036A7 /* kernel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kernel.cpp; sourceTree = "<group>"; };
+		3BC363421BB6FBC0001036A7 /* linker.ld */ = {isa = PBXFileReference; lastKnownFileType = text; name = linker.ld; path = build/linker.ld; sourceTree = "<group>"; };
+		3BC363431BB6FFF6001036A7 /* terminal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = terminal.cpp; sourceTree = "<group>"; };
+		3BC363441BB6FFF6001036A7 /* terminal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = terminal.hpp; sourceTree = "<group>"; };
+		3BF1521C1BB7E20600B25DB9 /* interrupts.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interrupts.cpp; sourceTree = "<group>"; };
+		3BF1521D1BB7E20600B25DB9 /* interrupts.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interrupts.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		3BC363331BB6F728001036A7 = {
+			isa = PBXGroup;
+			children = (
+				3BC3633E1BB6F83B001036A7 /* Assembly */,
+				3BC363401BB6F950001036A7 /* Linker */,
+				3BC3633F1BB6F84B001036A7 /* Source */,
+			);
+			sourceTree = "<group>";
+		};
+		3BC3633E1BB6F83B001036A7 /* Assembly */ = {
+			isa = PBXGroup;
+			children = (
+				3BC3633C1BB6F813001036A7 /* boot.s */,
+			);
+			name = Assembly;
+			sourceTree = "<group>";
+		};
+		3BC3633F1BB6F84B001036A7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				3BC3633D1BB6F829001036A7 /* kernel.cpp */,
+				3BC363431BB6FFF6001036A7 /* terminal.cpp */,
+				3BC363441BB6FFF6001036A7 /* terminal.hpp */,
+				3BF1521C1BB7E20600B25DB9 /* interrupts.cpp */,
+				3BF1521D1BB7E20600B25DB9 /* interrupts.hpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		3BC363401BB6F950001036A7 /* Linker */ = {
+			isa = PBXGroup;
+			children = (
+				3BC363421BB6FBC0001036A7 /* linker.ld */,
+			);
+			name = Linker;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		3BC363341BB6F728001036A7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+			};
+			buildConfigurationList = 3BC363371BB6F728001036A7 /* Build configuration list for PBXProject "OS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3BC363331BB6F728001036A7;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		3BC363381BB6F728001036A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		3BC363391BB6F728001036A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3BC363371BB6F728001036A7 /* Build configuration list for PBXProject "OS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BC363381BB6F728001036A7 /* Debug */,
+				3BC363391BB6F728001036A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3BC363341BB6F728001036A7 /* Project object */;
+}
