@@ -46,11 +46,20 @@ void kernel_main() {
     else {
         terminal.printf("Interrupts are errored\n");
     }
+    if (terminal.streql("clear", "clear")==true) {
+        terminal.printf("Works! Returns true\n");
+    }
+    else if(terminal.streql("clear", "clear")==false) {
+        terminal.printf("Doesn't work! Returns false\n");
+    }
+    else {
+        terminal.printf("Doesn't return anything!\n");
+    }
     while (1) {
         const char* command=terminal.read();
-        if (terminal.streql(command, "clear\n")) {
+        if (terminal.streql(command, "clear")) {
             terminal.clearScreen();
-        }                                                  //Commands weren't tested after update
+        }                                                  //Commands aren't working
         else {
             terminal.printf("Command not found\n");
         }

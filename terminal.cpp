@@ -59,11 +59,11 @@ void Terminal::putchar(char c) {
     }
     else if (c == 0x08) {
         if (row>0) {
-            if(column--==0) {
-               row--;
-               column=VGA_WIDTH;
-            }
             column--;
+            if(column==0) {
+                column=VGA_WIDTH;
+                row--;
+            }
             buffer[(row*VGA_WIDTH+column)]=make_vgaentry(' ', color);
         }
     }
@@ -111,7 +111,7 @@ void Terminal::clearScreen() {
     cur();
 }
 
-void Terminal::scrollUp(uint8_t lineNum) {
+void Terminal::scrollUp(uint64_t lineNum) {
     uint16_t i = 0;
     clearLine(0,lineNum-1);
     for (i; i<VGA_WIDTH*(VGA_HEIGHT-1); i++) {
@@ -274,8 +274,9 @@ const char* Terminal::read() {
                     break;
                 case 28:
                     putchar('\n');
-                    buffstr[i] = '\n';
-                    i++;
+                    /*buffstr[i] = '\n';
+                    i++;*/
+                    return buffstr;
                     reading = 0;
                     break;
                     /*  case 29:

@@ -63,7 +63,7 @@ private:
     
     void clearLine(uint8_t from, uint8_t to);
     
-    void scrollUp(uint8_t lineNum);
+    void scrollUp(uint64_t lineNum);
     
 public:
     Terminal();

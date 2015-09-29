@@ -14,6 +14,7 @@
 		3BC363441BB6FFF6001036A7 /* terminal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = terminal.hpp; sourceTree = "<group>"; };
 		3BF1521C1BB7E20600B25DB9 /* interrupts.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interrupts.cpp; sourceTree = "<group>"; };
 		3BF1521D1BB7E20600B25DB9 /* interrupts.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interrupts.hpp; sourceTree = "<group>"; };
+		3BF205D51BBAD7210005631E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -22,6 +23,7 @@
 			children = (
 				3BC3633E1BB6F83B001036A7 /* Assembly */,
 				3BC363401BB6F950001036A7 /* Linker */,
+				3BF205D61BBAD72A0005631E /* README */,
 				3BC3633F1BB6F84B001036A7 /* Source */,
 			);
 			sourceTree = "<group>";
@@ -52,6 +54,14 @@
 				3BC363421BB6FBC0001036A7 /* linker.ld */,
 			);
 			name = Linker;
+			sourceTree = "<group>";
+		};
+		3BF205D61BBAD72A0005631E /* README */ = {
+			isa = PBXGroup;
+			children = (
+				3BF205D51BBAD7210005631E /* README.md */,
+			);
+			name = README;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
