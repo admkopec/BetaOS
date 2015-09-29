@@ -50,7 +50,7 @@ void kernel_main() {
         const char* command=terminal.read();
         if (terminal.streql(command, "clear\n")) {
             terminal.clearScreen();
-        }                                                  //Commands aren't working
+        }                                                  //Commands weren't tested after update
         else {
             terminal.printf("Command not found\n");
         }
