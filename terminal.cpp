@@ -34,7 +34,7 @@ bool Terminal::streql(const char* str1, const char* str2) {
         return false;
     }
     else {
-        for (uint8_t i; i<=i; i++) {
+        for (uint8_t i=0; i<=strlen(str1); i++) {
             if (str1[i] != str2[i]) {
                 return false;
             }
@@ -59,6 +59,10 @@ void Terminal::putchar(char c) {
     }
     else if (c == 0x08) {
         if (row>0) {
+            if(column--==0) {
+               row--;
+               column=VGA_WIDTH;
+            }
             column--;
             buffer[(row*VGA_WIDTH+column)]=make_vgaentry(' ', color);
         }
