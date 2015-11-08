@@ -6,4 +6,4 @@ To compile the source code you need a gcc/g++ cross compiler for instructions ho
 ###Changelog:
 * Screen printing is working.
 * Keyboard input is working.
-* Commands aren't working.
+* Commands are working.
