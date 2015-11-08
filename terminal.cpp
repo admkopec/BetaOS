@@ -13,6 +13,7 @@ Terminal::Terminal() {
     row = 0;
     column = 0;
     color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
+    //color = make_color(COLOR_BLACK, COLOR_WHITE);
     buffer = (uint16_t*) 0xB8000;
     for (size_t y = 0; y < VGA_HEIGHT; y++) {
         for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -134,9 +135,8 @@ void Terminal::newLineCheck() {
     }
 }
 
-const char* Terminal::read() {
+void Terminal::read() {
     char buff;
-    char * buffstr;
     uint8_t i = 0;
     uint8_t reading=1;
     while (reading) {
@@ -172,11 +172,11 @@ const char* Terminal::read() {
                     buffstr[i] = '6';
                     i++;
                     break;
-                case 8:
+                /*case 8:
                     printf("7");
-                    buffstr[i] = '7';
+                    buffstr[i] = '7';           This bit is used also for mouse input.
                     i++;
-                    break;
+                    break;*/
                 case 9:
                     printf("8");
                     buffstr[i] = '8';
@@ -276,7 +276,6 @@ const char* Terminal::read() {
                     putchar('\n');
                     /*buffstr[i] = '\n';
                     i++;*/
-                    return buffstr;
                     reading = 0;
                     break;
                     /*  case 29:

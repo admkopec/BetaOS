@@ -70,7 +70,9 @@ public:
     
     void printf(const char* data);
     
-    const char* read();
+    void read();
+    
+    char buffstr[80];
     
     void cur();
     
