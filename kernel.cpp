@@ -29,13 +29,12 @@ extern "C" /* Use C linkage for kernel_main. */
 void kernel_main() {
     /* Initialize terminal interface */
     Terminal terminal;
-    Interrupts interrupts;
     
     terminal.printf("Hello, kernel World!\nThat's an end of line\n");
     
     while (1) {
         terminal.read();
-        if (terminal.streql(terminal.buffstr, "clr")) {
+        if (terminal.streql(terminal.buffstr, "clear")) {
             terminal.clearScreen();
         }
         else {

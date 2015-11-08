@@ -58,10 +58,10 @@ void Terminal::putchar(char c) {
         column = 0;
         row++;
     }
-    else if (c == 0x08) {
-        if (row>0) {
+    else if (c == '\b') {
+        if (row>0||row==0) {
             column--;
-            if(column==0) {
+            if(column==0&&row!=0) {
                 column=VGA_WIDTH;
                 row--;
             }
@@ -136,6 +136,9 @@ void Terminal::newLineCheck() {
 }
 
 void Terminal::read() {
+    for (int i=0; i<79; i++) {
+        buffstr[i]=buffstr[80];
+    }
     char buff;
     uint8_t i = 0;
     uint8_t reading=1;
