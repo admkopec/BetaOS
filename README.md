@@ -7,3 +7,4 @@ To compile the source code you need a gcc/g++ cross compiler for instructions ho
 * Screen printing is working.
 * Keyboard input is working.
 * Commands are working.
+* Added more commands.

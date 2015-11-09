@@ -54,12 +54,15 @@ private:
     size_t column;
     uint8_t color;
     uint16_t* buffer;
+    char buffstr[VGA_WIDTH];
     
     void setcolor(uint8_t color);
     
-    void putentryat(char c, uint8_t color, size_t x, size_t y);
-    
     void putchar(char c);
+    
+    void read();
+    
+    void putentryat(char c, uint8_t color, size_t x, size_t y);
     
     void clearLine(uint8_t from, uint8_t to);
     
@@ -70,9 +73,11 @@ public:
     
     void printf(const char* data);
     
-    void read();
+    //void scanf();
     
-    char buffstr[80];
+    //char buffstr[80];
+    
+    void getcommand();
     
     void cur();
     

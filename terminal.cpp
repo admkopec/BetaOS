@@ -8,6 +8,7 @@
 
 #pragma once
 #include "terminal.hpp"
+#include "version.h"
 
 Terminal::Terminal() {
     row = 0;
@@ -132,6 +133,35 @@ void Terminal::scrollUp(uint64_t lineNum) {
 void Terminal::newLineCheck() {
     if (row>=VGA_HEIGHT-1) {
         scrollUp(1);
+    }
+}
+
+void Terminal::getcommand() {
+    read();
+    /*for (long long i=0; i<sizeof(commands); i++) {
+     
+    }*/
+    if (streql(buffstr, "clear")) {
+        clearScreen();
+    }
+    else if (streql(buffstr, "shut down")) {
+        printf("Not supported in this version! Working ACPI is needed\n");
+    }
+    else if (streql(buffstr, "reboot")) {
+        printf("Not supported in this version!\n");
+    }
+    else if (streql(buffstr, "version")) {
+        printf(VERSION_NAME);
+        printf(" ");
+        printf(VERSION_MAJOR);
+        printf(".");
+        printf(VESRION_MINOR);
+        printf(" ");
+        printf(VERSION_COPYRIGHT);
+        printf("\n");
+    }
+    else {
+        printf("Command not found!\n");
     }
 }
 
