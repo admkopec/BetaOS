@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		3B2332B91BF242150020C32F /* ACPIController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ACPIController.cpp; sourceTree = "<group>"; };
+		3B2332BA1BF242150020C32F /* ACPIController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ACPIController.hpp; sourceTree = "<group>"; };
 		3B71E4C41BF0F33000DCDDF3 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		3BC3633C1BB6F813001036A7 /* boot.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = boot.s; sourceTree = "<group>"; };
 		3BC3633D1BB6F829001036A7 /* kernel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kernel.cpp; sourceTree = "<group>"; };
@@ -46,6 +48,8 @@
 				3BF1521C1BB7E20600B25DB9 /* interrupts.cpp */,
 				3BF1521D1BB7E20600B25DB9 /* interrupts.hpp */,
 				3B71E4C41BF0F33000DCDDF3 /* version.h */,
+				3B2332B91BF242150020C32F /* ACPIController.cpp */,
+				3B2332BA1BF242150020C32F /* ACPIController.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";

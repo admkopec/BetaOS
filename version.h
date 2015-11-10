@@ -11,7 +11,7 @@
 
 #define VERSION_NAME "Beta OS"
 #define VERSION_MAJOR "0"
-#define VESRION_MINOR "8"
+#define VESRION_MINOR "9"
 #define VERSION_COPYRIGHT "Copyright (c) 2015 Adam Kopec. All rights reserved."
 
 #endif /* version_h */

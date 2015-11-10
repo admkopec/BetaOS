@@ -10,7 +10,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "terminal.cpp"
-//#include "interrupts.cpp"
 
 /* Check if the compiler thinks we are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -33,13 +32,6 @@ void kernel_main() {
     terminal.printf("Hello, kernel World!\nThat's an end of line\n");
     
     while (1) {
-        /*terminal.read();
-        if (terminal.streql(terminal.buffstr, "clear")) {
-            terminal.clearScreen();
-        }
-        else {
-            terminal.printf("Command not found\n");
-        }*/
         terminal.getcommand();
     }
 }

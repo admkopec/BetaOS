@@ -62,7 +62,7 @@ void Terminal::putchar(char c) {
     else if (c == '\b') {
         if (row>0||row==0) {
             column--;
-            if(column==0&&row!=0) {
+            if(column==-1&&row!=0) {
                 column=VGA_WIDTH;
                 row--;
             }
