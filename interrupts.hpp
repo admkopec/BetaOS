@@ -3,7 +3,7 @@
 //  OS
 //
 //  Created by Adam Kopeć on 9/27/15.
-//
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
 #pragma once

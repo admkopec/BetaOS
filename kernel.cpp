@@ -3,7 +3,7 @@
 //  OS
 //
 //  Created by Adam Kopeć on 9/26/15.
-//
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
 #include <stdbool.h>

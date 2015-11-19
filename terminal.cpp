@@ -3,7 +3,7 @@
 //  OS
 //
 //  Created by Adam Kopeć on 9/26/15.
-//
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
 #pragma once
@@ -100,8 +100,7 @@ void Terminal::cur() {
 }
 
 void Terminal::clearLine(uint8_t from, uint8_t to) {
-    uint16_t i = VGA_WIDTH*from;
-    for (i; i<(VGA_WIDTH*to); i++) {
+    for (uint16_t i = VGA_WIDTH*from; i<(VGA_WIDTH*to); i++) {
         buffer[i]=make_vgaentry(' ', color);
     }
 }
@@ -159,6 +158,9 @@ void Terminal::getcommand() {
         printf(" ");
         printf(VERSION_COPYRIGHT);
         printf("\n");
+        printf("Build Number ");
+        printf(VERSION_BUILD);
+        printf("\n");
     }
     else {
         printf("Command not found!\n");
@@ -169,7 +171,6 @@ void Terminal::read() {
     for (int i=0; i<79; i++) {
         buffstr[i]=buffstr[80];
     }
-    char buff;
     uint8_t i = 0;
     uint8_t reading=1;
     while (reading) {
