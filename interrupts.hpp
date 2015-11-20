@@ -27,9 +27,6 @@ public:
     static inline uint8_t inb(uint16_t port);
     /* Write */
     static inline void outb(uint16_t port, uint8_t val);
-    
-    /* Enabled */
-    static inline bool are_interrupts_enabled();
 };
 
 #endif /* interupts_hpp */

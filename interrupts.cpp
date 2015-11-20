@@ -43,12 +43,3 @@ inline void Interrupts::outb(uint16_t port, uint8_t val)
     /* TODO: Is it wrong to use 'N' for the port? It's not a 8-bit constant. */
     /* TODO: Should %1 be %w1? */
 }
-
-inline bool Interrupts::are_interrupts_enabled()
-{
-    unsigned long flags;
-    __asm__ __volatile__ ( "pushf\n\t"
-                  "pop %0"
-                  : "=g"(flags) );
-    return flags & (1 << 9);
-}
