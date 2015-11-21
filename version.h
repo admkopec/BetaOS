@@ -9,10 +9,10 @@
 #ifndef version_h
 #define version_h
 
-#define VERSION_NAME "Beta OS"
+#define VERSION_NAME "BetaOS"
 #define VERSION_MAJOR "0"
 #define VESRION_MINOR "9"
 #define VERSION_COPYRIGHT "Copyright (c) 2015 Adam Kopec. All rights reserved."
-#define VERSION_BUILD "15.11.20.5"
+#define VERSION_BUILD "15.11.21.1"
 
 #endif /* version_h */

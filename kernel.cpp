@@ -29,9 +29,10 @@ void kernel_main() {
     /* Initialize terminal interface */
     Terminal terminal;
     
-    terminal.printf("Hello, kernel World!\nThat's an end of line\n");
+    terminal.printf("Hello!\nWelcome to BetaOS!\n");
     
     while (1) {
+        //terminal.printf("BetaOS: ");*
         terminal.getcommand();
     }
 }
