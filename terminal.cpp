@@ -163,6 +163,23 @@ void Terminal::getcommand() {
         printf(VERSION_BUILD);
         printf("\n");
     }
+    else if (streql(buffstr, "dev test 3 digit")) {
+        int a = 345;
+        //a = a/100;
+        //a = (int)(a < 0 ? (a - 0.5) : (a + 0.5));
+        char b[3];
+        b[1] = (char)(a/100 < 0 ? (a/100 - 0.5) : (a/100 + 0.5))+48;                                                    /// Works
+        b[2] = (char)(a/10 < 0 ? (a/10 - 0.5) : (a/10 + 0.5))-((a/100 < 0 ? (a/100 - 0.5) : (a/100 + 0.5))*10)+48;      /// Doesn't work
+        putchar(b[1]);
+        putchar(b[2]);
+        printf("\n");
+    }
+    else if (streql(buffstr, "dev test 1 digit")) {
+        int a = 8;
+        char b = (char)a+48;                /// Works
+        putchar(b);
+        printf("\n");
+    }
     else {
         printf("Command not found!\n");
     }
