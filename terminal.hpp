@@ -68,10 +68,12 @@ private:
     
     void scrollUp(uint64_t lineNum);
     
+    void itoa(char *buf, unsigned long int n, int base);
+    
 public:
     Terminal();
     
-    void printf(const char* data);
+    void printf(const char *s, ...);
     
     //void scanf();
     

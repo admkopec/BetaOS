@@ -7,6 +7,7 @@
 //
 
 #pragma once
+#include <stdarg.h>
 #include "terminal.hpp"
 #include "version.h"
 
@@ -83,11 +84,124 @@ void Terminal::putchar(char c) {
     newLineCheck();
 }
 
-void Terminal::printf(const char* data) {
-    size_t datalen = strlen(data);
-    for (size_t i = 0; i < datalen; i++)
-        putchar(data[i]);
+void Terminal::itoa(char *buf, unsigned long int n, int base)
+{
+    unsigned long int tmp;
+    int i, j;
+    
+    tmp = n;
+    i = 0;
+    
+    do {
+        tmp = n % base;
+        buf[i++] = (tmp < 10) ? (tmp + '0') : (tmp + 'a' - 10);
+    } while (n /= base);
+    buf[i--] = 0;
+    
+    for (j = 0; j < i; j++, i--) {
+        tmp = buf[j];
+        buf[j] = buf[i];
+        buf[i] = tmp;
+    }
 }
+
+void Terminal::printf(const char *s, ...) {
+    va_list ap;
+    
+    char buf[16];
+    int i, j, size, buflen, neg;
+    
+    unsigned char c;
+    int ival;
+    unsigned int uival;
+    
+    va_start(ap, s);
+    
+    while ((c = *s++)) {
+        size = 0;
+        neg = 0;
+        
+        if (c == 0)
+            break;
+        else if (c == '%') {
+            c = *s++;
+            if (c >= '0' && c <= '9') {
+                size = c - '0';
+                c = *s++;
+            }
+            
+            if (c == 'd') {
+                ival = va_arg(ap, int);
+                if (ival < 0) {
+                    uival = 0 - ival;
+                    neg++;
+                } else
+                    uival = ival;
+                itoa(buf, uival, 10);
+                
+                buflen = strlen(buf);
+                if (buflen < size)
+                    for (i = size, j = buflen; i >= 0;
+                         i--, j--)
+                        buf[i] =
+                        (j >=
+                         0) ? buf[j] : '0';
+                
+                if (neg)
+                    printf("-%s", buf);
+                else
+                    printf(buf);
+            }
+            else if (c == 'u') {
+                uival = va_arg(ap, int);
+                itoa(buf, uival, 10);
+                
+                buflen = strlen(buf);
+                if (buflen < size)
+                    for (i = size, j = buflen; i >= 0;
+                         i--, j--)
+                        buf[i] =
+                        (j >=
+                         0) ? buf[j] : '0';
+                
+                printf(buf);
+            } else if (c == 'x' || c == 'X') {
+                uival = va_arg(ap, int);
+                itoa(buf, uival, 16);
+                
+                buflen = strlen(buf);
+                if (buflen < size)
+                    for (i = size, j = buflen; i >= 0;
+                         i--, j--)
+                        buf[i] =
+                        (j >=
+                         0) ? buf[j] : '0';
+                
+                printf("0x%s", buf);
+            } else if (c == 'p') {
+                uival = va_arg(ap, int);
+                itoa(buf, uival, 16);
+                size = 8;
+                
+                buflen = strlen(buf);
+                if (buflen < size)
+                    for (i = size, j = buflen; i >= 0;
+                         i--, j--)
+                        buf[i] =
+                        (j >=
+                         0) ? buf[j] : '0';
+                
+                printf("0x%s", buf);
+            } else if (c == 's') {
+                printf((char *) va_arg(ap, int));
+            } 
+        } else
+            putchar(c);
+    }
+    
+    return;
+}
+
 
 void Terminal::cur() {
     unsigned temp;
@@ -163,22 +277,8 @@ void Terminal::getcommand() {
         printf(VERSION_BUILD);
         printf("\n");
     }
-    else if (streql(buffstr, "dev test 3 digit")) {
-        int a = 345;
-        //a = a/100;
-        //a = (int)(a < 0 ? (a - 0.5) : (a + 0.5));
-        char b[3];
-        b[1] = (char)(a/100 < 0 ? (a/100 - 0.5) : (a/100 + 0.5))+48;                                                    /// Works
-        b[2] = (char)((a/10 < 0 ? (a/10 - 0.5) : (a/10 + 0.5))-((a/100 < 0 ? (a/100 - 0.5) : (a/100 + 0.5)))*10+48);      /// Doesn't work
-        putchar(b[1]);
-        putchar(b[2]);
-        printf("\n");
-    }
-    else if (streql(buffstr, "dev test 1 digit")) {
-        int a = 8;
-        char b = (char)a+48;                /// Works
-        putchar(b);
-        printf("\n");
+    else if (streql(buffstr, "dev test new printf")) {
+        printf("It's %d year\n", 2015);
     }
     else {
         printf("Command not found!\n");

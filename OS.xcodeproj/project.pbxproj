@@ -19,6 +19,7 @@
 		3B5B35C21BFE451E003D3763 /* terminal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = terminal.hpp; sourceTree = "<group>"; };
 		3B5B35C31BFE451E003D3763 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		3B5B35C51BFE4566003D3763 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
+		3B7923271C099BFF00F721ED /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; path = build; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -30,6 +31,7 @@
 				3B5B35B71BFE44C6003D3763 /* README */,
 				3B5B35B81BFE44D3003D3763 /* Source */,
 				3B5B35C41BFE452C003D3763 /* Scripts */,
+				3B7923261C099BE000F721ED /* build */,
 			);
 			sourceTree = "<group>";
 		};
@@ -78,6 +80,14 @@
 				3B5B35C51BFE4566003D3763 /* build.sh */,
 			);
 			name = Scripts;
+			sourceTree = "<group>";
+		};
+		3B7923261C099BE000F721ED /* build */ = {
+			isa = PBXGroup;
+			children = (
+				3B7923271C099BFF00F721ED /* build */,
+			);
+			name = build;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
