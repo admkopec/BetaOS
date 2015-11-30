@@ -10,4 +10,5 @@ Now you can run the OS from ISO.
 * Commands are working.
 * Added more commands.
 * Added bootable ISO.
-* Added build script
+* Added build script.
+* Improved printf function.
