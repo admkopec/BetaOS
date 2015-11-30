@@ -71,6 +71,9 @@ void Terminal::putchar(char c) {
             buffer[(row*VGA_WIDTH+column)]=make_vgaentry(' ', color);
         }
     }
+    else if(c == '\t') {
+        column=column+8-(column%8);
+    }
     else {
         putentryat(c, color, column, row);
         if (++column == VGA_WIDTH) {
@@ -359,11 +362,11 @@ void Terminal::read() {
                     i--;
                     buffstr[i] = 0;
                     break;
-                    /* case 15:
-                     printch('\t');          Tab button
+                case 15:
+                     printf("\t");             //Tab button
                      buffstr[i] = '\t';
                      i++;
-                     break;*/
+                     break;
                 case 16:
                     printf("q");
                     buffstr[i] = 'q';
