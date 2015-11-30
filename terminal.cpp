@@ -10,6 +10,7 @@
 #include <stdarg.h>
 #include "terminal.hpp"
 #include "version.h"
+#include "Time.cpp"
 
 Terminal::Terminal() {
     row = 0;
@@ -282,6 +283,11 @@ void Terminal::getcommand() {
     }
     else if (streql(buffstr, "dev test new printf")) {
         printf("It's %d year\n", 2015);
+    }
+    else if(streql(buffstr, "time")) {
+        Time time;
+        unsigned int *date=time.date();
+        printf("Today is %d/%d/%d\n", date[0], date[1], date[3]);       //Crashes CPU
     }
     else {
         printf("Command not found!\n");

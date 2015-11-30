@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		3B28FF081C0C864900ED363F /* PCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PCIController.cpp; sourceTree = "<group>"; };
+		3B28FF091C0C864900ED363F /* PCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PCIController.hpp; sourceTree = "<group>"; };
+		3B28FF0A1C0C8C3D00ED363F /* Time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
+		3B28FF0B1C0C8C3D00ED363F /* Time.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Time.hpp; sourceTree = "<group>"; };
 		3B5B35B91BFE44FD003D3763 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3B5B35BA1BFE4506003D3763 /* linker.ld */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = linker.ld; path = build/linker.ld; sourceTree = "<group>"; };
 		3B5B35BB1BFE450F003D3763 /* boot.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = boot.s; sourceTree = "<group>"; };
@@ -70,6 +74,10 @@
 				3B5B35C31BFE451E003D3763 /* version.h */,
 				3B5B35BC1BFE451E003D3763 /* ACPIController.cpp */,
 				3B5B35BD1BFE451E003D3763 /* ACPIController.hpp */,
+				3B28FF081C0C864900ED363F /* PCIController.cpp */,
+				3B28FF091C0C864900ED363F /* PCIController.hpp */,
+				3B28FF0A1C0C8C3D00ED363F /* Time.cpp */,
+				3B28FF0B1C0C8C3D00ED363F /* Time.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
