@@ -12,7 +12,7 @@
 #include <stdbool.h> /* C doesn't have booleans by default. */
 #include <stddef.h>
 #include <stdint.h>
-#include "interrupts.cpp"
+#include "interrupts.hpp"
 
 /* Hardware text mode color constants. */
 enum vga_color {
@@ -46,7 +46,6 @@ uint16_t make_vgaentry(char c, uint8_t color) {
 
 class Terminal {
 private:
-    Interrupts interrupts;
     static const size_t VGA_WIDTH = 80;
     static const size_t VGA_HEIGHT = 25;
     

@@ -16,7 +16,6 @@
 		3B5B35BB1BFE450F003D3763 /* boot.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = boot.s; sourceTree = "<group>"; };
 		3B5B35BC1BFE451E003D3763 /* ACPIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACPIController.cpp; sourceTree = "<group>"; };
 		3B5B35BD1BFE451E003D3763 /* ACPIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ACPIController.hpp; sourceTree = "<group>"; };
-		3B5B35BE1BFE451E003D3763 /* interrupts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interrupts.cpp; sourceTree = "<group>"; };
 		3B5B35BF1BFE451E003D3763 /* interrupts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interrupts.hpp; sourceTree = "<group>"; };
 		3B5B35C01BFE451E003D3763 /* kernel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kernel.cpp; sourceTree = "<group>"; };
 		3B5B35C11BFE451E003D3763 /* terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = terminal.cpp; sourceTree = "<group>"; };
@@ -69,7 +68,6 @@
 				3B5B35C01BFE451E003D3763 /* kernel.cpp */,
 				3B5B35C11BFE451E003D3763 /* terminal.cpp */,
 				3B5B35C21BFE451E003D3763 /* terminal.hpp */,
-				3B5B35BE1BFE451E003D3763 /* interrupts.cpp */,
 				3B5B35BF1BFE451E003D3763 /* interrupts.hpp */,
 				3B5B35C31BFE451E003D3763 /* version.h */,
 				3B5B35BC1BFE451E003D3763 /* ACPIController.cpp */,

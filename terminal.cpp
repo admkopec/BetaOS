@@ -212,10 +212,10 @@ void Terminal::cur() {
     
     temp = row*VGA_WIDTH+column;
     
-    interrupts.outb(0x3D4, 14);
-    interrupts.outb(0x3D5, temp>>8);
-    interrupts.outb(0x3D4, 15);
-    interrupts.outb(0x3D5, temp);
+    outb(0x3D4, 14);
+    outb(0x3D5, temp>>8);
+    outb(0x3D4, 15);
+    outb(0x3D5, temp);
 }
 
 void Terminal::clearLine(uint8_t from, uint8_t to) {
@@ -232,9 +232,8 @@ void Terminal::clearScreen() {
 }
 
 void Terminal::scrollUp(uint64_t lineNum) {
-    uint16_t i = 0;
     clearLine(0,lineNum-1);
-    for (i; i<VGA_WIDTH*(VGA_HEIGHT-1); i++) {
+    for (uint16_t i = 0; i<VGA_WIDTH*(VGA_HEIGHT-1); i++) {
         buffer[i]=buffer[i+VGA_WIDTH*lineNum];
     }
     clearLine(VGA_HEIGHT-1-lineNum,VGA_HEIGHT-1);
@@ -301,8 +300,8 @@ void Terminal::read() {
     uint8_t i = 0;
     uint8_t reading=1;
     while (reading) {
-        if (interrupts.inb(0x64)&0x1) {
-            switch (interrupts.inb(0x60)) {
+        if (inb(0x64)&0x1) {
+            switch (inb(0x60)) {
                 case 2:
                     printf("1");
                     buffstr[i]='1';

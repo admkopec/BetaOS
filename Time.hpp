@@ -13,10 +13,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "interrupts.cpp"
+#include "interrupts.hpp"
 
-class Time {
-    Interrupts interrupts;
+class Time {            //Doesn't work
 public:
     int weekday();
     unsigned int* date();
