@@ -14,7 +14,6 @@
 #include <stdbool.h>
 #include "terminal.cpp"
 
-Interrupts interrupts;
 Terminal terminal;
 
 

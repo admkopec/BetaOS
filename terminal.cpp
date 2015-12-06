@@ -231,13 +231,13 @@ void Terminal::clearScreen() {
     cur();
 }
 
-void Terminal::scrollUp(uint64_t lineNum) {
+void Terminal::scrollUp(int64_t lineNum) {
     clearLine(0,lineNum-1);
     for (uint16_t i = 0; i<VGA_WIDTH*(VGA_HEIGHT-1); i++) {
         buffer[i]=buffer[i+VGA_WIDTH*lineNum];
     }
     clearLine(VGA_HEIGHT-1-lineNum,VGA_HEIGHT-1);
-    if ((row-lineNum)<0) {
+    if ((row-lineNum) < 0) {
         row=0;
         column=0;
     }

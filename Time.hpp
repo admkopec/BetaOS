@@ -31,7 +31,7 @@ public:
     
 private:
     
-    int century_register = 0x00;                                // Set by ACPI table parsing code if possible
+    static const int century_register = 0x00;                                // Set by ACPI table parsing code if possible
     
     enum {
         cmos_address = 0x70,

@@ -46,11 +46,12 @@ uint16_t make_vgaentry(char c, uint8_t color) {
 
 class Terminal {
 private:
-    static const size_t VGA_WIDTH = 80;
-    static const size_t VGA_HEIGHT = 25;
+    static const signed int VGA_WIDTH = 80;
+    static const signed int VGA_HEIGHT = 25;
     
-    size_t row;
-    size_t column;
+    signed int row;
+    signed int column;
+    
     uint8_t color;
     uint16_t* buffer;
     char buffstr[VGA_WIDTH];
@@ -65,7 +66,7 @@ private:
     
     void clearLine(uint8_t from, uint8_t to);
     
-    void scrollUp(uint64_t lineNum);
+    void scrollUp(int64_t lineNum);
     
     void itoa(char *buf, unsigned long int n, int base);
     
