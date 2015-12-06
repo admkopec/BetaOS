@@ -9,60 +9,77 @@
 #pragma once
 #include "Time.hpp"
 
-int Time::weekday() {
+void Time::read_rtc() {
+    unsigned char century;
+    unsigned char last_second;
+    unsigned char last_minute;
+    unsigned char last_hour;
+    unsigned char last_day;
+    unsigned char last_month;
+    unsigned char last_year;
+    unsigned char last_century;
+    unsigned char registerB;
     
-    unsigned int DataWeekday;
-    unsigned int Weekday;
     
-    outb(0x70, 0x95);
+    while (get_update_in_progress_flag());
+    second = get_RTC_register(0x00);
+    minute = get_RTC_register(0x02);
+    hour = get_RTC_register(0x04);
+    day = get_RTC_register(0x07);
+    month = get_RTC_register(0x08);
+    year = get_RTC_register(0x09);
+    if(century_register != 0) {
+        century = get_RTC_register(century_register);
+    }
     
-    outb(0x70, 6);
-    DataWeekday = inb(0x71);
-    if(DataWeekday<6) Weekday = DataWeekday + 2;
-    else Weekday = DataWeekday - 5;
-    return Weekday;
-}
-
-unsigned int* Time::date() {
+    do {
+        last_second = second;
+        last_minute = minute;
+        last_hour = hour;
+        last_day = day;
+        last_month = month;
+        last_year = year;
+        last_century = century;
+        
+        while (get_update_in_progress_flag());
+        second = get_RTC_register(0x00);
+        minute = get_RTC_register(0x02);
+        hour = get_RTC_register(0x04);
+        day = get_RTC_register(0x07);
+        month = get_RTC_register(0x08);
+        year = get_RTC_register(0x09);
+        if(century_register != 0) {
+            century = get_RTC_register(century_register);
+        }
+    } while( (last_second != second) || (last_minute != minute) || (last_hour != hour) ||
+            (last_day != day) || (last_month != month) || (last_year != year) ||
+            (last_century != century) );
     
-    unsigned int DataYear, DataMonth, DataDay;
-    unsigned int date[3];
+    registerB = get_RTC_register(0x0B);
     
-    outb(0x70, 0x95);
     
-    outb(0x70, 9);
-    DataYear = inb(0x71);
-    date[2] = DataYear - ((unsigned int) DataYear/16) * 6;
+    if (!(registerB & 0x04)) {
+        second = (second & 0x0F) + ((second / 16) * 10);
+        minute = (minute & 0x0F) + ((minute / 16) * 10);
+        hour = ( (hour & 0x0F) + (((hour & 0x70) / 16) * 10) ) | (hour & 0x80);
+        day = (day & 0x0F) + ((day / 16) * 10);
+        month = (month & 0x0F) + ((month / 16) * 10);
+        year = (year & 0x0F) + ((year / 16) * 10);
+        if(century_register != 0) {
+            century = (century & 0x0F) + ((century / 16) * 10);
+        }
+    }
     
-    outb(0x70, 8);
-    DataMonth = inb(0x71);
-    date[1] = DataMonth - ((unsigned int) DataMonth/16) * 6;
     
-    outb(0x70, 7);
-    DataDay = inb(0x71);
-    date[0] = DataDay - ((unsigned int) DataDay/16) * 6;
+    if (!(registerB & 0x02) && (hour & 0x80)) {
+        hour = ((hour & 0x7F) + 12) % 24;
+    }
     
-    return date;
-}
-
-unsigned int* Time::time() {
     
-    unsigned int DataHour, DataMinute, DataSecond;
-    unsigned int time[3];
-    
-    outb(0x70, 0x95);
-    
-    outb(0x70, 4);
-    DataHour = inb(0x71);
-    time[0] = DataHour - ((unsigned int) DataHour/16) * 6;
-    
-    outb(0x70, 2);
-    DataMinute = inb(0x71);
-    time[1] = DataMinute - ((unsigned int) DataMinute/16) * 6;
-    
-    outb(0x70, 0);
-    DataSecond = inb(0x71);
-    time[2] = DataSecond - ((unsigned int) DataSecond/16) * 6;
-    
-    return time;
+    if(century_register != 0) {
+        year += century * 100;
+    } else {
+        year += (CURRENT_YEAR / 100) * 100;
+        if(year < CURRENT_YEAR) year += 100;
+    }
 }
