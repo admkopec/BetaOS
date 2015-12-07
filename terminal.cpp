@@ -11,6 +11,7 @@
 #include "terminal.hpp"
 #include "version.h"
 #include "Time.cpp"
+#include "stdlib.cpp"
 
 Terminal::Terminal() {
     row = 0;
@@ -285,6 +286,9 @@ void Terminal::getcommand() {
         printf("%d:%d:%d\n", time.hour, time.minute, time.second);
         printf("%d/%d/%d\n", time.day, time.month, time.year);
         
+    }
+    else if(streql(buffstr, "dev test kernel panic")) {
+        kpanic("Test of Kernel Panic function. Don't worry :)");
     }
     else {
         printf("Command not found!\n");
