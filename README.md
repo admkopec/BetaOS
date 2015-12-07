@@ -12,3 +12,5 @@ Now you can run the OS from ISO.
 * Added bootable ISO.
 * Added build script.
 * Improved printf function.
+* Added time.
+* Added kpanic function.
