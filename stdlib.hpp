@@ -10,6 +10,6 @@
 #ifndef stdlib_hpp
 #define stdlib_hpp
 
-void kpanic(const char* errormsg);
+extern void kpanic(const char* errormsg);
 
 #endif /* stdlib_hpp */
