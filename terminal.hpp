@@ -44,8 +44,6 @@ uint16_t make_vgaentry(char c, uint8_t color) {
     return c16 | color16 << 8;
 }
 
-class Terminal {
-private:
     static const signed int VGA_WIDTH = 80;
     static const signed int VGA_HEIGHT = 25;
     
@@ -67,17 +65,8 @@ private:
     void clearLine(uint8_t from, uint8_t to);
     
     void scrollUp(int64_t lineNum);
-    
-    void itoa(char *buf, unsigned long int n, int base);
-    
-public:
-    Terminal();
-    
-    void printf(const char *s, ...);
-    
-    //void scanf();
-    
-    //char buffstr[80];
+
+    void Terminal();
     
     void getcommand();
     
@@ -86,11 +75,5 @@ public:
     void clearScreen();
     
     void newLineCheck();
-    
-    size_t strlen(const char* str);
-    
-    bool streql(const char* str1, const char* str2);
-    
-};
 
 #endif /* terminal_hpp */

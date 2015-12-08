@@ -13,7 +13,7 @@
 #include "Time.cpp"
 #include "stdlib.cpp"
 
-Terminal::Terminal() {
+void Terminal() {
     row = 0;
     column = 0;
     //color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
@@ -28,37 +28,16 @@ Terminal::Terminal() {
     }
 }
 
-size_t Terminal::strlen(const char* str) {
-    size_t ret = 0;
-    while ( str[ret] != 0 )
-        ret++;
-    return ret;
-}
-
-bool Terminal::streql(const char* str1, const char* str2) {
-    if (strlen(str1)!=strlen(str2)) {
-        return false;
-    }
-    else {
-        for (uint8_t i=0; i<=strlen(str1); i++) {
-            if (str1[i] != str2[i]) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-void Terminal::setcolor(uint8_t col) {
+void setcolor(uint8_t col) {
     color = col;
 }
 
-void Terminal::putentryat(char c, uint8_t color, size_t x, size_t y) {
+void putentryat(char c, uint8_t color, size_t x, size_t y) {
     const size_t index = y * VGA_WIDTH + x;
     buffer[index] = make_vgaentry(c, color);
 }
 
-void Terminal::putchar(char c) {
+void putchar(char c) {
     if (c == '\n') {
         column = 0;
         row++;
@@ -89,126 +68,7 @@ void Terminal::putchar(char c) {
     newLineCheck();
 }
 
-void Terminal::itoa(char *buf, unsigned long int n, int base)
-{
-    unsigned long int tmp;
-    int i, j;
-    
-    tmp = n;
-    i = 0;
-    
-    do {
-        tmp = n % base;
-        buf[i++] = (tmp < 10) ? (tmp + '0') : (tmp + 'a' - 10);
-    } while (n /= base);
-    buf[i--] = 0;
-    
-    for (j = 0; j < i; j++, i--) {
-        tmp = buf[j];
-        buf[j] = buf[i];
-        buf[i] = tmp;
-    }
-}
-
-void Terminal::printf(const char *s, ...) {
-    va_list ap;
-    
-    char buf[16];
-    int i, j, size, buflen, neg;
-    
-    unsigned char c;
-    int ival;
-    unsigned int uival;
-    
-    va_start(ap, s);
-    
-    while ((c = *s++)) {
-        size = 0;
-        neg = 0;
-        
-        if (c == 0)
-            break;
-        else if (c == '%') {
-            c = *s++;
-            if (c >= '0' && c <= '9') {
-                size = c - '0';
-                c = *s++;
-            }
-            
-            if (c == 'd') {
-                ival = va_arg(ap, int);
-                if (ival < 0) {
-                    uival = 0 - ival;
-                    neg++;
-                } else
-                    uival = ival;
-                itoa(buf, uival, 10);
-                
-                buflen = strlen(buf);
-                if (buflen < size)
-                    for (i = size, j = buflen; i >= 0;
-                         i--, j--)
-                        buf[i] =
-                        (j >=
-                         0) ? buf[j] : '0';
-                
-                if (neg)
-                    printf("-%s", buf);
-                else
-                    printf(buf);
-            }
-            else if (c == 'u') {
-                uival = va_arg(ap, int);
-                itoa(buf, uival, 10);
-                
-                buflen = strlen(buf);
-                if (buflen < size)
-                    for (i = size, j = buflen; i >= 0;
-                         i--, j--)
-                        buf[i] =
-                        (j >=
-                         0) ? buf[j] : '0';
-                
-                printf(buf);
-            } else if (c == 'x' || c == 'X') {
-                uival = va_arg(ap, int);
-                itoa(buf, uival, 16);
-                
-                buflen = strlen(buf);
-                if (buflen < size)
-                    for (i = size, j = buflen; i >= 0;
-                         i--, j--)
-                        buf[i] =
-                        (j >=
-                         0) ? buf[j] : '0';
-                
-                printf("0x%s", buf);
-            } else if (c == 'p') {
-                uival = va_arg(ap, int);
-                itoa(buf, uival, 16);
-                size = 8;
-                
-                buflen = strlen(buf);
-                if (buflen < size)
-                    for (i = size, j = buflen; i >= 0;
-                         i--, j--)
-                        buf[i] =
-                        (j >=
-                         0) ? buf[j] : '0';
-                
-                printf("0x%s", buf);
-            } else if (c == 's') {
-                printf((char *) va_arg(ap, int));
-            } 
-        } else
-            putchar(c);
-    }
-    
-    return;
-}
-
-
-void Terminal::cur() {
+void cur() {
     unsigned temp;
     
     temp = row*VGA_WIDTH+column;
@@ -219,20 +79,20 @@ void Terminal::cur() {
     outb(0x3D5, temp);
 }
 
-void Terminal::clearLine(uint8_t from, uint8_t to) {
+void clearLine(uint8_t from, uint8_t to) {
     for (uint16_t i = VGA_WIDTH*from; i<(VGA_WIDTH*to); i++) {
         buffer[i]=make_vgaentry(' ', color);
     }
 }
 
-void Terminal::clearScreen() {
+void clearScreen() {
     clearLine(0,VGA_HEIGHT-1);
     row=0;
     column=0;
     cur();
 }
 
-void Terminal::scrollUp(int64_t lineNum) {
+void scrollUp(int64_t lineNum) {
     clearLine(0,lineNum-1);
     for (uint16_t i = 0; i<VGA_WIDTH*(VGA_HEIGHT-1); i++) {
         buffer[i]=buffer[i+VGA_WIDTH*lineNum];
@@ -248,13 +108,13 @@ void Terminal::scrollUp(int64_t lineNum) {
     cur();
 }
 
-void Terminal::newLineCheck() {
+void newLineCheck() {
     if (row>=VGA_HEIGHT-1) {
         scrollUp(1);
     }
 }
 
-void Terminal::getcommand() {
+void getcommand() {
     read();
     /*for (long long i=0; i<sizeof(commands); i++) {
      
@@ -295,7 +155,7 @@ void Terminal::getcommand() {
     }
 }
 
-void Terminal::read() {
+void read() {
     for (int i=0; i<79; i++) {
         buffstr[i]=buffstr[80];
     }

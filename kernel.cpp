@@ -28,12 +28,12 @@ extern "C" /* Use C linkage for kernel_main. */
 
 void kernel_main() {
     /* Initialize terminal interface */
-    Terminal terminal;   //TODO: Move to stdio.h ///DOESN'T WORK
+    Terminal();
     
-    terminal.printf("Hello!\nWelcome to BetaOS!\n");
+    printf("Hello!\nWelcome to BetaOS!\n");
     
     while (1) {
         //terminal.printf("BetaOS: ");*
-        terminal.getcommand();
+        getcommand();
     }
 }

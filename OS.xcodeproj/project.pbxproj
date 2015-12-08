@@ -24,6 +24,8 @@
 		3B5B35C51BFE4566003D3763 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 		3B652F1D1C170A870019E619 /* stdio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdio.cpp; sourceTree = "<group>"; };
 		3B652F1E1C170A870019E619 /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdio.h; sourceTree = "<group>"; };
+		3B652F1F1C173D0C0019E619 /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string.cpp; sourceTree = "<group>"; };
+		3B652F201C173D0C0019E619 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		3B7923271C099BFF00F721ED /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; path = build; sourceTree = "<group>"; };
 		3B7DD3971C15FC9B00C021D3 /* stdlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdlib.cpp; sourceTree = "<group>"; };
 		3B7DD3981C15FC9B00C021D3 /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdlib.h; sourceTree = "<group>"; };
@@ -84,6 +86,8 @@
 				3B7DD3981C15FC9B00C021D3 /* stdlib.h */,
 				3B652F1D1C170A870019E619 /* stdio.cpp */,
 				3B652F1E1C170A870019E619 /* stdio.h */,
+				3B652F1F1C173D0C0019E619 /* string.cpp */,
+				3B652F201C173D0C0019E619 /* string.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";

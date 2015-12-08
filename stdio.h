@@ -12,6 +12,6 @@
 
 #include "terminal.cpp"
 
-Terminal terminal;      //Doesn't work
+extern void printf(const char *s, ...);
 
 #endif /* stdio_hpp */
