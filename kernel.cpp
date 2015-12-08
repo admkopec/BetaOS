@@ -27,7 +27,7 @@ extern "C" /* Use C linkage for kernel_main. */
 
 void kernel_main() {
     /* Initialize terminal interface */
-    Terminal terminal;
+    Terminal terminal;   //TODO: Move to stdio.h
     
     terminal.printf("Hello!\nWelcome to BetaOS!\n");
     
