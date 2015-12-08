@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "terminal.cpp"
+#include "stdio.cpp"
 
 /* Check if the compiler thinks we are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -27,7 +28,7 @@ extern "C" /* Use C linkage for kernel_main. */
 
 void kernel_main() {
     /* Initialize terminal interface */
-    Terminal terminal;   //TODO: Move to stdio.h
+    Terminal terminal;   //TODO: Move to stdio.h ///DOESN'T WORK
     
     terminal.printf("Hello!\nWelcome to BetaOS!\n");
     

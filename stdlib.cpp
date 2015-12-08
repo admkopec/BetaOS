@@ -7,13 +7,14 @@
 //
 
 #pragma once
-#include "stdlib.hpp"
+#include "stdlib.h"
+#include "stdio.cpp"
 #include "terminal.cpp"
 #include "Time.cpp"
 
 void kpanic(const char* errormsg) {
     Time time;
-    Terminal terminal;          //TODO: Do not initilize terminal one more time
+    //Terminal terminal;          //TODO: Do not initilize terminal one more time
     terminal.printf("Kernel Panic: %d:%d:%d %d/%d/%d\n\%s", time.hour, time.minute, time.second, time.day, time.month, time.year, errormsg);
     __asm__("hlt");
 }
