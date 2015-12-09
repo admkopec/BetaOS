@@ -26,6 +26,11 @@
 extern "C" /* Use C linkage for kernel_main. */
 #endif
 
+//TODO:
+// * add PIC and enable IRQ
+// * change read() (start from waiting for IRQ 1 instead of polling
+// * add PCI driver
+
 void kernel_main() {
     /* Initialize terminal interface */
     Terminal();

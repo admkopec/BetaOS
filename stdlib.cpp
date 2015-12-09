@@ -15,5 +15,6 @@
 void kpanic(const char* errormsg) {
     Time time;
     printf("Kernel Panic: %d:%d:%d %d/%d/%d\n\%s", time.hour, time.minute, time.second, time.day, time.month, time.year, errormsg);
+    printf("\nCPU halted\n");
     __asm__("hlt");
 }
