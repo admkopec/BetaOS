@@ -126,7 +126,10 @@ void getcommand() {
         printf("Not supported in this version! Working ACPI is needed\n");
     }
     else if (streql(buffstr, "reboot")) {
-        printf("Not supported in this version!\n");
+        unsigned char good = 0x02;          //Move to reboot()
+        while ((good & 0x02) != 0)
+            good = inb(0x64);
+        outb(0x64, 0xFE);
     }
     else if (streql(buffstr, "version")) {
         printf(VERSION_NAME);

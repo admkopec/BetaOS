@@ -14,3 +14,4 @@ Now you can run the OS from ISO.
 * Improved printf function.
 * Added time.
 * Added kpanic function.
+* Added reboot.
