@@ -3,6 +3,7 @@ export PREFIX="/opt/cross";
 export TARGET=i686-elf;
 export PATH="/opt/cross/bin:$PATH";
 ##-g -O2 -w -trigraphs -fno-builtin  -fno-exceptions -fno-stack-protector -O0 -m32  -fno-rtti -nostdlib -nodefaultlibs
+## Add linking and compiling every lib
 if ! i686-elf-as boot.s -o build/boot.o -Iinclude; then
 exit 1;
 fi
