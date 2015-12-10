@@ -12,6 +12,7 @@
 #include <version.h>
 #include "Time.cpp"
 #include <stdlib.cpp>
+#include <arch/arch.cpp>
 
 void Terminal() {
     row = 0;
@@ -126,10 +127,7 @@ void getcommand() {
         printf("Not supported in this version! Working ACPI is needed\n");
     }
     else if (streql(buffstr, "reboot")) {
-        unsigned char good = 0x02;          //Move to reboot()
-        while ((good & 0x02) != 0)
-            good = inb(0x64);
-        outb(0x64, 0xFE);
+        reboot();
     }
     else if (streql(buffstr, "version")) {
         printf(VERSION_NAME);

@@ -29,6 +29,8 @@
 		3BA6BC2C1C19D9AD009C8F87 /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cpp; path = include/string.cpp; sourceTree = "<group>"; };
 		3BA6BC2D1C19D9AD009C8F87 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = include/string.h; sourceTree = "<group>"; };
 		3BA6BC2E1C19D9AD009C8F87 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = include/version.h; sourceTree = "<group>"; };
+		3BA6BC311C19DCDD009C8F87 /* arch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arch.cpp; path = include/arch/arch.cpp; sourceTree = "<group>"; };
+		3BA6BC321C19DCDD009C8F87 /* arch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = arch.hpp; path = include/arch/arch.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -71,14 +73,7 @@
 		3B5B35B81BFE44D3003D3763 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				3BA6BC271C19D9AD009C8F87 /* interrupts.hpp */,
-				3BA6BC281C19D9AD009C8F87 /* stdio.cpp */,
-				3BA6BC291C19D9AD009C8F87 /* stdio.h */,
-				3BA6BC2A1C19D9AD009C8F87 /* stdlib.cpp */,
-				3BA6BC2B1C19D9AD009C8F87 /* stdlib.h */,
-				3BA6BC2C1C19D9AD009C8F87 /* string.cpp */,
-				3BA6BC2D1C19D9AD009C8F87 /* string.h */,
-				3BA6BC2E1C19D9AD009C8F87 /* version.h */,
+				3BA6BC2F1C19DC59009C8F87 /* include */,
 				3B5B35C01BFE451E003D3763 /* kernel.cpp */,
 				3B5B35C11BFE451E003D3763 /* terminal.cpp */,
 				3B5B35C21BFE451E003D3763 /* terminal.hpp */,
@@ -106,6 +101,31 @@
 				3B7923271C099BFF00F721ED /* build */,
 			);
 			name = build;
+			sourceTree = "<group>";
+		};
+		3BA6BC2F1C19DC59009C8F87 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				3BA6BC301C19DCB1009C8F87 /* arch */,
+				3BA6BC291C19D9AD009C8F87 /* stdio.h */,
+				3BA6BC281C19D9AD009C8F87 /* stdio.cpp */,
+				3BA6BC2B1C19D9AD009C8F87 /* stdlib.h */,
+				3BA6BC2A1C19D9AD009C8F87 /* stdlib.cpp */,
+				3BA6BC2D1C19D9AD009C8F87 /* string.h */,
+				3BA6BC2C1C19D9AD009C8F87 /* string.cpp */,
+				3BA6BC2E1C19D9AD009C8F87 /* version.h */,
+				3BA6BC271C19D9AD009C8F87 /* interrupts.hpp */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		3BA6BC301C19DCB1009C8F87 /* arch */ = {
+			isa = PBXGroup;
+			children = (
+				3BA6BC311C19DCDD009C8F87 /* arch.cpp */,
+				3BA6BC321C19DCDD009C8F87 /* arch.hpp */,
+			);
+			name = arch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
