@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "interrupts.hpp"
+#include <interrupts.hpp>
 
 class Time {
 #define CURRENT_YEAR 2015

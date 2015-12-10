@@ -9,9 +9,9 @@
 #pragma once
 #include <stdarg.h>
 #include "terminal.hpp"
-#include "version.h"
+#include <version.h>
 #include "Time.cpp"
-#include "stdlib.cpp"
+#include <stdlib.cpp>
 
 void Terminal() {
     row = 0;

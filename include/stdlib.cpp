@@ -7,10 +7,7 @@
 //
 
 #pragma once
-#include "stdlib.h"
-#include "stdio.cpp"
-#include "terminal.cpp"
-#include "Time.cpp"
+#include <stdlib.h>
 
 void kpanic(const char* errormsg) {
     Time time;

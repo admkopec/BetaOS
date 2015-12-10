@@ -14,7 +14,5 @@
 #include <stdbool.h>
 #include "terminal.cpp"
 
-Terminal terminal;
-
 
 #endif /* ACPIController_hpp */
