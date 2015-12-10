@@ -9,7 +9,7 @@
 #pragma once
 #ifndef stdlib_hpp
 #define stdlib_hpp
-#include <stdio.cpp>
+#include <stdio.h>
 #include "../Time.cpp"
 
 extern void kpanic(const char* errormsg);

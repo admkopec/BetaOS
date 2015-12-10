@@ -11,9 +11,8 @@
 #define string_hpp
 
 #include <stdbool.h>
-#include <stdio.cpp>
 
-size_t strlen(const char* str);
+unsigned int strlen(const char* str);
 bool streql(const char* str1, const char* str2);
 
 #endif /* string_hpp */

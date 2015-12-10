@@ -13,7 +13,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <interrupts.hpp>
-#include <stdio.h>
 
 /* Hardware text mode color constants. */
 enum vga_color {

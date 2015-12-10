@@ -11,7 +11,8 @@
 #define stdio_hpp
 
 #include <stdarg.h>
+#include <string.cpp>
 
-extern void printf(const char *s, ...);
+void printf(const char *s, ...);
 
 #endif /* stdio_hpp */

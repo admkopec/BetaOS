@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "terminal.cpp"
+#include <stdio.cpp>
 
 /* Check if the compiler thinks we are targeting the wrong operating system. */
 #if defined(__linux__)

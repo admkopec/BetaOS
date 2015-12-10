@@ -8,7 +8,7 @@
 
 #pragma once
 #include <stdio.h>
-#include <string.cpp>
+#include "../terminal.cpp"
 
 void itoa(char *buf, unsigned long int n, int base)
 {

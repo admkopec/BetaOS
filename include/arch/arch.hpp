@@ -9,8 +9,6 @@
 #ifndef arch_hpp
 #define arch_hpp
 
-#include <stdio.cpp>
-
 void cpuid();
 void reboot();
 void shutdown();

@@ -9,8 +9,8 @@
 #pragma once
 #include <string.h>
 
-size_t strlen(const char* str) {
-    size_t ret = 0;
+unsigned int strlen(const char* str) {
+    unsigned int ret = 0;
     while ( str[ret] != 0 )
     ret++;
     return ret;
@@ -21,7 +21,7 @@ bool streql(const char* str1, const char* str2) {
         return false;
     }
     else {
-        for (uint8_t i=0; i<=strlen(str1); i++) {
+        for (unsigned char i=0; i<=strlen(str1); i++) {
             if (str1[i] != str2[i]) {
                 return false;
             }
