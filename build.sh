@@ -4,10 +4,10 @@ export TARGET=i686-elf;
 export PATH="/opt/cross/bin:$PATH";
 ##-g -O2 -w -trigraphs -fno-builtin  -fno-exceptions -fno-stack-protector -O0 -m32  -fno-rtti -nostdlib -nodefaultlibs
 ## Add linking and compiling every lib
-if ! i686-elf-as boot.s -o build/boot.o -Iinclude; then
+if ! i686-elf-as boot.s -o build/boot.o -I ./include; then
 exit 1;
 fi
-if ! i686-elf-g++ -c kernel.cpp -o build/kernel.o -ffreestanding -fbuiltin -Wall -O2 -Wextra -fno-exceptions -m32 -fno-rtti -nostdlib -nodefaultlibs -I sysroot/include; then
+if ! i686-elf-g++ -c kernel.cpp -o build/kernel.o -ffreestanding -fbuiltin -Wall -O2 -Wextra -fno-exceptions -m32 -fno-rtti -nostdlib -nodefaultlibs -I ./include; then
 exit 2;
 fi
 if ! i686-elf-gcc -T build/linker.ld -o build/product/BetaOS.bin -ffreestanding -fbuiltin -Wall -O2 -Wextra -nostdlib -m32 -nodefaultlibs build/boot.o build/kernel.o -lgcc; then

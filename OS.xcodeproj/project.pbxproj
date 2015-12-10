@@ -16,19 +16,19 @@
 		3B5B35BB1BFE450F003D3763 /* boot.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = boot.s; sourceTree = "<group>"; };
 		3B5B35BC1BFE451E003D3763 /* ACPIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACPIController.cpp; sourceTree = "<group>"; };
 		3B5B35BD1BFE451E003D3763 /* ACPIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ACPIController.hpp; sourceTree = "<group>"; };
-		3B5B35BF1BFE451E003D3763 /* interrupts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = interrupts.hpp; sourceTree = "<group>"; };
 		3B5B35C01BFE451E003D3763 /* kernel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kernel.cpp; sourceTree = "<group>"; };
 		3B5B35C11BFE451E003D3763 /* terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = terminal.cpp; sourceTree = "<group>"; };
 		3B5B35C21BFE451E003D3763 /* terminal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = terminal.hpp; sourceTree = "<group>"; };
-		3B5B35C31BFE451E003D3763 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		3B5B35C51BFE4566003D3763 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
-		3B652F1D1C170A870019E619 /* stdio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdio.cpp; sourceTree = "<group>"; };
-		3B652F1E1C170A870019E619 /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdio.h; sourceTree = "<group>"; };
-		3B652F1F1C173D0C0019E619 /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string.cpp; sourceTree = "<group>"; };
-		3B652F201C173D0C0019E619 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		3B7923271C099BFF00F721ED /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; path = build; sourceTree = "<group>"; };
-		3B7DD3971C15FC9B00C021D3 /* stdlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdlib.cpp; sourceTree = "<group>"; };
-		3B7DD3981C15FC9B00C021D3 /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdlib.h; sourceTree = "<group>"; };
+		3BA6BC271C19D9AD009C8F87 /* interrupts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = interrupts.hpp; path = include/interrupts.hpp; sourceTree = "<group>"; };
+		3BA6BC281C19D9AD009C8F87 /* stdio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stdio.cpp; path = include/stdio.cpp; sourceTree = "<group>"; };
+		3BA6BC291C19D9AD009C8F87 /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = include/stdio.h; sourceTree = "<group>"; };
+		3BA6BC2A1C19D9AD009C8F87 /* stdlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stdlib.cpp; path = include/stdlib.cpp; sourceTree = "<group>"; };
+		3BA6BC2B1C19D9AD009C8F87 /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = include/stdlib.h; sourceTree = "<group>"; };
+		3BA6BC2C1C19D9AD009C8F87 /* string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cpp; path = include/string.cpp; sourceTree = "<group>"; };
+		3BA6BC2D1C19D9AD009C8F87 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = include/string.h; sourceTree = "<group>"; };
+		3BA6BC2E1C19D9AD009C8F87 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = include/version.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -71,23 +71,23 @@
 		3B5B35B81BFE44D3003D3763 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				3BA6BC271C19D9AD009C8F87 /* interrupts.hpp */,
+				3BA6BC281C19D9AD009C8F87 /* stdio.cpp */,
+				3BA6BC291C19D9AD009C8F87 /* stdio.h */,
+				3BA6BC2A1C19D9AD009C8F87 /* stdlib.cpp */,
+				3BA6BC2B1C19D9AD009C8F87 /* stdlib.h */,
+				3BA6BC2C1C19D9AD009C8F87 /* string.cpp */,
+				3BA6BC2D1C19D9AD009C8F87 /* string.h */,
+				3BA6BC2E1C19D9AD009C8F87 /* version.h */,
 				3B5B35C01BFE451E003D3763 /* kernel.cpp */,
 				3B5B35C11BFE451E003D3763 /* terminal.cpp */,
 				3B5B35C21BFE451E003D3763 /* terminal.hpp */,
-				3B5B35BF1BFE451E003D3763 /* interrupts.hpp */,
-				3B5B35C31BFE451E003D3763 /* version.h */,
 				3B5B35BC1BFE451E003D3763 /* ACPIController.cpp */,
 				3B5B35BD1BFE451E003D3763 /* ACPIController.hpp */,
 				3B28FF081C0C864900ED363F /* PCIController.cpp */,
 				3B28FF091C0C864900ED363F /* PCIController.hpp */,
 				3B28FF0A1C0C8C3D00ED363F /* Time.cpp */,
 				3B28FF0B1C0C8C3D00ED363F /* Time.hpp */,
-				3B7DD3971C15FC9B00C021D3 /* stdlib.cpp */,
-				3B7DD3981C15FC9B00C021D3 /* stdlib.h */,
-				3B652F1D1C170A870019E619 /* stdio.cpp */,
-				3B652F1E1C170A870019E619 /* stdio.h */,
-				3B652F1F1C173D0C0019E619 /* string.cpp */,
-				3B652F201C173D0C0019E619 /* string.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
