@@ -1,5 +1,5 @@
 //
-//  stdlib.hpp
+//  stdlib.h
 //  OS
 //
 //  Created by Adam Kopeć on 12/7/15.
@@ -7,11 +7,11 @@
 //
 
 #pragma once
-#ifndef stdlib_hpp
-#define stdlib_hpp
+#ifndef stdlib_h
+#define stdlib_h
 #include <stdio.h>
 #include "../Time.cpp"
 
 extern void kpanic(const char* errormsg);
 
-#endif /* stdlib_hpp */
+#endif /* stdlib_h */

@@ -1,5 +1,5 @@
 //
-//  stdio.hpp
+//  stdio.h
 //  OS
 //
 //  Created by Adam Kopeć on 12/8/15.
@@ -7,12 +7,11 @@
 //
 
 #pragma once
-#ifndef stdio_hpp
-#define stdio_hpp
-
+#ifndef stdio_h
+#define stdio_h
 #include <stdarg.h>
 #include <string.cpp>
 
 void printf(const char *s, ...);
 
-#endif /* stdio_hpp */
+#endif /* stdio_h */

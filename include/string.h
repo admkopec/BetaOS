@@ -1,5 +1,5 @@
 //
-//  string.hpp
+//  string.h
 //  OS
 //
 //  Created by Adam Kopeć on 12/8/15.
@@ -7,12 +7,12 @@
 //
 
 #pragma once
-#ifndef string_hpp
-#define string_hpp
+#ifndef string_h
+#define string_h
 
 #include <stdbool.h>
 
 unsigned int strlen(const char* str);
 bool streql(const char* str1, const char* str2);
 
-#endif /* string_hpp */
+#endif /* string_h */

@@ -21,6 +21,7 @@
 		3B5B35C21BFE451E003D3763 /* terminal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = terminal.hpp; sourceTree = "<group>"; };
 		3B5B35C51BFE4566003D3763 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 		3B7923271C099BFF00F721ED /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; path = build; sourceTree = "<group>"; };
+		3B85C2A31C1B4A7200F56D0D /* command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = command.cpp; sourceTree = "<group>"; };
 		3BA6BC271C19D9AD009C8F87 /* interrupts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = interrupts.hpp; path = include/interrupts.hpp; sourceTree = "<group>"; };
 		3BA6BC281C19D9AD009C8F87 /* stdio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stdio.cpp; path = include/stdio.cpp; sourceTree = "<group>"; };
 		3BA6BC291C19D9AD009C8F87 /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = include/stdio.h; sourceTree = "<group>"; };
@@ -83,6 +84,7 @@
 				3B28FF091C0C864900ED363F /* PCIController.hpp */,
 				3B28FF0A1C0C8C3D00ED363F /* Time.cpp */,
 				3B28FF0B1C0C8C3D00ED363F /* Time.hpp */,
+				3B85C2A31C1B4A7200F56D0D /* command.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";

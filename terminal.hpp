@@ -52,13 +52,10 @@ uint16_t make_vgaentry(char c, uint8_t color) {
     
     uint8_t color;
     uint16_t* buffer;
-    char buffstr[VGA_WIDTH];
     
     void setcolor(uint8_t color);
     
     void putchar(char c);
-    
-    void read();
     
     void putentryat(char c, uint8_t color, size_t x, size_t y);
     
@@ -67,8 +64,6 @@ uint16_t make_vgaentry(char c, uint8_t color) {
     void scrollUp(int64_t lineNum);
 
     void Terminal();
-    
-    void getcommand();
     
     void cur();
     

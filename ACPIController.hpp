@@ -12,7 +12,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "terminal.cpp"
 
 
 #endif /* ACPIController_hpp */
