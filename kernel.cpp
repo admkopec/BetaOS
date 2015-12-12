@@ -33,7 +33,7 @@ extern "C" /* Use C linkage for kernel_main. */
 void kernel_main() {
     /* Initialize terminal interface */
     Terminal();
-    
+    Initialize_arch();
     printf("Hello!\nWelcome to BetaOS!\n");
     
     while (1) {
