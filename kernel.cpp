@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "command.cpp"
+#include <gdt.cpp>
 
 /* Check if the compiler thinks we are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -33,7 +34,11 @@ extern "C" /* Use C linkage for kernel_main. */
 void kernel_main() {
     /* Initialize terminal interface */
     Terminal();
-    Initialize_arch();
+    printf("Loading GDT \n");
+    init_gdt();
+    asm("	movw $0x18, %%ax \n \
+        movw %%ax, %%ss \n \
+        movl %0, %%esp"::"i" (KERN_STACK));
     printf("Hello!\nWelcome to BetaOS!\n");
     
     while (1) {
