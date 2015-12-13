@@ -7,6 +7,11 @@
 #include <command.h>
 #include <kernel/tty.h>
 
+//TODO:
+// * Add © to files
+// * Add GDT
+// * Add PIC
+
 void kernel_early(void)
 {
 	terminal_initialize();
