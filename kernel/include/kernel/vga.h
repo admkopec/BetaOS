@@ -1,3 +1,11 @@
+//
+//  vga.h
+//  OS
+//
+//  Created by Adam Kopeć on 12/11/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #ifndef _KERNEL_VGA_H
 #define _KERNEL_VGA_H
 
@@ -40,4 +48,4 @@ static const size_t VGA_HEIGHT = 25;
 
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 
-#endif
+#endif /* vga_h */

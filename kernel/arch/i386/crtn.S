@@ -1,3 +1,11 @@
+#
+#  crtn.s
+#  OS
+#
+#  Created by Adam Kopeć on 12/11/15.
+#  Copyright © 2015 Adam Kopeć. All rights reserved.
+#
+
 .section .init
 	/* gcc will nicely put the contents of crtend.o's .init section here. */
 	popl %ebp

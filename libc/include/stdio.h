@@ -1,3 +1,11 @@
+//
+//  stdio.h
+//  OS
+//
+//  Created by Adam Kopeć on 12/8/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #ifndef _STDIO_H
 #define _STDIO_H 1
 
@@ -15,4 +23,4 @@ void puts(const char*);
 }
 #endif
 
-#endif
+#endif /* stdio_h */

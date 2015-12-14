@@ -1,3 +1,11 @@
+//
+//  tty.h
+//  OS
+//
+//  Created by Adam Kopeć on 9/26/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #ifndef _KERNEL_TTY_H
 #define _KERNEL_TTY_H
 
@@ -13,4 +21,4 @@ void terminal_writestring(const char* data);
 void clearScreen();
 void cur();
 
-#endif
+#endif /* tty_h */

@@ -1,3 +1,11 @@
+#
+#  crti.s
+#  OS
+#
+#  Created by Adam Kopeć on 12/11/15.
+#  Copyright © 2015 Adam Kopeć. All rights reserved.
+#
+
 .section .init
 .global _init
 .type _init, @function

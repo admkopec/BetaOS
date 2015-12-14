@@ -8,7 +8,7 @@
 
 #pragma once
 #ifndef interupts_h
-#define interupts_h 1
+#define interupts_h
 
 #include <stdbool.h>
 #include <stddef.h>

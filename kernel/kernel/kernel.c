@@ -1,3 +1,11 @@
+//
+//  kernel.c
+//  OS
+//
+//  Created by Adam Kopeć on 9/26/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -10,7 +18,9 @@
 //TODO:
 // * Add © to files
 // * Add GDT
-// * Add PIC
+// * add PIC and enable IRQ
+// * change read() (start from waiting for IRQ 1 instead of polling
+// * add PCI driver
 
 void kernel_early(void)
 {
@@ -19,7 +29,7 @@ void kernel_early(void)
 
 void kernel_main(void)
 {
-	printf("Hello\n");
+	printf("Hello!\nWelcome to BetaOS!\n");
 	while (1) {
 		getcommand();
 	}

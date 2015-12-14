@@ -1,3 +1,11 @@
+//
+//  memset.cpp
+//  OS
+//
+//  Created by Adam Kopeć on 12/8/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #include <string.h>
 
 void* memset(void* bufptr, int value, size_t size)

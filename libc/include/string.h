@@ -1,3 +1,11 @@
+//
+//  string.h
+//  OS
+//
+//  Created by Adam Kopeć on 12/8/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #ifndef _STRING_H
 #define _STRING_H 1
 
@@ -22,4 +30,4 @@ bool streql(const char* str1, const char* str2);
 }
 #endif
 
-#endif
+#endif /* string_h */

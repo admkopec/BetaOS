@@ -1,3 +1,11 @@
+//
+//  printf.cpp
+//  OS
+//
+//  Created by Adam Kopeć on 12/8/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -96,6 +104,4 @@ void printf(const char *s, ...) {
         } else
         putchar(c);
     }
-
-    return;
 }

@@ -1,3 +1,11 @@
+#
+#  boot.s
+#  OS
+#
+#  Created by Adam Kopeć on 9/26/15.
+#  Copyright © 2015 Adam Kopeć. All rights reserved.
+#
+
 # Declare constants used for creating a multiboot header.
 .set ALIGN,    1<<0             # align loaded modules on page boundaries
 .set MEMINFO,  1<<1             # provide memory map

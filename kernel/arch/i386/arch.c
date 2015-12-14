@@ -1,3 +1,11 @@
+//
+//  arch.c
+//  OS
+//
+//  Created by Adam Kopeć on 12/10/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #include <kernel/arch/arch.h>
 
 void reboot() {
@@ -8,5 +16,5 @@ void reboot() {
 }
 
 void shutdown() {
-  printf("Will be added in near future\n");
+  printf("Will be added in version 1.1\n");
 }

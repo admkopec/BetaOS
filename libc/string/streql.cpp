@@ -1,3 +1,11 @@
+//
+//  streql.cpp
+//  OS
+//
+//  Created by Adam Kopeć on 12/8/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #include <string.h>
 
 bool streql(const char* str1, const char* str2) {

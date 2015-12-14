@@ -1,3 +1,11 @@
+//
+//  stdlib.h
+//  OS
+//
+//  Created by Adam Kopeć on 12/7/15.
+//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//
+
 #ifndef _STDLIB_H
 #define _STDLIB_H 1
 
@@ -14,4 +22,4 @@ void kpanic(const char* errormsg);
 }
 #endif
 
-#endif
+#endif /* stdlib_h */
