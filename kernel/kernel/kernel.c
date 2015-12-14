@@ -16,7 +16,6 @@
 #include <kernel/tty.h>
 
 //TODO:
-// * Add © to files
 // * Add GDT
 // * add PIC and enable IRQ
 // * change read() (start from waiting for IRQ 1 instead of polling
