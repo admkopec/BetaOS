@@ -15,6 +15,7 @@
 #include <version.h>
 #include <kernel/tty.h>
 #include <kernel/interrupts.h>
+#include <kernel/arch/arch.h>
 
 char buffstr[215];
 void read();
@@ -28,7 +29,7 @@ void getcommand() {
         clearScreen();
     }
     else if (streql(buffstr, "shut down")) {
-        printf("Not supported in this version! Working ACPI is needed\n");
+        shutdown();
     }
     else if (streql(buffstr, "reboot")) {
         reboot();
@@ -50,9 +51,6 @@ void getcommand() {
         read_rtc();
         printf("%d:%d:%d\n", hour, minute, second);
         printf("%d/%d/%d\n", day, month, year);
-    }
-    else if(streql(buffstr, "dev test kernel panic")) {
-        kpanic("Test of Kernel Panic function. Don't worry :)");
     }
     else {
         printf("Command not found!\n");
