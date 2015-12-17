@@ -17,6 +17,7 @@
 
 //TODO:
 // * Add GDT
+// * Add IDT
 // * add PIC and enable IRQ
 // * change read() (start from waiting for IRQ 1 instead of polling
 // * add PCI driver

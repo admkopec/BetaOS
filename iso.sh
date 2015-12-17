@@ -15,6 +15,7 @@ menuentry "BetaOS" {
     boot
 }
 EOF
+rm -p product/BetaOS.iso
 grub-mkrescue -o product/BetaOS.iso product
 
 ./clean.sh

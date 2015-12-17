@@ -15,6 +15,7 @@
 #include <kernel/tty.h>
 #include <kernel/interrupts.h>
 #include <kernel/arch/arch.h>
+#include <kernel/arch/pic.h>
 
 void getcommand() {
     read();
@@ -58,7 +59,7 @@ void read() {
     unsigned char reading=1;
     while (reading) {
         if (inb(0x64)&0x1) {
-            switch (inb(0x60)) {
+        switch (inb(0x60)) {
                 case 2:
                     printf("1");
                     buffstr[i]='1';
@@ -251,13 +252,13 @@ void read() {
                     i++;
                     break;
                 case 40:
-                    printf("%c",(char)39);               //   Single quote (')
-                    buffstr[i] = (char)44;
+                    printf("'");               //   Single quote (')
+                    buffstr[i] = (char)39;
                     i++;
                     break;
                 case 41:
-                    printf("%c",(char)96);               // Back tick (`)
-                    buffstr[i] = (char)44;
+                    printf("`");               // Back tick (`)
+                    buffstr[i] = (char)96;
                     i++;
                     break;
                     /* case 42:                                 Left shift
