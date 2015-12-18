@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-__attribute__((__noreturn__))
+//__attribute__((__noreturn__))
 void kpanic(const char* errormsg);
 
 #ifdef __cplusplus
