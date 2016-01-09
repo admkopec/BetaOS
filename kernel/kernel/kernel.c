@@ -18,9 +18,14 @@
 //TODO:
 // * Add GDT
 // * Add IDT
-// * add PIC and enable IRQ
-// * change read() (start from waiting for IRQ 1 instead of polling
-// * add PCI driver
+// * Add PIC and enable IRQ
+// * Change read() (start from waiting for IRQ 1 instead of polling)
+// * Change read() (use keymap instead of switch)
+// * Add APM
+// * Add PCI driver
+// * Add SATA driver
+// * Add Filesystem driver
+// * Try replacing APM with ACPI
 
 void kernel_early(void)
 {
