@@ -14,7 +14,7 @@
 #include <stddef.h>
 #include <kernel/interrupts.h>
 
-#define CURRENT_YEAR 2015
+#define CURRENT_YEAR 2016
 
     unsigned char second;
     unsigned char minute;

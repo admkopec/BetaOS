@@ -16,5 +16,5 @@ void reboot() {
 }
 
 void shutdown() {
-  printf("Will be added in version 1.1\n");
+  printf("Will be added in version 1.1\nBeta will be available sooner\n");
 }
