@@ -11,6 +11,38 @@
 
 #define __myos_libc 1
 
+/* If int.h doesn't load */
+
+typedef long long int64;
+typedef unsigned long long uint64;
+
+typedef int int32;
+typedef unsigned int uint32;
+
+typedef short int16;
+typedef unsigned short uint16;
+
+typedef char int8;
+typedef unsigned char uint8;
+
+/* Useful macros */
+
+#define NULL   ((void*)0)
+#define true   1        //  For c ()
+#define false  0        //
+
+#define offsetof(type, member)  ((uint32)(&((type*)NULL)->member))
+#define arraysize(var)          (sizeof(var) / sizeof((var)[0]))
+#define roundup(x, y)           (((x) + ((y) - 1)) / (y))
+
+#define PACKED       __attribute__ ((__packed__))
+#define ALIGNED(n)   __attribute__ ((aligned(n)))
+#define fastcall     __attribute__ ((fastcall))
+
+#define MIN(a, b)   ((a) < (b) ? (a) : (b))
+#define MAX(a, b)   ((a) > (b) ? (a) : (b))
+
+
 /* PIC */
 
 #define PIC1            0x20		/* IO base address for master PIC */

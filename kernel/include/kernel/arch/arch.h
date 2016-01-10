@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <kernel/interrupts.h>
+#include <kernel/bios.h>
 
 void reboot();
 void shutdown();
