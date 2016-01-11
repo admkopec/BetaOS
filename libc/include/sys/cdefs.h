@@ -28,8 +28,6 @@ typedef unsigned char uint8;
 /* Useful macros */
 
 #define NULL   ((void*)0)
-#define true   1        //  For c ()
-#define false  0        //
 
 #define offsetof(type, member)  ((uint32)(&((type*)NULL)->member))
 #define arraysize(var)          (sizeof(var) / sizeof((var)[0]))
