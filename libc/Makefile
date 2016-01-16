@@ -31,7 +31,8 @@ $(ARCH_FREEOBJS) \
 stdio/printf.o \
 stdio/putchar.o \
 stdio/puts.o \
-stdlib/kpanic.o \
+stdlib/panic.o \
+stdlib/error.o \
 string/itoa.o \
 string/memcmp.o \
 string/memcpy.o \

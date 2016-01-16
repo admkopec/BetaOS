@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		3B64CAFA1C427B8600705B26 /* bios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bios.h; path = kernel/include/kernel/bios.h; sourceTree = "<group>"; };
-		3B64CAFB1C427BA200705B26 /* bios.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = bios.c; path = kernel/arch/i386/bios.c; sourceTree = "<group>"; };
-		3B64CAFC1C427F6200705B26 /* boot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = boot.h; path = kernel/include/kernel/boot.h; sourceTree = "<group>"; };
+		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
@@ -22,7 +20,7 @@
 		3B8B14E51C1DE6C00003638E /* printf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = printf.cpp; path = libc/stdio/printf.cpp; sourceTree = "<group>"; };
 		3B8B14E61C1DE6C00003638E /* putchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = putchar.c; path = libc/stdio/putchar.c; sourceTree = "<group>"; };
 		3B8B14E71C1DE6C00003638E /* puts.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = puts.c; path = libc/stdio/puts.c; sourceTree = "<group>"; };
-		3B8B14E81C1DE6CC0003638E /* kpanic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kpanic.c; path = libc/stdlib/kpanic.c; sourceTree = "<group>"; };
+		3B8B14E81C1DE6CC0003638E /* panic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = panic.c; path = libc/stdlib/panic.c; sourceTree = "<group>"; };
 		3B8B14E91C1DE6D60003638E /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = time.c; path = libc/time/time.c; sourceTree = "<group>"; };
 		3B8B14EA1C1DE6E70003638E /* itoa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = itoa.cpp; path = libc/string/itoa.cpp; sourceTree = "<group>"; };
 		3B8B14EB1C1DE6E70003638E /* memcmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = memcmp.cpp; path = libc/string/memcmp.cpp; sourceTree = "<group>"; };
@@ -120,7 +118,8 @@
 		3B8B14E11C1DE6940003638E /* stdlib */ = {
 			isa = PBXGroup;
 			children = (
-				3B8B14E81C1DE6CC0003638E /* kpanic.c */,
+				3B8B14E81C1DE6CC0003638E /* panic.c */,
+				3B13CF641C4A534700A1EF06 /* error.c */,
 			);
 			name = stdlib;
 			sourceTree = "<group>";
@@ -208,8 +207,6 @@
 				3B8B14FC1C1DE7A20003638E /* interrupts.h */,
 				3B8B14FD1C1DE7A20003638E /* tty.h */,
 				3B8B14FE1C1DE7A20003638E /* vga.h */,
-				3B64CAFA1C427B8600705B26 /* bios.h */,
-				3B64CAFC1C427F6200705B26 /* boot.h */,
 			);
 			name = kernel;
 			sourceTree = "<group>";
@@ -234,7 +231,6 @@
 				3B8B15071C1DE7CD0003638E /* make.config */,
 				3B8B15081C1DE7CD0003638E /* tty.c */,
 				3B79B8A51C21C32800F329CE /* pic.c */,
-				3B64CAFB1C427BA200705B26 /* bios.c */,
 			);
 			name = i386;
 			sourceTree = "<group>";
