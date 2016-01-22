@@ -12,8 +12,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct {
+    char* name;
+    char* desc;
+    void (*run)(void);
+} Commands_t;
+
+Commands_t commands[100];
+
+void CommandsInit();
+void findcommand();
+
+////// Temporary keyboard read() //////
 char buffstr[215];
 void read();
-void getcommand();
 
 #endif /* command_h */

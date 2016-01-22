@@ -17,39 +17,71 @@
 #include <kernel/arch/arch.h>
 #include <kernel/arch/pic.h>
 
-void getcommand() {
-    read();
-    if (streql(buffstr, "clear")) {
-        clearScreen();
-    }
-    else if (streql(buffstr, "shut down")) {
-        shutdown();
-    }
-    else if (streql(buffstr, "reboot")) {
-        reboot();
-    }
-    else if (streql(buffstr, "version")) {
-        printf(VERSION_NAME);
-        printf(" ");
-        printf(VERSION_MAJOR);
-        printf(".");
-        printf(VESRION_MINOR);
-        printf(" ");
-        printf(VERSION_COPYRIGHT);
-        printf("\n");
-        printf("Build Number ");
-        printf(VERSION_BUILD);
-        printf("\n");
-    }
-    else if(streql(buffstr, "time")) {
-        read_rtc();
-        printf("%d:%d:%d\n", hour, minute, second);
-        printf("%d/%d/%d\n", day, month, year);
-    }
-    else {
-        printf("Command not found!\n");
-    }
+int num=0;
+
+/* Commands prototypes */
+
+void help();
+void version();
+void time();
+
+void addCommand(char* name, char* desc, void (*run)(void)) {
+    commands[num].name=name;
+    commands[num].desc=desc;
+    commands[num].run=run;
+    num++;
 }
+
+void CommandsInit() {
+    
+    addCommand("help", "Help command\n", help);
+    addCommand("version", "Displays version of BetaOS\n", version);
+    addCommand("reboot", "Reboots the computer\n", reboot);
+    addCommand("clear", "Clears the screen\n", clearScreen);
+    addCommand("time", "Displays the actual time\n", time);
+    addCommand("shut down", "Shut downs the computer\n", shutdown);
+}
+
+void findcommand() {
+    read();
+    for (int i=0; i<100; i++) {
+        if (streql(buffstr, commands[i].name)) {
+            commands[i].run();
+            return;
+        }
+    }
+    printf("Command not found!\n");
+}
+
+
+
+void help() {
+    printf("Simple help command\nIt's not implemnted yet\n");
+}
+
+void version() {
+    printf(VERSION_NAME);
+    printf(" ");
+    printf(VERSION_MAJOR);
+    printf(".");
+    printf(VESRION_MINOR);
+    printf(" ");
+    printf(VERSION_COPYRIGHT);
+    printf("\n");
+    printf("Build Number ");
+    printf(VERSION_BUILD);
+    printf("\n");
+}
+
+void time() {
+    read_rtc();
+    printf("%d:%d:%d\n", hour, minute, second);
+    printf("%d/%d/%d\n", day, month, year);
+}
+
+
+
+////////////////////////   Keyboard Read()   ////////////////////////
 
 void read() {
     for (int i=0; i<214; i++) {

@@ -30,12 +30,13 @@
 void kernel_early(void)
 {
 	terminal_initialize();
+    CommandsInit();
 }
 
 void kernel_main(void)
 {
 	printf("Hello!\nWelcome to BetaOS!\n");
-	while (1) {
-		getcommand();
+    while (1) {
+        findcommand();
 	}
 }
