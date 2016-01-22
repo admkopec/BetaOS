@@ -18,7 +18,7 @@ typedef struct {
     void (*run)(void);
 } Commands_t;
 
-Commands_t commands[100];
+Commands_t command[100];
 
 void CommandsInit();
 void findcommand();

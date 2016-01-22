@@ -26,27 +26,27 @@ void version();
 void time();
 
 void addCommand(char* name, char* desc, void (*run)(void)) {
-    commands[num].name=name;
-    commands[num].desc=desc;
-    commands[num].run=run;
+    command[num].name=name;
+    command[num].desc=desc;
+    command[num].run=run;
     num++;
 }
 
 void CommandsInit() {
     
-    addCommand("help", "Help command\n", help);
-    addCommand("version", "Displays version of BetaOS\n", version);
-    addCommand("reboot", "Reboots the computer\n", reboot);
-    addCommand("clear", "Clears the screen\n", clearScreen);
-    addCommand("time", "Displays the actual time\n", time);
-    addCommand("shut down", "Shut downs the computer\n", shutdown);
+    addCommand("help", "Help command", help);
+    addCommand("version", "Displays version of BetaOS", version);
+    addCommand("reboot", "Reboots the computer", reboot);
+    addCommand("clear", "Clears the screen", clearScreen);
+    addCommand("time", "Displays the actual time", time);
+    addCommand("shut down", "Shut downs the computer", shutdown);
 }
 
 void findcommand() {
     read();
     for (int i=0; i<100; i++) {
-        if (streql(buffstr, commands[i].name)) {
-            commands[i].run();
+        if (streql(buffstr, command[i].name)) {
+            command[i].run();
             return;
         }
     }
@@ -56,7 +56,40 @@ void findcommand() {
 
 
 void help() {
-    printf("Simple help command\nIt's not implemnted yet\n");
+    clearScreen();
+    printf("==========HELP=========\n");
+    printf("1. Command list\n");
+    printf("2. Basic information about the OS\n");
+    printf("3. Exit help\n");
+    for (; ;) {
+        read();
+        if (streql(buffstr,"1")) {
+            clearScreen();
+            for (int i=0; i<num; i++) {
+                printf("Command name: %s\nCommand description: %s\n", command[i].name, command[i].desc);
+            }
+            for (; ;) {
+                read();
+                if (streql(buffstr, "")) {
+                    help();
+                    return;
+                }
+            }
+        } else if(streql(buffstr, "2")) {
+            clearScreen();
+            version();
+            for (; ;) {
+                read();
+                if (streql(buffstr, "")) {
+                    help();
+                    return;
+                }
+            }
+        } else if(streql(buffstr, "3")) {
+            clearScreen();
+            return;
+        }
+    }
 }
 
 void version() {
