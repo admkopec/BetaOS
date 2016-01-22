@@ -106,10 +106,76 @@ void version() {
     printf("\n");
 }
 
+char* translateMonth (int month) {
+    char* monthl="";
+    switch (month) {
+        case 1:
+            monthl="January";
+            break;
+        case 2:
+            monthl="February";
+            break;
+        case 3:
+            monthl="March";
+            break;
+        case 4:
+            monthl="April";
+            break;
+        case 5:
+            monthl="May";
+            break;
+        case 6:
+            monthl="June";
+            break;
+        case 7:
+            monthl="July";
+            break;
+        case 8:
+            monthl="August";
+            break;
+        case 9:
+            monthl="Spetember";
+            break;
+        case 10:
+            monthl="October";
+            break;
+        case 11:
+            monthl="November";
+            break;
+        case 12:
+            monthl="December";
+            break;
+            
+        default:
+            break;
+    }
+    return monthl;
+}
+
+char* translateDay() {
+    /* Day to day of the week */
+    /* year & month dayl= or something like that… */
+    return "DayofWeek";
+}
+char* translateHour() {
+    char* pmam;
+    if (hour<=12) {
+        hour=hour;
+        pmam="AM";
+    } else if (hour>12) {
+        hour=hour-12;
+        pmam="PM";
+    }
+    return pmam;
+}
+
 void time() {
     read_rtc();
-    printf("%d:%d:%d\n", hour, minute, second);
-    printf("%d/%d/%d\n", day, month, year);
+    char* monthl=translateMonth(month);
+    char* dayl=translateDay();
+    char* pmam=translateHour();
+    printf("%d:%d:%d %s\n", hour, minute, second, pmam);
+    printf("%s, %s %d, %d\n", dayl, monthl, day, year);
 }
 
 
