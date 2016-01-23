@@ -16,3 +16,5 @@ Now you can run the OS from ISO.
 * Added kpanic function.
 * Added reboot.
 * Added whole new build mechanism.
+* Improved commands management.
+* Improved time command.
