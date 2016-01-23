@@ -224,7 +224,14 @@ void time_full() {
     char* monthl=translateMonth(month);
     char* dayl=translateDay(true);
     char* pmam=translateHour();
-    printf("%d:%d:%d %s\n", hour, minute, second, pmam);
+    char* addzeros="";
+    char* addzerom="";
+    if (second<10) {
+        addzeros="0";
+    } if (minute<10) {
+        addzerom="0";
+    }
+    printf("%d:%s%d:%s%d %s\n", hour, addzerom, minute, addzeros, second, pmam);
     printf("%s, %s %d, %d\n", dayl, monthl, day, year);
 }
 
@@ -232,7 +239,11 @@ void time_short() {
     read_rtc();
     char* dayl=translateDay(false);
     char* pmam=translateHour();
-    printf("%s %d:%d %s\n", dayl, hour, minute, pmam);
+    char* addzerom="";
+    if (minute<10) {
+        addzerom="0";
+    }
+    printf("%s %d:%s%d %s\n", dayl, hour, addzerom, minute, pmam);
 }
 
 
