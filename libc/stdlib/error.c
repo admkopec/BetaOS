@@ -11,6 +11,6 @@
 #include <time.h>
 
 void error(const char* errormsg) {
-    read_rtc();
-    printf("\nError: %d:%d:%d %d/%d/%d\n%s\n", hour, minute, second, day, month, year, errormsg);
+    gettime();
+    printf("\nError: %d:%s%d:%s%d %s %d/%d/%d\n%s\n", hour, zerom, minute, zeros, second, pmam, month, day, year, errormsg);
 }

@@ -59,7 +59,7 @@ void findcommand() {
 
 void help() {
     clearScreen();
-    printf("==========HELP=========\n");
+    printf("=============HELP============\n");
     printf("1. Command list\n");
     printf("2. Basic information about the OS\n");
     printf("3. Exit help\n");
@@ -108,142 +108,15 @@ void version() {
     printf("\n");
 }
 
-char* translateMonth (int month) {
-    char* monthl="";
-    switch (month) {
-        case 1:
-            monthl="January";
-            break;
-        case 2:
-            monthl="February";
-            break;
-        case 3:
-            monthl="March";
-            break;
-        case 4:
-            monthl="April";
-            break;
-        case 5:
-            monthl="May";
-            break;
-        case 6:
-            monthl="June";
-            break;
-        case 7:
-            monthl="July";
-            break;
-        case 8:
-            monthl="August";
-            break;
-        case 9:
-            monthl="Spetember";
-            break;
-        case 10:
-            monthl="October";
-            break;
-        case 11:
-            monthl="November";
-            break;
-        case 12:
-            monthl="December";
-            break;
-            
-        default:
-            break;
-    }
-    return monthl;
-}
-
-char* translateDay(bool uselong) {
-    int y = year;
-    static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
-    y -= month < 3;
-    int dayofweek = (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7;
-    
-    char* dayofweeklong="";
-    char* dayofweekshort="";
-    
-    switch (dayofweek) {
-        case 0:
-            dayofweeklong = "Sunday";
-            dayofweekshort = "Sun";
-            break;
-        case 1:
-            dayofweeklong = "Monday";
-            dayofweekshort = "Mon";
-            break;
-        case 2:
-            dayofweeklong = "Tuesday";
-            dayofweekshort = "Tue";
-            break;
-        case 3:
-            dayofweeklong = "Wednesdy";
-            dayofweekshort = "Wed";
-            break;
-        case 4:
-            dayofweeklong = "Thursday";
-            dayofweekshort = "Thu";
-            break;
-        case 5:
-            dayofweeklong = "Friday";
-            dayofweekshort = "Fri";
-            break;
-        case 6:
-            dayofweeklong = "Saturday";
-            dayofweekshort = "Sat";
-            break;
-        default:
-            break;
-    }
-    if (uselong) {
-        return dayofweeklong;
-    } else {
-        return dayofweekshort;
-    }
-}
-char* translateHour() {
-    char* pmam="";
-    if (hour<12 && hour>0) {
-        hour=hour;
-        pmam="AM";
-    } else if (hour>12 && hour<24) {
-        hour=hour-12;
-        pmam="PM";
-    } else if (hour==12) {
-        hour=hour;
-        pmam="PM";
-    } else if (hour==0 || hour==24) {
-        hour=12;
-        pmam="AM";
-    }
-    return pmam;
-}
-
 void time_full() {
-    read_rtc();
-    char* monthl=translateMonth(month);
-    char* dayl=translateDay(true);
-    char* pmam=translateHour();
-    char* addzeros="";
-    char* addzerom="";
-    if (second<10) {
-        addzeros="0";
-    } if (minute<10) {
-        addzerom="0";
-    }
-    printf("%d:%s%d:%s%d %s\n", hour, addzerom, minute, addzeros, second, pmam);
-    printf("%s, %s %d, %d\n", dayl, monthl, day, year);
+    gettime();
+    printf("%d:%s%d:%s%d %s\n", hour, zerom, minute, zeros, second, pmam);
+    printf("%s, %s %d, %d\n", dayofweeklong, monthl, day, year);
 }
 
 void time_short() {
-    read_rtc();
-    char* dayl=translateDay(false);
-    char* pmam=translateHour();
-    char* addzerom="";
-    if (minute<10) {
-        addzerom="0";
-    }
-    printf("%s %d:%s%d %s\n", dayl, hour, addzerom, minute, pmam);
+    gettime();
+    printf("%s %d:%s%d %s\n", dayofweekshort, hour, zerom, minute, pmam);
 }
 
 

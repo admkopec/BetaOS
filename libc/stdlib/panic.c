@@ -12,7 +12,7 @@
 
 //__attribute__((__noreturn__))
 void panic(const char* errormsg) {
-    read_rtc();
-	printf("\nKernel Panic: %d:%d:%d %d/%d/%d\n%s\nCPU halted", hour, minute, second, day, month, year, errormsg);
+    gettime();
+	printf("\nKernel Panic: %d:%s%d:%s%d %s %d/%d/%d\n%s\nCPU halted", hour, zerom, minute, zeros, second, pmam, month, day, year, errormsg);
     asm("hlt");
 }

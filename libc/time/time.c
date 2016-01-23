@@ -92,3 +92,116 @@ void read_rtc() {
         if(year < CURRENT_YEAR) year += 100;
     }
 }
+
+void translateMonth() {
+    switch (month) {
+        case 1:
+            monthl="January";
+            break;
+        case 2:
+            monthl="February";
+            break;
+        case 3:
+            monthl="March";
+            break;
+        case 4:
+            monthl="April";
+            break;
+        case 5:
+            monthl="May";
+            break;
+        case 6:
+            monthl="June";
+            break;
+        case 7:
+            monthl="July";
+            break;
+        case 8:
+            monthl="August";
+            break;
+        case 9:
+            monthl="Spetember";
+            break;
+        case 10:
+            monthl="October";
+            break;
+        case 11:
+            monthl="November";
+            break;
+        case 12:
+            monthl="December";
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void translateDay() {
+    int y = year;
+    static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+    y -= month < 3;
+    int dayofweek = (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7;
+    
+    switch (dayofweek) {
+        case 0:
+            dayofweeklong = "Sunday";
+            dayofweekshort = "Sun";
+            break;
+        case 1:
+            dayofweeklong = "Monday";
+            dayofweekshort = "Mon";
+            break;
+        case 2:
+            dayofweeklong = "Tuesday";
+            dayofweekshort = "Tue";
+            break;
+        case 3:
+            dayofweeklong = "Wednesdy";
+            dayofweekshort = "Wed";
+            break;
+        case 4:
+            dayofweeklong = "Thursday";
+            dayofweekshort = "Thu";
+            break;
+        case 5:
+            dayofweeklong = "Friday";
+            dayofweekshort = "Fri";
+            break;
+        case 6:
+            dayofweeklong = "Saturday";
+            dayofweekshort = "Sat";
+            break;
+        default:
+            break;
+    }
+}
+void translateHour() {
+    if (hour<12 && hour>0) {
+        hour=hour;
+        pmam="AM";
+    } else if (hour>12 && hour<24) {
+        hour=hour-12;
+        pmam="PM";
+    } else if (hour==12) {
+        hour=hour;
+        pmam="PM";
+    } else if (hour==0 || hour==24) {
+        hour=12;
+        pmam="AM";
+    }
+}
+
+void gettime() {
+    read_rtc();
+    translateHour();
+    translateDay();
+    translateMonth();
+    zerom="";
+    zeros="";
+    if (minute<10) {
+        zerom="0";
+    } if (second<10) {
+        zeros="0";
+    }
+}

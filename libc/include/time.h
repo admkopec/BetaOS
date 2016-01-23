@@ -16,24 +16,32 @@
 
 #define CURRENT_YEAR 2016
 
-    unsigned char second;
-    unsigned char minute;
-    unsigned char hour;
-    unsigned char day;
-    unsigned char month;
-    unsigned int year;
+unsigned char second;
+unsigned char minute;
+unsigned char hour;
+unsigned char day;
+unsigned char month;
+unsigned int year;
+char* pmam;
+char* monthl;
+char* dayofweekshort;
+char* dayofweeklong;
+char* zeros;
+char* zerom;
 
-    static const int century_register = 0x00;                                // Set by ACPI table parsing code if possible
+static const int century_register = 0x00;                                // Set by ACPI table parsing code if possible
 
-    enum {
-        cmos_address = 0x70,
-        cmos_data    = 0x71
-    };
+enum {
+    cmos_address = 0x70,
+    cmos_data    = 0x71
+};
 
-    int get_update_in_progress_flag();
+int get_update_in_progress_flag();
 
-    unsigned char get_RTC_register(int reg);
+unsigned char get_RTC_register(int reg);
 
-    void read_rtc();
+void read_rtc();
+
+void gettime();
 
 #endif /* time_h */
