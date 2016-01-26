@@ -16,11 +16,11 @@ typedef struct {
     char* name;
     char* desc;
     void (*run)(void);
-} Commands_t;
+} Command_t;
 
-Commands_t command[100];
+Command_t command[100];
 
-void CommandsInit();
+void CommandInit();
 void findcommand();
 
 ////// Temporary keyboard read() //////

@@ -6,11 +6,60 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3B7DD8701C57B6F700F3B86A /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F81C1DE77E0003638E /* kernel.c */; };
+		3B7DD8711C57B6F900F3B86A /* command.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72518F1C20A0B9009560FE /* command.c */; };
+		3B7DD8721C57B70200F3B86A /* version.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14FA1C1DE78A0003638E /* version.h */; };
+		3B7DD8731C57B70500F3B86A /* command.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F91C1DE78A0003638E /* command.h */; };
+		3B7DD8741C57B70700F3B86A /* vga.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14FE1C1DE7A20003638E /* vga.h */; };
+		3B7DD8751C57B70B00F3B86A /* tty.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14FD1C1DE7A20003638E /* tty.h */; };
+		3B7DD8761C57B70E00F3B86A /* interrupts.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14FC1C1DE7A20003638E /* interrupts.h */; };
+		3B7DD8771C57B71200F3B86A /* arch.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B15001C1DE7B20003638E /* arch.h */; };
+		3B7DD8781C57B71400F3B86A /* pic.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B79B8A41C21C21500F329CE /* pic.h */; };
+		3B7DD8791C57B71D00F3B86A /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B15021C1DE7CD0003638E /* arch.c */; };
+		3B7DD87A1C57B72000F3B86A /* boot.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B15031C1DE7CD0003638E /* boot.S */; };
+		3B7DD87B1C57B72300F3B86A /* crti.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B15041C1DE7CD0003638E /* crti.S */; };
+		3B7DD87C1C57B72500F3B86A /* crtn.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B15051C1DE7CD0003638E /* crtn.S */; };
+		3B7DD87D1C57B72800F3B86A /* tty.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B15081C1DE7CD0003638E /* tty.c */; };
+		3B7DD87E1C57B72A00F3B86A /* pic.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B79B8A51C21C32800F329CE /* pic.c */; };
+		3B7DD87F1C57B73100F3B86A /* stdio.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14DA1C1DE6130003638E /* stdio.h */; };
+		3B7DD8801C57B73300F3B86A /* stdlib.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14DB1C1DE6130003638E /* stdlib.h */; };
+		3B7DD8811C57B73700F3B86A /* string.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14DC1C1DE6130003638E /* string.h */; };
+		3B7DD8821C57B73900F3B86A /* time.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14DD1C1DE6130003638E /* time.h */; };
+		3B7DD8831C57B73E00F3B86A /* cdefs.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14DE1C1DE61B0003638E /* cdefs.h */; };
+		3B7DD8841C57B74300F3B86A /* printf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E51C1DE6C00003638E /* printf.cpp */; };
+		3B7DD8851C57B74600F3B86A /* putchar.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E61C1DE6C00003638E /* putchar.c */; };
+		3B7DD8861C57B74900F3B86A /* puts.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E71C1DE6C00003638E /* puts.c */; };
+		3B7DD8871C57B74D00F3B86A /* panic.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E81C1DE6CC0003638E /* panic.c */; };
+		3B7DD8881C57B75000F3B86A /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B13CF641C4A534700A1EF06 /* error.c */; };
+		3B7DD8891C57B75400F3B86A /* itoa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EA1C1DE6E70003638E /* itoa.cpp */; };
+		3B7DD88A1C57B75700F3B86A /* memcmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EB1C1DE6E70003638E /* memcmp.cpp */; };
+		3B7DD88B1C57B75B00F3B86A /* memmove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14ED1C1DE6E70003638E /* memmove.cpp */; };
+		3B7DD88C1C57B75E00F3B86A /* memcpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EC1C1DE6E70003638E /* memcpy.cpp */; };
+		3B7DD88D1C57B76100F3B86A /* memset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EE1C1DE6E70003638E /* memset.cpp */; };
+		3B7DD88E1C57B76500F3B86A /* streql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EF1C1DE6E70003638E /* streql.cpp */; };
+		3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F01C1DE6E70003638E /* strlen.cpp */; };
+		3B7DD8901C57B76B00F3B86A /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E91C1DE6D60003638E /* time.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3B7DD8661C57B6B800F3B86A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
+		3B7DD8681C57B6B800F3B86A /* OS-doc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "OS-doc"; path = "/Users/adamkopec/Documents/OS/build/Debug/OS-doc"; sourceTree = "<absolute>"; };
 		3B8B14DA1C1DE6130003638E /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = libc/include/stdio.h; sourceTree = "<group>"; };
 		3B8B14DB1C1DE6130003638E /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = libc/include/stdlib.h; sourceTree = "<group>"; };
 		3B8B14DC1C1DE6130003638E /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = libc/include/string.h; sourceTree = "<group>"; };
@@ -58,6 +107,16 @@
 		3B8B15171C1DE9520003638E /* BetaOS.kernel */ = {isa = PBXFileReference; lastKnownFileType = file; name = BetaOS.kernel; path = product/boot/BetaOS.kernel; sourceTree = "<group>"; };
 		3B8B15191C1DE9600003638E /* grub.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = grub.cfg; path = product/boot/grub/grub.cfg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B7DD8651C57B6B800F3B86A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		3B8B14CC1C1DE5420003638E = {
@@ -303,6 +362,26 @@
 		};
 /* End PBXLegacyTarget section */
 
+/* Begin PBXNativeTarget section */
+		3B7DD8671C57B6B800F3B86A /* OS-doc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B7DD86F1C57B6B800F3B86A /* Build configuration list for PBXNativeTarget "OS-doc" */;
+			buildPhases = (
+				3B7DD8641C57B6B800F3B86A /* Sources */,
+				3B7DD8651C57B6B800F3B86A /* Frameworks */,
+				3B7DD8661C57B6B800F3B86A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "OS-doc";
+			productName = "OS-doc";
+			productReference = 3B7DD8681C57B6B800F3B86A /* OS-doc */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
 /* Begin PBXProject section */
 		3B8B14CD1C1DE5420003638E /* Project object */ = {
 			isa = PBXProject;
@@ -310,6 +389,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Adam Kopeć";
 				TargetAttributes = {
+					3B7DD8671C57B6B800F3B86A = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					3B8B14D11C1DE5420003638E = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -323,15 +405,80 @@
 				en,
 			);
 			mainGroup = 3B8B14CC1C1DE5420003638E;
+			productRefGroup = 3B8B14CC1C1DE5420003638E;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				3B8B14D11C1DE5420003638E /* OS */,
+				3B7DD8671C57B6B800F3B86A /* OS-doc */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXSourcesBuildPhase section */
+		3B7DD8641C57B6B800F3B86A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B7DD8901C57B76B00F3B86A /* time.c in Sources */,
+				3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */,
+				3B7DD88E1C57B76500F3B86A /* streql.cpp in Sources */,
+				3B7DD88D1C57B76100F3B86A /* memset.cpp in Sources */,
+				3B7DD88C1C57B75E00F3B86A /* memcpy.cpp in Sources */,
+				3B7DD88B1C57B75B00F3B86A /* memmove.cpp in Sources */,
+				3B7DD88A1C57B75700F3B86A /* memcmp.cpp in Sources */,
+				3B7DD8891C57B75400F3B86A /* itoa.cpp in Sources */,
+				3B7DD8881C57B75000F3B86A /* error.c in Sources */,
+				3B7DD8871C57B74D00F3B86A /* panic.c in Sources */,
+				3B7DD8861C57B74900F3B86A /* puts.c in Sources */,
+				3B7DD8851C57B74600F3B86A /* putchar.c in Sources */,
+				3B7DD8841C57B74300F3B86A /* printf.cpp in Sources */,
+				3B7DD8831C57B73E00F3B86A /* cdefs.h in Sources */,
+				3B7DD8821C57B73900F3B86A /* time.h in Sources */,
+				3B7DD8811C57B73700F3B86A /* string.h in Sources */,
+				3B7DD8801C57B73300F3B86A /* stdlib.h in Sources */,
+				3B7DD87F1C57B73100F3B86A /* stdio.h in Sources */,
+				3B7DD8701C57B6F700F3B86A /* kernel.c in Sources */,
+				3B7DD8711C57B6F900F3B86A /* command.c in Sources */,
+				3B7DD8721C57B70200F3B86A /* version.h in Sources */,
+				3B7DD8731C57B70500F3B86A /* command.h in Sources */,
+				3B7DD8741C57B70700F3B86A /* vga.h in Sources */,
+				3B7DD8751C57B70B00F3B86A /* tty.h in Sources */,
+				3B7DD8761C57B70E00F3B86A /* interrupts.h in Sources */,
+				3B7DD8771C57B71200F3B86A /* arch.h in Sources */,
+				3B7DD8781C57B71400F3B86A /* pic.h in Sources */,
+				3B7DD8791C57B71D00F3B86A /* arch.c in Sources */,
+				3B7DD87A1C57B72000F3B86A /* boot.S in Sources */,
+				3B7DD87B1C57B72300F3B86A /* crti.S in Sources */,
+				3B7DD87C1C57B72500F3B86A /* crtn.S in Sources */,
+				3B7DD87D1C57B72800F3B86A /* tty.c in Sources */,
+				3B7DD87E1C57B72A00F3B86A /* pic.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
 /* Begin XCBuildConfiguration section */
+		3B7DD86D1C57B6B800F3B86A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3B7DD86E1C57B6B800F3B86A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		3B8B14D21C1DE5420003638E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -431,6 +578,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3B7DD86F1C57B6B800F3B86A /* Build configuration list for PBXNativeTarget "OS-doc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B7DD86D1C57B6B800F3B86A /* Debug */,
+				3B7DD86E1C57B6B800F3B86A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		3B8B14D01C1DE5420003638E /* Build configuration list for PBXProject "OS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

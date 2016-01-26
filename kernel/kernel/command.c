@@ -33,7 +33,7 @@ void addCommand(char* name, char* desc, void (*run)(void)) {
     num++;
 }
 
-void CommandsInit() {
+void CommandInit() {
     
     addCommand("help",      "Help command",                             help);
     addCommand("version",   "Displays version of BetaOS",               version);

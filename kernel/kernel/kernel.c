@@ -30,7 +30,7 @@
 void kernel_early(void)
 {
 	terminal_initialize();
-    CommandsInit();
+    CommandInit();
 }
 
 void kernel_main(void)
