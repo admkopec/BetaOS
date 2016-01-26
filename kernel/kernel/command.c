@@ -17,7 +17,7 @@
 #include <kernel/arch/arch.h>
 #include <kernel/arch/pic.h>
 
-int num=0;
+int num = 0;
 
 /* Commands prototypes */
 
@@ -59,7 +59,7 @@ void findcommand() {
 
 void help() {
     clearScreen();
-    printf("=============HELP============\n");
+    printf("==================HELP=================\n");
     printf("1. Command list\n");
     printf("2. Basic information about the OS\n");
     printf("3. Exit help\n");
@@ -68,7 +68,7 @@ void help() {
         if (streql(buffstr,"1")) {
             clearScreen();
             for (int i=0; i<num; i++) {
-                printf("Command name: %s\nCommand description: %s\n", command[i].name, command[i].desc);
+                printf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
             }
             for (; ;) {
                 read();

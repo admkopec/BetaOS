@@ -56,10 +56,10 @@
 
 /* Begin PBXFileReference section */
 		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
+		3B198BCD1C57C83E00B80458 /* OS-doc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "OS-doc"; path = "/Users/adamkopec/Documents/OS/build/Debug/OS-doc"; sourceTree = "<absolute>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
-		3B7DD8911C57BC5200F3B86A /* OS-doc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "OS-doc"; path = "/Users/adamkopec/Documents/OS/build/Debug/OS-doc"; sourceTree = "<absolute>"; };
 		3B8B14DA1C1DE6130003638E /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = libc/include/stdio.h; sourceTree = "<group>"; };
 		3B8B14DB1C1DE6130003638E /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = libc/include/stdlib.h; sourceTree = "<group>"; };
 		3B8B14DC1C1DE6130003638E /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = libc/include/string.h; sourceTree = "<group>"; };
@@ -124,9 +124,9 @@
 			children = (
 				3B8B14F31C1DE74A0003638E /* kernel */,
 				3B8B14D71C1DE5BB0003638E /* libc */,
-				3B8B15091C1DE7FF0003638E /* scripts */,
+				3B8B15091C1DE7FF0003638E /* Scripts */,
 				3B8B15121C1DE9230003638E /* Readme */,
-				3B8B15141C1DE9390003638E /* product */,
+				3B8B15141C1DE9390003638E /* Product */,
 			);
 			sourceTree = "<group>";
 		};
@@ -294,7 +294,7 @@
 			name = i386;
 			sourceTree = "<group>";
 		};
-		3B8B15091C1DE7FF0003638E /* scripts */ = {
+		3B8B15091C1DE7FF0003638E /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
 				3B8B150A1C1DE91F0003638E /* build.sh */,
@@ -306,7 +306,7 @@
 				3B8B15101C1DE91F0003638E /* qemu.sh */,
 				3B8B15111C1DE91F0003638E /* target-triplet-to-arch.sh */,
 			);
-			name = scripts;
+			name = Scripts;
 			sourceTree = "<group>";
 		};
 		3B8B15121C1DE9230003638E /* Readme */ = {
@@ -317,13 +317,13 @@
 			name = Readme;
 			sourceTree = "<group>";
 		};
-		3B8B15141C1DE9390003638E /* product */ = {
+		3B8B15141C1DE9390003638E /* Product */ = {
 			isa = PBXGroup;
 			children = (
 				3B8B15161C1DE9490003638E /* boot */,
 				3B8B15151C1DE9450003638E /* BetaOS.iso */,
 			);
-			name = product;
+			name = Product;
 			sourceTree = "<group>";
 		};
 		3B8B15161C1DE9490003638E /* boot */ = {
@@ -377,7 +377,7 @@
 			);
 			name = "OS-doc";
 			productName = "OS-doc";
-			productReference = 3B7DD8911C57BC5200F3B86A /* OS-doc */;
+			productReference = 3B198BCD1C57C83E00B80458 /* OS-doc */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -593,6 +593,7 @@
 				3B7DD86E1C57B6B800F3B86A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3B8B14D01C1DE5420003638E /* Build configuration list for PBXProject "OS" */ = {
 			isa = XCConfigurationList;
