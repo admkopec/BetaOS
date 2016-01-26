@@ -59,7 +59,7 @@
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
-		3B7DD8681C57B6B800F3B86A /* OS-doc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "OS-doc"; path = "/Users/adamkopec/Documents/OS/build/Debug/OS-doc"; sourceTree = "<absolute>"; };
+		3B7DD8911C57BC5200F3B86A /* OS-doc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "OS-doc"; path = "/Users/adamkopec/Documents/OS/build/Debug/OS-doc"; sourceTree = "<absolute>"; };
 		3B8B14DA1C1DE6130003638E /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = libc/include/stdio.h; sourceTree = "<group>"; };
 		3B8B14DB1C1DE6130003638E /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = libc/include/stdlib.h; sourceTree = "<group>"; };
 		3B8B14DC1C1DE6130003638E /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = libc/include/string.h; sourceTree = "<group>"; };
@@ -377,7 +377,7 @@
 			);
 			name = "OS-doc";
 			productName = "OS-doc";
-			productReference = 3B7DD8681C57B6B800F3B86A /* OS-doc */;
+			productReference = 3B7DD8911C57BC5200F3B86A /* OS-doc */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -463,6 +463,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
+				HEADER_SEARCH_PATHS = (
+					/Users/adamkopec/Documents/OS/libc/include,
+					/Users/adamkopec/Documents/OS/kernel/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -473,6 +477,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
+				HEADER_SEARCH_PATHS = (
+					/Users/adamkopec/Documents/OS/libc/include,
+					/Users/adamkopec/Documents/OS/kernel/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
