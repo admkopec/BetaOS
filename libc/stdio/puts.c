@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-void puts(const char* string)
+int puts(const char* string)
 {
-	printf("%s\n", string);
+	return printf("%s\n", string);
 }
