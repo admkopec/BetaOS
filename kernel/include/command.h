@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAXCOMMANDS
+#define MAXCOMMANDS 100
 
 typedef struct {
     char* name;
