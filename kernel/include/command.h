@@ -12,13 +12,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAXCOMMANDS
+
 typedef struct {
     char* name;
     char* desc;
     void (*run)(void);
 } Command_t;
 
-Command_t command[100];
+Command_t command[MAXCOMMANDS];
 
 void CommandInit();
 void findcommand();
