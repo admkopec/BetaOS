@@ -11,8 +11,9 @@
 #include <stdio.h>
 #include <string.h>
 
-void printf(const char *s, ...) {
+int printf(const char *s, ...) {
     va_list ap;
+    int printedchars=0;
 
     char buf[16];
     int i, j, size, buflen, neg;
@@ -103,5 +104,7 @@ void printf(const char *s, ...) {
             }
         } else
         putchar(c);
+        printedchars++;
     }
+    return printedchars;
 }
