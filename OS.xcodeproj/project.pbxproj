@@ -56,7 +56,6 @@
 
 /* Begin PBXFileReference section */
 		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
-		3B198BCD1C57C83E00B80458 /* OS-doc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "OS-doc"; path = "/Users/adamkopec/Documents/OS/build/Debug/OS-doc"; sourceTree = "<absolute>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
