@@ -15,9 +15,9 @@
 extern "C" {
 #endif
 
-void printf(const char*, ...);
+int printf(const char*, ...);
 int putchar(int);
-void puts(const char*);
+int puts(const char*);
 
 #ifdef __cplusplus
 }
