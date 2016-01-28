@@ -100,7 +100,7 @@ void terminal_putchar(char c)
 	else if (c=='\b') {
 		if (terminal_row>0||terminal_row==0) {
 			terminal_column--;
-			if (terminal_column==-1&&terminal_row!=0) {
+			if (terminal_column==0&&terminal_row!=0) {
 				terminal_column=VGA_WIDTH;
 				terminal_row--;
 			}
@@ -121,7 +121,7 @@ void terminal_putchar(char c)
 		}
 	}
     cur();
-		newLineCheck();
+    newLineCheck();
 }
 
 void terminal_write(const char* data, size_t size)
