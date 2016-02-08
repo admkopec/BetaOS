@@ -28,8 +28,20 @@ void time_short();
 
 void addCommand(char* name, char* desc, void (*run)(void)) {
     command[num].name=name;
+    if (command[num].name==NULL) {
+        error("Failed to add command. Reason name=NULL");
+        return;
+    }
     command[num].desc=desc;
+    if (command[num].desc==NULL) {
+        error("Failed to add command. Reason desc=NULL");
+        return;
+    }
     command[num].run=run;
+    if (command[num].run==NULL) {
+        error("Failed to add command. Reason run=NULL");
+        return;
+    }
     num++;
 }
 
