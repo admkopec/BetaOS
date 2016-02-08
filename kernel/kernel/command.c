@@ -123,6 +123,45 @@ void time_short() {
 
 ////////////////////////   Keyboard Read()   ////////////////////////
 
+
+/* Testing keyboard leds */     /* Result: not working */
+unsigned char keyboard_control_read_status() {
+    return inb(0x64);
+}
+
+void keyboard_control_send_command(unsigned char command) {
+    while (1) {
+        if ((keyboard_control_read_status() & 2)==0) {
+            break;
+        }
+    }
+    outb(0x64, command);
+}
+
+unsigned char keyboard_encoder_read_buffer() {
+    return inb(0x60);
+}
+
+void keyboard_encoder_send_command(unsigned char command) {
+    while (1) {
+        if ((keyboard_control_read_status() & 2)==0) {
+            break;
+        }
+    }
+    outb(0x60, command);
+}
+
+void keyboard_set_leds(bool num, bool caps, bool scroll) {
+    unsigned char data = 0;
+    data = (scroll) ? (data | 1) : (data & 1);
+    data = (num) ? (num | 2) : (num & 2);
+    data = (caps) ? (num | 4) : (num & 4);
+    keyboard_encoder_send_command(0xED);
+    keyboard_encoder_send_command(data);
+}
+
+/* End of test */
+
 void read() {
     for (int i=0; i<214; i++) {
         buffstr[i]=buffstr[214];
