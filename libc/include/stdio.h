@@ -18,6 +18,7 @@ extern "C" {
 int printf(const char*, ...);
 int putchar(int);
 int puts(const char*);
+int getchar(void);
 
 #ifdef __cplusplus
 }

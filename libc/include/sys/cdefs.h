@@ -9,6 +9,8 @@
 #ifndef _SYS_CDEFS_H
 #define _SYS_CDEFS_H 1
 
+#include <version.h>
+
 #define __myos_libc 1
 
 /* If int.h doesn't load */

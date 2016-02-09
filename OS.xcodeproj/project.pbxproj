@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B460C621C6A455900213C64 /* getchar.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B460C611C6A455900213C64 /* getchar.c */; };
 		3B7DD8701C57B6F700F3B86A /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F81C1DE77E0003638E /* kernel.c */; };
 		3B7DD8711C57B6F900F3B86A /* command.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72518F1C20A0B9009560FE /* command.c */; };
 		3B7DD8721C57B70200F3B86A /* version.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14FA1C1DE78A0003638E /* version.h */; };
@@ -56,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
+		3B460C611C6A455900213C64 /* getchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = getchar.c; path = libc/stdio/getchar.c; sourceTree = "<group>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				3B8B14E51C1DE6C00003638E /* printf.cpp */,
 				3B8B14E61C1DE6C00003638E /* putchar.c */,
 				3B8B14E71C1DE6C00003638E /* puts.c */,
+				3B460C611C6A455900213C64 /* getchar.c */,
 			);
 			name = stdio;
 			sourceTree = "<group>";
@@ -376,7 +379,6 @@
 			);
 			name = "OS-doc";
 			productName = "OS-doc";
-			productReference = 3B198BCD1C57C83E00B80458 /* OS-doc */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -419,6 +421,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B460C621C6A455900213C64 /* getchar.c in Sources */,
 				3B7DD8901C57B76B00F3B86A /* time.c in Sources */,
 				3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */,
 				3B7DD88E1C57B76500F3B86A /* streql.cpp in Sources */,
@@ -463,8 +466,8 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				HEADER_SEARCH_PATHS = (
-					/Users/adamkopec/Documents/OS/libc/include,
-					/Users/adamkopec/Documents/OS/kernel/include,
+					"${PROJECT_DIR}/libc/include",
+					"${PROJECT_DIR}/kernel/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -477,8 +480,8 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				HEADER_SEARCH_PATHS = (
-					/Users/adamkopec/Documents/OS/libc/include,
-					/Users/adamkopec/Documents/OS/kernel/include,
+					"${PROJECT_DIR}/libc/include",
+					"${PROJECT_DIR}/kernel/include",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
