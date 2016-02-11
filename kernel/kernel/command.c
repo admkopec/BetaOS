@@ -27,19 +27,25 @@ void time_full();
 void time_short();
 
 void addCommand(char* name, char* desc, void (*run)(void)) {
+    for (int i=0; i<num; i++) {
+        if (command[i].name==name) {
+            error("Failed to add command. Reason: The command's name's been already taken");
+            return;
+        }
+    }
     command[num].name=name;
-    if (command[num].name==NULL) {
-        error("Failed to add command. Reason name=NULL");
+    if (command[num].name==NULL || command[num].name!=name) {
+        error("Failed to add command. Reason: name=NULL");
         return;
     }
     command[num].desc=desc;
-    if (command[num].desc==NULL) {
-        error("Failed to add command. Reason desc=NULL");
+    if (command[num].desc==NULL || command[num].desc!=desc) {
+        error("Failed to add command. Reason: desc=NULL");
         return;
     }
     command[num].run=run;
-    if (command[num].run==NULL) {
-        error("Failed to add command. Reason run=NULL");
+    if (command[num].run==NULL || command[num].run!=run) {
+        error("Failed to add command. Reason: run=NULL");
         return;
     }
     num++;
