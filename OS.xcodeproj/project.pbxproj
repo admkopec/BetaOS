@@ -41,6 +41,8 @@
 		3B7DD88E1C57B76500F3B86A /* streql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EF1C1DE6E70003638E /* streql.cpp */; };
 		3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F01C1DE6E70003638E /* strlen.cpp */; };
 		3B7DD8901C57B76B00F3B86A /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E91C1DE6D60003638E /* time.c */; };
+		3BAF96451C6E479900B3B459 /* PS2Controller.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96441C6E479900B3B459 /* PS2Controller.c */; };
+		3BAF96471C6E565A00B3B459 /* PS2Controller.h in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96461C6E47CB00B3B459 /* PS2Controller.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -107,6 +109,8 @@
 		3B8B15151C1DE9450003638E /* BetaOS.iso */ = {isa = PBXFileReference; lastKnownFileType = file; name = BetaOS.iso; path = product/BetaOS.iso; sourceTree = "<group>"; };
 		3B8B15171C1DE9520003638E /* BetaOS.kernel */ = {isa = PBXFileReference; lastKnownFileType = file; name = BetaOS.kernel; path = product/boot/BetaOS.kernel; sourceTree = "<group>"; };
 		3B8B15191C1DE9600003638E /* grub.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = grub.cfg; path = product/boot/grub/grub.cfg; sourceTree = "<group>"; };
+		3BAF96441C6E479900B3B459 /* PS2Controller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PS2Controller.c; path = kernel/modules/PS2Controller.c; sourceTree = "<group>"; };
+		3BAF96461C6E47CB00B3B459 /* PS2Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PS2Controller.h; path = kernel/include/PS2Controller.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				3B8B14F71C1DE7720003638E /* kernel */,
+				3BAF96431C6E472D00B3B459 /* modules */,
 				3B8B14F61C1DE76D0003638E /* include */,
 				3B8B14F51C1DE7680003638E /* arch */,
 				3B8B14F41C1DE75A0003638E /* Makefile */,
@@ -248,6 +253,7 @@
 				3B8B14FB1C1DE78D0003638E /* kernel */,
 				3B8B14F91C1DE78A0003638E /* command.h */,
 				3B8B14FA1C1DE78A0003638E /* version.h */,
+				3BAF96461C6E47CB00B3B459 /* PS2Controller.h */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -345,6 +351,14 @@
 			name = grub;
 			sourceTree = "<group>";
 		};
+		3BAF96431C6E472D00B3B459 /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				3BAF96441C6E479900B3B459 /* PS2Controller.c */,
+			);
+			name = modules;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
@@ -421,6 +435,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BAF96471C6E565A00B3B459 /* PS2Controller.h in Sources */,
 				3B460C621C6A455900213C64 /* getchar.c in Sources */,
 				3B7DD8901C57B76B00F3B86A /* time.c in Sources */,
 				3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */,
@@ -430,6 +445,7 @@
 				3B7DD88B1C57B75B00F3B86A /* memmove.cpp in Sources */,
 				3B7DD88A1C57B75700F3B86A /* memcmp.cpp in Sources */,
 				3B7DD8891C57B75400F3B86A /* itoa.cpp in Sources */,
+				3BAF96451C6E479900B3B459 /* PS2Controller.c in Sources */,
 				3B7DD8881C57B75000F3B86A /* error.c in Sources */,
 				3B7DD8871C57B74D00F3B86A /* panic.c in Sources */,
 				3B7DD8861C57B74900F3B86A /* puts.c in Sources */,

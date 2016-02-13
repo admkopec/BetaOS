@@ -27,6 +27,7 @@
 // * Add Filesystem driver
 // * Try replacing APM with ACPI
 
+
 void kernel_early(void)
 {
 	terminal_initialize();
@@ -38,5 +39,9 @@ void kernel_main(void)
 	printf("Hello!\nWelcome to BetaOS!\n");
     while (1) {
         findcommand();
+        //char c = getchar();
+        //if (c>=0x20||c=='\n'||c=='\b'||c=='\t') {
+        //    printf("%c",c);
+        //}
 	}
 }

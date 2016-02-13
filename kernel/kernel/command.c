@@ -82,30 +82,28 @@ void help() {
     printf("2. Basic information about the OS\n");
     printf("3. Exit help\n");
     for (; ;) {
-        read();
-        if (streql(buffstr,"1")) {
+        char menuentry=getchar();
+        if (menuentry=='1') {
             clearScreen();
             for (int i=0; i<num; i++) {
                 printf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
             }
             for (; ;) {
-                read();
-                if (streql(buffstr, "")) {
+                if (getchar()=='\n') {
                     help();
                     return;
                 }
             }
-        } else if(streql(buffstr, "2")) {
+        } else if(menuentry=='2') {
             clearScreen();
             version();
             for (; ;) {
-                read();
-                if (streql(buffstr, "")) {
+                if (getchar()=='\n') {
                     help();
                     return;
                 }
             }
-        } else if(streql(buffstr, "3")) {
+        } else if(menuentry=='3') {
             clearScreen();
             return;
         }

@@ -31,6 +31,7 @@ $(ARCH_FREEOBJS) \
 stdio/printf.o \
 stdio/putchar.o \
 stdio/puts.o \
+stdio/getchar.o \
 stdlib/panic.o \
 stdlib/error.o \
 string/itoa.o \
