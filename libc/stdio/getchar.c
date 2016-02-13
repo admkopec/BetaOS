@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <PS2Controller.h>
 #include <kernel/interrupts.h>
 
@@ -55,4 +56,6 @@ int getchar() {
         if (c!=0&&c<=0x53)
             return keymap[c][0];
     }
+    error("Failed to get char!");
+    return false;
 }
