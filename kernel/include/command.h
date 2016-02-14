@@ -25,9 +25,4 @@ Command_t command[MAXCOMMANDS];
 void CommandInit();
 void findcommand();
 
-////// Temporary keyboard read() //////
-char buffstr[215];
-void read();
-void keyboard_set_leds(bool num, bool caps, bool scroll);
-
 #endif /* command_h */

@@ -18,3 +18,4 @@ Now you can run the BetaOS from ISO.
 * Added whole new build mechanism.
 * Improved commands management.
 * Improved time command.
+* Added new keyboard driver.

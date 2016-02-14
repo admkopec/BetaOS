@@ -19,6 +19,7 @@ int printf(const char*, ...);
 int putchar(int);
 int puts(const char*);
 int getchar(void);
+char* gets(char*);
 
 #ifdef __cplusplus
 }

@@ -38,9 +38,10 @@
 		3B7DD88B1C57B75B00F3B86A /* memmove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14ED1C1DE6E70003638E /* memmove.cpp */; };
 		3B7DD88C1C57B75E00F3B86A /* memcpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EC1C1DE6E70003638E /* memcpy.cpp */; };
 		3B7DD88D1C57B76100F3B86A /* memset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EE1C1DE6E70003638E /* memset.cpp */; };
-		3B7DD88E1C57B76500F3B86A /* streql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EF1C1DE6E70003638E /* streql.cpp */; };
+		3B7DD88E1C57B76500F3B86A /* strcmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EF1C1DE6E70003638E /* strcmp.cpp */; };
 		3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F01C1DE6E70003638E /* strlen.cpp */; };
 		3B7DD8901C57B76B00F3B86A /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E91C1DE6D60003638E /* time.c */; };
+		3B93C6CE1C70909E0050C8BF /* gets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B93C6CD1C70909E0050C8BF /* gets.c */; };
 		3BAF96451C6E479900B3B459 /* PS2Controller.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96441C6E479900B3B459 /* PS2Controller.c */; };
 		3BAF96471C6E565A00B3B459 /* PS2Controller.h in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96461C6E47CB00B3B459 /* PS2Controller.h */; };
 /* End PBXBuildFile section */
@@ -79,7 +80,7 @@
 		3B8B14EC1C1DE6E70003638E /* memcpy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = memcpy.cpp; path = libc/string/memcpy.cpp; sourceTree = "<group>"; };
 		3B8B14ED1C1DE6E70003638E /* memmove.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = memmove.cpp; path = libc/string/memmove.cpp; sourceTree = "<group>"; };
 		3B8B14EE1C1DE6E70003638E /* memset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = memset.cpp; path = libc/string/memset.cpp; sourceTree = "<group>"; };
-		3B8B14EF1C1DE6E70003638E /* streql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = streql.cpp; path = libc/string/streql.cpp; sourceTree = "<group>"; };
+		3B8B14EF1C1DE6E70003638E /* strcmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strcmp.cpp; path = libc/string/strcmp.cpp; sourceTree = "<group>"; };
 		3B8B14F01C1DE6E70003638E /* strlen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strlen.cpp; path = libc/string/strlen.cpp; sourceTree = "<group>"; };
 		3B8B14F21C1DE7100003638E /* make.config */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; name = make.config; path = libc/arch/i386/make.config; sourceTree = "<group>"; };
 		3B8B14F41C1DE75A0003638E /* Makefile */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = Makefile; path = kernel/Makefile; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 		3B8B15151C1DE9450003638E /* BetaOS.iso */ = {isa = PBXFileReference; lastKnownFileType = file; name = BetaOS.iso; path = product/BetaOS.iso; sourceTree = "<group>"; };
 		3B8B15171C1DE9520003638E /* BetaOS.kernel */ = {isa = PBXFileReference; lastKnownFileType = file; name = BetaOS.kernel; path = product/boot/BetaOS.kernel; sourceTree = "<group>"; };
 		3B8B15191C1DE9600003638E /* grub.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = grub.cfg; path = product/boot/grub/grub.cfg; sourceTree = "<group>"; };
+		3B93C6CD1C70909E0050C8BF /* gets.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gets.c; path = libc/stdio/gets.c; sourceTree = "<group>"; };
 		3BAF96441C6E479900B3B459 /* PS2Controller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PS2Controller.c; path = kernel/modules/PS2Controller.c; sourceTree = "<group>"; };
 		3BAF96461C6E47CB00B3B459 /* PS2Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PS2Controller.h; path = kernel/include/PS2Controller.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,6 +178,7 @@
 				3B8B14E61C1DE6C00003638E /* putchar.c */,
 				3B8B14E71C1DE6C00003638E /* puts.c */,
 				3B460C611C6A455900213C64 /* getchar.c */,
+				3B93C6CD1C70909E0050C8BF /* gets.c */,
 			);
 			name = stdio;
 			sourceTree = "<group>";
@@ -205,7 +208,7 @@
 				3B8B14EC1C1DE6E70003638E /* memcpy.cpp */,
 				3B8B14ED1C1DE6E70003638E /* memmove.cpp */,
 				3B8B14EE1C1DE6E70003638E /* memset.cpp */,
-				3B8B14EF1C1DE6E70003638E /* streql.cpp */,
+				3B8B14EF1C1DE6E70003638E /* strcmp.cpp */,
 				3B8B14F01C1DE6E70003638E /* strlen.cpp */,
 			);
 			name = string;
@@ -439,11 +442,12 @@
 				3B460C621C6A455900213C64 /* getchar.c in Sources */,
 				3B7DD8901C57B76B00F3B86A /* time.c in Sources */,
 				3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */,
-				3B7DD88E1C57B76500F3B86A /* streql.cpp in Sources */,
+				3B7DD88E1C57B76500F3B86A /* strcmp.cpp in Sources */,
 				3B7DD88D1C57B76100F3B86A /* memset.cpp in Sources */,
 				3B7DD88C1C57B75E00F3B86A /* memcpy.cpp in Sources */,
 				3B7DD88B1C57B75B00F3B86A /* memmove.cpp in Sources */,
 				3B7DD88A1C57B75700F3B86A /* memcmp.cpp in Sources */,
+				3B93C6CE1C70909E0050C8BF /* gets.c in Sources */,
 				3B7DD8891C57B75400F3B86A /* itoa.cpp in Sources */,
 				3BAF96451C6E479900B3B459 /* PS2Controller.c in Sources */,
 				3B7DD8881C57B75000F3B86A /* error.c in Sources */,

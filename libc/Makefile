@@ -32,6 +32,7 @@ stdio/printf.o \
 stdio/putchar.o \
 stdio/puts.o \
 stdio/getchar.o \
+stdio/gets.o \
 stdlib/panic.o \
 stdlib/error.o \
 string/itoa.o \
@@ -40,7 +41,7 @@ string/memcpy.o \
 string/memmove.o \
 string/memset.o \
 string/strlen.o \
-string/streql.o \
+string/strcmp.o \
 time/time.o \
 
 HOSTEDOBJS:=\
