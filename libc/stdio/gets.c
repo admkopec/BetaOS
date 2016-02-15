@@ -16,7 +16,16 @@ char *gets(char *buf)
     while (1) {
         ch = getchar();
         
-        if (ch == '\r' || ch =='\n' || ch >= ' ' || ch=='\t' || ch=='\b') {
+        if (ch=='\b') {
+            if (p>buf) {
+                putchar('\b');
+                putchar(' ');
+                putchar('\b');
+                p--;
+            }
+        }
+        
+        if (ch == '\r' || ch =='\n' || ch >= ' ' || ch=='\t') {
             putchar(ch);
             if (ch == '\r') putchar('\n');
             if (ch == '\n' || ch == '\r') break;

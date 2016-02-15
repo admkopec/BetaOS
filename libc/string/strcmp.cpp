@@ -8,7 +8,7 @@
 
 #include <string.h>
 
-bool strcmp(const char* str1, const char* str2) {
+int strcmp(const char* str1, const char* str2) {
     if (strlen(str1)!=strlen(str2)) {
         return false;
     }

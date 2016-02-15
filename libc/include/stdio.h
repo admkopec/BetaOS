@@ -10,6 +10,7 @@
 #define _STDIO_H 1
 
 #include <sys/cdefs.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {

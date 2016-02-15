@@ -61,7 +61,7 @@
 /* Begin PBXFileReference section */
 		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
 		3B460C611C6A455900213C64 /* getchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = getchar.c; path = libc/stdio/getchar.c; sourceTree = "<group>"; };
-		3B4B25531C712B7F00EB5E80 /* run.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run.sh; sourceTree = "<group>"; };
+		3B4B25531C712B7F00EB5E80 /* run */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run; sourceTree = "<group>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
@@ -317,7 +317,7 @@
 				3B8B150F1C1DE91F0003638E /* iso.sh */,
 				3B8B15101C1DE91F0003638E /* qemu.sh */,
 				3B8B15111C1DE91F0003638E /* target-triplet-to-arch.sh */,
-				3B4B25531C712B7F00EB5E80 /* run.sh */,
+				3B4B25531C712B7F00EB5E80 /* run */,
 			);
 			name = Scripts;
 			sourceTree = "<group>";
