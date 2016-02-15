@@ -1,6 +1,6 @@
 //
 //  version.h
-//  OS
+//  BetaOS
 //
 //  Created by Adam Kopeć on 11/9/15.
 //  Copyright © 2015 Adam Kopeć. All rights reserved.
@@ -13,6 +13,6 @@
 #define VERSION_MAJOR "0"
 #define VESRION_MINOR "10"
 #define VERSION_COPYRIGHT "Copyright (c) 2016 Adam Kopec. All rights reserved."
-#define VERSION_BUILD "15.02.16.18"
+#define VERSION_BUILD "15.02.16.19"
 
 #endif /* version_h */

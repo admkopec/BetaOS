@@ -8,4 +8,4 @@
 
 export PATH="$PATH:/Applications/VMware Fusion.app/Contents/Library";
 
-vmrun -T fusion start /Users/adamkopec/Documents/Virtual\ Machines.localized/OS.vmwarevm/OS.vmx;
+vmrun -T fusion start /Users/adamkopec/Documents/Virtual\ Machines.localized/BetaOS.vmwarevm/BetaOS.vmx;

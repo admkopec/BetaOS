@@ -1,13 +1,11 @@
 //
 //  PS2Controller.h
-//  OS
+//  BetaOS
 //
 //  Created by Adam Kopeć on 2/12/16.
 //  Copyright © 2016 Adam Kopeć. All rights reserved.
 //
 
-
-//  Totally unusable
 
 #ifndef PS2Controller_h
 #define PS2Controller_h

@@ -1,6 +1,6 @@
 //
 //  pic.c
-//  OS
+//  BetaOS
 //
 //  Created by Adam Kopeć on 12/16/15.
 //  Copyright © 2015 Adam Kopeć. All rights reserved.
