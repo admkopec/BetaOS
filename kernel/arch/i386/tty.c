@@ -15,6 +15,8 @@
 #include <kernel/tty.h>
 #include <kernel/interrupts.h>
 
+#include <PS2Controller.h>
+
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
 
@@ -114,10 +116,6 @@ void terminal_putchar(char c)
 		terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
 		if ( ++terminal_column == VGA_WIDTH ) {
 			terminal_column = 0;
-			if ( ++terminal_row == VGA_HEIGHT )
-			{
-				terminal_row = 0;
-			}
 		}
 	}
     cur();
