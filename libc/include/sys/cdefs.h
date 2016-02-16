@@ -11,9 +11,12 @@
 
 #include <version.h>
 
+#include <stdint.h>
+
 #define __myos_libc 1
 
-/* If int.h doesn't load */
+#ifndef _GCC_WRAP_STDINT_H
+/* If stdint.h doesn't load */
 
 typedef long long int64;
 typedef unsigned long long uint64;
@@ -26,6 +29,8 @@ typedef unsigned short uint16;
 
 typedef char int8;
 typedef unsigned char uint8;
+
+#endif
 
 /* Useful macros */
 

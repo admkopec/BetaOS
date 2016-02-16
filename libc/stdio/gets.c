@@ -7,6 +7,9 @@
 //
 
 #include <stdio.h>
+#include <PS2Controller.h>
+#include <kernel/tty.h>
+#include <kernel/vga.h>
 
 char *gets(char *buf)
 {
@@ -25,7 +28,7 @@ char *gets(char *buf)
             }
         }
         
-        if (ch == '\r' || ch =='\n' || ch >= ' ' || ch=='\t') {
+        if (ch == '\r' || ch =='\n' || (ch >= ' ' && ch <= 0x7F) || ch=='\t') {
             putchar(ch);
             if (ch == '\r') putchar('\n');
             if (ch == '\n' || ch == '\r') break;

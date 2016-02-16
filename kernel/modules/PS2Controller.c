@@ -12,7 +12,7 @@
 #include <kernel/interrupts.h>
 
 
-char keymap[][/* Special Keys, For now only: */ 0x03 ] = {
+int keymap[][/* Special Keys, For now only: */ 0x03 ] = {
     
     /* Key */         /* Normal Key */        /* Shifted Key */       /* Escaped Key */
     /* 0x00 */  { /* NULL */        NULL_KEY,               NULL_KEY,               NULL_KEY        },
@@ -117,8 +117,17 @@ int pollchar() {
             escaped = false;
             return keymap[c][2];
         }
+        if (c==0x3A) {
+            if (!capsed) {
+                capsed=true;
+            } else {
+                capsed=false;
+            }
+        }
         if (c==0x2A||c==0x36||shifted==true||capsed==true) {
-            shifted=true;
+            if (!capsed) {
+                shifted=true;
+            }
             c=inb(0x60);
             if (c==0xAA||c==0xB6) {
                 shifted=false;
