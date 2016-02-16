@@ -6,11 +6,9 @@
 //  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <version.h>
 #include <command.h>
+#include <version.h>
+#include <time.h>
 #include <kernel/tty.h>
 #include <kernel/arch/arch.h>
 
