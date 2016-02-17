@@ -27,6 +27,14 @@ char *gets(char *buf)
                 p--;
             }
         }
+            /* Not fully implemented yet */
+        if (ch==LEFT_ARROW_KEY) {
+            terminal_column--;
+            cur();
+        } else if (ch==RIGHT_ARROW_KEY) {
+            terminal_column++;
+            cur();
+        }
         
         if (ch == '\r' || ch =='\n' || (ch >= ' ' && ch <= 0x7F) || ch=='\t') {
             putchar(ch);
