@@ -31,9 +31,11 @@ char *gets(char *buf)
         if (ch==LEFT_ARROW_KEY) {
             terminal_column--;
             cur();
+            p--;
         } else if (ch==RIGHT_ARROW_KEY) {
             terminal_column++;
             cur();
+            p--;
         }
         
         if (ch == '\r' || ch =='\n' || (ch >= ' ' && ch <= 0x7F) || ch=='\t') {
