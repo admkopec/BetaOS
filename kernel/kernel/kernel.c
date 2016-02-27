@@ -36,7 +36,9 @@ void kernel_early(void)
 void kernel_main(void)
 {
 	printf("Hello!\nWelcome to BetaOS!\n");
+    char * username = "root";
     while (1) {
+        printf("%s$ ", username);
         findcommand();
 	}
 }
