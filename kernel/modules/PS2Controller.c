@@ -124,10 +124,25 @@ int pollchar() {
                 capsed=false;
             }
         }
-        if (c==0x2A||c==0x36||shifted==true||capsed==true) {
-            if (!capsed) {
+        if (capsed) {
+            if (c==0x2A||c==0x36||shifted) {
                 shifted=true;
+                c=inb(0x60);
+                if (c!=0xAA&&c!=0xB6) {
+                    return keymap[c][0];
+                } else {
+                    shifted=false;
+                }
+                
             }
+            if ((c>=0x10&&c<=0x19)||(c>=0x1E&&c<=0x26)||(c>=0x2C&&c<=0x32)) {
+                return keymap[c][1];
+            } else {
+                return keymap[c][0];
+            }
+        }
+        if (c==0x2A||c==0x36||shifted==true) {
+            shifted=true;
             c=inb(0x60);
             if (c==0xAA||c==0xB6) {
                 shifted=false;

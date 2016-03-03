@@ -15,8 +15,10 @@
 int putchar(int ic)
 {
 #if defined(__is_betaos_kernel)
-    char c = (char) ic;
-    terminal_write(&c, sizeof(c));
+    if ((ic<=0x7F&&ic>=0x20)||ic=='\n'||ic=='\t'||ic=='\b'||ic=='\r') {
+        char c = (char) ic;
+        terminal_write(&c, sizeof(c));
+    }
 #else
 #endif
 	return ic;

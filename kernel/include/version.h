@@ -11,8 +11,8 @@
 
 #define VERSION_NAME "BetaOS"
 #define VERSION_MAJOR "0"
-#define VESRION_MINOR "10.1"
+#define VESRION_MINOR "10.3"
 #define VERSION_COPYRIGHT "Copyright (c) 2016 Adam Kopec. All rights reserved."
-#define VERSION_BUILD "27.02.16.5"
+#define VERSION_BUILD "3.03.16.5"
 
 #endif /* version_h */

@@ -73,7 +73,7 @@ void findcommand() {
 
 void help() {
     clearScreen();
-    printf("==================HELP=================\n");
+    printf("======================================HELP======================================");
     printf("1. Command list\n");
     printf("2. Basic information about the OS\n");
     printf("3. Exit help\n");
