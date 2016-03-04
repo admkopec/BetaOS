@@ -14,7 +14,7 @@
 
 int keymap[][/* Special Keys, For now only: */ 0x03 ] = {
     
-    /* Key */         /* Normal Key */        /* Shifted Key */       /* Escaped Key */
+    /* Key */                    /* Normal Key */       /* Shifted Key */       /* 0xE0'ed Key */
     /* 0x00 */  { /* NULL */        NULL_KEY,               NULL_KEY,               NULL_KEY        },
     /* 0x01 */  { /* Esc */         ESC_KEY,                ESC_KEY,                NULL_KEY        },
     /* 0x02 */  { /* 1 */           '1',                    '!',                    NULL_KEY        },
@@ -103,18 +103,18 @@ int keymap[][/* Special Keys, For now only: */ 0x03 ] = {
 
 bool shifted=false;
 bool capsed=false;
-bool escaped=false;
+bool e0ed=false;
 
 int pollchar() {
     int c;
     if (inb(0x64)&(1 << 0)) {
         c=inb(0x60);
         if (c==0xE0) {
-            escaped=true;
-        } else if (c >= 0x53) {
+            e0ed=true;
+        } else if (c > 0x53) {
             /* Unsupported */
-        } else if (escaped) {
-            escaped = false;
+        } else if (e0ed) {
+            e0ed = false;
             return keymap[c][2];
         }
         if (c==0x3A) {
