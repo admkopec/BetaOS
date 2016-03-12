@@ -7,6 +7,7 @@
 //
 
 #include <time.h>
+#include <interrupts.h>
 
 int get_update_in_progress_flag() {
     outb(cmos_address, 0x0A);

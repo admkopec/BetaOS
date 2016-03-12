@@ -12,7 +12,6 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#include <kernel/interrupts.h>
 
 #define CURRENT_YEAR 2016
 

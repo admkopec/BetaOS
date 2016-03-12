@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B2E6EE91C94CC1A00970A24 /* asm.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6EE81C94C9F100970A24 /* asm.h */; };
 		3B460C621C6A455900213C64 /* getchar.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B460C611C6A455900213C64 /* getchar.c */; };
 		3B7DD8701C57B6F700F3B86A /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F81C1DE77E0003638E /* kernel.c */; };
 		3B7DD8711C57B6F900F3B86A /* command.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72518F1C20A0B9009560FE /* command.c */; };
@@ -60,10 +61,11 @@
 
 /* Begin PBXFileReference section */
 		3B13CF641C4A534700A1EF06 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
+		3B2E6EE81C94C9F100970A24 /* asm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asm.h; path = kernel/include/arch/asm.h; sourceTree = "<group>"; };
 		3B460C611C6A455900213C64 /* getchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = getchar.c; path = libc/stdio/getchar.c; sourceTree = "<group>"; };
 		3B4B25531C712B7F00EB5E80 /* run */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run; sourceTree = "<group>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
-		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/kernel/arch/pic.h; sourceTree = "<group>"; };
+		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
 		3B8B14DA1C1DE6130003638E /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = libc/include/stdio.h; sourceTree = "<group>"; };
 		3B8B14DB1C1DE6130003638E /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = libc/include/stdlib.h; sourceTree = "<group>"; };
@@ -88,10 +90,10 @@
 		3B8B14F81C1DE77E0003638E /* kernel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kernel.c; path = kernel/kernel/kernel.c; sourceTree = "<group>"; };
 		3B8B14F91C1DE78A0003638E /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = command.h; path = kernel/include/command.h; sourceTree = "<group>"; };
 		3B8B14FA1C1DE78A0003638E /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = kernel/include/version.h; sourceTree = "<group>"; };
-		3B8B14FC1C1DE7A20003638E /* interrupts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interrupts.h; path = kernel/include/kernel/interrupts.h; sourceTree = "<group>"; };
-		3B8B14FD1C1DE7A20003638E /* tty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tty.h; path = kernel/include/kernel/tty.h; sourceTree = "<group>"; };
-		3B8B14FE1C1DE7A20003638E /* vga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vga.h; path = kernel/include/kernel/vga.h; sourceTree = "<group>"; };
-		3B8B15001C1DE7B20003638E /* arch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arch.h; path = kernel/include/kernel/arch/arch.h; sourceTree = "<group>"; };
+		3B8B14FC1C1DE7A20003638E /* interrupts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interrupts.h; path = kernel/include/interrupts.h; sourceTree = "<group>"; };
+		3B8B14FD1C1DE7A20003638E /* tty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tty.h; path = kernel/include/tty.h; sourceTree = "<group>"; };
+		3B8B14FE1C1DE7A20003638E /* vga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vga.h; path = kernel/include/vga.h; sourceTree = "<group>"; };
+		3B8B15001C1DE7B20003638E /* arch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arch.h; path = kernel/include/arch/arch.h; sourceTree = "<group>"; };
 		3B8B15021C1DE7CD0003638E /* arch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = arch.c; path = kernel/arch/i386/arch.c; sourceTree = "<group>"; };
 		3B8B15031C1DE7CD0003638E /* boot.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; name = boot.S; path = kernel/arch/i386/boot.S; sourceTree = "<group>"; };
 		3B8B15041C1DE7CD0003638E /* crti.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; name = crti.S; path = kernel/arch/i386/crti.S; sourceTree = "<group>"; };
@@ -254,7 +256,10 @@
 		3B8B14F61C1DE76D0003638E /* include */ = {
 			isa = PBXGroup;
 			children = (
-				3B8B14FB1C1DE78D0003638E /* kernel */,
+				3B8B14FF1C1DE7A50003638E /* arch */,
+				3B8B14FC1C1DE7A20003638E /* interrupts.h */,
+				3B8B14FD1C1DE7A20003638E /* tty.h */,
+				3B8B14FE1C1DE7A20003638E /* vga.h */,
 				3B8B14F91C1DE78A0003638E /* command.h */,
 				3B8B14FA1C1DE78A0003638E /* version.h */,
 				3BAF96461C6E47CB00B3B459 /* PS2Controller.h */,
@@ -271,22 +276,12 @@
 			name = kernel;
 			sourceTree = "<group>";
 		};
-		3B8B14FB1C1DE78D0003638E /* kernel */ = {
-			isa = PBXGroup;
-			children = (
-				3B8B14FF1C1DE7A50003638E /* arch */,
-				3B8B14FC1C1DE7A20003638E /* interrupts.h */,
-				3B8B14FD1C1DE7A20003638E /* tty.h */,
-				3B8B14FE1C1DE7A20003638E /* vga.h */,
-			);
-			name = kernel;
-			sourceTree = "<group>";
-		};
 		3B8B14FF1C1DE7A50003638E /* arch */ = {
 			isa = PBXGroup;
 			children = (
 				3B8B15001C1DE7B20003638E /* arch.h */,
 				3B79B8A41C21C21500F329CE /* pic.h */,
+				3B2E6EE81C94C9F100970A24 /* asm.h */,
 			);
 			name = arch;
 			sourceTree = "<group>";
@@ -440,6 +435,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B2E6EE91C94CC1A00970A24 /* asm.h in Sources */,
 				3BAF96471C6E565A00B3B459 /* PS2Controller.h in Sources */,
 				3B460C621C6A455900213C64 /* getchar.c in Sources */,
 				3B7DD8901C57B76B00F3B86A /* time.c in Sources */,

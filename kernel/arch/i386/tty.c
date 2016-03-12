@@ -11,9 +11,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <kernel/vga.h>
-#include <kernel/tty.h>
-#include <kernel/interrupts.h>
+#include <vga.h>
+#include <tty.h>
+#include <interrupts.h>
 
 #include <PS2Controller.h>
 

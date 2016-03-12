@@ -8,8 +8,8 @@
 
 #include <stdio.h>
 #include <PS2Controller.h>
-#include <kernel/tty.h>
-#include <kernel/vga.h>
+#include <tty.h>
+#include <vga.h>
 
 char *gets(char *buf)
 {

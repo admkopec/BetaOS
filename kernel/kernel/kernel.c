@@ -12,7 +12,7 @@
 #include <stdlib.h>
 
 #include <command.h>
-#include <kernel/tty.h>
+#include <tty.h>
 
 //TODO:
 // * Add GDT

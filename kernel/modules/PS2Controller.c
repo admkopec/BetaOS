@@ -9,7 +9,7 @@
 #include <PS2Controller.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <kernel/interrupts.h>
+#include <interrupts.h>
 
 
 int keymap[][/* Special Keys, For now only: */ 0x03 ] = {

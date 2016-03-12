@@ -9,8 +9,8 @@
 #include <command.h>
 #include <version.h>
 #include <time.h>
-#include <kernel/tty.h>
-#include <kernel/arch/arch.h>
+#include <tty.h>
+#include <arch/arch.h>
 
 int num = 0;
 

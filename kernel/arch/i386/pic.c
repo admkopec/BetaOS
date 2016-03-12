@@ -6,9 +6,13 @@
 //  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
+//
+//  For now not used because of lack of IDT and GDT initialized
+//
+
 #include <stdio.h>
-#include <kernel/arch/pic.h>
-#include <kernel/interrupts.h>
+#include <arch/pic.h>
+#include <interrupts.h>
 
 static uint16_t __pic_get_irq_reg(int ocw3)
 {

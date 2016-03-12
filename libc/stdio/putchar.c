@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #if defined(__is_betaos_kernel)
-#include <kernel/tty.h>
+#include <tty.h>
 #endif
 
 int putchar(int ic)
