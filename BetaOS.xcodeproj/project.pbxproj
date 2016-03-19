@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3B2E6EE91C94CC1A00970A24 /* asm.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6EE81C94C9F100970A24 /* asm.h */; };
 		3B460C621C6A455900213C64 /* getchar.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B460C611C6A455900213C64 /* getchar.c */; };
+		3B643DED1C9603410070DF6C /* asmlib.s in Sources */ = {isa = PBXBuildFile; fileRef = 3B643DEC1C9603400070DF6C /* asmlib.s */; };
+		3B7D52C11C9DF365000DE3CD /* protected.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7D52C01C9DF365000DE3CD /* protected.c */; };
 		3B7DD8701C57B6F700F3B86A /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F81C1DE77E0003638E /* kernel.c */; };
 		3B7DD8711C57B6F900F3B86A /* command.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72518F1C20A0B9009560FE /* command.c */; };
 		3B7DD8721C57B70200F3B86A /* version.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14FA1C1DE78A0003638E /* version.h */; };
@@ -42,6 +44,8 @@
 		3B7DD88E1C57B76500F3B86A /* strcmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14EF1C1DE6E70003638E /* strcmp.cpp */; };
 		3B7DD88F1C57B76700F3B86A /* strlen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F01C1DE6E70003638E /* strlen.cpp */; };
 		3B7DD8901C57B76B00F3B86A /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14E91C1DE6D60003638E /* time.c */; };
+		3B86A7201C9C792400584D37 /* cpufeature.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B86A71F1C9C791500584D37 /* cpufeature.h */; };
+		3B86A7221C9C7F6C00584D37 /* cpufeature.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B86A7211C9C7F6C00584D37 /* cpufeature.c */; };
 		3B93C6CE1C70909E0050C8BF /* gets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B93C6CD1C70909E0050C8BF /* gets.c */; };
 		3BAF96451C6E479900B3B459 /* PS2Controller.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96441C6E479900B3B459 /* PS2Controller.c */; };
 		3BAF96471C6E565A00B3B459 /* PS2Controller.h in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96461C6E47CB00B3B459 /* PS2Controller.h */; };
@@ -64,9 +68,14 @@
 		3B2E6EE81C94C9F100970A24 /* asm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asm.h; path = kernel/include/arch/asm.h; sourceTree = "<group>"; };
 		3B460C611C6A455900213C64 /* getchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = getchar.c; path = libc/stdio/getchar.c; sourceTree = "<group>"; };
 		3B4B25531C712B7F00EB5E80 /* run */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run; sourceTree = "<group>"; };
+		3B643DEC1C9603400070DF6C /* asmlib.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; name = asmlib.s; path = kernel/arch/i386/asmlib.s; sourceTree = "<group>"; };
 		3B72518F1C20A0B9009560FE /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/kernel/command.c; sourceTree = "<group>"; };
 		3B79B8A41C21C21500F329CE /* pic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pic.h; path = kernel/include/arch/pic.h; sourceTree = "<group>"; };
 		3B79B8A51C21C32800F329CE /* pic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pic.c; path = kernel/arch/i386/pic.c; sourceTree = "<group>"; };
+		3B7D52C01C9DF365000DE3CD /* protected.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = protected.c; path = kernel/arch/i386/protected.c; sourceTree = "<group>"; };
+		3B7D52C21C9DF3CC000DE3CD /* multiboot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multiboot.h; path = kernel/include/arch/multiboot.h; sourceTree = "<group>"; };
+		3B86A71F1C9C791500584D37 /* cpufeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpufeature.h; path = kernel/include/arch/cpufeature.h; sourceTree = "<group>"; };
+		3B86A7211C9C7F6C00584D37 /* cpufeature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cpufeature.c; path = kernel/arch/i386/cpufeature.c; sourceTree = "<group>"; };
 		3B8B14DA1C1DE6130003638E /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = libc/include/stdio.h; sourceTree = "<group>"; };
 		3B8B14DB1C1DE6130003638E /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = libc/include/stdlib.h; sourceTree = "<group>"; };
 		3B8B14DC1C1DE6130003638E /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = libc/include/string.h; sourceTree = "<group>"; };
@@ -282,6 +291,8 @@
 				3B8B15001C1DE7B20003638E /* arch.h */,
 				3B79B8A41C21C21500F329CE /* pic.h */,
 				3B2E6EE81C94C9F100970A24 /* asm.h */,
+				3B86A71F1C9C791500584D37 /* cpufeature.h */,
+				3B7D52C21C9DF3CC000DE3CD /* multiboot.h */,
 			);
 			name = arch;
 			sourceTree = "<group>";
@@ -297,6 +308,9 @@
 				3B8B15071C1DE7CD0003638E /* make.config */,
 				3B8B15081C1DE7CD0003638E /* tty.c */,
 				3B79B8A51C21C32800F329CE /* pic.c */,
+				3B643DEC1C9603400070DF6C /* asmlib.s */,
+				3B86A7211C9C7F6C00584D37 /* cpufeature.c */,
+				3B7D52C01C9DF365000DE3CD /* protected.c */,
 			);
 			name = i386;
 			sourceTree = "<group>";
@@ -435,6 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B86A7201C9C792400584D37 /* cpufeature.h in Sources */,
 				3B2E6EE91C94CC1A00970A24 /* asm.h in Sources */,
 				3BAF96471C6E565A00B3B459 /* PS2Controller.h in Sources */,
 				3B460C621C6A455900213C64 /* getchar.c in Sources */,
@@ -443,6 +458,7 @@
 				3B7DD88E1C57B76500F3B86A /* strcmp.cpp in Sources */,
 				3B7DD88D1C57B76100F3B86A /* memset.cpp in Sources */,
 				3B7DD88C1C57B75E00F3B86A /* memcpy.cpp in Sources */,
+				3B643DED1C9603410070DF6C /* asmlib.s in Sources */,
 				3B7DD88B1C57B75B00F3B86A /* memmove.cpp in Sources */,
 				3B7DD88A1C57B75700F3B86A /* memcmp.cpp in Sources */,
 				3B93C6CE1C70909E0050C8BF /* gets.c in Sources */,
@@ -463,7 +479,9 @@
 				3B7DD8721C57B70200F3B86A /* version.h in Sources */,
 				3B7DD8731C57B70500F3B86A /* command.h in Sources */,
 				3B7DD8741C57B70700F3B86A /* vga.h in Sources */,
+				3B86A7221C9C7F6C00584D37 /* cpufeature.c in Sources */,
 				3B7DD8751C57B70B00F3B86A /* tty.h in Sources */,
+				3B7D52C11C9DF365000DE3CD /* protected.c in Sources */,
 				3B7DD8761C57B70E00F3B86A /* interrupts.h in Sources */,
 				3B7DD8771C57B71200F3B86A /* arch.h in Sources */,
 				3B7DD8781C57B71400F3B86A /* pic.h in Sources */,
@@ -486,6 +504,8 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/libc/include",
 					"${PROJECT_DIR}/kernel/include",
+					"/opt/cross/lib/gcc/i686-elf/5.2.0/include",
+					"/opt/cross/lib/gcc/i686-elf/5.2.0/include-fixed",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = BetaOS;
@@ -500,6 +520,8 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/libc/include",
 					"${PROJECT_DIR}/kernel/include",
+					"/opt/cross/lib/gcc/i686-elf/5.2.0/include",
+					"/opt/cross/lib/gcc/i686-elf/5.2.0/include-fixed",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = BetaOS;

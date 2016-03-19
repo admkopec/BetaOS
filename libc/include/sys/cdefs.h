@@ -19,16 +19,24 @@
 /* If stdint.h doesn't load */
 
 typedef long long int64;
+typedef long long s64_t;
 typedef unsigned long long uint64;
+typedef unsigned long long u64_t;
 
-typedef int int32;
-typedef unsigned int uint32;
+typedef long int32;
+typedef long s32_t;
+typedef unsigned long uint32;
+typedef unsigned long u32_t;
 
-typedef short int16;
-typedef unsigned short uint16;
+typedef int int16;
+typedef int s16_t;
+typedef unsigned int uint16;
+typedef unsigned int u16_t;
 
 typedef char int8;
+typedef char s8_t;
 typedef unsigned char uint8;
+typedef unsigned char u8_t;
 
 #endif
 

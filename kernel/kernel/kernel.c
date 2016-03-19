@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <arch/asm.h>
 
 #include <command.h>
 #include <tty.h>

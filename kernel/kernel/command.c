@@ -11,6 +11,7 @@
 #include <time.h>
 #include <tty.h>
 #include <arch/arch.h>
+#include <arch/asm.h>
 
 int num = 0;
 
@@ -117,7 +118,46 @@ void version() {
     printf("\n");
     printf("Build Number ");
     printf(VERSION_BUILD);
-    printf("\n");
+    if (getprocessor()>486) {
+        char CPU_name[48];
+        char CPU_vendor[12];
+        unsigned long eax = 0;
+        unsigned long ebx = 0;
+        unsigned long ecx = 0;
+        unsigned long edx = 0;
+        _cpuid(&eax, &ebx, &ecx, &edx);
+        memcpy(CPU_vendor,   &ebx, sizeof(ebx));
+        memcpy(CPU_vendor+4, &edx, sizeof(edx));
+        memcpy(CPU_vendor+8, &ecx, sizeof(ecx));
+        
+        printf("\nCPU Vendor %s\n", CPU_vendor);
+        
+        eax=ebx=ecx=edx=0;
+        eax=0x80000002;
+        _cpuid(&eax, &ebx, &ecx, &edx);
+        memcpy(CPU_name+0,   &eax, sizeof(eax));
+        memcpy(CPU_name+4,   &ebx, sizeof(ebx));
+        memcpy(CPU_name+8,   &ecx, sizeof(ecx));
+        memcpy(CPU_name+12,  &edx, sizeof(edx));
+        eax=ebx=ecx=edx=0;
+        eax=0x80000003;
+        _cpuid(&eax, &ebx, &ecx, &edx);
+        memcpy(CPU_name+16,   &eax, sizeof(eax));
+        memcpy(CPU_name+20,   &ebx, sizeof(ebx));
+        memcpy(CPU_name+24,   &ecx, sizeof(ecx));
+        memcpy(CPU_name+28,   &edx, sizeof(edx));
+        eax=ebx=ecx=edx=0;
+        eax=0x80000004;
+        _cpuid(&eax, &ebx, &ecx, &edx);
+        memcpy(CPU_name+32,   &eax, sizeof(eax));
+        memcpy(CPU_name+36,   &ebx, sizeof(ebx));
+        memcpy(CPU_name+40,   &ecx, sizeof(ecx));
+        memcpy(CPU_name+44,   &edx, sizeof(edx));
+        
+        printf("CPU%s\n", CPU_name);
+    } else {
+        printf("\nCPU i%d\n", getprocessor());
+    }
 }
 
 void time_full() {
