@@ -20,7 +20,6 @@
 // * Add IDT
 // * Add PIC and enable IRQ
 // * Change read() (start from waiting for IRQ 1 instead of polling)
-// * Change read() (use keymap instead of switch)
 // * Add APM
 // * Add PCI driver
 // * Add SATA driver
