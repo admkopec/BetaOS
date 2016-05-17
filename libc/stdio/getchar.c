@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include <PS2Controller.h>
+#include <modules/PS2Controller.h>
 
 int getchar() {
     return pollchar();

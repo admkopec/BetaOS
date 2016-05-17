@@ -7,18 +7,18 @@
 //
 
 #include <stdio.h>
-#include <PS2Controller.h>
-#include <tty.h>
-#include <vga.h>
+#include <modules/PS2Controller.h>
+#include <kernel/tty.h>
+#include <kernel/vga.h>
 
 char *gets(char *buf)
 {
     char *p = buf;
     int ch;
-    
+
     while (1) {
         ch = getchar();
-        
+
         if (ch=='\b') {
             if (p>buf) {
                 putchar('\b');
@@ -27,7 +27,7 @@ char *gets(char *buf)
                 p--;
             }
         }
-        
+
         if (ch == '\r' || ch =='\n' || (ch >= ' ' && ch <= 0x7F) || ch=='\t') {
             putchar(ch);
             if (ch == '\r') putchar('\n');
@@ -35,7 +35,7 @@ char *gets(char *buf)
             *p++ = ch;
         }
     }
-    
+
     *p = 0;
     return buf;
 }

@@ -6,14 +6,13 @@
 //  Copyright © 2016 Adam Kopeć. All rights reserved.
 //
 
-#include <PS2Controller.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <interrupts.h>
+#include <modules/PS2Controller.h>
+#include <stdbool.h>
+#include <i386/pio.h>
 
 
 int keymap[][/* Special Keys, For now only: */ 0x03 ] = {
-    
+
     /* Key */                    /* Normal Key */       /* Shifted Key */       /* 0xE0'ed Key */
     /* 0x00 */  { /* NULL */        NULL_KEY,               NULL_KEY,               NULL_KEY        },
     /* 0x01 */  { /* Esc */         ESC_KEY,                ESC_KEY,                NULL_KEY        },
@@ -133,7 +132,7 @@ int pollchar() {
                 } else {
                     shifted=false;
                 }
-                
+
             }
             if ((c>=0x10&&c<=0x19)||(c>=0x1E&&c<=0x26)||(c>=0x2C&&c<=0x32)) {
                 return keymap[c][1];

@@ -7,7 +7,7 @@
 //
 
 #include <time.h>
-#include <interrupts.h>
+#include <i386/pio.h>
 
 int get_update_in_progress_flag() {
     outb(cmos_address, 0x0A);
@@ -132,7 +132,7 @@ void translateMonth() {
         case 12:
             monthl="December";
             break;
-            
+
         default:
             break;
     }
@@ -143,7 +143,7 @@ void translateDay() {
     static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
     y -= month < 3;
     int dayofweek = (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7;
-    
+
     switch (dayofweek) {
         case 0:
             dayofweeklong = "Sunday";

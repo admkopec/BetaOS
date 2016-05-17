@@ -3,15 +3,18 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/15/15.
-//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2016 Adam Kopeć. All rights reserved.
 //
 
-#include <command.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <kernel/command.h>
 #include <version.h>
 #include <time.h>
-#include <tty.h>
-#include <arch/arch.h>
-#include <arch/asm.h>
+#include <kernel/tty.h>
+#include <arch.h>
+#include <i386/asm.h>
+#include <sys/cdefs.h>
 
 int num = 0;
 
@@ -34,11 +37,11 @@ void addCommand(char* name, char* desc, void (*run)(void)) {
         error("Failed to add command. Reason: name=NULL");
         return;
     }
-    command[num].desc=desc;
-    if (command[num].desc==NULL || command[num].desc!=desc) {
-        error("Failed to add command. Reason: desc=NULL");
-        return;
-    }
+    //command[num].desc=desc;
+    //if (command[num].desc==NULL || command[num].desc!=desc) {
+    //    error("Failed to add command. Reason: desc=NULL");
+    //    return;
+    //}
     command[num].run=run;
     if (command[num].run==NULL || command[num].run!=run) {
         error("Failed to add command. Reason: run=NULL");
@@ -48,7 +51,7 @@ void addCommand(char* name, char* desc, void (*run)(void)) {
 }
 
 void CommandInit() {
-    
+
     addCommand("help",      "Help command",                             help);
     addCommand("version",   "Displays version of BetaOS",               version);
     addCommand("reboot",    "Reboots the computer",                     reboot);
@@ -118,7 +121,8 @@ void version() {
     printf("\n");
     printf("Build Number ");
     printf(VERSION_BUILD);
-    if (getprocessor()>486) {
+    printf("\n");
+    /*if (getprocessor()>486) {
         char CPU_name[48];
         char CPU_vendor[12];
         unsigned long eax = 0;
@@ -129,9 +133,9 @@ void version() {
         memcpy(CPU_vendor,   &ebx, sizeof(ebx));
         memcpy(CPU_vendor+4, &edx, sizeof(edx));
         memcpy(CPU_vendor+8, &ecx, sizeof(ecx));
-        
-        printf("\nCPU Vendor %s\n", CPU_vendor);
-        
+
+        printf("CPU Vendor %s\n", CPU_vendor);
+
         eax=ebx=ecx=edx=0;
         eax=0x80000002;
         _cpuid(&eax, &ebx, &ecx, &edx);
@@ -153,11 +157,21 @@ void version() {
         memcpy(CPU_name+36,   &ebx, sizeof(ebx));
         memcpy(CPU_name+40,   &ecx, sizeof(ecx));
         memcpy(CPU_name+44,   &edx, sizeof(edx));
-        
-        printf("CPU%s\n", CPU_name);
+
+        int j=0;
+        for (j=0; ; j++) {
+            if (CPU_name[j]!=' ') {
+                break;
+            }
+        }
+        for (int i=j; i<48; i++) {
+            CPU_name[i-j]=CPU_name[i];
+        }
+
+        printf("CPU %s\n", CPU_name);
     } else {
         printf("\nCPU i%d\n", getprocessor());
-    }
+    }*/
 }
 
 void time_full() {
