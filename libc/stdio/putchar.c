@@ -7,19 +7,13 @@
 //
 
 #include <stdio.h>
-
-#if defined(__is_betaos_kernel)
-#include <tty.h>
-#endif
+#include <kernel/tty.h>
 
 int putchar(int ic)
 {
-#if defined(__is_betaos_kernel)
     if ((ic<=0x7F&&ic>=0x20)||ic=='\n'||ic=='\t'||ic=='\b'||ic=='\r') {
         char c = (char) ic;
-        terminal_write(&c, sizeof(c));
+        terminal_putchar(c);
     }
-#else
-#endif
 	return ic;
 }
