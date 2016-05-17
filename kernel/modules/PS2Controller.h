@@ -10,7 +10,7 @@
 #ifndef PS2Controller_h
 #define PS2Controller_h
 
-#include <sys/cdefs.h>
+//#include <sys/cdefs.h>
 
 #define NULL_KEY            0x00
 #define ESC_KEY             0x1B

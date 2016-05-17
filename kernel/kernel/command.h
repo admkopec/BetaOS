@@ -9,9 +9,6 @@
 #ifndef _KERNEL_COMMAND_H
 #define _KERNEL_COMMAND_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #define MAXCOMMANDS 100
 
 typedef struct {

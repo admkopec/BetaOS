@@ -8,18 +8,18 @@
 
 #include <sys/cdefs.h>
 #include <stdint.h>
-#include <string.h>
-#include <arch/asm.h>
-#include <arch/cpufeature.h>
+#include <i386/asm.h>
+#include <kernel/kmalloc.h>
+#include <cpufeature.h>
 
 int _cpufeature(int cpufeature) {
     unsigned long eax, ebx, ecx, edx;
     unsigned long ef_eax = 0, ef_ebx = 0, ef_ecx = 0, ef_edx = 0;
     unsigned int family, model, stepping;
     bool is_intel = false, is_amd = false;
-    
+
     eax = ebx = ecx = edx = 0;
-    
+
     /* Assume cpuid >= pentium */
     _cpuid(&eax, &ebx, &ecx, &edx);
     if (eax > 0) {
@@ -36,25 +36,25 @@ int _cpufeature(int cpufeature) {
         eax = 1;
         _cpuid(&eax, &ebx, &ecx, &edx);
     } else return 0;
-    
+
     stepping    =  eax       & 0xf;
     model       = (eax >> 4) & 0xf;
-    
+
     if (model == 0xf || model == 0x6) {
         model += ((eax >> 16) & 0xf) << 4;
     }
-    
+
     family      = (eax >> 8) & 0xf;
-    
+
     if (family == 0xf) {
         family += (eax >> 20) & 0xff;
     }
-    
+
     if (is_amd) {
         ef_eax = 0x80000001;
         _cpuid(&ef_eax, &ef_ebx, &ef_ecx, &ef_edx);
     }
-    
+
     switch (cpufeature) {
         case _CPUF_I386_PSE:
             return edx & CPUID1_EDX_PSE;
@@ -100,6 +100,6 @@ CPUID1_ECX_SSE4_1 | CPUID1_ECX_SSE4_2)
             if(!(ef_edx & CPUID_EF_EDX_SYSENTER)) return 0;
             return 1;
     }
-    
+
     return 0;
 }

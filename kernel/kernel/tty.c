@@ -3,19 +3,19 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 9/26/15.
-//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2016 Adam Kopeć. All rights reserved.
 //
 
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
+//#include <string.h>
 
-#include <vga.h>
-#include <tty.h>
-#include <interrupts.h>
+#include <kernel/vga.h>
+#include <kernel/tty.h>
+#include <i386/pio.h>
 
-#include <PS2Controller.h>
+//#include <modules/PS2Controller.h>
 
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
@@ -123,15 +123,4 @@ void terminal_putchar(char c)
 	}
     cur();
     newLineCheck();
-}
-
-void terminal_write(const char* data, size_t size)
-{
-	for ( size_t i = 0; i < size; i++ )
-		terminal_putchar(data[i]);
-}
-
-void terminal_writestring(const char* data)
-{
-	terminal_write(data, strlen(data));
 }
