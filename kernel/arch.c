@@ -6,6 +6,7 @@
 //  Copyright © 2015-2016 Adam Kopeć. All rights reserved.
 //
 
+#include <stdio.h>
 #include <arch.h>
 #include <i386/asm.h>
 #include <i386/pio.h>

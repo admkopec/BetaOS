@@ -35,7 +35,7 @@ void kernel_early(void)
 
 void kernel_main(void)
 {
-	printf("Hello!\nWelcome to BetaOS in x86_64 ELF mode :) !\n");
+	printf("Hello!\nWelcome to BetaOS in x86_64 mode :) !\n");
     char * username = "root";
     while (1) {
         printf("%s$ ", username);

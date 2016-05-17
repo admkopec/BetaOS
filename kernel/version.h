@@ -13,6 +13,6 @@
 #define VERSION_MAJOR       "0"
 #define VESRION_MINOR       "11"
 #define VERSION_COPYRIGHT   "Copyright (c) 2016 Adam Kopec. All rights reserved."
-#define VERSION_BUILD       "14.05.16.5"
+#define VERSION_BUILD       "17.05.16.9"
 
 #endif /* version_h */
