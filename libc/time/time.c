@@ -158,7 +158,7 @@ void translateDay() {
             dayofweekshort = "Tue";
             break;
         case 3:
-            dayofweeklong = "Wednesdy";
+            dayofweeklong = "Wednesday";
             dayofweekshort = "Wed";
             break;
         case 4:

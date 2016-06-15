@@ -2,14 +2,17 @@
  * Copyright (c) 2000-2010 Apple Inc.
  * All rights reserved.
  */
+/* 
+ * Few edits made to work correctly in BetaOS build.
+ */
 
 #ifndef _KERNEL_STDINT_H_
 #define _KERNEL_STDINT_H_
 
-#ifndef KERNEL
+//#ifndef KERNEL    /* Xcode IntelliSense doesn't like this if */
 /* For user-space code that may include this header */
-#include_next <stdint.h>
-#else /* KERNEL */
+//#include_next <stdint.h>
+//#else /* KERNEL */
 
 //#include <machine/types.h>
 /* Needed contents of <machine/types.h> */
@@ -24,11 +27,11 @@ typedef int                 int32_t;
 typedef long long           int64_t;
 /* <machine/types.h> */
 
-#if __LP64__
+//#if __LP64__
 #define __WORDSIZE 64
-#else
-#define __WORDSIZE 32
-#endif
+//#else
+//#define __WORDSIZE 32
+//#endif
 
 /* from ISO/IEC 988:1999 spec */
 
@@ -219,6 +222,6 @@ typedef unsigned long long      uintmax_t;
 #define INTMAX_C(v)  (v ## LL)
 #define UINTMAX_C(v) (v ## ULL)
 
-#endif /* KERNEL */
+//#endif /* KERNEL */
 
 #endif /* _KERNEL_STDINT_H_ */
