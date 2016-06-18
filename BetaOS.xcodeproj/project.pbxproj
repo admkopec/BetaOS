@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B4C92611D072ED800E2312D /* stdarg.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B4C925C1D072ECF00E2312D /* stdarg.h */; };
+		3B4C92621D072EDA00E2312D /* stdbool.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B4C925D1D072ECF00E2312D /* stdbool.h */; };
+		3B4C92631D072EDD00E2312D /* stddef.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B4C925E1D072ECF00E2312D /* stddef.h */; };
+		3B4C92641D072EE000E2312D /* stdint.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B4C925F1D072ECF00E2312D /* stdint.h */; };
+		3B6C4D531D157A0400D34BD6 /* cpuid.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C4D511D157A0400D34BD6 /* cpuid.c */; };
+		3B6C4D541D15804700D34BD6 /* cpuid.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C4D521D157A0400D34BD6 /* cpuid.h */; };
 		3B7222441CE7764F00E1AC35 /* kmalloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7222421CE7764F00E1AC35 /* kmalloc.c */; };
 		3B7222451CE778E200E1AC35 /* asm.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B7222311CE7611600E1AC35 /* asm.h */; };
 		3B7222461CE778E400E1AC35 /* crti.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B7222321CE7611600E1AC35 /* crti.S */; };
@@ -29,13 +35,13 @@
 		3B7222571CE7791800E1AC35 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72223A1CE7612600E1AC35 /* arch.c */; };
 		3B7222581CE7791900E1AC35 /* arch.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B72223B1CE7612600E1AC35 /* arch.h */; };
 		3B7222591CE7791B00E1AC35 /* asmlib.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B72223C1CE7612600E1AC35 /* asmlib.S */; };
-		3B72225A1CE7791D00E1AC35 /* cpufeature.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72223D1CE7612600E1AC35 /* cpufeature.c */; };
-		3B72225B1CE7792000E1AC35 /* cpufeature.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B72223E1CE7612600E1AC35 /* cpufeature.h */; };
 		3B72225C1CE7792200E1AC35 /* version.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B72223F1CE7612600E1AC35 /* version.h */; };
 		3B72225D1CE7792500E1AC35 /* cdefs.h in Sources */ = {isa = PBXBuildFile; fileRef = 3B7222411CE7615600E1AC35 /* cdefs.h */; };
 		3B7DD8701C57B6F700F3B86A /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8B14F81C1DE77E0003638E /* kernel.c */; };
 		3B7DD8711C57B6F900F3B86A /* command.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B72518F1C20A0B9009560FE /* command.c */; };
 		3BAF96451C6E479900B3B459 /* PS2Controller.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF96441C6E479900B3B459 /* PS2Controller.c */; };
+		3BB6BDBA1D1421EF00C344C7 /* pci.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BB6BDB91D1421EF00C344C7 /* pci.c */; };
+		3BB6BDBC1D14223000C344C7 /* pci.h in Sources */ = {isa = PBXBuildFile; fileRef = 3BB6BDBB1D14221A00C344C7 /* pci.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +57,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B4C925C1D072ECF00E2312D /* stdarg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdarg.h; path = EXTERNAL_HEADERS/stdarg.h; sourceTree = "<group>"; };
+		3B4C925D1D072ECF00E2312D /* stdbool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdbool.h; path = EXTERNAL_HEADERS/stdbool.h; sourceTree = "<group>"; };
+		3B4C925E1D072ECF00E2312D /* stddef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stddef.h; path = EXTERNAL_HEADERS/stddef.h; sourceTree = "<group>"; };
+		3B4C925F1D072ECF00E2312D /* stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdint.h; path = EXTERNAL_HEADERS/stdint.h; sourceTree = "<group>"; };
+		3B6C4D511D157A0400D34BD6 /* cpuid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cpuid.c; path = kernel/i386/cpuid.c; sourceTree = "<group>"; };
+		3B6C4D521D157A0400D34BD6 /* cpuid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpuid.h; path = kernel/i386/cpuid.h; sourceTree = "<group>"; };
 		3B7222271CE760D700E1AC35 /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = command.h; path = kernel/kernel/command.h; sourceTree = "<group>"; };
 		3B7222281CE760D700E1AC35 /* printf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = printf.c; path = kernel/kernel/printf.c; sourceTree = "<group>"; };
 		3B7222291CE760D700E1AC35 /* tty.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tty.c; path = kernel/kernel/tty.c; sourceTree = "<group>"; };
@@ -71,8 +83,6 @@
 		3B72223A1CE7612600E1AC35 /* arch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = arch.c; path = kernel/arch.c; sourceTree = "<group>"; };
 		3B72223B1CE7612600E1AC35 /* arch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arch.h; path = kernel/arch.h; sourceTree = "<group>"; };
 		3B72223C1CE7612600E1AC35 /* asmlib.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; name = asmlib.S; path = kernel/asmlib.S; sourceTree = "<group>"; };
-		3B72223D1CE7612600E1AC35 /* cpufeature.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cpufeature.c; path = kernel/cpufeature.c; sourceTree = "<group>"; };
-		3B72223E1CE7612600E1AC35 /* cpufeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpufeature.h; path = kernel/cpufeature.h; sourceTree = "<group>"; };
 		3B72223F1CE7612600E1AC35 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = kernel/version.h; sourceTree = "<group>"; };
 		3B7222411CE7615600E1AC35 /* cdefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cdefs.h; path = kernel/sys/cdefs.h; sourceTree = "<group>"; };
 		3B7222421CE7764F00E1AC35 /* kmalloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kmalloc.c; path = kernel/kernel/kmalloc.c; sourceTree = "<group>"; };
@@ -94,6 +104,8 @@
 		3B77DEEC1CEB687800B8720D /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = error.c; path = libc/stdlib/error.c; sourceTree = "<group>"; };
 		3B77DEED1CEB687800B8720D /* panic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = panic.c; path = libc/stdlib/panic.c; sourceTree = "<group>"; };
 		3B77DEEF1CEB688D00B8720D /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = time.c; path = libc/time/time.c; sourceTree = "<group>"; };
+		3B77DEF01CEB6CD300B8720D /* libc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libc.a; path = libc/libc.a; sourceTree = "<group>"; };
+		3B77DEF11CEB6CD300B8720D /* libk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libk.a; path = libc/libk.a; sourceTree = "<group>"; };
 		3B8B14F41C1DE75A0003638E /* Makefile */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = Makefile; path = kernel/Makefile; sourceTree = "<group>"; usesTabs = 1; };
 		3B8B14F81C1DE77E0003638E /* kernel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kernel.c; path = kernel/kernel/kernel.c; sourceTree = "<group>"; };
 		3B8B15131C1DE92E0003638E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -102,6 +114,8 @@
 		3B8B15191C1DE9600003638E /* grub.cfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = grub.cfg; path = product/boot/grub/grub.cfg; sourceTree = "<group>"; };
 		3B8BF5B11CEA0CA600A32320 /* misc_protos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = misc_protos.h; path = kernel/kernel/misc_protos.h; sourceTree = "<group>"; };
 		3BAF96441C6E479900B3B459 /* PS2Controller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PS2Controller.c; path = kernel/modules/PS2Controller.c; sourceTree = "<group>"; };
+		3BB6BDB91D1421EF00C344C7 /* pci.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pci.c; path = kernel/i386/pci.c; sourceTree = "<group>"; };
+		3BB6BDBB1D14221A00C344C7 /* pci.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pci.h; path = kernel/i386/pci.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +129,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B4C925A1D072EAE00E2312D /* EXTERNAL_HEADERS */ = {
+			isa = PBXGroup;
+			children = (
+				3B4C925C1D072ECF00E2312D /* stdarg.h */,
+				3B4C925D1D072ECF00E2312D /* stdbool.h */,
+				3B4C925E1D072ECF00E2312D /* stddef.h */,
+				3B4C925F1D072ECF00E2312D /* stdint.h */,
+			);
+			name = EXTERNAL_HEADERS;
+			sourceTree = "<group>";
+		};
 		3B72222D1CE760EA00E1AC35 /* x86_64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +161,10 @@
 				3B7222371CE7611600E1AC35 /* proc_reg.h */,
 				3B7222381CE7611600E1AC35 /* seg.h */,
 				3B7222391CE7611600E1AC35 /* sel.h */,
+				3BB6BDB91D1421EF00C344C7 /* pci.c */,
+				3BB6BDBB1D14221A00C344C7 /* pci.h */,
+				3B6C4D521D157A0400D34BD6 /* cpuid.h */,
+				3B6C4D511D157A0400D34BD6 /* cpuid.c */,
 			);
 			name = i386;
 			sourceTree = "<group>";
@@ -216,6 +245,7 @@
 			children = (
 				3B8B14F31C1DE74A0003638E /* Kernel */,
 				3B77DEDA1CEB681500B8720D /* Libc */,
+				3B4C925A1D072EAE00E2312D /* EXTERNAL_HEADERS */,
 				3B8B15121C1DE9230003638E /* Readme */,
 				3B8B15141C1DE9390003638E /* Product */,
 			);
@@ -231,8 +261,6 @@
 				3B72223A1CE7612600E1AC35 /* arch.c */,
 				3B72223B1CE7612600E1AC35 /* arch.h */,
 				3B72223C1CE7612600E1AC35 /* asmlib.S */,
-				3B72223D1CE7612600E1AC35 /* cpufeature.c */,
-				3B72223E1CE7612600E1AC35 /* cpufeature.h */,
 				3B72223F1CE7612600E1AC35 /* version.h */,
 				3B7222401CE7612B00E1AC35 /* sys */,
 				3B8B14F41C1DE75A0003638E /* Makefile */,
@@ -268,6 +296,8 @@
 		3B8B15141C1DE9390003638E /* Product */ = {
 			isa = PBXGroup;
 			children = (
+				3B77DEF01CEB6CD300B8720D /* libc.a */,
+				3B77DEF11CEB6CD300B8720D /* libk.a */,
 				3B8B15161C1DE9490003638E /* boot */,
 				3B8B15151C1DE9450003638E /* BetaOS.iso */,
 			);
@@ -305,12 +335,12 @@
 /* Begin PBXLegacyTarget section */
 		3B8B14D11C1DE5420003638E /* BetaOS */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
+			buildArgumentsString = "-j 4 $(ACTION)";
 			buildConfigurationList = 3B8B14D41C1DE5420003638E /* Build configuration list for PBXLegacyTarget "BetaOS" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/adamkopec/Desktop/OS/kernel;
+			buildWorkingDirectory = /Users/adamkopec/Documents/OS/kernel;
 			dependencies = (
 			);
 			name = BetaOS;
@@ -376,10 +406,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B6C4D531D157A0400D34BD6 /* cpuid.c in Sources */,
+				3B6C4D541D15804700D34BD6 /* cpuid.h in Sources */,
+				3BB6BDBA1D1421EF00C344C7 /* pci.c in Sources */,
+				3BB6BDBC1D14223000C344C7 /* pci.h in Sources */,
+				3B4C92641D072EE000E2312D /* stdint.h in Sources */,
+				3B4C92631D072EDD00E2312D /* stddef.h in Sources */,
+				3B4C92621D072EDA00E2312D /* stdbool.h in Sources */,
+				3B4C92611D072ED800E2312D /* stdarg.h in Sources */,
 				3B72225D1CE7792500E1AC35 /* cdefs.h in Sources */,
 				3B72225C1CE7792200E1AC35 /* version.h in Sources */,
-				3B72225B1CE7792000E1AC35 /* cpufeature.h in Sources */,
-				3B72225A1CE7791D00E1AC35 /* cpufeature.c in Sources */,
 				3B7222591CE7791B00E1AC35 /* asmlib.S in Sources */,
 				3B7222581CE7791900E1AC35 /* arch.h in Sources */,
 				3B7222571CE7791800E1AC35 /* arch.c in Sources */,

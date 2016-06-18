@@ -9,13 +9,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-//#include <string.h>
 
 #include <kernel/vga.h>
 #include <kernel/tty.h>
 #include <i386/pio.h>
-
-//#include <modules/PS2Controller.h>
 
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
@@ -71,7 +68,7 @@ void scrollUp(int64_t lineNum) {
         terminal_buffer[i]=terminal_buffer[i+VGA_WIDTH*lineNum];
     }
     clearLine(VGA_HEIGHT-1-lineNum,VGA_HEIGHT-1);
-    if ((terminal_row-lineNum) < 0) {
+    if ((terminal_row-lineNum) <= 0) {
         terminal_row=0;
         terminal_column=0;
     }

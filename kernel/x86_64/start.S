@@ -31,16 +31,30 @@
 
 
 # Declare constants used for creating a multiboot header.
-.set FLAGS,    1<<0 | 1<<1  # this is the Multiboot 'flag' field
-.set MAGIC,    0x1BADB002       # 'magic number' lets bootloader find the header
-.set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
+.set FLAGS,    1<<0 | 1<<1 //| 1<<2   # this is the Multiboot 'flag' field
+.set MAGIC,    0x1BADB002           # 'magic number' lets bootloader find the header
+.set CHECKSUM, -(MAGIC + FLAGS)     # checksum of above, to prove we are multiboot
 
 # Declare a header as in the Multiboot Standard.
 //.section .text
+/*Multiboot_Header:
+.long 0xE85250D6    // Magic
+.long 0             // Architecture
+.long Multiboot_Header_END - Multiboot_Header // Header length
+.long -(0xE85250D6 + 0 + (Multiboot_Header_END - Multiboot_Header)) // Checksum
+
+.long 0         // Type
+.long 0         // Flags
+.long 8         // Size
+//.long _start    // Entry
+Multiboot_Header_END:*/
 .align 4
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
+.long 0, 0, 0, 0, 0
+.long 0
+//.long 1280, 768, 8
 
 /* in the __HIB section since the hibernate restore code uses this stack. */
 	//.section __HIB, __data
@@ -48,7 +62,7 @@
 		#ifdef __ELF__
 		.section .data
 		#else
-    .section __DATA, __data
+        .section __DATA, __data
 		#endif
 	//.align	12
 
@@ -81,11 +95,6 @@ EXT(gIOHibernateRestoreStackEnd):
 LEXT(_start)
 LEXT(pstart)
 	mov	%eax, %edi      /* save kernbootstruct */ /* For now doesn't make anything valuable */
-
-	/*.code16
-	mov $0x00, %ah
-	int 0x10
-	.code32*/
 
 	/* Use low 32-bits of address as 32-bit stack */
 	movl	$EXT(low_eintstack), %esp

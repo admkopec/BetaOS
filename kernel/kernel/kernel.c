@@ -9,18 +9,14 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <i386/asm.h>
 
 #include <kernel/command.h>
 #include <kernel/tty.h>
 
-#include <modules/PS2Controller.h>
-
 //TODO:
 // * Add IDT
 // * Add PIC and enable IRQ
-// * Change read() (start from waiting for IRQ 1 instead of polling)
+// * Change pollchar() (start from waiting for IRQ 1 instead of polling)
 // * Add APM
 // * Add PCI driver
 // * Add SATA driver
@@ -35,7 +31,7 @@ void kernel_early(void)
 
 void kernel_main(void)
 {
-	printf("Hello!\nWelcome to BetaOS in x86_64 mode :) !\n");
+    printf("Hello!\nWelcome to BetaOS in x86_64 mode :) !\n");
     char * username = "root";
     while (1) {
         printf("%s$ ", username);

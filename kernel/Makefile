@@ -34,11 +34,14 @@ OBJS:=\
 $(X86_64_DIR)/start.o           \
 $(X86_64_DIR)/boot_pt.o         \
 $(I386_DIR)/gdt.o               \
+$(I386_DIR)/pci.o               \
+$(I386_DIR)/cpuid.o				\
 $(KERNELL_DIR)/kernel.o         \
 $(KERNELL_DIR)/tty.o            \
 $(KERNELL_DIR)/kmalloc.o        \
 $(KERNELL_DIR)/command.o        \
 $(MODULES_DIR)/PS2Controller.o  \
+$(MODULES_DIR)/SATAController.o	\
 $(KERNEL_DIR)/asmlib.o          \
 $(KERNEL_DIR)/arch.o            \
 

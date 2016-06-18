@@ -72,19 +72,7 @@
 #ifndef __ASSEMBLY__
 
 void halt_cpu(void);
-int  getprocessor(void);
 void x86_triplefault();
-void x86_lgdt(void *);
-void x86_lldt(unsigned long);
-void x86_ltr(unsigned long);
-void x86_lidt(void *);
-//void x86_load_kerncs(void); /* Implement! */
-void x86_load_ds(unsigned long);
-void x86_load_ss(unsigned long);
-void x86_load_es(unsigned long);
-void x86_load_fs(unsigned long);
-void x86_load_gs(unsigned long);
-void _cpuid(unsigned long *eax, unsigned long *ebx, unsigned long *ecx, unsigned long *edx); /* For now prototype'll be here */
 
 #endif /* __ASSEMBLY__ */
 

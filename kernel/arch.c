@@ -19,7 +19,7 @@ void reboot() {
 
     /* Some checks if worked */
 
-    if (0) {
+    if (/* DISABLES CODE */ (0)) {
         x86_triplefault();
     }
 

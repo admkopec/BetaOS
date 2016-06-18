@@ -24,6 +24,8 @@ void help();
 void version();
 void time_full();
 void time_short();
+void pciTest();
+
 
 void addCommand(char* name, char* desc, void (*run)(void)) {
     for (int i=0; i<num; i++) {
@@ -51,7 +53,6 @@ void addCommand(char* name, char* desc, void (*run)(void)) {
 }
 
 void CommandInit() {
-
     addCommand("help",      "Help command",                             help);
     addCommand("version",   "Displays version of BetaOS",               version);
     addCommand("reboot",    "Reboots the computer",                     reboot);
@@ -59,6 +60,7 @@ void CommandInit() {
     addCommand("time",      "Displays the actual time",                 time_short);
     addCommand("time long", "Displays the actual time in long version", time_full);
     addCommand("shut down", "Shut downs the computer",                  shutdown);
+    addCommand("pciTest",   "Tests PCI",                                pciTest);
 }
 
 void findcommand() {
@@ -86,7 +88,7 @@ void help() {
         if (menuentry=='1') {
             clearScreen();
             for (int i=0; i<num; i++) {
-                printf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
+                printf("Command name: %s"/*\nCommand description: %s*/"\n\n", command[i].name/*, command[i].desc*/);
             }
             for (; ;) {
                 if (getchar()=='\n') {
@@ -122,56 +124,47 @@ void version() {
     printf("Build Number ");
     printf(VERSION_BUILD);
     printf("\n");
-    /*if (getprocessor()>486) {
-        char CPU_name[48];
-        char CPU_vendor[12];
-        unsigned long eax = 0;
-        unsigned long ebx = 0;
-        unsigned long ecx = 0;
-        unsigned long edx = 0;
-        _cpuid(&eax, &ebx, &ecx, &edx);
-        memcpy(CPU_vendor,   &ebx, sizeof(ebx));
-        memcpy(CPU_vendor+4, &edx, sizeof(edx));
-        memcpy(CPU_vendor+8, &ecx, sizeof(ecx));
+    
+    #include <i386/cpuid.h>
+    
+    uint32_t reg[4];
+    char CPU_vendor[12];
+    char CPU_name[48];
+    do_cpuid(0, reg);
+    memcpy(CPU_vendor,   (char *)&reg[ebx], sizeof(4));
+    memcpy(CPU_vendor+4, (char *)&reg[edx], sizeof(4));
+    memcpy(CPU_vendor+8, (char *)&reg[ecx], sizeof(4));
+    printf("CPU Vendor %s\n", CPU_vendor);
+    
+    do_cpuid(0x80000002, reg);
+    memcpy(CPU_name+0,   (char *)&reg[eax], sizeof(4));
+    memcpy(CPU_name+4,   (char *)&reg[ebx], sizeof(4));
+    memcpy(CPU_name+8,   (char *)&reg[ecx], sizeof(4));
+    memcpy(CPU_name+12,  (char *)&reg[edx], sizeof(4));
+    
+    do_cpuid(0x80000003, reg);
+    memcpy(CPU_name+16,   (char *)&reg[eax], sizeof(4));
+    memcpy(CPU_name+20,   (char *)&reg[ebx], sizeof(4));
+    memcpy(CPU_name+24,   (char *)&reg[ecx], sizeof(4));
+    memcpy(CPU_name+28,   (char *)&reg[edx], sizeof(4));
+    
+    do_cpuid(0x80000004, reg);
+    memcpy(CPU_name+32,   (char *)&reg[eax], sizeof(4));
+    memcpy(CPU_name+36,   (char *)&reg[ebx], sizeof(4));
+    memcpy(CPU_name+40,   (char *)&reg[ecx], sizeof(4));
+    memcpy(CPU_name+44,   (char *)&reg[edx], sizeof(4));
 
-        printf("CPU Vendor %s\n", CPU_vendor);
-
-        eax=ebx=ecx=edx=0;
-        eax=0x80000002;
-        _cpuid(&eax, &ebx, &ecx, &edx);
-        memcpy(CPU_name+0,   &eax, sizeof(eax));
-        memcpy(CPU_name+4,   &ebx, sizeof(ebx));
-        memcpy(CPU_name+8,   &ecx, sizeof(ecx));
-        memcpy(CPU_name+12,  &edx, sizeof(edx));
-        eax=ebx=ecx=edx=0;
-        eax=0x80000003;
-        _cpuid(&eax, &ebx, &ecx, &edx);
-        memcpy(CPU_name+16,   &eax, sizeof(eax));
-        memcpy(CPU_name+20,   &ebx, sizeof(ebx));
-        memcpy(CPU_name+24,   &ecx, sizeof(ecx));
-        memcpy(CPU_name+28,   &edx, sizeof(edx));
-        eax=ebx=ecx=edx=0;
-        eax=0x80000004;
-        _cpuid(&eax, &ebx, &ecx, &edx);
-        memcpy(CPU_name+32,   &eax, sizeof(eax));
-        memcpy(CPU_name+36,   &ebx, sizeof(ebx));
-        memcpy(CPU_name+40,   &ecx, sizeof(ecx));
-        memcpy(CPU_name+44,   &edx, sizeof(edx));
-
-        int j=0;
-        for (j=0; ; j++) {
-            if (CPU_name[j]!=' ') {
-                break;
-            }
+    int j=0;
+    for (j=0; ; j++) {
+        if (CPU_name[j]!=' ') {
+            break;
         }
-        for (int i=j; i<48; i++) {
-            CPU_name[i-j]=CPU_name[i];
-        }
+    }
+    for (int i=j; i<48; i++) {
+        CPU_name[i-j]=CPU_name[i];
+    }
 
-        printf("CPU %s\n", CPU_name);
-    } else {
-        printf("\nCPU i%d\n", getprocessor());
-    }*/
+    printf("CPU %s\n", CPU_name);
 }
 
 void time_full() {
@@ -183,4 +176,19 @@ void time_full() {
 void time_short() {
     gettime();
     printf("%s %d:%s%d %s\n", dayofweekshort, hour, zerom, minute, pmam);
+}
+#include <i386/pci.h>
+void pciTest() {
+    printf("Should I dump? (Y/N) //For now only dump works ");
+    char yn;
+    for (;;) {
+        yn = getchar();
+        if (yn=='Y'||yn=='N'||yn=='y'||yn=='n') {
+            break;
+        }
+    }
+    if (yn=='Y') {
+        printf("%c\n", yn);
+        pcidump();
+    }
 }
