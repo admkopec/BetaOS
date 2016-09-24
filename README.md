@@ -1,8 +1,8 @@
 # BetaOS
 The BetaOS in this version is not yet officially ready for use on real hardware. It shouldn't break your machine, althoug use with caution.<br />
 For your and your hardware safety use it only as VM.<br />
-To compile the source code you need Apple's/LLVM's clang. (No need for GNU, because we're using MACH-O now)<br />
-Now installation got even easier with vmdk disk for VMware VMs and USB directory which contents you only need to copy to your USB to make it bootable.
+To compile the source code you need Apple's Xcode.
+Now installation got even easier with vmdk disk for VMware VMs and USB directory which contents you only need to copy to your USB to make it bootable.<br />
 Switching fully to Xcode making new projects, compilation now should be much easier, soon I'll add some kind of precompiled version of OS to download.
 
 ###Changelog:
