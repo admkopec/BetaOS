@@ -56,15 +56,15 @@
 
     /* Write */
     static inline void outb(unsigned int port, uint8_t val) {
-        __asm__ __volatile__ ( "outb %0, %w1" : : "a"(val), "Nd"(port) );
+        __asm__ __volatile__ ("outb %b0, %w1" : : "a"(val), "Nd"(port));
     }
 
     static inline void outw(unsigned int port, uint16_t val) {
-        __asm__ __volatile__("outw %%eax, %%dx" : : "d" (port), "a" (val));
+        __asm__ __volatile__("outw %w0, %w1" : : "a" (val), "Nd" (port));
     }
 
     static inline void outl(unsigned int port, uint32_t val) {
-        __asm__ __volatile__("outl %%eax, %%dx" : : "d" (port), "a" (val));
+        __asm__ __volatile__("outl %0, %w1" : : "a" (val), "Nd" (port));
     }
 
     /* Wait */
