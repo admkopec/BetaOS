@@ -18,6 +18,12 @@
 #define EFI_ACPI_DESCRIPTION_GUID \
 { 0x3c699197, 0x93c, 0x4c69, {0xb0, 0x6b, 0x12, 0x8a, 0xe3, 0x48, 0x1d, 0xc9 }}
 
+#if DEBUG
+#define DBG(x...)   kprintf(x)
+#else
+#define DBG(x...)
+#endif
+
 
 typedef struct {
     char     Signature[8];
@@ -167,21 +173,21 @@ ParseRSDP(ACPI_2_Description *RSDP) {
     ACPISDTHeader_t *XSDT, *Entry;
     uint32_t  EntryCount;
     uint64_t* EntryPtr;
-    kprintf("Found RSDP, Version: %d OEM ID: %s\n", RSDP->Revision, RSDP->OemId);
+    DBG("Found RSDP, Version: %d OEM ID: %s\n", RSDP->Revision, RSDP->OemId);
     if (RSDP->Revision >= 0x02) {
         XSDT = (ACPISDTHeader_t *) (RSDP->XsdtAddress);
     } else {
-        kprintf("NO XSDT table found!\n");
+        DBG("NO XSDT table found!\n");
         return 1;
     }
     
     if (strncmp("XSDT", XSDT->Signature, 4)) {
-        kprintf("Invalid XSDT!\n");
+        DBG("Invalid XSDT!\n");
         return 1;
     }
     
     EntryCount = (XSDT->Length - sizeof(ACPISDTHeader_t)) / sizeof(uint64_t);
-    kprintf("Found XSDT OEM ID: %s Entry Count: %d\n", XSDT->OEMID, EntryCount);
+    DBG("Found XSDT OEM ID: %s Entry Count: %d\n", XSDT->OEMID, EntryCount);
     
     EntryPtr = (uint64_t*) (XSDT + 1);
     for (uint32_t i = 0; i < EntryCount; i++, EntryPtr++) {
@@ -190,7 +196,7 @@ ParseRSDP(ACPI_2_Description *RSDP) {
         if (!strncmp("FACP", Entry->Signature, 4)) {
             Fadt = (FADT_t *)Entry;
             if (!strncmp("DSDT", ((ACPISDTHeader_t*)(Fadt->Dsdt))->Signature, 4)) {
-                kprintf("Found DSDT!\n");
+                DBG("Found DSDT!\n");
                 // search the \_S5 package in the DSDT
                 char *S5Addr = (char *) Fadt->Dsdt +36; // skip header
                 int dsdtLength = ((ACPISDTHeader_t*)Fadt->Dsdt)->Length;
@@ -233,10 +239,10 @@ ParseRSDP(ACPI_2_Description *RSDP) {
                         
                         return 0;
                     } else {
-                        kprintf("\\_S5 parse error.\n");
+                        DBG("\\_S5 parse error.\n");
                     }
                 } else {
-                    kprintf("\\_S5 not present.\n");
+                    DBG("\\_S5 not present.\n");
                 }
             }
         }
@@ -269,24 +275,24 @@ int acpiEnable_(void) {
                     }
                 }
             if (i<300) {
-                kprintf("Enabled ACPI.\n");
+                DBG("Enabled ACPI.\n");
                 return 0;
             } else {
-                kprintf("Couldn't enable ACPI.\n");
+                DBG("Couldn't enable ACPI.\n");
                 return -1;
             }
         } else {
-            kprintf("No known way to enable ACPI.\n");
+            DBG("No known way to enable ACPI.\n");
             return -1;
         }
     } else {
-        kprintf("ACPI was already enabled.\n");
+        DBG("ACPI was already enabled.\n");
         return 0;
     }
 }
 
 void printGuid(EFI_GUID g1) {
-    kprintf("{0x%lx, 0x%x, 0x%x, {0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x}}\n", g1.Data1, g1.Data2, g1.Data3, g1.Data4[0], g1.Data4[1], g1.Data4[2], g1.Data4[3], g1.Data4[4], g1.Data4[5], g1.Data4[6], g1.Data4[7]);
+    DBG("{0x%lx, 0x%x, 0x%x, {0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x}}\n", g1.Data1, g1.Data2, g1.Data3, g1.Data4[0], g1.Data4[1], g1.Data4[2], g1.Data4[3], g1.Data4[4], g1.Data4[5], g1.Data4[6], g1.Data4[7]);
 }
 
 void acpi() {
@@ -318,32 +324,32 @@ void acpi() {
     
     for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
         if (*(uint64_t *)(Address) == 0x54445352 || !strncmp((const char*)((uint64_t *)(Address)), "RSD PTR ", 8) /*|| !strcmp((const char*)(*(uint64_t *)(Address)), "RSD PTR ") || */) {
-            kprintf("Found RSDP using Legacy Method!\n");
+            DBG("Found RSDP using Legacy Method!\n");
             RSDP = (ACPI_2_Description *)Address;
         }
     }
     
     if (!strcmp(((ACPI_2_Description *)0xFE300)->Signature, "RSD PTR ")) {
-        kprintf("Found RSDP using fixed address!\n");
+        DBG("Found RSDP using fixed address!\n");
         //RSDP = (ACPI_2_Description *)0xFE300;
     }
     
     Address = (*(uint16_t *)(uint64_t)(0x40E)) << 4;
     for (Index = 0; Index < 0x400; Index += 16) {
         if (*(uint64_t *)(Address + Index) == 0x54445352 || !strncmp((const char *)((uint64_t*)(Address + Index)), "RSD PTR ", 8)) {
-            kprintf("Found RSDP using EBDA Method!\n");
+            DBG("Found RSDP using EBDA Method!\n");
             RSDP = (ACPI_2_Description *)Address;
         }
     }
     
     if (RSDP == (void *)0) {
-        kprintf("Error: Could not find RSDP\n");
+        DBG("Error: Could not find RSDP\n");
         return;
     }
     
     ParseRSDP(RSDP);
     if (SCI_EN_ == 0) {
-        kprintf("SCI_EN_ == 0");
+        DBG("SCI_EN_ == 0");
         return;
     }
     
@@ -360,16 +366,16 @@ void acpipoweroff(void) {
 
 void acpireboot(void) {
     if (Fadt->h.Revision < 2) {
-        kprintf("FADT isn't 2.0 or newer!\n");
+        DBG("FADT isn't 2.0 or newer!\n");
         return;
     } else {
         if (CHECK_BIT(Fadt->Flags, 10)) {
-            kprintf("Bit 10 is not set!\n");
+            DBG("Bit 10 is not set!\n");
             return;
         }
     }
-    kprintf("%u\n%d\n", Fadt->ResetReg.Address, Fadt->ResetReg.Address);
-    kprintf("%d\n", Fadt->ResetValue);
+    DBG("%u\n%d\n", Fadt->ResetReg.Address, Fadt->ResetReg.Address);
+    DBG("%d\n", Fadt->ResetValue);
     outb(Fadt->ResetReg.Address, Fadt->ResetValue);
     kprintf("ACPI reboot Failed!\n");
 }

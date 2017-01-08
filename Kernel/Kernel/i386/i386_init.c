@@ -131,7 +131,7 @@ physmap_init(void) {
             | INTEL_PTE_NX
             | INTEL_PTE_WRITE;
             if (j > 0x1FE) {       // Using the same hack as above :)
-                DBG("");
+                kprintf("");
             }
         }
     }

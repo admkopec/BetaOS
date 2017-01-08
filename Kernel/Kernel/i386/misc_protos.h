@@ -14,6 +14,12 @@
 #include <i386/vm_types.h>
 #include <platform/boot.h>
 
+#if DEBUG
+#define DBG(x...)   kprintf(x)
+#else
+#define DBG(x...)
+#endif
+
 extern bool can_use_serial;
 extern bool is_new_paging_enabled;
 extern void kprintf(const char *fmt, ...);

@@ -284,12 +284,7 @@ fix_desc(void *d, int num_desc) {
         desc += 8;
     } while (--num_desc);
 }
-#define DEBUG 1
-#if DEBUG
-#define DBG(x...) kprintf(x)
-#else
-#define DBG(x...)
-#endif
+
 void
 fix_desc64(void *descp, int count) {
     struct fake_descriptor64        *fakep;

@@ -53,16 +53,16 @@ EFI_get_frequency(const char *prop) {
     unsigned int	size;
     
     if (DTLookupEntry(0, "/efi/platform", &entry) != kSuccess) {
-        kprintf("EFI_get_frequency: didn't find /efi/platform\n");
+        DBG("EFI_get_frequency: didn't find /efi/platform\n");
         return 0;
     }
     if (DTGetProperty(entry,prop,&value,&size) != kSuccess) {
-        kprintf("EFI_get_frequency: property %s not found\n", prop);
+        DBG("EFI_get_frequency: property %s not found\n", prop);
         return 0;
     }
     if (size == sizeof(uint64_t)) {
         frequency = *(uint64_t *) value;
-        kprintf("EFI_get_frequency: read %s value: %llu\n",
+        DBG("EFI_get_frequency: read %s value: %llu\n",
                 prop, frequency);
     }
     
@@ -72,7 +72,7 @@ EFI_get_frequency(const char *prop) {
     if (DTGetProperty(entry,"InitialTSC",&value,&size) == kSuccess) {
         if (size == sizeof(uint64_t)) {
             tsc_at_boot = *(uint64_t *) value;
-            kprintf("EFI_get_frequency: read InitialTSC: %llu\n",
+            DBG("EFI_get_frequency: read InitialTSC: %llu\n",
                     tsc_at_boot);
         }
     }
@@ -88,7 +88,7 @@ tsc_init(void) {
     bool	N_by_2_bus_ratio = false;
     
     if (cpuid_vmm_present()) {
-        kprintf("VMM vendor %u TSC frequency %u KHz bus frequency %u KHz\n",
+        DBG("VMM vendor %u TSC frequency %u KHz bus frequency %u KHz\n",
                 cpuid_vmm_info()->cpuid_vmm_family,
                 cpuid_vmm_info()->cpuid_vmm_tsc_frequency,
                 cpuid_vmm_info()->cpuid_vmm_bus_frequency);
@@ -136,7 +136,7 @@ tsc_init(void) {
             tscFreq = refFreq * N / M;
             busFreq = tscFreq;		/* bus is APIC frequency */
             
-            kprintf(" ART: Frequency = %6d.%06dMHz, N/M = %lld/%llu\n",
+            DBG(" ART: Frequency = %6d.%06dMHz, N/M = %lld/%llu\n",
                     (uint32_t)(refFreq / Mega),
                     (uint32_t)(refFreq % Mega),
                     N, M);
@@ -189,7 +189,7 @@ tsc_init(void) {
         panic("tsc_init: EFI not supported!\n");
     }
     
-    kprintf(" BUS: Frequency = %6d.%06dMHz, "
+    DBG(" BUS: Frequency = %6d.%06dMHz, "
             "cvtt2n = %08X.%08X, cvtn2t = %08X.%08X\n",
             (uint32_t)(busFreq / Mega),
             (uint32_t)(busFreq % Mega),
@@ -225,7 +225,7 @@ tsc_init(void) {
         bus2tsc = tmrCvt(busFCvtt2n, tscFCvtn2t);
     }
     
-    kprintf(" TSC: Frequency = %6d.%06dMHz, "
+    DBG(" TSC: Frequency = %6d.%06dMHz, "
             "cvtt2n = %08X.%08X, cvtn2t = %08X.%08X, gran = %lld%s\n",
             (uint32_t)(tscFreq / Mega),
             (uint32_t)(tscFreq % Mega), 

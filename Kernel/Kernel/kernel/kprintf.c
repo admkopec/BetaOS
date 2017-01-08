@@ -73,14 +73,15 @@ kprintf(const char *fmt, ...) {
             MP_DEBUG_KPRINTF("[cpu%d...]\n", cpu_number());
             cpu_last_locked = cpu_number();
         }*/
-        
+    }   // Quick Fix for can_use_serial
+    
         va_start(listp, fmt);
         _doprnt(fmt, &listp, putc, 16);
         va_end(listp);
         
         /*simple_unlock(&kprintf_lock);
         ml_set_interrupts_enabled(state);*/
-    }
+    //}
 }
 
 void
