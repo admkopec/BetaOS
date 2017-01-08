@@ -15,6 +15,12 @@
 static uint32_t color_foreground = 0x00FFFFFF;
 static uint32_t color_background = 0x00000000;
 
+char painted_chars[1000][1000];
+unsigned long painted_chars_row    = 0;
+unsigned long painted_chars_column = 0;
+
+void putc(int ch);
+
 uint32_t row = 0;
 uint32_t column = 0;
 
@@ -100,10 +106,43 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
 }
 
 void
+scroll_up() {  // Fix clearing painted_chars every time scroll occures
+    int i_ = (int)painted_chars_row;
+    //painted_chars_row = 0;
+    //painted_chars_column = 0;
+    //int j = place;
+    clear_screen();
+    /*for (int i = 0; (i <= j); i++) {
+        putc(chars[i]);
+    }*/
+    /*for (uint32_t i = 0; ((i < painted_chars_row) && (i <= Platform_state.video.v_height/ISO_CHAR_HEIGHT)); i++) {
+        for (uint32_t j = 0; j < painted_chars_column; j++) {
+            paint_char(j*ISO_CHAR_WIDTH, i*ISO_CHAR_HEIGHT, painted_chars[i][j]);
+        }
+    }*/
+    __unused unsigned long start_row = painted_chars_row - ((Platform_state.video.v_height/ISO_CHAR_HEIGHT)-1);
+    for (int i = (int)start_row; i <= i_; i++) {
+        //kprintf(painted_chars[i]);
+        for (int j = 0; j<200; j++) {
+            if (painted_chars[i][j]!='\0') {
+                //painted_chars[i-1][j] = 0;
+                //paint_char((unsigned int)(j*ISO_CHAR_WIDTH), (unsigned int)((start_row-(Platform_state.video.v_height/ISO_CHAR_HEIGHT))*ISO_CHAR_HEIGHT), painted_chars[i][j]);
+                putc(painted_chars[i][j]);
+            }
+        }
+    }
+    //column=0;
+    //row = (uint32_t)(Platform_state.video.v_height-(2*ISO_CHAR_HEIGHT));
+}
+
+void
 putc(int ch) {
+    painted_chars[painted_chars_row][painted_chars_column] = ch;
     if (ch=='\n'||ch=='\r') {
+        painted_chars_row++;
+        painted_chars_column=0;
         if (row>=(Platform_state.video.v_height-ISO_CHAR_HEIGHT)) {
-            //scrollup();
+            //scroll_up();
             clear_screen();
             row=0;
             column=0;
@@ -115,11 +154,14 @@ putc(int ch) {
     }
     if (ch=='\b') {
         if (column>0) {
+            painted_chars_column--;
+            painted_chars[painted_chars_row][painted_chars_column] = '\0';
             column-=ISO_CHAR_WIDTH;
             paint_char(column, row, '\0');
             return;
         }
     }
+    painted_chars_column++;
     paint_char(column, row, ch);
     column+=ISO_CHAR_WIDTH;
     if (column>=(Platform_state.video.v_width)) {

@@ -24,7 +24,7 @@ void testSATA(void) {
     fis.c = 1;                         // Write command register*/
     
     HBA_MEM mem;
-    memset(&mem, 0, sizeof(HBA_MEM));
+    memset((void *)&mem, 0, sizeof(HBA_MEM));
     probe_port(&mem);
 }
 
@@ -79,10 +79,10 @@ void probe_port(HBA_MEM *abar) {
 
 // Check device type
 static int check_type(HBA_PORT *port) {
-    uint32_t ssts = port->ssts;
+    //uint32_t ssts = port->ssts;
     
-    uint8_t ipm = (ssts >> 8) & 0x0F;
-    uint8_t det = ssts & 0x0F;
+    //uint8_t ipm = (ssts >> 8) & 0x0F;
+    //uint8_t det = ssts & 0x0F;
     
     //if (det != HBA_PORT_DET_PRESENT)	// Check drive status
     //    return AHCI_DEV_NULL;

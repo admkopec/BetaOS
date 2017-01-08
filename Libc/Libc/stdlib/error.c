@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <kernel/misc_protos.h>
 
 void error(const char* errormsg) {
     gettime();

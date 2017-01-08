@@ -10,21 +10,24 @@
 #include <arch.h>
 #include <i386/asm.h>
 #include <i386/pio.h>
+#include <i386/acpi.h>
 
 void reboot() {
-    unsigned char good = 0x02;                    // Future: Move power () to apm.c
+    acpireboot();  // Needs troubleshooting
+    
+    printf("Using legacy reboot method.\n");
+    
+    unsigned char good = 0x02;                    // Future: Move power () to acpi.c
     while ((good & 0x02) != 0)
             good = inb(0x64);
     outb(0x64, 0xFE);
-
-    /* Some checks if worked */
-
-    if (/* DISABLES CODE */ (0)) {
-        x86_triplefault();
-    }
+    
+    x86_triplefault();
 
 }
 
 void shutdown() {
-    printf("Will be added in version 1.0\nBeta will be available sooner\n");
+    acpipoweroff();
+    printf("Something went wrong!\nYou can now manually switch off your computer.");
+    halt_cpu();
 }

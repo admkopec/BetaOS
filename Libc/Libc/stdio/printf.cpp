@@ -15,7 +15,8 @@ int printf(const char *s, ...) {
     int printedchars=0;
 
     char buf[16];
-    int i, j, size, buflen, neg;
+    size_t buflen, size;
+    int i, j, neg;
 
     unsigned char c;
     int ival;
@@ -47,11 +48,9 @@ int printf(const char *s, ...) {
 
                 buflen = strlen(buf);
                 if (buflen < size)
-                for (i = size, j = buflen; i >= 0;
+                for (i = (int) size, j = (int) buflen; i >= 0;
                      i--, j--)
-                buf[i] =
-                (j >=
-                 0) ? buf[j] : '0';
+                buf[i] = (j >= 0) ? buf[j] : '0';
 
                 if (neg)
                 printf("-%s", buf);
@@ -59,12 +58,12 @@ int printf(const char *s, ...) {
                 printf(buf);
             }
             else if (c == 'u') {
-                uival = va_arg(ap, int);
+                uival = va_arg(ap, unsigned);
                 itoa(buf, uival, 10);
 
                 buflen = strlen(buf);
                 if (buflen < size)
-                for (i = size, j = buflen; i >= 0;
+                for (i = (int) size, j = (int) buflen; i >= 0;
                      i--, j--)
                 buf[i] =
                 (j >=
@@ -77,7 +76,7 @@ int printf(const char *s, ...) {
 
                 buflen = strlen(buf);
                 if (buflen < size)
-                for (i = size, j = buflen; i >= 0;
+                for (i = (int) size, j = (int) buflen; i >= 0;
                      i--, j--)
                 buf[i] =
                 (j >=
@@ -91,15 +90,13 @@ int printf(const char *s, ...) {
 
                 buflen = strlen(buf);
                 if (buflen < size)
-                for (i = size, j = buflen; i >= 0;
+                for (i = (int) size, j = (int) buflen; i >= 0;
                      i--, j--)
-                buf[i] =
-                (j >=
-                 0) ? buf[j] : '0';
+                buf[i] = (j >= 0) ? buf[j] : '0';
 
                 printf("0x%s", buf);
             } else if (c == 's') {
-                printf((char *) va_arg(ap, int));
+                printf((char *) va_arg(ap, char *));
             }
         } else
         putchar(c);

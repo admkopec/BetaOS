@@ -44,13 +44,13 @@
 
     static inline uint16_t inw(unsigned int port) {
         uint16_t ret;
-        __asm__ __volatile__("inw %%dx, %%eax" : "=a" (ret) : "dN" (port));
+        __asm__ __volatile__("inw %w1, %0" : "=a" (ret) : "Nd" (port));
         return ret;
     }
 
     static inline uint32_t inl(unsigned int port) {
         uint32_t ret;
-        __asm__ __volatile__("inl %%dx, %%eax" : "=a" (ret) : "dN" (port));
+        __asm__ __volatile__("inl %w1, %0" : "=a" (ret) : "Nd" (port));
         return ret;
     }
 

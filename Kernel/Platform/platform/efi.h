@@ -468,7 +468,8 @@ typedef struct EFI_SYSTEM_TABLE_32 {
     EFI_PTR32                     BootServices;
     
     EFI_UINT32                    NumberOfTableEntries;
-    EFI_PTR32                     ConfigurationTable;
+    //EFI_PTR32                     ConfigurationTable;
+    EFI_CONFIGURATION_TABLE_32*   ConfigurationTable;
     
 } __attribute__((aligned(8))) EFI_SYSTEM_TABLE_32;
 
@@ -493,7 +494,8 @@ typedef struct EFI_SYSTEM_TABLE_64 {
     EFI_PTR64                     BootServices;
     
     EFI_UINT64                    NumberOfTableEntries;
-    EFI_PTR64                     ConfigurationTable;
+    /*EFI_PTR64*/
+    EFI_CONFIGURATION_TABLE_64*   ConfigurationTable;
     
 } __attribute__((aligned(8))) EFI_SYSTEM_TABLE_64;
 

@@ -24,6 +24,8 @@ extern void
 change_color(uint32_t foreground, uint32_t background);
 extern void
 clear_screen();
+extern void
+scroll_up();
 
 /* Commands prototypes */
 
@@ -38,6 +40,9 @@ void returnnn() {
 }
 void testassert() {
     assert(1==0);
+}
+void testscroll() {
+    scroll_up();
 }
 
 void addCommand(char* name, __unused char* desc, void (*run)(void)) {
@@ -78,6 +83,7 @@ void CommandInit() {
     addCommand("pciTest",   "Tests PCI",                                pciTest);
     addCommand("assert",    "Assert",                                   testassert);
     addCommand("Platform",  "Prints Platform State boot args",          get_platformstate);
+    addCommand("scroll up", "Tests if scroll up doesn't crash CPU",     testscroll);
 }
 
 void findcommand() {

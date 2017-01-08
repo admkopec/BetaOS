@@ -171,7 +171,7 @@ descriptor_alias_init() {
     KPTphys[atop_kernel(master_idt_alias_phys)] = master_idt_phys | INTEL_PTE_VALID | INTEL_PTE_NX;	/* read-only */
 }
 
-static void
+__unused static void
 Idle_PTs_init(void) {
     /* Allocate the "idle" kernel page tables: */
     KPTphys  = ALLOCPAGES(NKPT);	/* level 1 */
@@ -236,8 +236,10 @@ vstart(vm_offset_t boot_args_start) {
 #endif
         
         kernelBootArgs = (boot_args *)ml_static_ptovirt(boot_args_start);
-        DBG("i386_init(0x%lx) kernelBootArgs=%p\n", (unsigned long)boot_args_start, kernelBootArgs);
+        //DBG("i386_init(0x%lx) kernelBootArgs=%p\n", (unsigned long)boot_args_start, kernelBootArgs);
         Platform_init(FALSE, kernelBootArgs);
+        
+        clear_screen();
         
         DBG("revision      0x%X\n", kernelBootArgs->Revision);
         DBG("version       0x%X\n", kernelBootArgs->Version);
@@ -301,7 +303,8 @@ vstart(vm_offset_t boot_args_start) {
                 dst = (volatile unsigned int *) (((volatile char *)dst)+Platform_state.video.v_rowBytes);
             }
         }
-        #include "video/colors.h"
+        
+        
         //Idle_PTs_init();      // Using Boot Page Tables
         
         first_avail = (vm_offset_t)ID_MAP_VTOP(physfree);

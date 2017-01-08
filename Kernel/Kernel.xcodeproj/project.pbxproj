@@ -51,6 +51,7 @@
 		3B7866361D95947500C015DF /* ldt.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661E1D95947500C015DF /* ldt.c */; };
 		3B7866371D95947500C015DF /* mp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661F1D95947500C015DF /* mp.c */; };
 		3B78663C1D95948B00C015DF /* renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866391D95948B00C015DF /* renderer.c */; };
+		3BF2954B1E003EF8006716EB /* acpi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF295491E003EF8006716EB /* acpi.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -110,6 +111,7 @@
 		3B5F797D1D9597F8006EC205 /* boot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boot.h; path = Platform/platform/boot.h; sourceTree = "<group>"; };
 		3B5F797E1D9597F8006EC205 /* device_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = device_tree.h; path = Platform/platform/device_tree.h; sourceTree = "<group>"; };
 		3B5F797F1D9597F8006EC205 /* efi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = efi.h; path = Platform/platform/efi.h; sourceTree = "<group>"; };
+		3B7381A61D984A1C0001846F /* PS2Keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PS2Keymap.h; path = Modules/PS2Keymap.h; sourceTree = SOURCE_ROOT; };
 		3B7865BC1D958FEE00C015DF /* Kernel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Kernel; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B7865DC1D9591B800C015DF /* libc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libc.a; path = "../../../../Developer/Xcode/DerivedData/BetaOS-gapbhrzafomgsbfxbixzumnpbwhr/Build/Products/Debug/libc.a"; sourceTree = "<group>"; };
 		3B7865DF1D9592F500C015DF /* low_mem_vectors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = low_mem_vectors.c; path = x86_64/low_mem_vectors.c; sourceTree = "<group>"; };
@@ -174,6 +176,8 @@
 		3B7866391D95948B00C015DF /* renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = renderer.c; path = i386/video/renderer.c; sourceTree = "<group>"; };
 		3B78663A1D95948B00C015DF /* colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colors.h; path = i386/video/colors.h; sourceTree = "<group>"; };
 		3B78663B1D95948B00C015DF /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = font.h; path = i386/video/font.h; sourceTree = "<group>"; };
+		3BF295491E003EF8006716EB /* acpi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = acpi.c; path = i386/acpi.c; sourceTree = "<group>"; };
+		3BF2954A1E003EF8006716EB /* acpi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = acpi.h; path = i386/acpi.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,18 +195,19 @@
 		3B588BBF1D95C76300087C38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				3B588BC01D95C89C00087C38 /* ModulesController.cpp */,
-				3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */,
-				3B588BC21D95C89C00087C38 /* SATAController.c */,
-				3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */,
 				3B588BC41D95C89C00087C38 /* ModulesController.hpp */,
+				3B588BC01D95C89C00087C38 /* ModulesController.cpp */,
 				3B588BC51D95C89C00087C38 /* IntelE1000Controller.hpp */,
-				3B588BC61D95C89C00087C38 /* RTL8111Controller.hpp */,
-				3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */,
-				3B588BC81D95C89C00087C38 /* MMIOUtils.hpp */,
-				3B588BC91D95C89C00087C38 /* PS2Controller.c */,
+				3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */,
 				3B588BCA1D95C89C00087C38 /* SATAController.h */,
+				3B588BC21D95C89C00087C38 /* SATAController.c */,
+				3B588BC61D95C89C00087C38 /* RTL8111Controller.hpp */,
+				3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */,
+				3B588BC81D95C89C00087C38 /* MMIOUtils.hpp */,
+				3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */,
+				3B7381A61D984A1C0001846F /* PS2Keymap.h */,
 				3B588BCB1D95C89C00087C38 /* PS2Controller.h */,
+				3B588BC91D95C89C00087C38 /* PS2Controller.c */,
 			);
 			name = Modules;
 			sourceTree = "<group>";
@@ -328,6 +333,8 @@
 			isa = PBXGroup;
 			children = (
 				3B7866381D95948000C015DF /* video */,
+				3BF2954A1E003EF8006716EB /* acpi.h */,
+				3BF295491E003EF8006716EB /* acpi.c */,
 				3B7865F31D95947500C015DF /* vm_param.h */,
 				3B7865F41D95947500C015DF /* mp.h */,
 				3B7865F51D95947500C015DF /* mp_desc.c */,
@@ -425,7 +432,7 @@
 		3B7865B41D958FED00C015DF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Adam Kopeć";
 				TargetAttributes = {
 					3B7865BB1D958FED00C015DF = {
@@ -477,6 +484,7 @@
 				3B7865EF1D9592F500C015DF /* pmap_pcid.c in Sources */,
 				3B78663C1D95948B00C015DF /* renderer.c in Sources */,
 				3B78662D1D95947500C015DF /* cpuid.c in Sources */,
+				3BF2954B1E003EF8006716EB /* acpi.c in Sources */,
 				3B7865F01D9592F500C015DF /* boot_pt.c in Sources */,
 				3B78662F1D95947500C015DF /* i386_vm_init.c in Sources */,
 				3B78662A1D95947500C015DF /* syscall.c in Sources */,
@@ -524,6 +532,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -571,6 +580,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -600,7 +610,7 @@
 				CURRENT_PROJECT_VERSION = 0.25;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					KERNEL,
@@ -623,10 +633,7 @@
 					"-mkernel",
 					"-msoft-float",
 				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-nostdinc++",
-				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					"-nostdlib",
 					"-fapple-kext",
@@ -697,10 +704,7 @@
 					"-mkernel",
 					"-msoft-float",
 				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-nostdinc++",
-				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					"-nostdlib",
 					"-fapple-kext",

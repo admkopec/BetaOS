@@ -27,6 +27,7 @@ size_t strlcpy(char * dst, const char * src, size_t maxlen);
 void* memcpy  (void* dstptr, const void* srcptr, size_t size);
 void* memmove (void* dstptr, const void* srcptr, size_t size);
 void* memset  (void* bufptr, int         value,  size_t size);
+int   memcmp  (const void* s1, const void* s2,   size_t size);
 
 #ifdef __cplusplus
 }

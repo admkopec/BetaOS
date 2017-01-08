@@ -319,7 +319,7 @@
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					KERNEL,
@@ -341,10 +341,7 @@
 					"-mkernel",
 					"-msoft-float",
 				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-nostdinc++",
-				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_MODULE_NAME = c;
 				PRODUCT_NAME = c;
 				WARNING_CFLAGS = (
@@ -381,10 +378,7 @@
 					"-mkernel",
 					"-msoft-float",
 				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-nostdinc++",
-				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_MODULE_NAME = c;
 				PRODUCT_NAME = c;
 				WARNING_CFLAGS = (

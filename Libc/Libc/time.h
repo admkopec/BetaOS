@@ -26,8 +26,8 @@ extern char* monthl;
 extern char* dayofweekshort;
 extern char* dayofweeklong;
 
-static const int century_register = 0x00;                                // Set by ACPI table parsing code if possible
-
+static const int century_register = 0x00;                                // Set by ACPI table parsing code
+                                                                         // TODO: initialize in acpi()
 enum {
     cmos_address = 0x70,
     cmos_data    = 0x71

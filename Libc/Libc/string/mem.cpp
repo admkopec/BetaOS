@@ -38,3 +38,18 @@ void* memset(void* bufptr, int value, size_t size) {
         buf[i] = (unsigned char) value;
     return bufptr;
 }
+
+/*
+ * Compare memory regions.
+ */
+int
+memcmp(const void *s1, const void *s2, size_t size) {
+    if (size != 0) {
+        register const unsigned char *p1 = (const uint8_t *)s1, *p2 = (const uint8_t *)s2;
+        do {
+            if (*p1++ != *p2++)
+                return (*--p1 - *--p2);
+        } while (--size != 0);
+    }
+    return (0);
+}

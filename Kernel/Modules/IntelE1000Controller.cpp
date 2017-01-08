@@ -64,7 +64,7 @@ void E1000::rxinit() {
     writeCommand(REG_TXDESCLO, (uint32_t)((uint64_t)ptr >> 32) );
     writeCommand(REG_TXDESCHI, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
     
-    writeCommand(REG_RXDESCLO, (uint64_t)ptr);
+    writeCommand(REG_RXDESCLO, (uint32_t)((uint64_t)ptr));
     writeCommand(REG_RXDESCHI, 0);
     
     writeCommand(REG_RXDESCLEN, E1000_NUM_RX_DESC * 16);

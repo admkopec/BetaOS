@@ -355,7 +355,7 @@ L_common_dispatch:
  * Control is passed here to return to user.
  */
 Entry(return_to_user)
-	//TIME_TRAP_UEXIT   RTC_ASM.H
+	//TIME_TRAP_UEXIT   RTC_ASM.h
 
 Entry(ret_to_user)
 	//mov	%gs:CPU_ACTIVE_THREAD, %rdx
@@ -596,7 +596,7 @@ Entry(idt64_sysenter)
 	 */
 	push	$(USER_DS)		/* ss */
 	push	%rcx			/* uesp */
-	pushf				/* flags */
+	pushf                   /* flags */
 	/*
 	 * Clear, among others, the Nested Task (NT) flags bit;
 	 * this is zeroed by INT, but not by SYSENTER.
@@ -612,8 +612,6 @@ L_sysenter_continue:
 	pushq	$(T_SYSENTER)
 	orl	$(EFL_IF), ISF64_RFLAGS(%rsp)
 	jmp	L_32bit_entry_check
-
-
 
 
 Entry(hndl_unix_scall64)

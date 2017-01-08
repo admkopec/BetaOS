@@ -28,6 +28,8 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif  /* MAX */
 
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
 #define RB_ENTRY(type)                              \
 struct {                                            \
 struct type *rbe_left;		/* left element */		\

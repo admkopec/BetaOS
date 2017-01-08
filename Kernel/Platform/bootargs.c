@@ -55,16 +55,16 @@ static int argnumcpy(long long val, void *to, unsigned maxlen) {
             break;
         case 3:
             /* Unlikely in practice */
-            ((struct i24 *)to)->i24 = val;
+            ((struct i24 *)to)->i24 = (int32_t) val;
             break;
         case 4:
-            *(int32_t *)to = val;
+            *(int32_t *)to = (int32_t) val;
             break;
         case 8:
             *(int64_t *)to = val;
             break;
         default:
-            *(int32_t *)to = val;
+            *(int32_t *)to = (int32_t) val;
             maxlen = 4;
             break;
     }
