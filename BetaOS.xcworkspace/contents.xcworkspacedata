@@ -14,4 +14,11 @@
          location = "group:README.md">
       </FileRef>
    </Group>
+   <Group
+      location = "container:"
+      name = "License">
+      <FileRef
+         location = "group:LICENSE.txt">
+      </FileRef>
+   </Group>
 </Workspace>
