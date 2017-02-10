@@ -2,7 +2,7 @@
 The BetaOS in this version is not yet officially ready for use on real hardware. It shouldn't break your machine, although use with caution.<br />
 For your and your hardware safety use it only as VM.<br />
 To compile the source code you need Apple's Xcode.<br />
-Now installation got even easier with vmdk disk for VMware VMs and USB directory which contents you only need to copy to your USB to make it bootable.<br />
+Now installation got even easier with dmg disk for VMs (or you can restore it to USB) and USB directory which contents you only need to copy to your USB to make it bootable.<br />
 PC users should use Clover bootloader to boot the MACH-O binary through included boot.efi(Apple).
 
 ###Changelog:
