@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/20/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef RTL8111Controller_hpp
@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "PCIController.hpp"
 
 #define Realtek_Vendor 0x10EC
 #define RTL8168_ID     0x8168
@@ -38,6 +39,8 @@ class RTL8111 {
     bool        readMACAddress();           // Read MAC Address
 public:
     RTL8111();
+    int  init(PCI *h);
+    void start();
 };
 
 #endif

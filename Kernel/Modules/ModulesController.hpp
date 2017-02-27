@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/20/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef ModulesController_hpp
@@ -21,11 +21,8 @@ extern "C" {
 }
 #define MAX_LOADED_MODULES 1024
 class Modules {
-    int   num_of_loaded_modules;
-    char* loaded_modules[MAX_LOADED_MODULES];
-    
 public:
-    static void LoadModule();
+    void start(void);
 };
 
 

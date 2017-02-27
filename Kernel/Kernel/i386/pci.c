@@ -3,12 +3,12 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/17/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <i386/pci.h>
 #include <i386/pio.h>
-//#include <stdio.h>
+#include <stdio.h>
 #include "misc_protos.h"
 
 uint32_t pciGetConfig(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
@@ -24,31 +24,32 @@ uint32_t pciGetConfig(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
     return inl(0xCFC);
 }
 
-uint16_t pciGetVendor(uint8_t bus, uint8_t slot) {
-    return (uint16_t)(pciGetConfig(bus,slot,0,0));
+uint16_t pciGetVendor(uint8_t bus, uint8_t slot, uint8_t func) {
+    return (uint16_t)(pciGetConfig(bus,slot, func,0));
 }
 
-uint16_t pciGetDevice(uint8_t bus, uint8_t slot) {
-    return (uint16_t)(pciGetConfig(bus,slot,0,0) >> 16);
+uint16_t pciGetDevice(uint8_t bus, uint8_t slot, uint8_t func) {
+    return (uint16_t)(pciGetConfig(bus,slot, func,0) >> 16);
 }
 
 int pcidump() {
     //clearScreen();
     kprintf("=========================PCI DUMP========================\n");
-    for (int bus = 0; bus<=15; bus++) {
-        for (int slot = 0; slot<=15; slot++) {
-            if (pciGetVendor(bus, slot)==0xFFFF) {
+    for (int bus = 0; bus < 256; bus++) {
+        for (int slot = 0; slot < 32; slot++) {
+            for (int func = 0; func < 8; func++) {
+            if (pciGetVendor(bus, slot, func)==0xFFFF) {
                 /* ... */
             } else {
-                kprintf("Vendor ID = %x Device ID = %x\n", pciGetVendor(bus, slot), pciGetDevice(bus, slot));
+                kprintf("Vendor ID = %x Device ID = %x\n", pciGetVendor(bus, slot, func), pciGetDevice(bus, slot, func));
                 //if (/*(bus==0&&slot==0)||(bus==2&&slot==0)*/0) {
-                kprintf("%x",pciGetConfig(bus, slot, 0, 0x0));
+                kprintf("%x",pciGetConfig(bus, slot, func, 0x0));
                 kprintf("\n");
-                kprintf("%x",pciGetConfig(bus, slot, 0, 0x4));
+                kprintf("%x",pciGetConfig(bus, slot, func, 0x4));
                 kprintf("\n");
-                kprintf("%x",pciGetConfig(bus, slot, 0, 0x8));
+                kprintf("%x",pciGetConfig(bus, slot, func, 0x8));
                 kprintf("\n");
-                kprintf("%x",pciGetConfig(bus, slot, 0, 0xC));
+                /*kprintf("%x",pciGetConfig(bus, slot, 0, 0xC));
                 kprintf("\n");
                 kprintf("%x",pciGetConfig(bus, slot, 0, 0x10));
                 kprintf("\n");
@@ -73,15 +74,16 @@ int pcidump() {
                 kprintf("%x",pciGetConfig(bus, slot, 0, 0x38));
                 kprintf("\n");
                 kprintf("%x",pciGetConfig(bus, slot, 0, 0x3C));
-                kprintf("\n");
+                kprintf("\n");*/
                 //}
-                /*for (char c = '\0'; ;) {
+                for (char c = '\0'; ;) {
                     c = getchar();
                     if (c=='\n') {
-                        clearScreen();
+                        //clearScreen();
                         break;
                     }
-                }*/
+                }
+            }
             }
         }
     }

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 5/10/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef cdefs_h
@@ -41,5 +41,6 @@ struct type *rbe_parent;	/* parent element */    \
 #define	__improbable(x)	__builtin_expect(!!((long)(x)), 0L)
 
 #define __unused        __attribute__((unused))
+#define __packed        __attribute__((packed))
 
 #endif /* cdefs_h */

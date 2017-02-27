@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/27/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef rtclock_h
@@ -34,6 +34,7 @@ extern rtc_timer_t	*rtc_timer;
 extern uint64_t setPop(uint64_t time);
 extern void rtclock_early_init(void);
 extern uint64_t absolute_time(void);
+extern uint64_t mach_absolute_time(void);
 extern void clock_get_system_nanotime(uint64_t *secs, uint64_t *nanosecs);
 
 #endif /* rtclock_h */

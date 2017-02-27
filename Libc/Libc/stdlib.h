@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/7/15.
-//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef _STDLIB_H
@@ -14,6 +14,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+typedef struct Link {
+    struct Link *prev;
+    struct Link *next;
+} Link;
 
 //__attribute__((__noreturn__))
 //void panic(const char* errormsg);

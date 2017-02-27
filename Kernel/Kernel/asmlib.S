@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 3/13/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef __ASSEMBLY__
@@ -96,6 +96,11 @@ ENTRY(pal_rtc_nanotime_store)
 Entry(x86_triplefault)
     //lidt    idt_zero
     //int $3  /* Just to interrupt, CPU won't like it */
+
+Entry(do_mfence)
+    mfence
+    ret
+
 #ifdef __ELF__
 .data
 #else

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/10/15.
-//  Copyright © 2015-2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <stdio.h>
@@ -13,7 +13,7 @@
 #include <i386/acpi.h>
 
 void reboot() {
-    acpireboot();  // Needs troubleshooting
+    //acpireboot();  // Needs troubleshooting
     
     printf("Using legacy reboot method.\n");
     

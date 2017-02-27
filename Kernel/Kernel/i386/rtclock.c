@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/27/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include "rtclock.h"
@@ -251,6 +251,11 @@ clock_get_system_nanotime(uint64_t *secs, uint64_t *nanosecs) {
 uint64_t
 absolute_time(void) {
     return rtc_nanotime_read();
+}
+
+uint64_t
+mach_absolute_time(void) {      // For compatibility
+    return absolute_time();
 }
 
 /*

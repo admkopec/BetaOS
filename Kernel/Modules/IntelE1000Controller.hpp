@@ -3,18 +3,21 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/20/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef IntelE1000Controller_hpp
 #define IntelE1000Controller_hpp
 
 #include <stdio.h>
+#include "PCIController.hpp"
 
 #define Intel_Vendor   0x8086  // Vendor ID for Intel
 #define E1000_DEV      0x100E  // Device ID for the e1000 Qemu, Bochs, and VirtualBox emmulated NICs
 #define E1000_I217     0x153A  // Device ID for Intel I217
 #define E1000_82577LM  0x10EA  // Device ID for Intel 82577LM
+#define E1000_82579LM  0x1502  // Device ID for Intel 82579LM
+#define E1000_82579V   0x1503  // Device ID for Intel 82579V
 
 #define REG_CTRL        0x0000
 #define REG_STATUS      0x0008
@@ -44,7 +47,7 @@
 
 
 #define REG_TIPG         0x0410      // Transmit Inter Packet Gap
-#define ECTRL_SLU        0x40        //set link up
+#define ECTRL_SLU        0x40        // Set link up
 
 
 #define RCTL_EN                         (1 << 1)    // Receiver Enable
@@ -154,7 +157,8 @@ private:
     void        handleReceive();        // Handle a packet reception.
 public:
     
-    E1000(/*PCIConfigHeader * _pciConfigHeader*/); // Constructor. takes as a parameter a pointer to an object that encapsulate all he PCI configuration data of the device
+    E1000();
+    int         init(PCI *h);
     bool        start();                                        // perform initialization tasks and starts the driver
     void        fire(/*InterruptContext * p_interruptContext*/);// This method should be called by the interrupt handler
     uint8_t*    getMacAddress();                                // Returns the MAC address

@@ -34,10 +34,8 @@ lowglo lowGlo __attribute__ ((aligned(PAGE_SIZE))) = {
     
     //.lgKmodptr		= (uint64_t) &kmod,
     
-    ///.lgTransOff		= (uint64_t) &kdp_trans_off,
-    //.lgReadIO		= (uint64_t) &kdp_read_io,
-    .lgTransOff		= 0,
-    .lgReadIO		= 0,
+    .lgTransOff		= (uint64_t) &kdp_trans_off,
+    .lgReadIO		= (uint64_t) &kdp_read_io,
     
     .lgDevSlot1		= 0,
     .lgDevSlot2		= 0,

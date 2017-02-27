@@ -3,12 +3,94 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/12/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef lapic_h
 #define lapic_h
 
+#define LAPIC_START             0xFEE00000
+#define LAPIC_SIZE              0x00000400
+
+#define LAPIC_ID                0x00000020
+#define		LAPIC_ID_SHIFT              24
+#define		LAPIC_ID_MASK             0xFF
+#define LAPIC_VERSION           0x00000030
+#define		LAPIC_VERSION_MASK        0xFF
+#define LAPIC_TPR               0x00000080
+#define		LAPIC_TPR_MASK            0xFF
+#define LAPIC_APR               0x00000090
+#define		LAPIC_APR_MASK            0xFF
+#define LAPIC_PPR               0x000000A0
+#define		LAPIC_PPR_MASK            0xFF
+#define LAPIC_EOI               0x000000B0
+#define LAPIC_REMOTE_READ       0x000000C0
+#define LAPIC_LDR               0x000000D0
+#define		LAPIC_LDR_SHIFT             24
+#define LAPIC_DFR               0x000000E0
+#define		LAPIC_DFR_FLAT      0xFFFFFFFF
+#define		LAPIC_DFR_CLUSTER   0x0FFFFFFF
+#define		LAPIC_DFR_SHIFT             28
+#define LAPIC_SVR               0x000000F0
+#define		LAPIC_SVR_MASK           0x0FF
+#define		LAPIC_SVR_ENABLE         0x100
+#define		LAPIC_SVR_FOCUS_OFF      0x200
+#define LAPIC_ISR_BASE			0x00000100
+#define LAPIC_TMR_BASE			0x00000180
+#define LAPIC_IRR_BASE			0x00000200
+#define LAPIC_ERROR_STATUS		0x00000280
+#define LAPIC_LVT_CMCI			0x000002F0
+#define LAPIC_ICR               0x00000300
+#define		LAPIC_ICR_VECTOR_MASK  0x000FF
+#define		LAPIC_ICR_DM_MASK      0x00700
+#define		LAPIC_ICR_DM_FIXED     0x00000
+#define		LAPIC_ICR_DM_LOWEST    0x00100
+#define		LAPIC_ICR_DM_SMI       0x00200
+#define		LAPIC_ICR_DM_REMOTE    0x00300
+#define		LAPIC_ICR_DM_NMI       0x00400
+#define		LAPIC_ICR_DM_INIT      0x00500
+#define		LAPIC_ICR_DM_STARTUP   0x00600
+#define		LAPIC_ICR_DM_LOGICAL   0x00800
+#define		LAPIC_ICR_DS_PENDING   0x01000
+#define		LAPIC_ICR_LEVEL_ASSERT 0x04000
+#define		LAPIC_ICR_TRIGGER_LEVEL	0x08000
+#define		LAPIC_ICR_RR_MASK      0x30000
+#define		LAPIC_ICR_RR_INVALID   0x00000
+#define		LAPIC_ICR_RR_INPROGRESS	0x10000
+#define		LAPIC_ICR_RR_VALID     0x20000
+#define		LAPIC_ICR_DSS_MASK     0xC0000
+#define		LAPIC_ICR_DSS_DEST     0x00000
+#define		LAPIC_ICR_DSS_SELF     0x40000
+#define		LAPIC_ICR_DSS_ALL      0x80000
+#define		LAPIC_ICR_DSS_OTHERS   0xC0000
+#define LAPIC_ICRD              0x00000310
+#define		LAPIC_ICRD_DEST_SHIFT       24
+#define LAPIC_LVT_TIMER			0x00000320
+#define LAPIC_LVT_THERMAL		0x00000330
+#define LAPIC_LVT_PERFCNT		0x00000340
+#define LAPIC_LVT_LINT0			0x00000350
+#define LAPIC_LVT_LINT1			0x00000360
+#define LAPIC_LVT_ERROR			0x00000370
+#define		LAPIC_LVT_VECTOR_MASK  0x000FF
+#define		LAPIC_LVT_DM_SHIFT           8
+#define		LAPIC_LVT_DM_MASK      0x00007
+#define		LAPIC_LVT_DM_FIXED     0x00000
+#define		LAPIC_LVT_DM_NMI       0x00400
+#define		LAPIC_LVT_DM_EXTINT    0x00700
+#define		LAPIC_LVT_DS_PENDING   0x01000
+#define		LAPIC_LVT_IP_PLRITY_LOW	0x02000
+#define		LAPIC_LVT_REMOTE_IRR   0x04000
+#define		LAPIC_LVT_TM_LEVEL     0x08000
+#define		LAPIC_LVT_MASKED       0x10000
+#define		LAPIC_LVT_PERIODIC     0x20000
+#define		LAPIC_LVT_TSC_DEADLINE 0x40000
+#define		LAPIC_LVT_TMR_SHIFT         17
+#define		LAPIC_LVT_TMR_MASK           3
+#define LAPIC_TIMER_INITIAL_COUNT  0x00000380
+#define LAPIC_TIMER_CURRENT_COUNT  0x00000390
+#define LAPIC_TIMER_DIVIDE_CONFIG  0x000003E0
+/* divisor encoded by bits 0,1,3 with bit 2 always 0: */
+#define 	LAPIC_TIMER_DIVIDE_MASK	0x0000000F
 #define 	LAPIC_TIMER_DIVIDE_1	0x0000000B
 #define 	LAPIC_TIMER_DIVIDE_2	0x00000000
 #define 	LAPIC_TIMER_DIVIDE_4	0x00000001
@@ -18,6 +100,8 @@
 #define 	LAPIC_TIMER_DIVIDE_64	0x00000009
 #define 	LAPIC_TIMER_DIVIDE_128	0x0000000A
 #include <stdint.h>
+#include <sys/cdefs.h>
+#include "thread_status.h"
 
 typedef enum {
     ID                  = 0x02,
@@ -133,13 +217,69 @@ typedef uint32_t lapic_timer_count_t;
     (LAPIC_READ_OFFSET(ISR_BASE,(base+LAPIC_##src##_INTERRUPT)/32) \
     & (1 <<((base + LAPIC_##src##_INTERRUPT)%32)))
 
+extern void     lapic_init(void);
+extern void		lapic_configure(void);
+extern void		lapic_shutdown(void);
+extern void		lapic_smm_restore(void);
+extern bool     lapic_probe(void);
+extern void		lapic_dump(void);
+extern void		lapic_cpu_map_dump(void);
+extern int		lapic_interrupt(int interrupt, x86_saved_state_t *state);
+extern void		lapic_end_of_interrupt(void);
+extern void		lapic_unmask_perfcnt_interrupt(void);
+extern void		lapic_set_perfcnt_interrupt_mask(bool);
+extern void		lapic_send_ipi(int cpu, int interupt);
+extern void		lapic_cpu_map_init(void);
+extern void		lapic_cpu_map(int lapic, int cpu_num);
+extern uint32_t	ml_get_apicid(uint32_t cpu);
+extern uint32_t	ml_get_cpuid(uint32_t lapic_index);
+
 extern int		lapic_to_cpu[];
 extern int		cpu_to_lapic[];
+extern int		lapic_interrupt_base;
+
+extern void		lapic_config_timer(bool	interrupt, lapic_timer_mode_t mode, lapic_timer_divide_t divisor);
+extern void		lapic_set_timer_fast(lapic_timer_count_t initial_count);
+extern void		lapic_set_timer(bool interrupt, lapic_timer_mode_t mode, lapic_timer_divide_t divisor, lapic_timer_count_t initial_count);
+extern void		lapic_get_timer(lapic_timer_mode_t *mode, lapic_timer_divide_t *divisor, lapic_timer_count_t *initial_count, lapic_timer_count_t *current_count);
+extern void		lapic_config_tsc_deadline_timer(void);
+extern void		lapic_set_tsc_deadline_timer(uint64_t deadline);
+extern uint64_t	lapic_get_tsc_deadline_timer(void);
+
+typedef	int     (*i386_intr_func_t)(x86_saved_state_t *state);
+extern void		lapic_set_intr_func(int intr, i386_intr_func_t func);
+extern void		lapic_set_pmi_func(i386_intr_func_t);
+
+static inline void	lapic_set_timer_func(i386_intr_func_t func) {
+	lapic_set_intr_func(LAPIC_VECTOR(TIMER), func);
+}
+/* We don't support dynamic adjustment of the LAPIC timer base vector here
+ * it's effectively incompletely supported elsewhere as well.
+ */
+static inline void	lapic_timer_swi(void) {
+	__asm__ __volatile__("int %0" :: "i"(LAPIC_DEFAULT_INTERRUPT_BASE + LAPIC_TIMER_INTERRUPT):"memory");
+}
+
+static inline void	lapic_set_thermal_func(i386_intr_func_t func) {
+	lapic_set_intr_func(LAPIC_VECTOR(THERMAL), func);
+}
+static inline void	lapic_set_cmci_func(i386_intr_func_t func) {
+	lapic_set_intr_func(LAPIC_VECTOR(CMCI), func);
+}
+static inline void	lapic_set_pm_func(i386_intr_func_t func) {
+	lapic_set_intr_func(LAPIC_VECTOR(PM), func);
+}
+
+extern bool     lapic_is_interrupt_pending(void);
+extern bool     lapic_is_interrupting(uint8_t vector);
+extern void		lapic_interrupt_counts(uint64_t intrs[256]);
+extern void		lapic_disable_timer(void);
+extern uint8_t	lapic_get_cmci_vector(void);
 
 #define	MAX_LAPICIDS	(0xFF+1)
 #ifdef DEBUG
 #define LAPIC_CPU_MAP_DUMP()	lapic_cpu_map_dump()
-#define LAPIC_DUMP()		lapic_dump()
+#define LAPIC_DUMP()            lapic_dump()
 #else
 #define LAPIC_CPU_MAP_DUMP()
 #define LAPIC_DUMP()

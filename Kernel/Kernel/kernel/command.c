@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/15/15.
-//  Copyright © 2015-2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <stdio.h>
@@ -33,16 +33,17 @@ void help();
 void version();
 void time_full();
 void time_short();
+void time_absolute();
 void pciTest();
 void get_platformstate(void);
-void returnnn() {
-    returnn = true;
-}
 void testassert() {
     assert(1==0);
 }
 void testscroll() {
     scroll_up();
+}
+void inter() {
+    asm("int $0x20");
 }
 
 void addCommand(char* name, __unused char* desc, void (*run)(void)) {
@@ -72,18 +73,19 @@ void addCommand(char* name, __unused char* desc, void (*run)(void)) {
 }
 
 void CommandInit() {
-    addCommand("help",      "Help command",                             help);
-    addCommand("version",   "Displays version of BetaOS",               version);
-    addCommand("reboot",    "Reboots the computer",                     reboot);
-    addCommand("clear",     "Clears the screen",                        clear_screen);
-    addCommand("time",      "Displays the actual time",                 time_short);
-    addCommand("time long", "Displays the actual time in long version", time_full);
-    addCommand("shut down", "Shut downs the computer",                  shutdown);
-    addCommand("return",    "Returns to kernel_main",                   returnnn);
-    addCommand("pciTest",   "Tests PCI",                                pciTest);
-    addCommand("assert",    "Assert",                                   testassert);
-    addCommand("Platform",  "Prints Platform State boot args",          get_platformstate);
-    addCommand("scroll up", "Tests if scroll up doesn't crash CPU",     testscroll);
+    addCommand("help",          "Help command",                                             help);
+    addCommand("version",       "Displays version of BetaOS",                               version);
+    addCommand("reboot",        "Reboots the computer",                                     reboot);
+    addCommand("clear",         "Clears the screen",                                        clear_screen);
+    addCommand("time",          "Displays the actual time",                                 time_short);
+    addCommand("time long",     "Displays the actual time in long version",                 time_full);
+    addCommand("time absolute", "Displays the actual time in seconds since 1 January 1970", time_absolute);
+    addCommand("shut down",     "Shut downs the computer",                                  shutdown);
+    addCommand("pciTest",       "Tests PCI",                                                pciTest);
+    addCommand("assert",        "Assert",                                                   testassert);
+    addCommand("Platform",      "Prints Platform State boot args",                          get_platformstate);
+    addCommand("scroll up",     "Tests if scroll up doesn't crash CPU",                     testscroll);
+    addCommand("int",           "Sends Interrput $0x20 to CPU",                             inter);
 }
 
 void findcommand() {
@@ -147,25 +149,25 @@ void version() {
 }
 
 void get_platformstate(void) {
-    kprintf("revision      0x%X\n", Platform_state.bootArgs->Revision);
-    kprintf("version       0x%X\n", Platform_state.bootArgs->Version);
-    kprintf("command line  %s\n",   Platform_state.bootArgs->CommandLine);
-    kprintf("memory map    0x%X\n", Platform_state.bootArgs->MemoryMap);
-    kprintf("memory map sz 0x%X\n", Platform_state.bootArgs->MemoryMapSize);
-    kprintf("kaddr         0x%X\n", Platform_state.bootArgs->kaddr);
-    kprintf("ksize         0x%X\n", Platform_state.bootArgs->ksize);
+    kprintf("revision      0x%X\n",     Platform_state.bootArgs->Revision);
+    kprintf("version       0x%X\n",     Platform_state.bootArgs->Version);
+    kprintf("command line  %s\n",       Platform_state.bootArgs->CommandLine);
+    kprintf("memory map    0x%X\n",     Platform_state.bootArgs->MemoryMap);
+    kprintf("memory map sz 0x%X\n",     Platform_state.bootArgs->MemoryMapSize);
+    kprintf("kaddr         0x%X\n",     Platform_state.bootArgs->kaddr);
+    kprintf("ksize         0x%X\n",     Platform_state.bootArgs->ksize);
     kprintf("bootargs: %p, &ksize: %p &kaddr: %p\n",
-        Platform_state.bootArgs,
-        &Platform_state.bootArgs->ksize,
-        &Platform_state.bootArgs->kaddr);
-    kprintf("SMBIOS mem sz 0x%llx\n", Platform_state.bootArgs->PhysicalMemorySize);
-    kprintf("EFI mode      %d\n",     Platform_state.bootArgs->efiMode);
-    kprintf("Video BAR     0x%X\n",   Platform_state.bootArgs->Video.v_baseAddr);
-    kprintf("Video Display %d\n",     Platform_state.bootArgs->Video.v_display);
-    kprintf("Video rowbyte %d\n",     Platform_state.bootArgs->Video.v_rowBytes);
-    kprintf("Video width   %d\n",     Platform_state.bootArgs->Video.v_width);
-    kprintf("Video height  %d\n",     Platform_state.bootArgs->Video.v_height);
-    kprintf("Video depth   %d\n",     Platform_state.bootArgs->Video.v_depth);
+                                        Platform_state.bootArgs,
+                                       &Platform_state.bootArgs->ksize,
+                                       &Platform_state.bootArgs->kaddr);
+    kprintf("SMBIOS mem sz 0x%llx\n",   Platform_state.bootArgs->PhysicalMemorySize);
+    kprintf("EFI mode      %d\n",       Platform_state.bootArgs->efiMode);
+    kprintf("Video BAR     0x%X\n",     Platform_state.bootArgs->Video.v_baseAddr);
+    kprintf("Video Display %d\n",       Platform_state.bootArgs->Video.v_display);
+    kprintf("Video rowbyte %d\n",       Platform_state.bootArgs->Video.v_rowBytes);
+    kprintf("Video width   %d\n",       Platform_state.bootArgs->Video.v_width);
+    kprintf("Video height  %d\n",       Platform_state.bootArgs->Video.v_height);
+    kprintf("Video depth   %d\n",       Platform_state.bootArgs->Video.v_depth);
 }
 
 void time_full() {
@@ -177,6 +179,11 @@ void time_full() {
 void time_short() {
     gettime();
     kprintf("%s %d:%02d %s\n", dayofweekshort, hour, minute, pmam);
+}
+#include <i386/rtclock.h>
+void time_absolute() {
+    kprintf("Absolute time is: %d\n", time());
+    kprintf("Mach Absolute time is: %d\n", mach_absolute_time());
 }
 #include <i386/pci.h>
 void pciTest() {

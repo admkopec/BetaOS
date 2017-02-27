@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/25/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <stdint.h>
@@ -11,7 +11,7 @@
 #include <string.h>
 #include <platform/device_tree.h>
 
-// Portions Copyright Apple, Inc
+// Portions Copyright © Apple, Inc.
 
 #ifndef NULL
 #define NULL ((void *) 0)
@@ -25,18 +25,18 @@ typedef DeviceTreeNode *RealDTEntry;
 
 typedef struct DTSavedScope {
     struct DTSavedScope * nextScope;
-    RealDTEntry scope;
-    RealDTEntry entry;
+    RealDTEntry   scope;
+    RealDTEntry   entry;
     unsigned long index;
 } *DTSavedScopePtr;
 
 /* Entry Iterator*/
 typedef struct OpaqueDTEntryIterator {
-    RealDTEntry outerScope;
-    RealDTEntry currentScope;
-    RealDTEntry currentEntry;
+    RealDTEntry     outerScope;
+    RealDTEntry     currentScope;
+    RealDTEntry     currentEntry;
     DTSavedScopePtr savedScope;
-    unsigned long currentIndex;
+    unsigned long   currentIndex;
 } *RealDTEntryIterator;
 
 /* Property Iterator*/
@@ -46,8 +46,8 @@ typedef struct OpaqueDTPropertyIterator {
     unsigned long currentIndex;
 } *RealDTPropertyIterator;
 
-static int DTInitialized;
-static RealDTEntry DTRootNode;
+static int          DTInitialized;
+static RealDTEntry  DTRootNode;
 
 /*
  * Support Routines
@@ -214,7 +214,7 @@ int
 DTLookupEntry(const DTEntry searchPoint, const char *pathName, DTEntry *foundEntry)
 {
     DTEntryNameBuf	buf;
-    RealDTEntry	cur;
+    RealDTEntry     cur;
     const char *	cp;
     
     if (!DTInitialized) {
@@ -255,25 +255,26 @@ DTLookupEntry(const DTEntry searchPoint, const char *pathName, DTEntry *foundEnt
 int
 DTCreateEntryIterator(const DTEntry startEntry, __unused DTEntryIterator *iterator)
 {
-    __unused RealDTEntryIterator iter;
+    RealDTEntryIterator iter;
     
     if (!DTInitialized) {
         return kError;
     }
     
     //iter = (RealDTEntryIterator) kalloc(sizeof(struct OpaqueDTEntryIterator));
+    iter = (RealDTEntryIterator) 0x100000;
     if (startEntry != NULL) {
-        //iter->outerScope = (RealDTEntry) startEntry;
-        //iter->currentScope = (RealDTEntry) startEntry;
+        iter->outerScope   = (RealDTEntry) startEntry;
+        iter->currentScope = (RealDTEntry) startEntry;
     } else {
-        //iter->outerScope = DTRootNode;
-        //iter->currentScope = DTRootNode;
+        iter->outerScope   = DTRootNode;
+        iter->currentScope = DTRootNode;
     }
-    //iter->currentEntry = NULL;
-    //iter->savedScope = NULL;
-    //iter->currentIndex = 0;
+    iter->currentEntry = NULL;
+    iter->savedScope   = NULL;
+    iter->currentIndex = 0;
     
-    //*iterator = iter;
+    *iterator = iter;
     return kSuccess;
 }
 
@@ -294,20 +295,21 @@ DTDisposeEntryIterator(DTEntryIterator iterator)
 int
 DTEnterEntry(DTEntryIterator iterator, DTEntry childEntry) {
     RealDTEntryIterator iter = iterator;
-    //DTSavedScopePtr newScope;
+    DTSavedScopePtr newScope;
     
     if (childEntry == NULL) {
         return kError;
     }
     //newScope = (DTSavedScopePtr) kalloc(sizeof(struct DTSavedScope));
-    //newScope->nextScope = iter->savedScope;
-    //newScope->scope = iter->currentScope;
-    //newScope->entry = iter->currentEntry;
-    //newScope->index = iter->currentIndex;
+    newScope = (DTSavedScopePtr) 0x1000000;
+    newScope->nextScope = iter->savedScope;
+    newScope->scope = iter->currentScope;
+    newScope->entry = iter->currentEntry;
+    newScope->index = iter->currentIndex;
     
     iter->currentScope = childEntry;
     iter->currentEntry = NULL;
-    //iter->savedScope = newScope;
+    iter->savedScope = newScope;
     iter->currentIndex = 0;
     
     return kSuccess;
@@ -403,14 +405,15 @@ DTGetProperty(const DTEntry entry, const char *propertyName, void **propertyValu
 int
 DTCreatePropertyIterator(__unused const DTEntry entry, __unused DTPropertyIterator *iterator)
 {
-    __unused RealDTPropertyIterator iter;
+    RealDTPropertyIterator iter;
     
     //iter = (RealDTPropertyIterator) kalloc(sizeof(struct OpaqueDTPropertyIterator));
-    //iter->entry = entry;
-    //iter->currentProperty = NULL;
-    //iter->currentIndex = 0;
+    iter = (RealDTPropertyIterator) 0x10000000;
+    iter->entry = entry;
+    iter->currentProperty = NULL;
+    iter->currentIndex = 0;
     
-    //*iterator = iter;
+    *iterator = iter;
     return kSuccess;
 }
 

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/24/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <i386/mp_desc.h>
@@ -106,7 +106,7 @@ __attribute__ ((section(".data")))
 __attribute__ ((section("__HIB,__desc")))
 #endif
 __attribute__ ((aligned(PAGE_SIZE))) = {
-//#include "../x86_64/idt_table.h"
+#include "../x86_64/idt_table.h"
 };
 
 /*
@@ -374,7 +374,7 @@ cpu_desc_init64(cpu_data_t *cdp) {
         *(struct fake_descriptor64 *) &master_gdt[sel_idx(KERNEL_TSS)] = kernel_tss_desc64;
         
         /* Fix up the expanded descriptors for 64-bit. */
-        //fix_desc64((void *) &master_idt64, IDTSZ);
+        fix_desc64((void *) &master_idt64, IDTSZ);
         fix_desc64((void *) &master_gdt[sel_idx(KERNEL_LDT)], 1);
         fix_desc64((void *) &master_gdt[sel_idx(USER_LDT)],   1);
         fix_desc64((void *) &master_gdt[sel_idx(KERNEL_TSS)], 1);
@@ -433,7 +433,7 @@ cpu_desc_init64(cpu_data_t *cdp) {
     
     /* Require that the top of the sysenter stack is 16-byte aligned */
     if ((cdi->cdi_sstk % 16) != 0)
-          panic("cpu_desc_init64() sysenter tack not 16-byte aligned");
+          panic("cpu_desc_init64() sysenter stack not 16-byte aligned");
 }
 extern uint8_t   *screen;
 void
@@ -448,14 +448,16 @@ cpu_desc_load64(cpu_data_t *cdp) {
      * for the case of reloading descriptors at wake to avoid
      * their complete re-initialization.
      */
+    kprintf("");
     gdt_desc_p(KERNEL_TSS)->access &= ~ACC_TSS_BUSY;
+    kprintf("");
     
     /* Load the GDT, LDT, IDT and TSS */
     cdi->cdi_gdt.size = sizeof(struct real_descriptor)*GDTSZ - 1;
     cdi->cdi_idt.size = 0x1000 + cdp->cpu_number;
     lgdt ((unsigned long *) &cdi->cdi_gdt);
-    //lidt ((unsigned long *) &cdi->cdi_idt);
-    lldt  (KERNEL_LDT);
+    lidt ((unsigned long *) &cdi->cdi_idt);
+    lldt  (KERNEL_LDT);   // CPU Crash
     set_tr(KERNEL_TSS);
 #if GPROF // Hack to enable mcount to work on K64
     __asm__ volatile("mov %0, %%gs" : : "rm" ((unsigned short)(KERNEL_DS)));

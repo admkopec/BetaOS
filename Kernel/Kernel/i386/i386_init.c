@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/1/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <i386/cpu_data.h>
@@ -24,6 +24,7 @@
 #include <i386/rtclock.h>
 #include <platform/platform.h>
 #include <platform/boot.h>
+#include <platform/device_tree.h>
 
 #include <sys/cdefs.h>
 #include "misc_protos.h"
@@ -156,22 +157,22 @@ descriptor_alias_init() {
     assert(((vm_offset_t)master_gdt   & PAGE_MASK) == 0);
     assert(((vm_offset_t)master_idt64 & PAGE_MASK) == 0);
     
-    master_gdt_phys       = (vm_offset_t) ID_MAP_VTOP(master_gdt);
-    master_idt_phys       = (vm_offset_t) ID_MAP_VTOP(master_idt64);
-    master_gdt_alias_phys = (vm_offset_t) ID_MAP_VTOP(MASTER_GDT_ALIAS);
-    master_idt_alias_phys = (vm_offset_t) ID_MAP_VTOP(MASTER_IDT_ALIAS);
+    master_gdt_phys         = (vm_offset_t) ID_MAP_VTOP(master_gdt);
+    master_idt_phys         = (vm_offset_t) ID_MAP_VTOP(master_idt64);
+    master_gdt_alias_phys   = (vm_offset_t) ID_MAP_VTOP(MASTER_GDT_ALIAS);
+    master_idt_alias_phys   = (vm_offset_t) ID_MAP_VTOP(MASTER_IDT_ALIAS);
     
-    DBG("master_gdt_phys:       %p\n", (void *) master_gdt_phys);
-    DBG("master_idt_phys:       %p\n", (void *) master_idt_phys);
-    DBG("master_gdt_alias_phys: %p\n", (void *) master_gdt_alias_phys);
-    DBG("master_idt_alias_phys: %p\n", (void *) master_idt_alias_phys);
+    DBG("master_gdt_phys:        %p\n", (void *) master_gdt_phys);
+    DBG("master_idt_phys:        %p\n", (void *) master_idt_phys);
+    DBG("master_gdt_alias_phys:  %p\n", (void *) master_gdt_alias_phys);
+    DBG("master_idt_alias_phys:  %p\n", (void *) master_idt_alias_phys);
     
     KPTphys[atop_kernel(master_gdt_alias_phys)] = master_gdt_phys | INTEL_PTE_VALID | INTEL_PTE_NX | INTEL_PTE_WRITE;
     kprintf(""); // Same hack as above :)
     KPTphys[atop_kernel(master_idt_alias_phys)] = master_idt_phys | INTEL_PTE_VALID | INTEL_PTE_NX;	/* read-only */
 }
 
-__unused static void
+static void
 Idle_PTs_init(void) {
     /* Allocate the "idle" kernel page tables: */
     KPTphys  = ALLOCPAGES(NKPT);	/* level 1 */
@@ -198,9 +199,6 @@ Idle_PTs_init(void) {
     // Switch to the page tables..
     DBG("Before Switch....\n");
     set_cr3_raw((unsigned long)ID_MAP_VTOP(IdlePML4));
-    kprintf("Hello from serial in Fully set up Paging with protection :)\n");
-    DBG("After Switch.....\n");
-    
 }
 
 /*
@@ -218,6 +216,8 @@ Idle_PTs_init(void) {
  * Non-bootstrap processors are called with argument boot_args_start NULL.
  * These processors switch immediately to the existing kernel page tables.
  */
+extern bool early;
+extern void acpi(void);
 void
 vstart(vm_offset_t boot_args_start) {
     bool        is_boot_cpu = !(boot_args_start == 0);
@@ -236,10 +236,11 @@ vstart(vm_offset_t boot_args_start) {
 #endif
         
         kernelBootArgs = (boot_args *)ml_static_ptovirt(boot_args_start);
-        //DBG("i386_init(0x%lx) kernelBootArgs=%p\n", (unsigned long)boot_args_start, kernelBootArgs);
+        DBG("i386_init(0x%lx) kernelBootArgs=%p\n", (unsigned long)boot_args_start, kernelBootArgs);
         Platform_init(FALSE, kernelBootArgs);
         
         clear_screen();
+        acpi();
         
         DBG("revision      0x%X\n", kernelBootArgs->Revision);
         DBG("version       0x%X\n", kernelBootArgs->Version);
@@ -261,98 +262,76 @@ vstart(vm_offset_t boot_args_start) {
         DBG("Video height  %d\n",     kernelBootArgs->Video.v_height);
         DBG("Video depth   %d\n",     kernelBootArgs->Video.v_depth);
         
-        uintptr_t color;
-        uint16_t x, y, width, height, display_square = 0;
-        int line, column;
-        volatile unsigned int * dst;
-        const unsigned char* clr;
-        if (Parse_boot_argn("color", &color, sizeof(color))) {
-            DBG("Got bootarg color!\nSetting now...\n");
-            clr = (typeof(clr))(uintptr_t)color;
-        } else {
-            clr = (typeof(clr))(uintptr_t)(0x003565DF);
-        }
-        if (Parse_boot_argn("display_square", &display_square, sizeof(display_square))) {
-            DBG("Got display_square");
-        } else
-            display_square = 0;
-        if (Parse_boot_argn("x", &x, sizeof(x)))
-            DBG("Got x\n");
-        else
-            x = 0;
-        if (Parse_boot_argn("y", &y, sizeof(y)))
-            DBG("Got y\n");
-        else
-            y = 0;
-        if (Parse_boot_argn("width", &width, sizeof(width))) {
-            DBG("Got width\n");
-        } else
-            width = Platform_state.video.v_width;
-        if (Parse_boot_argn("height", &height, sizeof(height))) {
-            DBG("Got height\n");
-        } else
-            height = Platform_state.video.v_height;
-        
-        if (display_square != 0) {
-            unsigned int data = (unsigned int)(uintptr_t)clr;
-            dst = (volatile unsigned int *) (Platform_state.video.v_baseAddr+(y*Platform_state.video.v_rowBytes)+(x*4));
-            for (line = 0; line < height; line++) {
-                for (column = 0; column < width; column++) {
-                    *(dst + column) = data;
-                }
-                dst = (volatile unsigned int *) (((volatile char *)dst)+Platform_state.video.v_rowBytes);
-            }
-        }
-        
-        
-        //Idle_PTs_init();      // Using Boot Page Tables
+        Idle_PTs_init();      // Using Boot Page Tables
+        early = true;
         
         first_avail = (vm_offset_t)ID_MAP_VTOP(physfree);
         
         // Use for getting offsetof and placing it to #defines in idt64.S
-        DBG("Offset of %p\n", offsetof(pal_rtc_nanotime_t, ns_base));
+        //DBG("Offset of %p\n", offsetof(pal_rtc_nanotime_t, ns_base));
         
-        
-        
-/*         ******   *******     ****** ******   ******      ***    ** ******* **      **
-           *******  *******     ****** *******  ******      ****   ** ******* **      **
-           **    ** **   **       **   **    **   **        ** **  ** **   ** **  **  **
-           **    ** **   **       **   **    **   **        **  ** ** **   ** ** **** **
-           *******  *******     ****** *******    **        **   **** ******* ****  ****
-           ******   *******     ****** ******     **        **    *** ******* ***    ***
-        =====================================================================================
-        =====================================================================================
-*/
+        // FIX Interrupts
+        // The problem is nearly solved
         
         cpu = 0;
-       // cpu_data_alloc(true);
+        cpu_data_alloc(true);
     } else {
         // Switch to kernel's page tables (from the Boot PTs)
-        //set_cr3_raw((unsigned long)ID_MAP_VTOP(IdlePML4));
+        set_cr3_raw((unsigned long)ID_MAP_VTOP(IdlePML4));
         //Find our logical cpu number
         cpu = lapic_to_cpu[(LAPIC_READ(ID)>>24) & 0xFF];
         DBG("CPU: %d, GSBASE initial value: 0x%llx\n", cpu, rdmsr64(MSR_IA32_GS_BASE));
     }
-    //if(is_boot_cpu)
-    //    cpu_desc_init64(cpu_datap(cpu));
-    //cpu_desc_load64(cpu_datap(cpu));
-    //if (is_boot_cpu)
-    //    cpu_mode_init(current_cpu_datap()); // cpu_mode_init() will be invoked on the APs via i386_init_slave()
+    if(is_boot_cpu) {
+        cpu_desc_init64(cpu_datap(cpu));
+        cpu_desc_load64(cpu_datap(cpu));
+        //kprintf("Int $0x1!\n");
+        //__asm__ volatile ("int $0x1");
+        //kprintf("Returned from Int $0x1!\n");
+    } if (is_boot_cpu)
+        cpu_mode_init(current_cpu_datap()); // cpu_mode_init() will be invoked on the APs via i386_init_slave()
     x86_init_wrapper(is_boot_cpu ? (uintptr_t) i386_init : (uintptr_t) i386_init_slave, cpu_datap(cpu)->cpu_int_stack_top);
 }
+
 extern bool enable;
 void
 i386_init(void) {
     //unsigned int max_mem;
-    //unsigned int max_mem_touse = 0;
+    unsigned int max_mem_touse = 0;
     //unsigned int cpus = 0;
     //bool         fidn;
-    //bool         IA32e = true;
+    bool         IA32e = true;
+    master_cpu = 0;
+    //lapic_init();
+    i386_vm_init(max_mem_touse, IA32e, kernelBootArgs);
     tsc_init();
     rtclock_early_init();
-    master_cpu = 0;
-    //i386_vm_init(max_mem_touse, IA32e, kernelBootArgs);
     enable = true;
+    
+    vm_offset_t v_physAddr = Platform_state.video.v_baseAddr & ~3;
+    vm_offset_t v_newAddr  = 0;
+    vm_size_t fbsize = 0;
+    
+    if (!v_physAddr) {
+        kprintf("v_physAddr == 0\n");
+    } else {
+        if (Platform_state.video.v_length != 0) {
+            fbsize = (vm_size_t) round_page(Platform_state.video.v_length);
+        } else {
+            fbsize = (vm_size_t) round_page(Platform_state.video.v_height * Platform_state.video.v_rowBytes);
+        }
+        unsigned int flags = VM_WIMG_IO;
+        v_newAddr = io_map((vm_map_offset_t)v_physAddr, fbsize, flags);
+        if (v_newAddr != 0) {
+            Platform_state.video.v_baseAddr = v_newAddr + Platform_state.video.v_offset;
+        } else {
+            kprintf("It didn't work :(\n");
+        }
+    }
+    DBG("v_baseAddr = 0x%x\n", Platform_state.video.v_baseAddr);
+    early = false;
+    DBG("Got Here!\n");
+    
     kernel_main();
 }
 

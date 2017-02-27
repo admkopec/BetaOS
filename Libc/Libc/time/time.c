@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 11/30/15.
-//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <time.h>
@@ -19,6 +19,19 @@ char* pmam;
 char* monthl;
 char* dayofweekshort;
 char* dayofweeklong;
+
+absolute_time_t absolute_UNIX = 0; // 0 - 1 January 1970
+absolute_time_t absolute_Beta = 0;
+
+absolute_time_t time(void) {        // Not working - +1 Day
+    read_rtc();
+    uint32_t days_in_year[13] = { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+    uint32_t abs_year = year - 1900;
+    uint32_t year_day = day + days_in_year[month] + (((month) >= (3)) ? (((year & 3) != (0)) ? (0) : ((year % 100) != 0 || (year % 400) == 0) ? (1) : (0)) : (0));
+    absolute_UNIX = minute * 60 + hour * 3600 + year_day * 86400 + (abs_year - 70) * 31536000 + ((abs_year - 69) / 4) * 86400 - ((abs_year - 1) / 100) * 86400 + ((abs_year + 299) / 400) * 86400;
+    
+    return absolute_UNIX;
+}
 
 int get_update_in_progress_flag() {
     outb(cmos_address, 0x0A);

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/20/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 // To be implemented properly
@@ -13,7 +13,18 @@
 #include <stdint.h>
 #include <i386/pio.h>
 
-E1000::E1000(/*PCIConfigHeader * _pciConfigHeader*/) {
+E1000::E1000()  { }
+E1000::~E1000() { }
+
+int E1000::init(PCI * _pciConfigHeader) {
+    if (_pciConfigHeader->VendorID() != Intel_Vendor) {
+        return -1;
+    }
+    if (_pciConfigHeader->DeviceID() != E1000_DEV || _pciConfigHeader->DeviceID() != E1000_I217 || _pciConfigHeader->DeviceID() != E1000_82577LM || _pciConfigHeader->DeviceID() != E1000_82579LM) {
+        //printf("IntelE1000Controller: Not found device id: %X\n", _pciConfigHeader->DeviceID());
+        return -1;
+    }
+    
     // Get BAR0 type, io_base address and MMIO base address
     //bar_type = pciConfigHeader->getPCIBarType(0);
     //io_base = pciConfigHeader->getPCIBar(PCI_BAR_IO) & ~1;
@@ -23,11 +34,17 @@ E1000::E1000(/*PCIConfigHeader * _pciConfigHeader*/) {
     // Enable bus mastering
     //pciConfigHeader->enablePCIBusMastering();
     eerprom_exists = false;
-    bar_type = 0;
-    mem_base = 0xF0000000;
+    bar_type = _pciConfigHeader->getBAR(0);
+    mem_base = (uintptr_t)_pciConfigHeader->BAR().u.address;
+    io_base  = _pciConfigHeader->BAR().u.port;
+    printf("IntelE1000Controller: BAR type    %X\n", bar_type);
+    printf("IntelE1000Controller: BAR port    %X\n", io_base);
+    printf("IntelE1000Controller: BAR address %X\n", mem_base);
+    //mem_base = _pciConfigHeader->BAR() & ~3;
+    //mem_base = 0xF0000000;
+    
+    return 0;
 }
-
-E1000::~E1000() { }
 
 bool E1000::start() {
     detectEEProm();
@@ -37,15 +54,14 @@ bool E1000::start() {
     
     for(int i = 0; i < 0x80; i++)
         writeCommand(0x5200 + i*4, 0);
-    if (/*interruptManager->registerInterrupt(IRQ0+pciConfigHeader->getIntLine(),this)*/1)
-    {
+    if (/*interruptManager->registerInterrupt(IRQ0+pciConfigHeader->getIntLine(),this)*/1) {
         //enableInterrupt();
         rxinit();
         txinit();
-        //video.putString("E1000 card started\n",COLOR_RED,COLOR_WHITE);
+        printf("IntelE1000Controller: Device is running!\n");
         return true;
-    }
-    else return false;
+    } else
+        return false;
 }
 
 void E1000::rxinit() {
@@ -167,8 +183,7 @@ bool E1000::detectEEProm() {
     uint32_t val = 0;
     writeCommand(REG_EEPROM, 0x1);
     
-    for(int i = 0; i < 1000 && !eerprom_exists; i++)
-    {
+    for(int i = 0; i < 1000 && !eerprom_exists; i++) {
         val = readCommand(REG_EEPROM);
         if(val & 0x10)
             eerprom_exists = true;
@@ -179,8 +194,7 @@ bool E1000::detectEEProm() {
 }
 
 bool E1000::readMACAddress() {
-    if (eerprom_exists)
-    {
+    if (eerprom_exists) {
         uint32_t temp;
         temp = eepromRead(0);
         mac[0] = temp &0xff;
@@ -191,15 +205,11 @@ bool E1000::readMACAddress() {
         temp = eepromRead(2);
         mac[4] = temp &0xff;
         mac[5] = temp >> 8;
-    }
-    else
-    {
+    } else {
         uint8_t * mem_base_mac_8 = (uint8_t *) (mem_base+0x5400);
         uint32_t * mem_base_mac_32 = (uint32_t *) (mem_base+0x5400);
-        if ( mem_base_mac_32[0] != 0 )
-        {
-            for(int i = 0; i < 6; i++)
-            {
+        if (mem_base_mac_32[0] != 0 ) {
+            for (int i = 0; i < 6; i++) {
                 mac[i] = mem_base_mac_8[i];
             }
         }
@@ -219,8 +229,7 @@ uint32_t E1000::eepromRead( uint8_t addr) {
     if ( eerprom_exists) {
         writeCommand( REG_EEPROM, (1) | ((uint32_t)(addr) << 8) );
         while( !((tmp = readCommand(REG_EEPROM)) & (1 << 4)) );
-    }
-    else {
+    } else {
         writeCommand( REG_EEPROM, (1) | ((uint32_t)(addr) << 2) );
         while( !((tmp = readCommand(REG_EEPROM)) & (1 << 1)) );
     }

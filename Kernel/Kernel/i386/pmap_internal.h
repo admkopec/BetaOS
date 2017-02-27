@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/4/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef pmap_internal_h
@@ -18,28 +18,7 @@
 void	pmap_pcid_configure(void);
 
 // <Temporary>
-void kernel_preempt_check(void) {
-    bool          intr;
-    unsigned long flags;
-    
-    assert(get_preemption_level() == 0);
-    
-    __asm__ volatile("pushf; pop	%0" :  "=r" (flags));
-    
-    intr = ((flags & EFL_IF) != 0);
-    
-    if ((*ast_pending() & AST_URGENT) && intr == true) {
-        /*
-         * can handle interrupts and preemptions
-         * at this point
-         */
-        
-        /*
-         * now cause the PRE-EMPTION trap
-         */
-        __asm__ volatile ("int %0" :: "N" (T_PREEMPT));
-    }
-}
+void kernel_preempt_check(void);
 
 // </Temporary>
 
@@ -148,54 +127,8 @@ static inline pd_entry_t* pmap_pde(pmap_t m, vm_map_offset_t v) {
  * mapped by a large page and this is taken into account in order
  * to return the correct page number in this case.
  */
-ppnum_t pmap_find_phys(pmap_t pmap, uint64_t va) {
-    pt_entry_t	*ptp;
-    pd_entry_t	*pdep;
-    ppnum_t		ppn = 0;
-    pd_entry_t	pde;
-    pt_entry_t	pte;
-    bool        is_ept;
-    
-    is_ept = is_ept_pmap(pmap);
-    
-    mp_disable_preemption();
-    
-    /* This refcount test is a band-aid--several infrastructural changes
-     * are necessary to eliminate invocation of this routine from arbitrary
-     * contexts.
-     */
-    
-    if (!pmap->ref_count)
-        goto pfp_exit;
-    
-    pdep = pmap_pde(pmap, va);
-    
-    if ((pdep != PD_ENTRY_NULL) && ((pde = *pdep) & PTE_VALID_MASK(is_ept))) {
-        if (pde & PTE_PS) {
-            ppn  = (ppnum_t) i386_btop(pte_to_pa(pde));
-            ppn += (ppnum_t) ptenum(va);
-        }
-        else {
-            ptp = pmap_pte(pmap, va);
-            if ((PT_ENTRY_NULL != ptp) && (((pte = *ptp) & PTE_VALID_MASK(is_ept)) != 0)) {
-                ppn = (ppnum_t) i386_btop(pte_to_pa(pte));
-            }
-        }
-    }
-pfp_exit:
-    mp_enable_preemption();
-    
-    return ppn;
-}
+ppnum_t pmap_find_phys(pmap_t pmap, uint64_t va);
 
-uint64_t kvtophys(vm_offset_t addr) {
-    pmap_paddr_t pa;
-    
-    pa = ((pmap_paddr_t)pmap_find_phys(kernel_pmap, addr)) << INTEL_PGSHIFT;
-    if (pa)
-        pa |= (addr & INTEL_OFFMASK);
-    
-    return ((uint64_t)pa);
-}
+uint64_t kvtophys(vm_offset_t addr);
 
 #endif /* pmap_internal_h */

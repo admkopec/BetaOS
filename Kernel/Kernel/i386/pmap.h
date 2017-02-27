@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 4/30/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef pmap_h
@@ -90,6 +90,37 @@ typedef uint64_t        pt_entry_t;
 typedef uint64_t        pmap_paddr_t;
 
 #endif /* __ASSEMBLY__ */
+
+#define VM_MEM_GUARDED          0x1		/* (G) Guarded Storage */
+#define VM_MEM_COHERENT         0x2		/* (M) Memory Coherency */
+#define VM_MEM_NOT_CACHEABLE	0x4		/* (I) Cache Inhibit */
+#define VM_MEM_WRITE_THROUGH	0x8		/* (W) Write-Through */
+
+#define VM_WIMG_USE_DEFAULT     0x80
+#define VM_WIMG_MASK            0xFF
+
+#define	VM_WIMG_COPYBACK	VM_MEM_COHERENT
+#define	VM_WIMG_COPYBACKLW  VM_WIMG_COPYBACK
+#define	VM_WIMG_DEFAULT		VM_MEM_COHERENT
+#define VM_WIMG_IO         (VM_MEM_COHERENT      | VM_MEM_NOT_CACHEABLE | VM_MEM_GUARDED)
+#define VM_WIMG_WTHRU      (VM_MEM_WRITE_THROUGH | VM_MEM_COHERENT      | VM_MEM_GUARDED)
+#define VM_WIMG_WCOMB      (VM_MEM_NOT_CACHEABLE | VM_MEM_COHERENT)
+#define	VM_WIMG_INNERWBACK	VM_MEM_COHERENT
+
+#define CPU_CR3_MARK_INACTIVE()						\
+current_cpu_datap()->cpu_active_cr3 |= 1
+
+#define CPU_CR3_MARK_ACTIVE()	 					\
+current_cpu_datap()->cpu_active_cr3 &= ~1
+
+#define CPU_CR3_IS_ACTIVE(cpu)						\
+((cpu_datap(cpu)->cpu_active_cr3 & 1) == 0)
+
+#define CPU_GET_ACTIVE_CR3(cpu)						\
+(cpu_datap(cpu)->cpu_active_cr3 & ~1)
+
+#define CPU_GET_TASK_CR3(cpu)						\
+(cpu_datap(cpu)->cpu_task_cr3)
 
 /*
  * Pte related macros
@@ -193,6 +224,7 @@ typedef uint64_t        pmap_paddr_t;
 #define MASTER_IDT_ALIAS	(VM_MIN_KERNEL_ADDRESS + 0x0000)
 #define MASTER_GDT_ALIAS	(VM_MIN_KERNEL_ADDRESS + 0x1000)
 #define LOWGLOBAL_ALIAS		(VM_MIN_KERNEL_ADDRESS + 0x2000)
+#define FRAMEBUFFER_ALIAS   (VM_MIN_KERNEL_ADDRESS + 0x5000)
 #define CPU_GDT_ALIAS(_cpu)	(LOWGLOBAL_ALIAS + (0x1000*(_cpu)))
 
 #ifndef __ASSEMBLY__
@@ -257,8 +289,10 @@ typedef struct pmap_memory_regions {
 
 extern unsigned pmap_memory_region_count;
 extern unsigned pmap_memory_region_current;
+extern uint64_t sane_size;
 
 extern void		pmap_bootstrap(vm_offset_t load_start, bool IA32e);
+extern ppnum_t  pmap_find_phys(pmap_t pmap, uint64_t va);
 
 #define PMAP_MEMORY_REGIONS_SIZE 128
 extern pmap_memory_region_t pmap_memory_regions[];
@@ -274,6 +308,18 @@ pmap_store_pte(pt_entry_t *entryp, pt_entry_t value) {
      */
     *entryp = value;
 }
+
+typedef struct {
+    long	pfc_cpus;
+    long	pfc_invalid_global;
+} pmap_flush_context;
+
+#define PMAP_UPDATE_TLBS(pmap, s, e)			\
+        pmap_flush_tlbs(pmap, s, e, 0, NULL)
+
+void
+pmap_flush_tlbs(pmap_t, vm_map_offset_t, vm_map_offset_t, int, pmap_flush_context *);
+
 
 #endif /* __ASSEMBLY__ */
 

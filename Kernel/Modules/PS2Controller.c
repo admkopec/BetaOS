@@ -10,10 +10,50 @@
 #include "PS2Keymap.h"
 #include <stdbool.h>
 #include <i386/pio.h>
+#include <stdio.h>
 
 bool shifted=false;
 bool capsed=false;
 bool e0ed=false;
+
+void updateLEDs() {
+    uint8_t state = ((capsed << 2) | (0 << 1) | 0);
+    uint8_t i;
+    int j = 0;
+    do {
+        i = inb(0x64);
+        j++;
+    } while ((i & 0x02) && j < 1000);
+    
+    if (j == 1000) {
+        return;
+    }
+    
+    outb(0x60, 0xED);
+    
+    i = 0;
+    j = 0;
+    do {
+        i = inb(0x60);
+        j++;
+    } while ((i != 0xFA) && j < 1000);
+    
+    if (j == 1000) {
+        return;
+    }
+
+    i = 0;
+    do {
+        i = inb(0x64);
+    } while (i & 0x02);
+    
+    outb(0x60, state);
+    
+    i = 0;
+    do {
+        i = inb(0x60);
+    } while (i != 0xFA);
+}
 
 int pollchar() {
     int c;
@@ -33,6 +73,7 @@ int pollchar() {
             } else {
                 capsed=false;
             }
+            updateLEDs();
         }
         if (capsed) {
             if (c==0x2A||c==0x36||shifted) {

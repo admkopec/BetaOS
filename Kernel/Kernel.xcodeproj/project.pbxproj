@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC01E4FCACB000204B1 /* kdp.c */; };
+		3B2D0EC61E4FCB11000204B1 /* EHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */; };
+		3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC41E4FCB11000204B1 /* PCIController.cpp */; };
+		3B2D0ECD1E4FCB3D000204B1 /* UHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC91E4FCB3D000204B1 /* UHCIController.cpp */; };
+		3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */; };
+		3B3B78BE1E50D7F500F4C176 /* SMBiosController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */; };
 		3B588BCC1D95C89C00087C38 /* ModulesController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC01D95C89C00087C38 /* ModulesController.cpp */; };
 		3B588BCD1D95C89C00087C38 /* IntelE1000Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */; };
-		3B588BCE1D95C89C00087C38 /* SATAController.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC21D95C89C00087C38 /* SATAController.c */; };
 		3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */; };
 		3B588BD01D95C89C00087C38 /* MMIOUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */; };
 		3B588BD11D95C89C00087C38 /* PS2Controller.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC91D95C89C00087C38 /* PS2Controller.c */; };
@@ -24,6 +29,7 @@
 		3B5F79791D9597EC006EC205 /* DeviceTree.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79761D9597EC006EC205 /* DeviceTree.c */; };
 		3B5F797A1D9597EC006EC205 /* platform_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79771D9597EC006EC205 /* platform_init.c */; };
 		3B5F797B1D9597EC006EC205 /* bootargs.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79781D9597EC006EC205 /* bootargs.c */; };
+		3B660AC01E623B8E003EE3C1 /* SATAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B660ABE1E623B8E003EE3C1 /* SATAController.cpp */; };
 		3B7865DD1D9591B800C015DF /* libc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7865DC1D9591B800C015DF /* libc.a */; };
 		3B7865E91D9592F500C015DF /* low_mem_vectors.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865DF1D9592F500C015DF /* low_mem_vectors.c */; };
 		3B7865EA1D9592F500C015DF /* idt64.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865E01D9592F500C015DF /* idt64.S */; };
@@ -51,6 +57,7 @@
 		3B7866361D95947500C015DF /* ldt.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661E1D95947500C015DF /* ldt.c */; };
 		3B7866371D95947500C015DF /* mp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661F1D95947500C015DF /* mp.c */; };
 		3B78663C1D95948B00C015DF /* renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866391D95948B00C015DF /* renderer.c */; };
+		3BF071D11E59E75000BFF155 /* io_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF071D01E59E75000BFF155 /* io_map.c */; };
 		3BF2954B1E003EF8006716EB /* acpi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF295491E003EF8006716EB /* acpi.c */; };
 /* End PBXBuildFile section */
 
@@ -67,9 +74,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B0860021E58B79A00AAD780 /* vm_prot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vm_prot.h; path = i386/vm_prot.h; sourceTree = "<group>"; };
+		3B2D0EC01E4FCACB000204B1 /* kdp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kdp.c; path = i386/kdp.c; sourceTree = "<group>"; };
+		3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EHCIController.cpp; path = Modules/EHCIController.cpp; sourceTree = SOURCE_ROOT; };
+		3B2D0EC31E4FCB11000204B1 /* EHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EHCIController.hpp; path = Modules/EHCIController.hpp; sourceTree = SOURCE_ROOT; };
+		3B2D0EC41E4FCB11000204B1 /* PCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PCIController.cpp; path = Modules/PCIController.cpp; sourceTree = SOURCE_ROOT; };
+		3B2D0EC51E4FCB11000204B1 /* PCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PCIController.hpp; path = Modules/PCIController.hpp; sourceTree = SOURCE_ROOT; };
+		3B2D0EC91E4FCB3D000204B1 /* UHCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UHCIController.cpp; path = Modules/UHCIController.cpp; sourceTree = SOURCE_ROOT; };
+		3B2D0ECA1E4FCB3D000204B1 /* UHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UHCIController.hpp; path = Modules/UHCIController.hpp; sourceTree = SOURCE_ROOT; };
+		3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XHCIController.cpp; path = Modules/XHCIController.cpp; sourceTree = SOURCE_ROOT; };
+		3B2D0ECC1E4FCB3D000204B1 /* XHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = XHCIController.hpp; path = Modules/XHCIController.hpp; sourceTree = SOURCE_ROOT; };
+		3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SMBiosController.cpp; path = Modules/SMBiosController.cpp; sourceTree = SOURCE_ROOT; };
+		3B3B78BD1E50D7F500F4C176 /* SMBiosController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SMBiosController.hpp; path = Modules/SMBiosController.hpp; sourceTree = SOURCE_ROOT; };
 		3B588BC01D95C89C00087C38 /* ModulesController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ModulesController.cpp; path = Modules/ModulesController.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntelE1000Controller.cpp; path = Modules/IntelE1000Controller.cpp; sourceTree = SOURCE_ROOT; };
-		3B588BC21D95C89C00087C38 /* SATAController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SATAController.c; path = Modules/SATAController.c; sourceTree = SOURCE_ROOT; };
 		3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RTL8111Controller.cpp; path = Modules/RTL8111Controller.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC41D95C89C00087C38 /* ModulesController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ModulesController.hpp; path = Modules/ModulesController.hpp; sourceTree = SOURCE_ROOT; };
 		3B588BC51D95C89C00087C38 /* IntelE1000Controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IntelE1000Controller.hpp; path = Modules/IntelE1000Controller.hpp; sourceTree = SOURCE_ROOT; };
@@ -77,7 +95,6 @@
 		3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMIOUtils.cpp; path = Modules/MMIOUtils.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC81D95C89C00087C38 /* MMIOUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MMIOUtils.hpp; path = Modules/MMIOUtils.hpp; sourceTree = SOURCE_ROOT; };
 		3B588BC91D95C89C00087C38 /* PS2Controller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PS2Controller.c; path = Modules/PS2Controller.c; sourceTree = SOURCE_ROOT; };
-		3B588BCA1D95C89C00087C38 /* SATAController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SATAController.h; path = Modules/SATAController.h; sourceTree = SOURCE_ROOT; };
 		3B588BCB1D95C89C00087C38 /* PS2Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PS2Controller.h; path = Modules/PS2Controller.h; sourceTree = SOURCE_ROOT; };
 		3B588BD41D95CAB400087C38 /* stdbool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdbool.h; path = Headers/stdbool.h; sourceTree = SOURCE_ROOT; };
 		3B588BD51D95CAB400087C38 /* stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdint.h; path = Headers/stdint.h; sourceTree = SOURCE_ROOT; };
@@ -111,6 +128,8 @@
 		3B5F797D1D9597F8006EC205 /* boot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boot.h; path = Platform/platform/boot.h; sourceTree = "<group>"; };
 		3B5F797E1D9597F8006EC205 /* device_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = device_tree.h; path = Platform/platform/device_tree.h; sourceTree = "<group>"; };
 		3B5F797F1D9597F8006EC205 /* efi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = efi.h; path = Platform/platform/efi.h; sourceTree = "<group>"; };
+		3B660ABE1E623B8E003EE3C1 /* SATAController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SATAController.cpp; path = Modules/SATAController.cpp; sourceTree = SOURCE_ROOT; };
+		3B660ABF1E623B8E003EE3C1 /* SATAController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SATAController.hpp; path = Modules/SATAController.hpp; sourceTree = SOURCE_ROOT; };
 		3B7381A61D984A1C0001846F /* PS2Keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PS2Keymap.h; path = Modules/PS2Keymap.h; sourceTree = SOURCE_ROOT; };
 		3B7865BC1D958FEE00C015DF /* Kernel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Kernel; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B7865DC1D9591B800C015DF /* libc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libc.a; path = "../../../../Developer/Xcode/DerivedData/BetaOS-gapbhrzafomgsbfxbixzumnpbwhr/Build/Products/Debug/libc.a"; sourceTree = "<group>"; };
@@ -176,6 +195,7 @@
 		3B7866391D95948B00C015DF /* renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = renderer.c; path = i386/video/renderer.c; sourceTree = "<group>"; };
 		3B78663A1D95948B00C015DF /* colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colors.h; path = i386/video/colors.h; sourceTree = "<group>"; };
 		3B78663B1D95948B00C015DF /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = font.h; path = i386/video/font.h; sourceTree = "<group>"; };
+		3BF071D01E59E75000BFF155 /* io_map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = io_map.c; path = i386/io_map.c; sourceTree = "<group>"; };
 		3BF295491E003EF8006716EB /* acpi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = acpi.c; path = i386/acpi.c; sourceTree = "<group>"; };
 		3BF2954A1E003EF8006716EB /* acpi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = acpi.h; path = i386/acpi.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,22 +212,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B2D0EC81E4FCB1A000204B1 /* USBController */ = {
+			isa = PBXGroup;
+			children = (
+				3B2D0ECA1E4FCB3D000204B1 /* UHCIController.hpp */,
+				3B2D0EC91E4FCB3D000204B1 /* UHCIController.cpp */,
+				3B2D0EC31E4FCB11000204B1 /* EHCIController.hpp */,
+				3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */,
+				3B2D0ECC1E4FCB3D000204B1 /* XHCIController.hpp */,
+				3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */,
+			);
+			name = USBController;
+			sourceTree = "<group>";
+		};
 		3B588BBF1D95C76300087C38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				3B2D0EC51E4FCB11000204B1 /* PCIController.hpp */,
+				3B2D0EC41E4FCB11000204B1 /* PCIController.cpp */,
 				3B588BC41D95C89C00087C38 /* ModulesController.hpp */,
 				3B588BC01D95C89C00087C38 /* ModulesController.cpp */,
 				3B588BC51D95C89C00087C38 /* IntelE1000Controller.hpp */,
 				3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */,
-				3B588BCA1D95C89C00087C38 /* SATAController.h */,
-				3B588BC21D95C89C00087C38 /* SATAController.c */,
 				3B588BC61D95C89C00087C38 /* RTL8111Controller.hpp */,
 				3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */,
+				3B3B78BD1E50D7F500F4C176 /* SMBiosController.hpp */,
+				3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */,
+				3B660ABF1E623B8E003EE3C1 /* SATAController.hpp */,
+				3B660ABE1E623B8E003EE3C1 /* SATAController.cpp */,
 				3B588BC81D95C89C00087C38 /* MMIOUtils.hpp */,
 				3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */,
 				3B7381A61D984A1C0001846F /* PS2Keymap.h */,
 				3B588BCB1D95C89C00087C38 /* PS2Controller.h */,
 				3B588BC91D95C89C00087C38 /* PS2Controller.c */,
+				3B2D0EC81E4FCB1A000204B1 /* USBController */,
 			);
 			name = Modules;
 			sourceTree = "<group>";
@@ -349,7 +387,6 @@
 				3B7866001D95947500C015DF /* proc_reg.h */,
 				3B7866011D95947500C015DF /* machine_routines.c */,
 				3B7866021D95947500C015DF /* machine_routines.h */,
-				3B7866031D95947500C015DF /* pmap_internal.h */,
 				3B7866041D95947500C015DF /* cpu_topology.h */,
 				3B7866051D95947500C015DF /* cpu_threads.h */,
 				3B7866061D95947500C015DF /* cpuid.c */,
@@ -358,8 +395,10 @@
 				3B7866091D95947500C015DF /* mp_desc.h */,
 				3B7865F21D95947500C015DF /* i386_init.c */,
 				3B78660A1D95947500C015DF /* i386_vm_init.c */,
+				3BF071D01E59E75000BFF155 /* io_map.c */,
 				3B78660B1D95947500C015DF /* pmap.h */,
 				3B78660C1D95947500C015DF /* pmap_pcid.h */,
+				3B7866031D95947500C015DF /* pmap_internal.h */,
 				3B78660D1D95947500C015DF /* vm_map.h */,
 				3B78660E1D95947500C015DF /* locks.h */,
 				3B78660F1D95947500C015DF /* eflags.h */,
@@ -384,6 +423,8 @@
 				3B7866221D95947500C015DF /* pci.h */,
 				3B7866231D95947500C015DF /* pio.h */,
 				3B7866241D95947500C015DF /* sel.h */,
+				3B2D0EC01E4FCACB000204B1 /* kdp.c */,
+				3B0860021E58B79A00AAD780 /* vm_prot.h */,
 			);
 			name = i386;
 			sourceTree = "<group>";
@@ -464,6 +505,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B3B78BE1E50D7F500F4C176 /* SMBiosController.cpp in Sources */,
 				3B78662C1D95947500C015DF /* machine_routines.c in Sources */,
 				3B78662B1D95947500C015DF /* pci.c in Sources */,
 				3B5F79721D9596E7006EC205 /* kernel_header.c in Sources */,
@@ -474,6 +516,7 @@
 				3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */,
 				3B7866371D95947500C015DF /* mp.c in Sources */,
 				3B588BD11D95C89C00087C38 /* PS2Controller.c in Sources */,
+				3BF071D11E59E75000BFF155 /* io_map.c in Sources */,
 				3B7866251D95947500C015DF /* i386_init.c in Sources */,
 				3B588BD01D95C89C00087C38 /* MMIOUtils.cpp in Sources */,
 				3B7866301D95947500C015DF /* tsc.c in Sources */,
@@ -481,6 +524,7 @@
 				3B588BDA1D95CEF200087C38 /* assert.c in Sources */,
 				3B5F796F1D9596E7006EC205 /* kernel.c in Sources */,
 				3B588BDF1D95CF0500087C38 /* asmlib.S in Sources */,
+				3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */,
 				3B7865EF1D9592F500C015DF /* pmap_pcid.c in Sources */,
 				3B78663C1D95948B00C015DF /* renderer.c in Sources */,
 				3B78662D1D95947500C015DF /* cpuid.c in Sources */,
@@ -488,16 +532,21 @@
 				3B7865F01D9592F500C015DF /* boot_pt.c in Sources */,
 				3B78662F1D95947500C015DF /* i386_vm_init.c in Sources */,
 				3B78662A1D95947500C015DF /* syscall.c in Sources */,
+				3B2D0EC61E4FCB11000204B1 /* EHCIController.cpp in Sources */,
 				3B7865ED1D9592F500C015DF /* start.S in Sources */,
 				3B7865EE1D9592F500C015DF /* pmap.c in Sources */,
 				3B5F79731D9596E7006EC205 /* kalloc.c in Sources */,
 				3B7866351D95947500C015DF /* ktss.c in Sources */,
 				3B588BCC1D95C89C00087C38 /* ModulesController.cpp in Sources */,
 				3B7866361D95947500C015DF /* ldt.c in Sources */,
+				3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */,
+				3B2D0ECD1E4FCB3D000204B1 /* UHCIController.cpp in Sources */,
 				3B588BE01D95CF0500087C38 /* arch.c in Sources */,
 				3B7866261D95947500C015DF /* mp_desc.c in Sources */,
 				3B5F79711D9596E7006EC205 /* kprintf.c in Sources */,
+				3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */,
 				3B5F797A1D9597EC006EC205 /* platform_init.c in Sources */,
+				3B660AC01E623B8E003EE3C1 /* SATAController.cpp in Sources */,
 				3B5F797B1D9597EC006EC205 /* bootargs.c in Sources */,
 				3B7866311D95947500C015DF /* trap.c in Sources */,
 				3B588BCD1D95C89C00087C38 /* IntelE1000Controller.cpp in Sources */,
@@ -507,7 +556,6 @@
 				3B7866341D95947500C015DF /* gdt.c in Sources */,
 				3B7865EC1D9592F500C015DF /* bzero.S in Sources */,
 				3B7865EA1D9592F500C015DF /* idt64.S in Sources */,
-				3B588BCE1D95C89C00087C38 /* SATAController.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

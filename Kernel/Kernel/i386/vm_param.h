@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/30/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef vm_param_h
@@ -58,6 +58,9 @@
 
 #define atop_kernel(x) ((vm_address_t)(x) >> PAGE_SHIFT)
 #define ptoa_kernel(x) ((vm_address_t)(x) << PAGE_SHIFT)
+
+#define round_page(x) (((vm_offset_t)(x) + PAGE_MASK) & ~((vm_offset_t)PAGE_MASK))
+#define trunc_page(x) ((vm_offset_t)(x) & ~((vm_offset_t)PAGE_MASK))
 
 #define round_page_64(x) (((uint64_t)(x) + PAGE_MASK_64) & ~((uint64_t)PAGE_MASK_64))
 #define trunc_page_64(x) ((uint64_t)(x) & ~((uint64_t)PAGE_MASK_64))

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/29/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #ifndef pal_h
@@ -15,6 +15,8 @@
 #define pal_hlt()			__asm__ volatile ("sti; hlt")
 #define pal_sti()			__asm__ volatile ("sti")
 #define pal_cli()			__asm__ volatile ("cli")
+
+typedef uint64_t pal_cr_t;
 
 static inline
 void pal_stop_cpu(bool cli) {
@@ -44,5 +46,6 @@ extern pal_rtc_nanotime_t pal_rtc_nanotime_info;
 extern int  serial_init(void);
 extern void serial_putc(int c);
 extern int  serial_getc(void);
+extern void pal_get_control_registers(pal_cr_t *cr0, pal_cr_t *cr2, pal_cr_t *cr3, pal_cr_t *cr4);
 
 #endif /* pal_h */

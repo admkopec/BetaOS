@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 4/30/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 /*
@@ -292,6 +292,7 @@
 #define MSR_IA32_GS_BASE			    0xC0000101
 #define MSR_IA32_KERNEL_GS_BASE         0xC0000102
 #define MSR_IA32_TSC_AUX			    0xC0000103
+
 #ifndef __ASSEMBLY__
 
 #define	set_ts() set_cr0(get_cr0() | CR0_TS)
@@ -434,6 +435,26 @@ static inline void swapgs(void) {
     __asm__ volatile("swapgs");
 }
 
+static inline void flush_tlb_raw(void) {
+    set_cr3_raw(get_cr3_raw());
+}
+
+static inline void wbinvd(void) {
+    __asm__ volatile("wbinvd");
+}
+
+static inline void invlpg(uintptr_t addr) {
+    __asm__  volatile("invlpg (%0)" :: "r" (addr) : "memory");
+}
+
+static inline void clac(void) {
+    __asm__  volatile("clac");
+}
+
+static inline void stac(void) {
+    __asm__  volatile("stac");
+}
+
 #define rdmsr(msr,lo,hi) \
 __asm__ volatile("rdmsr" : "=a" (lo), "=d" (hi) : "c" (msr))
 
@@ -450,6 +471,9 @@ __asm__ volatile("rdtsc" : "=a" (lo), "=d" (hi))
 
 #define rdpmc(counter,lo,hi) \
 __asm__ volatile("rdpmc" : "=a" (lo), "=d" (hi) : "c" (counter))
+
+extern void do_mfence(void);
+#define mfence() do_mfence()
 
 static inline void wrmsr64(uint32_t msr, uint64_t val) {
     wrmsr(msr, (val & 0xFFFFFFFFUL), ((val >> 32) & 0xFFFFFFFFUL));

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/26/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include "cpuid.h"
@@ -54,9 +54,4 @@ bool ml_set_interrupts_enabled(bool enable) {
 /* Check if running at interrupt context */
 bool ml_at_interrupt_context(void) {
     return get_interrupt_level() != 0;
-}
-
-vm_offset_t
-ml_static_ptovirt(vm_offset_t paddr) {
-    return (vm_offset_t)(((unsigned long) paddr) | VM_MIN_KERNEL_ADDRESS);
 }

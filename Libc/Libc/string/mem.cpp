@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/22/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <string.h>
@@ -45,7 +45,7 @@ void* memset(void* bufptr, int value, size_t size) {
 int
 memcmp(const void *s1, const void *s2, size_t size) {
     if (size != 0) {
-        register const unsigned char *p1 = (const uint8_t *)s1, *p2 = (const uint8_t *)s2;
+        const unsigned char *p1 = (const uint8_t *)s1, *p2 = (const uint8_t *)s2;
         do {
             if (*p1++ != *p2++)
                 return (*--p1 - *--p2);

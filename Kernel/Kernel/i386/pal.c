@@ -3,13 +3,22 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/29/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <i386/pal.h>
+#include <i386/proc_reg.h>
 
 /* nanotime convertion info */
 pal_rtc_nanotime_t pal_rtc_nanotime_info = {0,0,0,0,1,0};
+
+void
+pal_get_control_registers(pal_cr_t *cr0, pal_cr_t *cr2, pal_cr_t *cr3, pal_cr_t *cr4) {
+    *cr0 = get_cr0();
+    *cr2 = get_cr2();
+    *cr3 = get_cr3_raw();
+    *cr4 = get_cr4();
+}
 
 
 /* <Temporary> */

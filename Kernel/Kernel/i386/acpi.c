@@ -3,16 +3,19 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/13/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include "acpi.h"
 #include "misc_protos.h"
 #include "pio.h"
+#include "machine_routines.h"
 #include <sys/cdefs.h>
 
 #define EFI_ACPI_TABLE_GUID \
 { 0xeb9d2d30, 0x2d88, 0x11d3, {0x9a, 0x16, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d }}
+#define EFI_ACPI_TABLE_GUID_2 \
+{ 0xeb9d2d31, 0x2d88, 0x11d3, {0x9a, 0x16, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d }}
 #define EFI_ACPI_20_TABLE_GUID \
 { 0x8868e871, 0xe4f1, 0x11d3, {0xbc, 0x22, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 }}
 #define EFI_ACPI_DESCRIPTION_GUID \
@@ -61,10 +64,10 @@ typedef struct FADT {
     struct   ACPISDTHeader h;
     uint32_t FirmwareCtrl;
     uint32_t Dsdt;
-    
+
     // field used in ACPI 1.0; no longer in use, for compatibility only
     uint8_t  Reserved;
-    
+
     uint8_t  PreferredPowerManagementProfile;
     uint16_t SCI_Interrupt;
     uint32_t SMI_CommandPort;
@@ -97,23 +100,23 @@ typedef struct FADT {
     uint8_t  DayAlarm;
     uint8_t  MonthAlarm;
     uint8_t  Century;
-    
+
     // reserved in ACPI 1.0; used since ACPI 2.0+
     uint16_t BootArchitectureFlags;
-    
+
     uint8_t  Reserved2;
     uint32_t Flags;
-    
+
     // 12 byte structure; see below for details
     GenericAddressStructure ResetReg;
-    
+
     uint8_t  ResetValue;
     uint8_t  Reserved3[3];
-    
+
     // 64bit pointers - Available on ACPI 2.0+
     uint64_t                X_FirmwareControl;
     uint64_t                X_Dsdt;
-    
+
     GenericAddressStructure X_PM1aEventBlock;
     GenericAddressStructure X_PM1bEventBlock;
     GenericAddressStructure X_PM1aControlBlock;
@@ -142,12 +145,12 @@ int64_t CompareGuid(EFI_GUID *GUID1, EFI_GUID *GUID2) {
     /*int32_t *g1, *g2, r;
     g1 = (int32_t *) GUID1;
     g2 = (int32_t *) GUID2;
-    
+
     r  = g1[0] - g2[0];
     r |= g1[1] - g2[1];
     r |= g1[2] - g2[2];
     r |= g1[3] - g2[3];
-    
+
     return r;*/
 }
 
@@ -155,16 +158,18 @@ typedef uint8_t byte;
 typedef uint16_t word;
 typedef uint32_t dword;
 
-dword *SMI_CMD_;
-byte ACPI_ENABLE_;
-byte ACPI_DISABLE_;
-dword *PM1a_CNT_;
-dword *PM1b_CNT_;
-word SLP_TYPa_;
-word SLP_TYPb_;
-word SLP_EN_;
-word SCI_EN_;
-byte PM1_CNT_LEN_;
+dword *SMI_CMD;
+byte ACPI_ENABLE;
+byte ACPI_DISABLE;
+dword *PM1a_CNT;
+dword *PM1b_CNT;
+dword  PM1a;
+dword  PM1b;
+word SLP_TYPa;
+word SLP_TYPb;
+word SLP_EN;
+word SCI_EN;
+byte PM1_CNT_LEN;
 
 FADT_t * Fadt;
 
@@ -180,26 +185,26 @@ ParseRSDP(ACPI_2_Description *RSDP) {
         DBG("NO XSDT table found!\n");
         return 1;
     }
-    
+
     if (strncmp("XSDT", XSDT->Signature, 4)) {
         DBG("Invalid XSDT!\n");
         return 1;
     }
-    
+
     EntryCount = (XSDT->Length - sizeof(ACPISDTHeader_t)) / sizeof(uint64_t);
     DBG("Found XSDT OEM ID: %s Entry Count: %d\n", XSDT->OEMID, EntryCount);
-    
+
     EntryPtr = (uint64_t*) (XSDT + 1);
     for (uint32_t i = 0; i < EntryCount; i++, EntryPtr++) {
         Entry = (ACPISDTHeader_t *) ((uint64_t) (*EntryPtr));
         //kprintf("Found ACPI table: %s Version %d OEM ID: %s\n", Entry->Signature, Entry->Revision, Entry->OEMID);
         if (!strncmp("FACP", Entry->Signature, 4)) {
             Fadt = (FADT_t *)Entry;
-            if (!strncmp("DSDT", ((ACPISDTHeader_t*)(Fadt->Dsdt))->Signature, 4)) {
+            if (!strncmp("DSDT", ((ACPISDTHeader_t*)(uintptr_t)(Fadt->Dsdt))->Signature, 4)) {
                 DBG("Found DSDT!\n");
                 // search the \_S5 package in the DSDT
-                char *S5Addr = (char *) Fadt->Dsdt +36; // skip header
-                int dsdtLength = ((ACPISDTHeader_t*)Fadt->Dsdt)->Length;
+                char *S5Addr = (char *)(uintptr_t)Fadt->Dsdt +36; // skip header
+                int dsdtLength = ((ACPISDTHeader_t*)(uintptr_t)Fadt->Dsdt)->Length;
                 while (dsdtLength-- >= 0) {
                     if (strncmp(S5Addr, "_S5_", 4) == 0) {
                         break;
@@ -214,29 +219,32 @@ ParseRSDP(ACPI_2_Description *RSDP) {
                     if ( ( *(S5Addr-1) == 0x08 || ( *(S5Addr-2) == 0x08 && *(S5Addr-1) == '\\') ) && *(S5Addr+4) == 0x12 ) {
                         S5Addr += 5;
                         S5Addr += ((*S5Addr &0xC0)>>6) +2;   // calculate PkgLength size
-                        
+
                         if (*S5Addr == 0x0A)
                             S5Addr++;   // skip byteprefix
-                        SLP_TYPa_ = *(S5Addr)<<10;
+                        SLP_TYPa = *(S5Addr)<<10;
                         S5Addr++;
-                        
+
                         if (*S5Addr == 0x0A)
                             S5Addr++;   // skip byteprefix
-                        SLP_TYPb_ = *(S5Addr)<<10;
-                        
-                        SMI_CMD_ = &Fadt->SMI_CommandPort;
-                        
-                        ACPI_ENABLE_  = Fadt->AcpiEnable;
-                        ACPI_DISABLE_ = Fadt->AcpiDisable;
-                        
-                        PM1a_CNT_ = &Fadt->PM1aControlBlock;
-                        PM1b_CNT_ = &Fadt->PM1bControlBlock;
-                        
-                        PM1_CNT_LEN_ = Fadt->PM1ControlLength;
-                        
-                        SLP_EN_ = 1<<13;
-                        SCI_EN_ = 1;
-                        
+                        SLP_TYPb = *(S5Addr)<<10;
+
+                        SMI_CMD = &Fadt->SMI_CommandPort;
+
+                        ACPI_ENABLE  = Fadt->AcpiEnable;
+                        ACPI_DISABLE = Fadt->AcpiDisable;
+
+                        PM1a_CNT = &Fadt->PM1aControlBlock;
+                        PM1b_CNT = &Fadt->PM1bControlBlock;
+
+                        PM1a = *PM1a_CNT;
+                        PM1b = *PM1b_CNT;
+
+                        PM1_CNT_LEN = Fadt->PM1ControlLength;
+
+                        SLP_EN = 1<<13;
+                        SCI_EN = 1;
+
                         return 0;
                     } else {
                         DBG("\\_S5 parse error.\n");
@@ -247,28 +255,28 @@ ParseRSDP(ACPI_2_Description *RSDP) {
             }
         }
     }
-    
+
     return 0;
 }
 
 int acpiEnable_(void) {
     // check if acpi is enabled
-    if ( (inw((word) PM1a_CNT_) &SCI_EN_) == 0 ) {
+    if ( (inw((word) PM1a_CNT) &SCI_EN) == 0 ) {
         // check if acpi can be enabled
-        if (SMI_CMD_ != 0 && ACPI_ENABLE_ != 0) {
-            outb((word) SMI_CMD_, ACPI_ENABLE_); // send acpi enable command
+        if (SMI_CMD != 0 && ACPI_ENABLE != 0) {
+            outb((word) SMI_CMD, ACPI_ENABLE); // send acpi enable command
             // give 3 seconds time to enable acpi
             int i;
             for (i=0; i<300; i++ ) {
-                if ( (inw((word) PM1a_CNT_) &SCI_EN_) == 1 )
+                if ( (inw((word) PM1a_CNT) &SCI_EN) == 1 )
                     break;
                 for (int j = 0; j < 1000; j++) {
                     kprintf("");
                 }
             }
-            if (PM1b_CNT_ != 0)
+            if (PM1b_CNT != 0)
                 for (; i<300; i++ ) {
-                    if ( (inw((word) PM1b_CNT_) &SCI_EN_) == 1 )
+                    if ( (inw((word) PM1b_CNT) &SCI_EN) == 1 )
                         break;
                     for (int j = 0; j < 1000; j++) {
                         kprintf("");
@@ -296,70 +304,65 @@ void printGuid(EFI_GUID g1) {
 }
 
 void acpi() {
+    uint64_t Address;
+    uint64_t Index;
+    ACPI_2_Description *RSDP = (void *)0;
+
+    for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
+        if (*(uint64_t *)(ml_static_ptovirt(Address)) == 0x54445352 || !strncmp((const char*)((uint64_t *)(ml_static_ptovirt(Address))), "RSD PTR ", 8) /*|| !strcmp((const char*)(*(uint64_t *)(Address)), "RSD PTR ") || */) {
+            DBG("Found RSDP using Legacy Method!\n");
+            RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
+            goto parse;
+        }
+    }
+
+    Address = (*(uint16_t *)(uint64_t)(0x40E)) << 4;
+    for (Index = 0; Index < 0x400; Index += 16) {
+        if (*(uint64_t *)(ml_static_ptovirt(Address + Index)) == 0x54445352 || !strncmp((const char *)((uint64_t*)(ml_static_ptovirt(Address + Index))), "RSD PTR ", 8)) {
+            DBG("Found RSDP using EBDA Method!\n");
+            RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
+            goto parse;
+        }
+    }
+
     if (Platform_state.bootArgs->efiMode != kBootArgsEfiMode64) {
         panic("EFI MODE 32-bit!\n");
     }
-    EFI_SYSTEM_TABLE_64 *systab = (EFI_SYSTEM_TABLE_64 *)(Platform_state.bootArgs->efiSystemTable);
+    EFI_SYSTEM_TABLE_64 *systab = (EFI_SYSTEM_TABLE_64 *)((uint64_t)(Platform_state.bootArgs->efiSystemTable));
     EFI_CONFIGURATION_TABLE_64 *configtab = systab->ConfigurationTable;
-    ACPI_2_Description *RSDP = (void *)0;
-    EFI_GUID ACPIGUID     = EFI_ACPI_20_TABLE_GUID;
-    EFI_GUID ACPIGUID_old = EFI_ACPI_TABLE_GUID;
+    EFI_GUID ACPIGUID      = EFI_ACPI_20_TABLE_GUID;
+    EFI_GUID ACPIGUID_old2 = EFI_ACPI_TABLE_GUID_2;
+    EFI_GUID ACPIGUID_old  = EFI_ACPI_TABLE_GUID;
     for (uint64_t i = 0; i <= systab->NumberOfTableEntries; i++) {
-        if (!(CompareGuid(&(systab->ConfigurationTable[i].VendorGuid), &ACPIGUID)) || !(CompareGuid(&(systab->ConfigurationTable[i].VendorGuid), &ACPIGUID_old))) {
+        if (!(CompareGuid(&(systab->ConfigurationTable[i].VendorGuid), &ACPIGUID)) || !(CompareGuid(&(systab->ConfigurationTable[i].VendorGuid), &ACPIGUID_old)) || !(CompareGuid(&(systab->ConfigurationTable[i].VendorGuid), &ACPIGUID_old2))) {
             if (!strncmp("RSD PTR ", ((ACPI_2_Description *)(configtab->VendorTable))->Signature, 8)) {
                 RSDP = (ACPI_2_Description *)(configtab->VendorTable);
-                ParseRSDP(RSDP);
-                if (SCI_EN_ == 0)
-                    return;
-                
-                acpiEnable_();
-                return;
-           }
+                goto parse;
+            }
         }
         configtab++;
     }
-    
-    uint64_t Address;
-    uint64_t Index;
-    
-    for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
-        if (*(uint64_t *)(Address) == 0x54445352 || !strncmp((const char*)((uint64_t *)(Address)), "RSD PTR ", 8) /*|| !strcmp((const char*)(*(uint64_t *)(Address)), "RSD PTR ") || */) {
-            DBG("Found RSDP using Legacy Method!\n");
-            RSDP = (ACPI_2_Description *)Address;
-        }
-    }
-    
-    if (!strcmp(((ACPI_2_Description *)0xFE300)->Signature, "RSD PTR ")) {
-        DBG("Found RSDP using fixed address!\n");
-        //RSDP = (ACPI_2_Description *)0xFE300;
-    }
-    
-    Address = (*(uint16_t *)(uint64_t)(0x40E)) << 4;
-    for (Index = 0; Index < 0x400; Index += 16) {
-        if (*(uint64_t *)(Address + Index) == 0x54445352 || !strncmp((const char *)((uint64_t*)(Address + Index)), "RSD PTR ", 8)) {
-            DBG("Found RSDP using EBDA Method!\n");
-            RSDP = (ACPI_2_Description *)Address;
-        }
-    }
-    
+
     if (RSDP == (void *)0) {
         DBG("Error: Could not find RSDP\n");
         return;
     }
-    
+parse:
     ParseRSDP(RSDP);
-    if (SCI_EN_ == 0) {
-        DBG("SCI_EN_ == 0");
+    if (SCI_EN == 0) {
+        DBG("SCI_EN == 0");
         return;
     }
-    
+
     acpiEnable_();
 }
 
 void acpipoweroff(void) {
-    outw((unsigned int)(*(PM1a_CNT_)), SLP_TYPa_ | SLP_EN_);
-    if (PM1b_CNT_ != 0) {
-        outw((unsigned int)(*(PM1b_CNT_)), SLP_TYPb_ | SLP_EN_);
+    DBG("PM1a_CNT = 0x%x\n", PM1a_CNT);
+    DBG("*PM1a_CNT = 0x%x\n", PM1a);
+    outw((unsigned int)(PM1a), SLP_TYPa | SLP_EN);
+    if (PM1b_CNT != 0) {
+        outw((unsigned int)(PM1b), SLP_TYPb | SLP_EN);
     }
     kprintf("ACPI poweroff Failed!\n");
 }
@@ -376,6 +379,6 @@ void acpireboot(void) {
     }
     DBG("%u\n%d\n", Fadt->ResetReg.Address, Fadt->ResetReg.Address);
     DBG("%d\n", Fadt->ResetValue);
-    outb(Fadt->ResetReg.Address, Fadt->ResetValue);
+    outb((unsigned int)Fadt->ResetReg.Address, Fadt->ResetValue);
     kprintf("ACPI reboot Failed!\n");
 }

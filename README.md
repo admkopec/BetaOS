@@ -46,3 +46,9 @@ PC users should use Clover bootloader to boot the MACH-O binary through included
 ###Version 0.26:
 * Added ACPI.
 * Shut down is now working.
+
+###Version 0.30:
+* Using advanced Paging.
+* Added IDT.
+* Testing USB and new PCI Modules initialization.
+* Added Unix absolute time (needs a fix - +1 Day)

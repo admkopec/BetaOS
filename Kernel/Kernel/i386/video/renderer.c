@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 9/12/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <stdint.h>
@@ -11,6 +11,9 @@
 #include <sys/cdefs.h>
 #include "font.h"
 #include "../misc_protos.h"
+
+#define VM_MIN_KERNEL_ADDRESS		((vm_offset_t) 0xFFFFFF8000000000UL)
+#define FRAMEBUFFER_ALIAS           (VM_MIN_KERNEL_ADDRESS + 0x5000)
 
 static uint32_t color_foreground = 0x00FFFFFF;
 static uint32_t color_background = 0x00000000;
@@ -35,11 +38,12 @@ change_color(uint32_t foreground, uint32_t background) {
     color_foreground = foreground;
     color_background = background;
 }
-
+uint32_t line = 0;
+uint32_t col  = 0;
 void
 clear_screen() {
-    for (uint32_t line = 0; line < Platform_state.video.v_height; line+=ISO_CHAR_HEIGHT) {
-        for (uint32_t col = 0; col < Platform_state.video.v_width; col+=ISO_CHAR_WIDTH) {
+    for (/*uint32_t */line = 0; line + ISO_CHAR_HEIGHT < Platform_state.video.v_height; line+=ISO_CHAR_HEIGHT) {
+        for (/*uint32_t */col = 0; col < Platform_state.video.v_width; col+=ISO_CHAR_WIDTH) {
             paint_char(col, line, '\0');
         }
     }
@@ -141,7 +145,7 @@ putc(int ch) {
     if (ch=='\n'||ch=='\r') {
         painted_chars_row++;
         painted_chars_column=0;
-        if (row>=(Platform_state.video.v_height-ISO_CHAR_HEIGHT)) {
+        if (row>=(Platform_state.video.v_height-(2*ISO_CHAR_HEIGHT))) {
             //scroll_up();
             clear_screen();
             row=0;

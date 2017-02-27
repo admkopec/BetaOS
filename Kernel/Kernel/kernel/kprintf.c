@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 5/9/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
 #include <stdarg.h>
@@ -15,9 +15,8 @@
 
 #include <stdio.h>
 
-#define DEBUG 1
-
 bool enable=true;
+bool early = false;
 
 extern void putc(int ch);
 
@@ -45,8 +44,8 @@ void
 kprintf(const char *fmt, ...) {
     va_list     listp;
     //bool      state;
-    if (can_use_serial) {
-        bool early = false;
+    //if (can_use_serial) {
+        //bool early = false;
         if (rdmsr64(MSR_IA32_GS_BASE) == 0&&enable==false) {
             //early = true;
         }
@@ -73,19 +72,24 @@ kprintf(const char *fmt, ...) {
             MP_DEBUG_KPRINTF("[cpu%d...]\n", cpu_number());
             cpu_last_locked = cpu_number();
         }*/
-    }   // Quick Fix for can_use_serial
+    //}   // Quick Fix for can_use_serial
     
-        va_start(listp, fmt);
-        _doprnt(fmt, &listp, putc, 16);
-        va_end(listp);
+    va_start(listp, fmt);
+    _doprnt(fmt, &listp, putc, 16);
+    va_end(listp);
         
         /*simple_unlock(&kprintf_lock);
         ml_set_interrupts_enabled(state);*/
     //}
 }
+boolean_t kRebootOnPanic = TRUE;
 
+extern void reboot(void);
 void
 panic(const char *errormsg, ...) {
+#ifdef DEBUG
+    kRebootOnPanic = FALSE;
+#endif
     va_list list;
     kprintf("\nKERNEL PANIC: ");
     if (can_use_serial) {
@@ -109,8 +113,65 @@ panic(const char *errormsg, ...) {
         goto normal_print;
     }
 panicing:
-    kprintf("\nCPU Halted");
-    pal_stop_cpu(true);
+    if (!kRebootOnPanic) {
+        kprintf("\nCPU Halted");
+        pal_stop_cpu(true);
+    } else {
+        for (int i = 0; i < 10000; i++) { kprintf(""); } // Wait a while
+        reboot();
+    }
+}
+
+void hexdump(char *desc, void *addr, int len) {
+    int i;
+    unsigned char buff[17];
+    unsigned char *pc = (unsigned char*)addr;
+    
+    // Output description if given.
+    if (desc != NULL)
+        kprintf ("%s:\n", desc);
+    
+    if (len == 0) {
+        kprintf("  ZERO LENGTH\n");
+        return;
+    }
+    if (len < 0) {
+        kprintf("  NEGATIVE LENGTH: %i\n",len);
+        return;
+    }
+    
+    // Process every byte in the data.
+    for (i = 0; i < len; i++) {
+        // Multiple of 16 means new line (with line offset).
+        
+        if ((i % 16) == 0) {
+            // Just don't print ASCII for the zeroth line.
+            if (i != 0)
+                kprintf ("  %s\n", buff);
+            
+            // Output the offset.
+            kprintf ("  %04X ", i);
+        }
+        
+        // Now the hex code for the specific character.
+        kprintf (" %02X", pc[i]);
+        
+        // And store a printable ASCII character for later.
+        if ((pc[i] < 0x20) || (pc[i] > 0x7e))
+            buff[i % 16] = '.';
+        else
+            buff[i % 16] = pc[i];
+        buff[(i % 16) + 1] = '\0';
+    }
+    
+    // Pad out last line if not exactly 16 characters.
+    while ((i % 16) != 0) {
+        kprintf ("   ");
+        i++;
+    }
+    
+    // And print the final ASCII bit.
+    kprintf ("  %s\n", buff);
 }
 
 static int
