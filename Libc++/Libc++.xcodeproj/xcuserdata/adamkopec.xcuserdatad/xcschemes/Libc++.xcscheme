@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B7865BB1D958FED00C015DF"
-               BuildableName = "Kernel"
-               BlueprintName = "Kernel"
-               ReferencedContainer = "container:Kernel.xcodeproj">
+               BlueprintIdentifier = "3B4E19991EE81E9700256BD0"
+               BuildableName = "libc++.a"
+               BlueprintName = "Libc++"
+               ReferencedContainer = "container:Libc++.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B7865BB1D958FED00C015DF"
-            BuildableName = "Kernel"
-            BlueprintName = "Kernel"
-            ReferencedContainer = "container:Kernel.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -54,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B7865BB1D958FED00C015DF"
-            BuildableName = "Kernel"
-            BlueprintName = "Kernel"
-            ReferencedContainer = "container:Kernel.xcodeproj">
+            BlueprintIdentifier = "3B4E19991EE81E9700256BD0"
+            BuildableName = "libc++.a"
+            BlueprintName = "Libc++"
+            ReferencedContainer = "container:Libc++.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -69,16 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B7865BB1D958FED00C015DF"
-            BuildableName = "Kernel"
-            BlueprintName = "Kernel"
-            ReferencedContainer = "container:Kernel.xcodeproj">
+            BlueprintIdentifier = "3B4E19991EE81E9700256BD0"
+            BuildableName = "libc++.a"
+            BlueprintName = "Libc++"
+            ReferencedContainer = "container:Libc++.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

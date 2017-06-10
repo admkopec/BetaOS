@@ -2,7 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Libc/Libc.xcodeproj">
+      location = "group:Libc++/Libc++.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/adamkopec/Library/Mobile Documents/com~apple~CloudDocs/BetaOS/Libc/Libc.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Kernel/Kernel.xcodeproj">
