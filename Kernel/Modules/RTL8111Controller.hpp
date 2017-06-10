@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "PCIController.hpp"
+#include "Controller.hpp"
 
 #define Realtek_Vendor 0x10EC
 #define RTL8168_ID     0x8168
@@ -23,7 +23,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 
-class RTL8111 {
+class RTL8111 : public Controller {
     uint8_t     bar_type;       // Type of BOR0
     uint16_t    io_base;        // IO Base Address
     uint64_t    mem_base;       // MMIO Base Address
@@ -38,9 +38,8 @@ class RTL8111 {
     uint32_t    eepromRead(uint8_t addr);   // Read 4 bytes from a specific EEProm Address
     bool        readMACAddress();           // Read MAC Address
 public:
-    RTL8111();
-    int  init(PCI *h);
-    void start();
+    virtual int  init(PCI *h) override;
+    virtual void start() override;
 };
 
 #endif

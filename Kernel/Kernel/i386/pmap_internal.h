@@ -106,8 +106,7 @@ static inline pt_entry_t * pmap_pte(pmap_t pmap, vm_map_offset_t vaddr) {
         if (*pde & PTE_PS)
             return pde;
         newpf = *pde & PG_FRAME;
-        return &((pt_entry_t *)PHYSMAP_PTOV(newpf))
-        [i386_btop(vaddr) & (ppnum_t)(NPTEPG-1)];
+        return &((pt_entry_t *)PHYSMAP_PTOV(newpf))[i386_btop(vaddr) & (ppnum_t)(NPTEPG-1)];
     }
     return (NULL);
 }

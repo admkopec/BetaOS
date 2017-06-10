@@ -14,7 +14,7 @@
 
 struct BAR {
     union {
-        void*       address;
+        uint64_t    address;
         uint16_t    port;
     } u;
     uint64_t size = 0;
@@ -32,6 +32,7 @@ class PCI {
     uint8_t  ClassCode_;
     uint8_t  SubClass_;
     uint8_t  ProgIF_;
+    uint8_t  IntLine_;
     void getVendor();
     void getDevice();
     void getHeader();
@@ -41,11 +42,14 @@ public:
     uint8_t  ClassCode();
     uint8_t  SubClass();
     uint8_t  ProgIF();
+    uint8_t  IntLine();
     BAR      BAR();
     int      getBAR(uint16_t index);
+    uint32_t Read32(uint8_t offset);
+    void     Write32(uint8_t offset, uint32_t data);
     bool     Valid = true;
     
-    void init(int bus, int slot, int function);
+    void init(int bus = 0, int slot = 0, int function = 0);
 };
 
 #endif /* PCIController_hpp */

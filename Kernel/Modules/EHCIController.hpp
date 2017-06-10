@@ -11,8 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "PCIController.hpp"
-#include "MMIOUtils.hpp"
+#include "Controller.hpp"
 
 #define PCI_USB_CLASS    0x0C
 #define PCI_USB_SUBCLASS 0x03
@@ -98,41 +97,48 @@ typedef struct {
     uint8_t     pad[20];
 }          EhciQH;
 typedef struct {
-    uint8_t  capLength;
-    uint8_t  reserved;
-    uint16_t hciVersion;
-    uint32_t hcsParams;
-    uint32_t hccParams;
-    uint64_t hcspPortRoute;
+    uint8_t  CapabilitiesLength;
+    uint8_t  Reserved;
+    uint16_t HCIVersion;
+    uint32_t HCSParams;
+    uint32_t HCCParams;
+    uint64_t HCSPPortRoute;
 } __packed CapRegisters;
 typedef struct {
-    volatile uint32_t USBCommad;
+    volatile uint32_t USBCommand;
     volatile uint32_t USBStatus;
     volatile uint32_t USBInterrupt;
-    volatile uint32_t frameIndex;
-    volatile uint32_t ctrlDsSegment;
-    volatile uint32_t periodicListBase;
-    volatile uint32_t asyncListAddr;
-    volatile uint32_t reserved[9];
-    volatile uint32_t configFlag;
-    volatile uint32_t ports[];
-}          OpRegisters;
+    volatile uint32_t FrameIndex;
+    volatile uint32_t ControlDSSegment;
+    volatile uint32_t PeriodicListBase;
+    volatile uint32_t AsyncListAddress;
+    volatile uint32_t Reserved[9];
+    volatile uint32_t ConfigFlag;
+    volatile uint32_t Ports[];
+}         OpRegisters;
 
-class EHCI {
-    CapRegisters *Caps;
-    OpRegisters  *Ops;
-    uint32_t     *FrameList;
-    EhciQH       *QHpool;
-    EhciTD       *TDpool;
-    EhciQH       *AsyncQH;
-    EhciQH       *PeriodicQH;
+// Fix static declarations;
+
+class EHCI : public Controller {
+    CapRegisters*    CapabilityRegisters;
+    OpRegisters*     OperationalRegisters;
+    uint32_t*        FrameList;
+    EhciQH*          QHpool;
+    EhciTD*          TDpool;
+    EhciQH*          AsyncQH;
+    EhciQH*          PeriodicQH;
     
+    uint32_t Vendor;
+    uint32_t Device;
+    
+    OSReturn     Handshake  (volatile const uint32_t* pReg, uint32_t test_mask, uint32_t test_target, int32_t msec);
     unsigned int ResetPort  (unsigned int port);
     void         PortSet    (volatile uint32_t *reg, uint32_t data);
     void         PortClear  (volatile uint32_t *reg, uint32_t data);
 public:
-    int  init(PCI *pci);
-    void start();
+    virtual int  init(PCI *pci) override;
+    virtual void start() override;
+    virtual void stop() override;
 };
 
 #endif /* EHCIController_hpp */

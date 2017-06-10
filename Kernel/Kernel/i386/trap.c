@@ -18,6 +18,7 @@
 #include "machine_routines.h"
 #include "vm_prot.h"
 #include "pal.h"
+#include "pio.h"
 
 extern uint64_t col, line;
 
@@ -47,7 +48,6 @@ i386_exception(int exc, uint64_t code, uint64_t subcode) {
 void
 interrupt(x86_saved_state_t *state) {
     state = (x86_saved_state_t *)ml_static_ptovirt((vm_offset_t)state);
-    kprintf("Interrupt!\n");
     uint64_t	rip;
     uint64_t	rsp;
     int         interrupt_num;
@@ -55,7 +55,7 @@ interrupt(x86_saved_state_t *state) {
     int         ipl;
     int         cnum = cpu_number();
     cpu_data_t	*cdp = cpu_data_ptr[cnum];
-    int         itype = 0;
+    __unused int         itype = 0;
     
     if (is_saved_state64(state) == true) {
         x86_saved_state64_t	*state64;
@@ -76,16 +76,15 @@ interrupt(x86_saved_state_t *state) {
         rsp             = state32->uesp;
         interrupt_num   = state32->trapno;
     }
-    
-    if (cpu_data_ptr[cnum]->lcpu.package->num_idle == topoParms.nLThreadsPerPackage)
+    kprintf("Interrupt_Num: 0x%x\n", interrupt_num);
+    /*if (cpu_data_ptr[cnum]->lcpu.package->num_idle == topoParms.nLThreadsPerPackage)
         cpu_data_ptr[cnum]->cpu_hwIntpexits[interrupt_num]++;
     if (interrupt_num == (LAPIC_DEFAULT_INTERRUPT_BASE + LAPIC_INTERPROCESSOR_INTERRUPT))
         itype = 1;
     else if (interrupt_num == (LAPIC_DEFAULT_INTERRUPT_BASE + LAPIC_TIMER_INTERRUPT))
         itype = 2;
     else
-        itype = 3;
-    
+        itype = 3;*/
     //KERNEL_DEBUG_CONSTANT_IST(KDEBUG_TRACE, DBG_CODE(DBG_EXCP_INTR, 0) | DBG_FUNC_START, interrupt_num, (user_mode ? rip : VM_KERNEL_UNSLIDE(rip)), user_mode, itype, 0);
     //SCHED_STATS_INTERRUPT(current_processor());
     
@@ -101,9 +100,17 @@ interrupt(x86_saved_state_t *state) {
      * Handle local APIC interrupts
      * else call platform expert for devices.
      */
-    //if (!lapic_interrupt(interrupt_num, state)) {
-    //    PE_incoming_interrupt(interrupt_num);
-    //}
+    if (interrupt_num >= 0xD0 && interrupt_num <= 0xDF) {
+        if (interrupt_num < 0xD8) {
+            outb(0x20,0x20);
+        } else {
+            outb(0x20, 0x20); outb(0xA0, 0x20);
+        }
+    }
+    
+    if (!lapic_interrupt(interrupt_num, state)) {
+        kprintf("");//Platform_incoming_interrupt(interrupt_num);
+    }
     
     if (__improbable(get_preemption_level() != ipl)) {
         panic("Preemption level altered by interrupt vector 0x%x: initial 0x%x, final: 0x%x\n", interrupt_num, ipl, get_preemption_level());
@@ -477,7 +484,6 @@ kernel_trap(x86_saved_state_t	*state,
 	}
 	pal_cli();
 	panic_trap(saved_state, trap_pl);
-    for (; ;) { }
 	/*
 	 * NO RETURN
 	 */

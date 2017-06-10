@@ -13,7 +13,7 @@
 #include <i386/asm.h>
 
 /*
- * void bzero(char * addr, size_t length)
+ * void bzero(void * addr, size_t length)
  */
 Entry(blkclr)
 ENTRY2(bzero,__bzero)

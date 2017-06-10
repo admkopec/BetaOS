@@ -9,70 +9,64 @@
 // To be implemented properly
 
 #include "IntelE1000Controller.hpp"
+#include "InterruptController.hpp"
 #include "MMIOUtils.hpp"
 #include <stdint.h>
 #include <i386/pio.h>
 
-E1000::E1000()  { }
-E1000::~E1000() { }
+#define super Controller
+#define Log(x ...) printf("IntelE1000Controller: " x)
 
-int E1000::init(PCI * _pciConfigHeader) {
-    if (_pciConfigHeader->VendorID() != Intel_Vendor) {
+int E1000::init(PCI * pciConfigHeader) {
+    if (!(pciConfigHeader->VendorID() == Intel_Vendor && ((pciConfigHeader->DeviceID() == E1000_82579LM) || (pciConfigHeader->DeviceID() == E1000_DEV) || (pciConfigHeader->DeviceID() == E1000_I217) || (pciConfigHeader->DeviceID() == E1000_82577LM) || (pciConfigHeader->DeviceID() == E1000_82579V)))) {
         return -1;
     }
-    if (_pciConfigHeader->DeviceID() != E1000_DEV || _pciConfigHeader->DeviceID() != E1000_I217 || _pciConfigHeader->DeviceID() != E1000_82577LM || _pciConfigHeader->DeviceID() != E1000_82579LM) {
-        //printf("IntelE1000Controller: Not found device id: %X\n", _pciConfigHeader->DeviceID());
-        return -1;
-    }
-    
-    // Get BAR0 type, io_base address and MMIO base address
-    //bar_type = pciConfigHeader->getPCIBarType(0);
-    //io_base = pciConfigHeader->getPCIBar(PCI_BAR_IO) & ~1;
-    //mem_base = pciConfigHeader->getPCIBar( PCI_BAR_MEM) & ~3;
-    
     
     // Enable bus mastering
     //pciConfigHeader->enablePCIBusMastering();
     eerprom_exists = false;
-    bar_type = _pciConfigHeader->getBAR(0);
-    mem_base = (uintptr_t)_pciConfigHeader->BAR().u.address;
-    io_base  = _pciConfigHeader->BAR().u.port;
-    printf("IntelE1000Controller: BAR type    %X\n", bar_type);
-    printf("IntelE1000Controller: BAR port    %X\n", io_base);
-    printf("IntelE1000Controller: BAR address %X\n", mem_base);
-    //mem_base = _pciConfigHeader->BAR() & ~3;
-    //mem_base = 0xF0000000;
-    
+    bar_type = pciConfigHeader->getBAR(0);
+    Log("BAR type    %X\n", bar_type);
+    if (bar_type == 0x1) {
+        io_base  = pciConfigHeader->BAR().u.port;
+        Log("BAR port    %X\n", io_base);
+    } else {
+        mem_base = (uintptr_t)pciConfigHeader->BAR().u.address;
+        Log("BAR address %X\n", mem_base);
+    }
+    intline = pciConfigHeader->IntLine();
+    Used_ = true;
     return 0;
 }
 
-bool E1000::start() {
+void E1000::start() {
     detectEEProm();
-    if (!readMACAddress()) return false;
+    if (!readMACAddress())
+        return /*false*/;
     //printMac();
     //startLink();
-    
+    Log("IRQ = %d\n", intline);
     for(int i = 0; i < 0x80; i++)
         writeCommand(0x5200 + i*4, 0);
-    if (/*interruptManager->registerInterrupt(IRQ0+pciConfigHeader->getIntLine(),this)*/1) {
-        //enableInterrupt();
+    if (!Interrupt::RegisterInterrupt(intline, NULL)/*interruptManager->registerInterrupt(IRQ0+pciConfigHeader->getIntLine(),this)*/) {
+        enableInterrupt();
         rxinit();
         txinit();
-        printf("IntelE1000Controller: Device is running!\n");
-        return true;
+        Log("Device is running!\n");
+        return /*true*/;
     } else
-        return false;
+        return /*false*/;
 }
 
 void E1000::rxinit() {
     uint8_t * ptr;
     struct e1000_rx_desc *descs;
     
-    ptr = (uint8_t *)((sizeof(struct e1000_rx_desc)*E1000_NUM_RX_DESC + 16)); // Should be a physical address
+    ptr = (uint8_t *)OSRuntime::OSMalloc((sizeof(struct e1000_rx_desc)*E1000_NUM_RX_DESC + 16)); // Should be a physical address
     
     descs = (struct e1000_rx_desc *)ptr;
     for(int i = 0; i < E1000_NUM_RX_DESC; i++) {
-        rx_descs[i] = (struct e1000_rx_desc *)((uint8_t *)descs + i*16); // Should be a physical address
+        rx_descs[i] = (struct e1000_rx_desc *)((uint8_t *)descs + i*16);
         rx_descs[i]->addr = (uint64_t)(uint8_t *)((8192 + 16));
         rx_descs[i]->status = 0;
     }
@@ -97,7 +91,7 @@ void E1000::txinit() {
     uint8_t *  ptr;
     struct e1000_tx_desc *descs;
     
-    ptr = (uint8_t *)((sizeof(struct e1000_tx_desc)*E1000_NUM_TX_DESC + 16)); // Should be a physical address
+    ptr = (uint8_t *)OSRuntime::OSMalloc((sizeof(struct e1000_tx_desc)*E1000_NUM_TX_DESC + 16)); // Should be a physical address
     
     descs = (struct e1000_tx_desc *)ptr;
     for(int i = 0; i < E1000_NUM_TX_DESC; i++) {
@@ -138,9 +132,10 @@ void E1000::handleReceive() {
     
     while((rx_descs[rx_cur]->status & 0x1)) {
         got_packet = true;
-        __unused uint8_t *buf = (uint8_t *)rx_descs[rx_cur]->addr;
-        __unused uint16_t len = rx_descs[rx_cur]->length;
+        uint8_t *buf = (uint8_t *)rx_descs[rx_cur]->addr;
+        uint16_t len = rx_descs[rx_cur]->length;
         
+        Log("Packet: %s length: %d\n", buf, len);
         // Here inject the received packet into the network stack
         
         rx_descs[rx_cur]->status = 0;
@@ -221,6 +216,13 @@ bool E1000::readMACAddress() {
 uint8_t * E1000::getMacAddress() {
     readMACAddress();
     return mac;
+}
+
+void E1000::enableInterrupt() {
+    writeCommand(REG_IMASK ,0x1F6DC);
+    writeCommand(REG_IMASK ,0xFF & ~4);
+    readCommand(0xC0);
+    
 }
 
 uint32_t E1000::eepromRead( uint8_t addr) {

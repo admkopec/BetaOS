@@ -24,29 +24,14 @@ extern void
 change_color(uint32_t foreground, uint32_t background);
 extern void
 clear_screen();
-extern void
-scroll_up();
 
 /* Commands prototypes */
 
 void help();
 void version();
-void time_full();
-void time_short();
-void time_absolute();
-void pciTest();
-void get_platformstate(void);
-void testassert() {
-    assert(1==0);
-}
-void testscroll() {
-    scroll_up();
-}
-void inter() {
-    asm("int $0x20");
-}
+void time_(int argc, char* argv[]);
 
-void addCommand(char* name, __unused char* desc, void (*run)(void)) {
+void addCommand(char* name, __unused char* desc, void (*run)(int argc, char* argv[])) {
     for (int i=0; i<num; i++) {
         if (command[i].name==name) {
             error("Failed to add command. Reason: The command's name's been already taken");
@@ -77,23 +62,44 @@ void CommandInit() {
     addCommand("version",       "Displays version of BetaOS",                               version);
     addCommand("reboot",        "Reboots the computer",                                     reboot);
     addCommand("clear",         "Clears the screen",                                        clear_screen);
-    addCommand("time",          "Displays the actual time",                                 time_short);
-    addCommand("time long",     "Displays the actual time in long version",                 time_full);
-    addCommand("time absolute", "Displays the actual time in seconds since 1 January 1970", time_absolute);
-    addCommand("shut down",     "Shut downs the computer",                                  shutdown);
-    addCommand("pciTest",       "Tests PCI",                                                pciTest);
-    addCommand("assert",        "Assert",                                                   testassert);
-    addCommand("Platform",      "Prints Platform State boot args",                          get_platformstate);
-    addCommand("scroll up",     "Tests if scroll up doesn't crash CPU",                     testscroll);
-    addCommand("int",           "Sends Interrput $0x20 to CPU",                             inter);
+    addCommand("time",          "Displays the actual time",                                 time_);
+    addCommand("shutdown",      "Shut downs the computer",                                  shutdown);
+    addCommand("stop",          "Shut downs the computer",                                  shutdown);
 }
 
 void findcommand() {
     char comm[256];
+    int argc = 0;
+    char *argv[16];
     gets(comm);
+    char* p = comm;
+    bool arg = false;
+    for (; ;) {
+        char ch = *p;
+        if (!ch) {
+            break;
+        }
+        
+        bool Space = ch == ' ' || ch == '\t';
+        if (arg) {
+            if (Space) {
+                *p = '\0';
+                arg = false;
+            }
+        } else {
+            if (!Space) {
+                if (argc < 16) {
+                    argv[argc] = p;
+                    argc++;
+                }
+                arg = true;
+            }
+        }
+        p++;
+    }
     for (int i=0; i<num; i++) {
-        if (strcmp(comm, command[i].name)) {
-            command[i].run();
+        if (strcmp(argv[0], command[i].name)) {
+            command[i].run(argc, argv);
             return;
         }
     }
@@ -108,32 +114,27 @@ void help() {
     kprintf("1. Command list\n");
     kprintf("2. Basic information about the OS\n");
     kprintf("3. Exit help\n");
-    for (; ;) {
-        char menuentry=getchar();
-        if (menuentry=='1') {
-            clear_screen();
-            for (int i=0; i<num; i++) {
-                kprintf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
-            }
-            for (; ;) {
-                if (getchar()=='\n') {
-                    help();
-                    return;
-                }
-            }
-        } else if(menuentry=='2') {
-            clear_screen();
-            version();
-            for (; ;) {
-                if (getchar()=='\n') {
-                    help();
-                    return;
-                }
-            }
-        } else if(menuentry=='3') {
-            clear_screen();
+    char menuentry=getchar();
+    if (menuentry=='1') {
+        clear_screen();
+        for (int i=0; i<num; i++) {
+            kprintf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
+        }
+            
+        if (getchar()=='\n') {
+            help();
             return;
         }
+    } else if(menuentry=='2') {
+        clear_screen();
+        version();
+        if (getchar()=='\n') {
+            help();
+            return;
+        }
+    } else if(menuentry=='3') {
+        clear_screen();
+        return;
     }
 }
 #include <platform/platform.h>
@@ -148,57 +149,23 @@ void version() {
     kprintf("Memory %d GB\n", Platform_state.bootArgs->PhysicalMemorySize/GB);
 }
 
-void get_platformstate(void) {
-    kprintf("revision      0x%X\n",     Platform_state.bootArgs->Revision);
-    kprintf("version       0x%X\n",     Platform_state.bootArgs->Version);
-    kprintf("command line  %s\n",       Platform_state.bootArgs->CommandLine);
-    kprintf("memory map    0x%X\n",     Platform_state.bootArgs->MemoryMap);
-    kprintf("memory map sz 0x%X\n",     Platform_state.bootArgs->MemoryMapSize);
-    kprintf("kaddr         0x%X\n",     Platform_state.bootArgs->kaddr);
-    kprintf("ksize         0x%X\n",     Platform_state.bootArgs->ksize);
-    kprintf("bootargs: %p, &ksize: %p &kaddr: %p\n",
-                                        Platform_state.bootArgs,
-                                       &Platform_state.bootArgs->ksize,
-                                       &Platform_state.bootArgs->kaddr);
-    kprintf("SMBIOS mem sz 0x%llx\n",   Platform_state.bootArgs->PhysicalMemorySize);
-    kprintf("EFI mode      %d\n",       Platform_state.bootArgs->efiMode);
-    kprintf("Video BAR     0x%X\n",     Platform_state.bootArgs->Video.v_baseAddr);
-    kprintf("Video Display %d\n",       Platform_state.bootArgs->Video.v_display);
-    kprintf("Video rowbyte %d\n",       Platform_state.bootArgs->Video.v_rowBytes);
-    kprintf("Video width   %d\n",       Platform_state.bootArgs->Video.v_width);
-    kprintf("Video height  %d\n",       Platform_state.bootArgs->Video.v_height);
-    kprintf("Video depth   %d\n",       Platform_state.bootArgs->Video.v_depth);
-}
-
-void time_full() {
-    gettime();
-    kprintf("%d:%02d:%02d %s\n", hour, minute, second, pmam);
-    kprintf("%s, %s %d, %d\n", dayofweeklong, monthl, day, year);
-}
-
-void time_short() {
-    gettime();
-    kprintf("%s %d:%02d %s\n", dayofweekshort, hour, minute, pmam);
-}
 #include <i386/rtclock.h>
-void time_absolute() {
-    kprintf("Absolute time is: %d\n", time());
-    kprintf("Mach Absolute time is: %d\n", mach_absolute_time());
-}
-#include <i386/pci.h>
-void pciTest() {
-    kprintf("Should I dump? (Y/N) //For now only dump works ");
-    char yn;
-    for (;;) {
-        yn = getchar();
-        if (yn=='Y'||yn=='N'||yn=='y'||yn=='n') {
-            break;
+void time_(int argc, char* argv[]) {
+    gettime();
+    if (argc == 2) {
+        if(strcmp(argv[1], "long")) {
+            kprintf("%d:%02d:%02d %s\n", hour, minute, second, pmam);
+            kprintf("%s, %s %d, %d\n", dayofweeklong, monthl, day, year);
+        } else if (strcmp(argv[1], "absolute")) {
+            kprintf("Absolute time is: %d\n", time());
+            kprintf("Mach Absolute time is: %d\n", mach_absolute_time());
+        } else {
+            goto usage;
         }
+    } else if (argc == 1) {
+        kprintf("%s %d:%02d %s\n", dayofweekshort, hour, minute, pmam);
+    } else {
+    usage:
+        kprintf("Usage: time [long | absolute]\n");
     }
-    if (yn=='Y'||yn=='y') {
-        kprintf("%c\n", yn);
-        pcidump();
-    }
-//#include <modules/SATAController.h>
-    //testSATA();   // Crashes CPU
 }

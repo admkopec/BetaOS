@@ -14,6 +14,7 @@
 #include <i386/vm_param.h>
 
 #include <stdio.h>
+#include <time.h>
 
 bool enable=true;
 bool early = false;
@@ -117,7 +118,14 @@ panicing:
         kprintf("\nCPU Halted");
         pal_stop_cpu(true);
     } else {
-        for (int i = 0; i < 10000; i++) { kprintf(""); } // Wait a while
+        absolute_time_t start_time = time();
+    condition:
+        if ((start_time + 3) < time()) {
+            goto reboot_;
+        } else {
+            goto condition;
+        }
+    reboot_:
         reboot();
     }
 }

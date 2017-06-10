@@ -13,13 +13,13 @@
 #include "PCIController.hpp"
 #include <i386/pio.h>
 
+#define super Controller
+#define Log(x ...) printf("RTL8111Controller: " x)
 
 //uint8_t     bar_type = 0;                 // Type of BAR0
 //uint16_t    io_base  = 0xD001;            // IO Base Address
 //uint64_t    mem_base = 0xEA10000C;        // MMIO Base Address
 //bool        eeprom_exists = false;
-
-RTL8111::RTL8111() { }
 
 int RTL8111::init(PCI *h) {
     if (h->VendorID() != Realtek_Vendor) {
@@ -30,20 +30,21 @@ int RTL8111::init(PCI *h) {
     }
     
     bar_type = h->getBAR(0);
-    io_base  = h->BAR().u.port;
-    mem_base = (uintptr_t)h->BAR().u.address;
-    printf("RTL8111Controller: BAR type     %X\n", bar_type);
-    printf("RTL8111Controller: BAR Port:    %X\n", io_base);
-    printf("RTL8111Controller: BAR Address: %X\n", mem_base);
-    
+    Log("BAR type     %X\n", bar_type);
+    if (bar_type == 0x1) {
+        io_base  = h->BAR().u.port;
+        Log("BAR Port:    %X\n", io_base);
+    } else {
+        mem_base = (uintptr_t)h->BAR().u.address;
+        Log("BAR Address: %X\n", mem_base);
+    }
+    Used_ = true;
     return 0;
 }
 
 void RTL8111::start() {
-    //bar_type = 1;
-    //io_base  = 0xD001;
-    //eeprom_exists = false;
     detectEEProm();
+    Log("EEProm = %d\n", eeprom_exists);
 }
 
 #define REG_EEPROM      0x0014

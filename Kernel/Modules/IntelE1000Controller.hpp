@@ -10,7 +10,7 @@
 #define IntelE1000Controller_hpp
 
 #include <stdio.h>
-#include "PCIController.hpp"
+#include "Controller.hpp"
 
 #define Intel_Vendor   0x8086  // Vendor ID for Intel
 #define E1000_DEV      0x100E  // Device ID for the e1000 Qemu, Bochs, and VirtualBox emmulated NICs
@@ -129,9 +129,10 @@ struct e1000_tx_desc {
     volatile uint16_t special;
 } __attribute__((packed));
 
-class E1000 /*: public NetworkDriver*/ {
+class E1000 : public Controller /*: public NetworkDriver*/ {
 private:
     uint8_t     bar_type;       // Type of BOR0
+    uint8_t     intline;        // Interrupt Line
     uint16_t    io_base;        // IO Base Address
     uint64_t    mem_base;       // MMIO Base Address
     bool        eerprom_exists; // A flag indicating if eeprom exists
@@ -156,14 +157,11 @@ private:
     void        enableInterrupt();      // Enable Interrupts
     void        handleReceive();        // Handle a packet reception.
 public:
-    
-    E1000();
-    int         init(PCI *h);
-    bool        start();                                        // perform initialization tasks and starts the driver
+    virtual int  init(PCI *h) override;
+    virtual void start() override;                              // perform initialization tasks and starts the driver
     void        fire(/*InterruptContext * p_interruptContext*/);// This method should be called by the interrupt handler
     uint8_t*    getMacAddress();                                // Returns the MAC address
     int         sendPacket(const void* p_data, uint16_t p_len); // Send a packet
-    ~E1000();                                                   // Default Destructor
 };
 
 #endif /* IntelE1000Controller_hpp */

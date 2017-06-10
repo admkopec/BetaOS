@@ -18,6 +18,8 @@
 #include <sys/cdefs.h>
 #include <kernel/kern_return.h>
 
+void cpu_init(void); // Temp
+
 kern_return_t intel_startCPU(int slot_number);
 kern_return_t intel_startCPU_fast(int slot_number);
 void          i386_init_slave(void);

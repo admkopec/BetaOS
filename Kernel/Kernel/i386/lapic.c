@@ -28,7 +28,7 @@ static vm_offset_t      lapic_vbase;	/* Virtual base memory-mapped regs */
 //static unsigned lapic_error_count_threshold = 5;
 //static bool     lapic_dont_panic = FALSE;
 /* Base vector for local APIC interrupt sources */
-int lapic_interrupt_base = LAPIC_DEFAULT_INTERRUPT_BASE;
+int lapic_interrupt_base = LAPIC_REDUCED_INTERRUPT_BASE;
 int		lapic_to_cpu[MAX_LAPICIDS];
 int		cpu_to_lapic[MAX_CPUS];
 
@@ -100,7 +100,10 @@ legacy_init(void) {
     __unused vm_map_entry_t  entry;
     __unused vm_map_offset_t lapic_vbase64;
     
+    kprintf("Legacy Init\n");
+    
     if (lapic_vbase == 0) {
+        lapic_vbase = io_map(lapic_pbase, round_page(LAPIC_SIZE), VM_WIMG_IO);
         //lapic_vbase64 = (vm_map_offset_t)vm_map_min(kernel_map);
     }
     
@@ -143,7 +146,7 @@ static void
 x2apic_init(void) {
 	uint32_t	low;
 	uint32_t	high;
-    
+ 
 	rdmsr(MSR_IA32_APIC_BASE, low, high);
 	if ((low  & MSR_IA32_APIC_BASE_EXTENDED) == 0)  {
 		 low |= MSR_IA32_APIC_BASE_EXTENDED;
@@ -197,7 +200,7 @@ lapic_init(void) {
     is_x2apic        = (low & MSR_IA32_APIC_BASE_EXTENDED) != 0;
     lapic_pbase      = (low & MSR_IA32_APIC_BASE_BASE);
     
-    kprintf("MSR_IA32_APIC_BASE 0x%llx %s %s mode %s\n", lapic_pbase, is_lapic_enabled ? "enabled" : "disabled", is_x2apic ? "extended" : "legacy", is_boot_cpu ? "BSP" : "AP");
+    DBG("MSR_IA32_APIC_BASE 0x%llx %s %s mode %s\n", lapic_pbase, is_lapic_enabled ? "enabled" : "disabled", is_x2apic ? "extended" : "legacy", is_boot_cpu ? "BSP" : "AP");
     if (!is_boot_cpu || !is_lapic_enabled) {
         panic("Unexpected local APIC state\n");
     }
@@ -208,10 +211,11 @@ lapic_init(void) {
     }
     
     lapic_ops = is_x2apic ? &x2apic_ops : &legacy_ops;
+    //lapic_ops = &x2apic_ops;
     
     LAPIC_INIT();
     
-    kprintf("ID: 0x%x LDR: 0x%x\n", LAPIC_READ(ID), LAPIC_READ(LDR));
+    DBG("ID: 0x%x LDR: 0x%x\n", LAPIC_READ(ID), LAPIC_READ(LDR));
     if ((LAPIC_READ(VERSION) & LAPIC_VERSION_MASK) < 0x14) {
         panic("Local APIC version 0x%x, 0x14 or more expected\n", (LAPIC_READ(VERSION) & LAPIC_VERSION_MASK));
     }
@@ -219,5 +223,74 @@ lapic_init(void) {
     lapic_cpu_map_init();
     lapic_cpu_map((LAPIC_READ(ID) >> LAPIC_ID_SHIFT) & LAPIC_ID_MASK, 0);
     current_cpu_datap()->cpu_phys_number = cpu_to_lapic[0];
-    kprintf("Boot CPU Local APIC ID 0x%x\n", cpu_to_lapic[0]);
+    DBG("Boot CPU Local APIC ID 0x%x\n", cpu_to_lapic[0]);
+    
+    LAPIC_WRITE(TPR, 0);
+    
+    LAPIC_WRITE(SVR, LAPIC_VECTOR(SPURIOUS) | LAPIC_SVR_ENABLE);
+    
+    
+    
+    LAPIC_WRITE(LVT_TIMER,   LAPIC_VECTOR(TIMER));
+    LAPIC_WRITE(LVT_PERFCNT, LAPIC_VECTOR(PERFCNT));
+    LAPIC_WRITE(LVT_THERMAL, LAPIC_VECTOR(THERMAL));
+    
+    // Clear ESR
+    LAPIC_WRITE(ERROR_STATUS, 0);
+    LAPIC_WRITE(ERROR_STATUS, 0);
+    
+    LAPIC_WRITE(LVT_ERROR, LAPIC_VECTOR(ERROR));
+    
+    asm("sti");
+    
+    uint32_t vec;
+    mp_disable_preemption();
+    vec = LAPIC_READ(LVT_TIMER);
+    vec &= ~(LAPIC_LVT_MASKED|LAPIC_LVT_PERIODIC|LAPIC_LVT_TSC_DEADLINE);
+    LAPIC_WRITE(LVT_TIMER, vec);
+    LAPIC_WRITE(TIMER_DIVIDE_CONFIG, divide_by_16);
+    mp_enable_preemption();
+    
+    LAPIC_WRITE(LVT_TIMER, LAPIC_READ(LVT_TIMER) & ~LAPIC_LVT_MASKED);
+    LAPIC_WRITE(TIMER_INITIAL_COUNT, 1000);
+}
+
+void
+lapic_end_of_interrupt(void) {
+    LAPIC_WRITE(EOI, 0);
+}
+
+void
+lapic_set_timer(lapic_timer_count_t initial_count) {
+    LAPIC_WRITE(LVT_TIMER, LAPIC_READ(LVT_TIMER) & ~LAPIC_LVT_MASKED);
+    LAPIC_WRITE(TIMER_INITIAL_COUNT, initial_count);
+}
+
+int
+lapic_interrupt( int interrupt_num, __unused x86_saved_state_t *state) {
+    interrupt_num -= lapic_interrupt_base;
+    
+    if (interrupt_num < 0) {
+        return 0;
+    }
+    
+    switch (interrupt_num) {
+        case LAPIC_TIMER_INTERRUPT:
+            lapic_end_of_interrupt();
+            kprintf("LAPIC Timer\n");
+            return 1;
+            break;
+        case LAPIC_ERROR_INTERRUPT:
+            LAPIC_WRITE(LVT_ERROR, LAPIC_READ(LVT_ERROR) | LAPIC_LVT_MASKED);
+            lapic_end_of_interrupt();
+            kprintf("LAPIC Error\n");
+            return 1;
+            break;
+        case LAPIC_SPURIOUS_INTERRUPT:
+            kprintf("SPURIOUS Interrupt\n");
+            return 1;
+            break;
+    }
+    
+    return 0;
 }

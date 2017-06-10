@@ -10,17 +10,14 @@
 #include <platform/platform.h>
 #include <sys/cdefs.h>
 #include "font.h"
-#include "../misc_protos.h"
-
-#define VM_MIN_KERNEL_ADDRESS		((vm_offset_t) 0xFFFFFF8000000000UL)
-#define FRAMEBUFFER_ALIAS           (VM_MIN_KERNEL_ADDRESS + 0x5000)
+//#include "../misc_protos.h"
 
 static uint32_t color_foreground = 0x00FFFFFF;
 static uint32_t color_background = 0x00000000;
 
-char painted_chars[1000][1000];
+/*char painted_chars[1000][1000];
 unsigned long painted_chars_row    = 0;
-unsigned long painted_chars_column = 0;
+unsigned long painted_chars_column = 0;*/
 
 void putc(int ch);
 
@@ -109,47 +106,71 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
     }
 }
 
-void
-scroll_up() {  // Fix clearing painted_chars every time scroll occures
-    int i_ = (int)painted_chars_row;
-    //painted_chars_row = 0;
-    //painted_chars_column = 0;
-    //int j = place;
-    clear_screen();
-    /*for (int i = 0; (i <= j); i++) {
-        putc(chars[i]);
-    }*/
-    /*for (uint32_t i = 0; ((i < painted_chars_row) && (i <= Platform_state.video.v_height/ISO_CHAR_HEIGHT)); i++) {
-        for (uint32_t j = 0; j < painted_chars_column; j++) {
-            paint_char(j*ISO_CHAR_WIDTH, i*ISO_CHAR_HEIGHT, painted_chars[i][j]);
-        }
-    }*/
-    __unused unsigned long start_row = painted_chars_row - ((Platform_state.video.v_height/ISO_CHAR_HEIGHT)-1);
-    for (int i = (int)start_row; i <= i_; i++) {
-        //kprintf(painted_chars[i]);
-        for (int j = 0; j<200; j++) {
-            if (painted_chars[i][j]!='\0') {
-                //painted_chars[i-1][j] = 0;
-                //paint_char((unsigned int)(j*ISO_CHAR_WIDTH), (unsigned int)((start_row-(Platform_state.video.v_height/ISO_CHAR_HEIGHT))*ISO_CHAR_HEIGHT), painted_chars[i][j]);
-                putc(painted_chars[i][j]);
-            }
+extern void bcopy(void *, void *, size_t);
+
+static void
+clear_line(unsigned int xx, unsigned int yy) {
+    unsigned int start, end, i;
+    start = xx;
+    end = (unsigned int)((Platform_state.video.v_width) - 1);
+    
+    for (i = start; i <= end; i+=ISO_CHAR_WIDTH) {
+        paint_char(i, yy, ' ');
+    }
+}
+
+static void
+clear_screen_(unsigned int xx, unsigned int yy, unsigned int bottom) {
+    uint32_t *p, *endp, *_row;
+    int linelongs, _col;
+    int rowline, rowlongs;
+    
+    linelongs   = (int)(Platform_state.video.v_rowBytes * (ISO_CHAR_HEIGHT >> 2));
+    rowline     = (int)((((Platform_state.video.v_depth + 7) / 8) * Platform_state.video.v_width) >> 2);
+    rowlongs    = (int)(Platform_state.video.v_rowBytes >> 2);
+    
+    p    = (uint32_t *) Platform_state.video.v_baseAddr;
+    endp = (uint32_t *) Platform_state.video.v_baseAddr;
+    
+    clear_line(xx, yy);
+    if (yy < bottom - 1) {
+        p    += (yy + 1) * linelongs;
+        endp += bottom * linelongs;
+    }
+    
+    for (_row = p; _row < endp; _row += rowlongs) {
+        for (_col = 0; _col < rowline; _col++) {
+            *(_row+_col) = 0;
         }
     }
-    //column=0;
-    //row = (uint32_t)(Platform_state.video.v_height-(2*ISO_CHAR_HEIGHT));
+}
+void
+scroll_up() {  // Fix half line after to scrolls    // Fix for real hardware - stop reading from Framebuffer
+    uint32_t *from, *to, linelongs, i, line, rowline, rowscanline;
+    linelongs   = (uint32_t)(Platform_state.video.v_rowBytes * (ISO_CHAR_HEIGHT >> 2));
+    rowline     = (uint32_t)(Platform_state.video.v_rowBytes >> 2);
+    rowscanline = (uint32_t)((((Platform_state.video.v_depth + 7) / 8) * Platform_state.video.v_width) >> 2);
+    to   = (uint32_t *) Platform_state.video.v_baseAddr;
+    from = to + linelongs;
+    i    = (uint32_t)((Platform_state.video.v_height / ISO_CHAR_HEIGHT) - 1);
+    
+    while (i-- > 0) {
+        for (line = 0; line < ISO_CHAR_HEIGHT; line++) {
+            bcopy(from, to, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+            from += rowline;
+            to   += rowline;
+        }
+    }
+    clear_screen_(0, row, (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
+    clear_screen_(0, (uint32_t)((Platform_state.video.v_height) - ISO_CHAR_HEIGHT), (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
 }
 
 void
 putc(int ch) {
-    painted_chars[painted_chars_row][painted_chars_column] = ch;
     if (ch=='\n'||ch=='\r') {
-        painted_chars_row++;
-        painted_chars_column=0;
         if (row>=(Platform_state.video.v_height-(2*ISO_CHAR_HEIGHT))) {
-            //scroll_up();
-            clear_screen();
-            row=0;
-            column=0;
+            scroll_up();
+            column = 0;
             return;
         }
         row+=ISO_CHAR_HEIGHT;
@@ -158,14 +179,11 @@ putc(int ch) {
     }
     if (ch=='\b') {
         if (column>0) {
-            painted_chars_column--;
-            painted_chars[painted_chars_row][painted_chars_column] = '\0';
             column-=ISO_CHAR_WIDTH;
             paint_char(column, row, '\0');
             return;
         }
     }
-    painted_chars_column++;
     paint_char(column, row, ch);
     column+=ISO_CHAR_WIDTH;
     if (column>=(Platform_state.video.v_width)) {

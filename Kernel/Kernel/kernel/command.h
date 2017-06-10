@@ -14,7 +14,7 @@
 typedef struct {
     char* name;
     char* desc;
-    void (*run)(void);
+    void (*run)(int argc, char* argv[]);
 } Command_t;
 
 extern bool returnn;

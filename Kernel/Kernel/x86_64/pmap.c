@@ -416,7 +416,6 @@ pmap_map_bd(vm_offset_t virt, vm_map_offset_t start_addr, vm_map_offset_t end_ad
     while (start_addr < end_addr) {
         pte = pmap_pte(kernel_pmap, (vm_map_offset_t)virt);
         if (pte == PT_ENTRY_NULL) {
-            kprintf("I'm here in pmap_map_bd panic()!\n");
             panic("pmap_map_bd: Invalid kernel address!\n");
         }
         pmap_store_pte(pte, template);

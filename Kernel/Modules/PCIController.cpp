@@ -11,12 +11,12 @@
 #include <i386/machine_routines.h>
 
 #ifdef DEBUG
-#define DBG(x...) printf(x)
+#define DBG(x...) printf("PCIController: " x)
 #else
 #define DBG(x...)
 #endif
 
-extern vm_offset_t io_map(vm_offset_t phys_addr, vm_size_t size, unsigned int flags);
+extern "C" vm_offset_t io_map(vm_offset_t phys_addr, vm_size_t size, unsigned int flags);
 
 uint32_t pciGetConfig(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
     uint32_t address;
@@ -45,11 +45,11 @@ void PCI::init(int bus, int slot, int function) {
 }
 
 void PCI::getVendor() {
-    VendorID_ = (uint16_t)pciGetConfig(Bus, Slot, 0, 0);
+    VendorID_ = (uint16_t)pciGetConfig(Bus, Slot, Function, 0);
 }
 
 void PCI::getDevice() {
-    DeviceID_ = (uint16_t)(pciGetConfig(Bus, Slot, 0, 0) >> 16);
+    DeviceID_ = (uint16_t)(pciGetConfig(Bus, Slot, Function, 0) >> 16);
 }
 
 void PCI::getHeader() {
@@ -57,6 +57,7 @@ void PCI::getHeader() {
     ClassCode_  = (uint8_t)(pciGetConfig(Bus, Slot, Function, 0x08) >> 24);
     SubClass_   = (uint8_t)(pciGetConfig(Bus, Slot, Function, 0x08) >> 16);
     ProgIF_     = (uint8_t)(pciGetConfig(Bus, Slot, Function, 0x08) >>  8);
+    IntLine_    = (uint8_t)(pciGetConfig(Bus, Slot, Function, 0x3C) >>  0);
 }
 
 static void ReadBar(uint16_t index, uint32_t *address, uint32_t *mask, uint8_t bus, uint8_t slot, uint8_t func) {
@@ -71,41 +72,51 @@ int PCI::getBAR(uint16_t index) {
     uint32_t addressLow;
     uint32_t maskLow;
     
-    ReadBar(index, &addressLow, &maskLow, Bus, Slot, Function);
+    ReadBar(index, (&addressLow), (&maskLow), Bus, Slot, Function);
     
     if (addressLow & 0x04) {            // 64-bit BAR
         uint32_t addressHigh;
         uint32_t maskHigh;
         
-        ReadBar(index, &addressHigh, &maskHigh, Bus, Slot, Function);
+        ReadBar(index+1, (&addressHigh), (&maskHigh), Bus, Slot, Function);
         
-        BAR_.u.address  = (void *)(((uintptr_t) addressHigh << 32) | (addressLow & ~0xF));
+        //BAR_.u.address  = (uint64_t)(((uintptr_t) addressHigh << 32) | (addressLow & ~0xF));
+        BAR_.u.address  = (uint64_t)(((uint64_t)(addressLow & 0xFFFFFFF0) + ((uint64_t)(addressHigh & 0xFFFFFFFF) << 32)));
         BAR_.size       = ~(((uint64_t)maskHigh << 32) | (maskLow & ~0xF)) + 1;
         BAR_.flags      = addressLow & 0xF;
         
-        //BAR_.u.address  = (void *)(io_map((vm_offset_t)BAR_.u.address, BAR_.size, VM_WIMG_IO));
+        BAR_.u.address  = (uint64_t)(io_map((vm_map_offset_t)(BAR_.u.address/* & ~3*/), round_page(BAR_.size), VM_WIMG_IO));
         
         return 0x04;
     } else if (addressLow & 0x01) {     // IO BAR
-        BAR_.u.port     = (uint16_t)(addressLow & ~0x3);
+        BAR_.u.port     = (uint16_t)(addressLow & 0xFFFFFFFC/*~0x3*/);
         BAR_.size       = (uint16_t)(~(maskLow & ~0x3) + 1);
         BAR_.flags      = addressLow & 0x3;
         
         return 0x01;
     } else {                            // 32-bit BAR
-        BAR_.u.address  = (void *)((uintptr_t)(addressLow & ~0xF));
+        BAR_.u.address  = (uint64_t)((addressLow & 0xFFFFFFF0/*~0xF*/));
         BAR_.size       = ~(maskLow & ~0xF) + 1;
         BAR_.flags      = addressLow & 0xF;
         
-        //BAR_.u.address  = (void *)(io_map((vm_offset_t)BAR_.u.address, BAR_.size, VM_WIMG_IO));
+        BAR_.u.address  = (uint64_t)(io_map((vm_map_offset_t)(BAR_.u.address/* & ~3*/), round_page(BAR_.size), VM_WIMG_IO));
         
         return 0x00;
     }
 }
 
-uint16_t PCI::VendorID()  { return VendorID_;  }
-uint16_t PCI::DeviceID()  { return DeviceID_;  }
-uint8_t  PCI::ClassCode() { return ClassCode_; }
-uint8_t  PCI::SubClass()  { return SubClass_;  }
-uint8_t  PCI::ProgIF()    { return ProgIF_;    }
-BAR      PCI::BAR()       { return BAR_;       }
+uint32_t PCI::Read32(uint8_t offset) {
+    return pciGetConfig(Bus, Slot, Function, offset);
+}
+
+void PCI::Write32(uint8_t offset, uint32_t data) {
+    pciWriteConfig(Bus, Slot, Function, offset, data);
+}
+
+uint16_t PCI::VendorID()    { return VendorID_;  }
+uint16_t PCI::DeviceID()    { return DeviceID_;  }
+uint8_t  PCI::ClassCode()   { return ClassCode_; }
+uint8_t  PCI::SubClass()    { return SubClass_;  }
+uint8_t  PCI::ProgIF()      { return ProgIF_;    }
+uint8_t  PCI::IntLine()     { return IntLine_;   }
+BAR      PCI::BAR()         { return BAR_;       }

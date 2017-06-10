@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <i386/pio.h>
-#include "PCIController.hpp"
+#include "Controller.hpp"
 
 #define PCI_USB_CLASS    0x0C
 #define PCI_USB_SUBCLASS 0x03
@@ -21,11 +21,11 @@
 #define PCI_USB_XHCI     0x30
 #define PCI_USB_OTHER    0x80
 
-class UHCI {
+class UHCI : public Controller {
     
 public:
-    int  init(PCI *pci);
-    void start();
+    virtual int  init(PCI *pci) override;
+    virtual void start() override;
 };
 
 #endif /* UHCIController_hpp */

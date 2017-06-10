@@ -7,7 +7,6 @@
 //
 
 #include <stdio.h>
-#include <Modules/PS2Controller.h>
 
 char *gets(char *buf)
 {

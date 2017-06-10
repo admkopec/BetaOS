@@ -10,6 +10,7 @@
 #define vm_map_h
 
 #include <i386/vm_types.h>
+#include <i386/vm_object.h>
 #include <i386/locks.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -23,8 +24,8 @@ typedef struct vm_map_entry	*vm_map_entry_t;
 #define VM_MAP_ENTRY_NULL	((vm_map_entry_t) 0)
 
 typedef union vm_map_object {
-    //vm_object_t		vmo_object;	/* object object */
-    vm_map_t		vmo_submap;	/* belongs to another map */
+    vm_object_t		vmo_object;     /* object object */
+    vm_map_t		vmo_submap;     /* belongs to another map */
 } vm_map_object_t;
 
 struct vm_map_links {
@@ -56,30 +57,28 @@ struct vm_map_entry {
     vm_object_offset_t	vme_offset;	/* offset into object */
     
     unsigned int
-    /* boolean_t */	is_shared:1,	/* region is shared */
-    /* boolean_t */	is_sub_map:1,	/* Is "object" a submap? */
-    /* boolean_t */	in_transition:1, /* Entry being changed */
-    /* boolean_t */	needs_wakeup:1,	/* Waiters on in_transition */
+    /* boolean_t */     is_shared:1,	/* region is shared */
+    /* boolean_t */     is_sub_map:1,	/* Is "object" a submap? */
+    /* boolean_t */     in_transition:1, /* Entry being changed */
+    /* boolean_t */     needs_wakeup:1,	/* Waiters on in_transition */
     /* vm_behavior_t */ behavior:2,	/* user paging behavior hint */
     /* behavior is not defined for submap type */
-    /* boolean_t */	needs_copy:1,	/* object need to be copied? */
+    /* boolean_t */     needs_copy:1,	/* object need to be copied? */
     
     /* Only in task maps: */
-    /* vm_prot_t */	protection:3,	/* protection code */
-    /* vm_prot_t */	max_protection:3, /* maximum protection */
-    /* vm_inherit_t */ inheritance:2, /* inheritance */
-    /* boolean_t */	use_pmap:1,	/*
-                                 * use_pmap is overloaded:
-                                 * if "is_sub_map":
-                                 * 	use a nested pmap?
-                                 * else (i.e. if object):
-                                 * 	use pmap accounting
-                                 * 	for footprint?
-                                 */
-    /* boolean_t */	no_cache:1,	/* should new pages be cached? */
-    /* boolean_t */	permanent:1,	/* mapping can not be removed */
-    /* boolean_t */	superpage_size:1, /* use superpages of a certain size */
-    /* boolean_t */	map_aligned:1,	/* align to map's page size */
+    /* vm_prot_t */     protection:3,       /* protection code */
+    /* vm_prot_t */     max_protection:3,   /* maximum protection */
+    /* vm_inherit_t */  inheritance:2,      /* inheritance */
+    /* boolean_t */     use_pmap:1,         /* use_pmap is overloaded:
+                                             * if "is_sub_map":
+                                             * 	use a nested pmap?
+                                             * else (i.e. if object):
+                                             * 	use pmap accounting
+                                             * 	for footprint? */
+    /* boolean_t */	no_cache:1,         /* should new pages be cached? */
+    /* boolean_t */	permanent:1,        /* mapping can not be removed */
+    /* boolean_t */	superpage_size:1,   /* use superpages of a certain size */
+    /* boolean_t */	map_aligned:1,      /* align to map's page size */
     /* boolean_t */	zero_wired_pages:1, /* zero out the wired pages of
                                          * this entry it is being deleted
                                          * without unwiring them */
@@ -110,48 +109,60 @@ struct vm_map_entry {
 };
 
 struct _vm_map {
-    lck_rw_t                lock;		/* map lock */
-    struct vm_map_header	hdr;		/* Map entry header */
-#define min_offset		hdr.links.start	/* start of range */
-#define max_offset		hdr.links.end	/* end of range */
+    lck_rw_t                lock;           /* Map lock */
+    struct vm_map_header	hdr;            /* Map entry header */
+#define min_offset          hdr.links.start	/* start of range */
+#define max_offset          hdr.links.end	/* end of range */
 #define highest_entry_end	hdr.highest_entry_end_addr
-    pmap_t              pmap;		/* Physical map */
-    vm_map_size_t		size;		/* virtual size */
-    vm_map_size_t		user_wire_limit;/* rlimit on user locked memory */
-    vm_map_size_t		user_wire_size; /* current size of user locked memory in this map */
-    int			ref_count;	/* Reference count */
+    pmap_t                  pmap;           /* Physical map */
+    vm_map_size_t           size;           /* Virtual size */
+    vm_map_size_t           user_wire_limit;/* Rlimit on user locked memory */
+    vm_map_size_t           user_wire_size; /* Current size of user locked memory in this map */
+    int                     ref_count;      /* Reference count */
 #if	TASK_SWAPPER
-    int			res_count;	/* Residence count (swap) */
-    int			sw_state;	/* Swap state */
+    int                     res_count;      /* Residence count (swap) */
+    int                     sw_state;       /* Swap state */
 #endif	/* TASK_SWAPPER */
-    //decl_lck_mtx_data(,	s_lock)		/* Lock ref, res fields */
-    lck_mtx_ext_t		s_lock_ext;
-    vm_map_entry_t		hint;		/* hint for quick lookups */
-    struct vm_map_links*	hole_hint;	/* hint for quick hole lookups */
+    //decl_lck_mtx_data(,	s_lock)         /* Lock ref, res fields */
+    lck_mtx_ext_t           s_lock_ext;
+    vm_map_entry_t          hint;           /* Hint for quick lookups */
+    struct vm_map_links*	hole_hint;      /* Hint for quick hole lookups */
     union{
-        vm_map_entry_t		_first_free;	/* First free space hint */
-        struct vm_map_links*	_holes;		/* links all holes between entries */
-    }f_s;						/* Union for free space data structures being used */
+                vm_map_entry_t  _first_free;	/* First free space hint */
+        struct  vm_map_links*	_holes;         /* links all holes between entries */
+    }f_s;                                   /* Union for free space data structures being used */
     
 #define first_free		f_s._first_free
 #define holes_list		f_s._holes
     
     unsigned int
-    /* boolean_t */		wait_for_space:1, /* Should callers wait for space? */
-    /* boolean_t */		wiring_required:1, /* All memory wired? */
-    /* boolean_t */		no_zero_fill:1, /*No zero fill absent pages */
-    /* boolean_t */		mapped_in_other_pmaps:1, /*has this submap been mapped in maps that use a different pmap */
-    /* boolean_t */		switch_protect:1, /*  Protect map from write faults while switched */
-    /* boolean_t */		disable_vmentry_reuse:1, /*  All vm entries should keep using newer and higher addresses in the map */
-    /* boolean_t */		map_disallow_data_exec:1, /* Disallow execution from data pages on exec-permissive architectures */
+    /* boolean_t */		wait_for_space:1,       /* Should callers wait for space? */
+    /* boolean_t */		wiring_required:1,      /* All memory wired? */
+    /* boolean_t */		no_zero_fill:1,         /* No zero fill absent pages */
+    /* boolean_t */		mapped_in_other_pmaps:1,/* Has this submap been mapped in maps that use a different pmap */
+    /* boolean_t */		switch_protect:1,       /* Protect map from write faults while switched */
+    /* boolean_t */		disable_vmentry_reuse:1,/* All vm entries should keep using newer and higher addresses in the map */
+    /* boolean_t */		map_disallow_data_exec:1,/* Disallow execution from data pages on exec-permissive architectures */
     /* boolean_t */		holelistenabled:1,
     /* reserved */		pad:24;
-    unsigned int		timestamp;	/* Version number */
-    unsigned int		color_rr;	/* next color (not protected by a lock) */
+    unsigned int		timestamp;              /* Version number */
+    unsigned int		color_rr;               /* Next color (not protected by a lock) */
 #if CONFIG_FREEZE
-    void			*default_freezer_handle;
+    void                *default_freezer_handle;
 #endif
-    boolean_t		jit_entry_exists;
+    boolean_t           jit_entry_exists;
 } ;
+
+
+/*
+ *	Functions implemented as macros
+ */
+#define	vm_map_min(map) ((map)->min_offset) /* Lowest valid address in a map */
+
+#define	vm_map_max(map) ((map)->max_offset) /* Highest valid address */
+
+#define	vm_map_pmap(map) ((map)->pmap)      /* Physical map associated with this address map */
+
+#define	vm_map_verify_done(map, version) vm_map_unlock_read(map) /* Operation that required a verified lookup is now complete */
 
 #endif /* vm_map_h */

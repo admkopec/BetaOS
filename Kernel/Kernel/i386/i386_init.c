@@ -82,10 +82,17 @@ fillkpt(pt_entry_t *base, int prot, unsigned long src, int index, int count) {
         index++;
     }
 }
-
-/* Temporary */ unsigned long __stack_chk_guard = 0UL;
+#if UINT32_MAX == UINTPTR_MAX
+#define STACK_CHK_GUARD 0xe2dee396
+#else
+#define STACK_CHK_GUARD 0x595e9fbd94fda766
+#endif
+/* Temporary */
+uintptr_t __stack_chk_guard = STACK_CHK_GUARD;
+__attribute__((noreturn))
 void __stack_chk_fail(void) {
-    kprintf("Kernel stack memory corruption detected"); panic("");
+    panic("Kernel stack memory corruption detected");
+    for (; ;) { }
 }
 
 // Set up the physical mapping - NPHYSMAP GB of memory mapped at a high address
@@ -218,6 +225,7 @@ Idle_PTs_init(void) {
  */
 extern bool early;
 extern void acpi(void);
+extern void SearchForEntrySMBios(void);
 void
 vstart(vm_offset_t boot_args_start) {
     bool        is_boot_cpu = !(boot_args_start == 0);
@@ -241,6 +249,7 @@ vstart(vm_offset_t boot_args_start) {
         
         clear_screen();
         acpi();
+        SearchForEntrySMBios();
         
         DBG("revision      0x%X\n", kernelBootArgs->Revision);
         DBG("version       0x%X\n", kernelBootArgs->Version);
@@ -285,15 +294,13 @@ vstart(vm_offset_t boot_args_start) {
     if(is_boot_cpu) {
         cpu_desc_init64(cpu_datap(cpu));
         cpu_desc_load64(cpu_datap(cpu));
-        //kprintf("Int $0x1!\n");
-        //__asm__ volatile ("int $0x1");
-        //kprintf("Returned from Int $0x1!\n");
     } if (is_boot_cpu)
         cpu_mode_init(current_cpu_datap()); // cpu_mode_init() will be invoked on the APs via i386_init_slave()
     x86_init_wrapper(is_boot_cpu ? (uintptr_t) i386_init : (uintptr_t) i386_init_slave, cpu_datap(cpu)->cpu_int_stack_top);
 }
 
 extern bool enable;
+extern void APICInit(void);
 void
 i386_init(void) {
     //unsigned int max_mem;
@@ -301,11 +308,14 @@ i386_init(void) {
     //unsigned int cpus = 0;
     //bool         fidn;
     bool         IA32e = true;
-    master_cpu = 0;
-    //lapic_init();
-    i386_vm_init(max_mem_touse, IA32e, kernelBootArgs);
+    
     tsc_init();
     rtclock_early_init();
+    
+    master_cpu = 0;
+    cpu_init();
+    
+    i386_vm_init(max_mem_touse, IA32e, kernelBootArgs);
     enable = true;
     
     vm_offset_t v_physAddr = Platform_state.video.v_baseAddr & ~3;
@@ -332,10 +342,16 @@ i386_init(void) {
     early = false;
     DBG("Got Here!\n");
     
+    lapic_init();
+    APICInit();
+    
+    //pmInit();
+    
     kernel_main();
 }
 
 void
 i386_init_slave(void) {
-    i386_init();
+    kprintf("Init Slave!\n");
+    //i386_init();
 }

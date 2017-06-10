@@ -9,12 +9,14 @@
 #include <kernel/kalloc.h>
 #include <i386/vm_types.h>
 #include <i386/vm_map.h>
+#include <i386/vm_param.h>
 #include <stddef.h>
-#include "misc_protos.h"
+#include <i386/misc_protos.h>
 
 #define KALLOC_MAP_SIZE_MIN  (16  * 1024 * 1024)
 #define KALLOC_MAP_SIZE_MAX  (128 * 1024 * 1024)
 
+extern uint64_t first_avail;
 vm_map_t  kalloc_map;
 vm_size_t kalloc_max;
 vm_size_t kalloc_max_prerounded;
@@ -33,3 +35,18 @@ int	kalloc_fake_zone_index = -1; /* index of our fake zone in statistics arrays 
 
 vm_offset_t	kalloc_map_min;
 vm_offset_t	kalloc_map_max;
+
+// Simple allocation and free methods that need to be changed as soon as possible
+
+void * kalloc_(uint32_t size) {
+	uint64_t res;
+	res = (uint64_t) io_map(first_avail, size, 0);
+	first_avail += round_page(size);
+	return (void *) res;
+}
+
+void free_(void * data, uint32_t size) {
+    if (data + round_page(size) == (void *) first_avail) {
+        first_avail -= round_page(size);
+    }
+}

@@ -25,7 +25,7 @@ extern bool is_new_paging_enabled;
 extern void kprintf(const char *fmt, ...);
 extern void panic(const char* errormsg, ...);
 extern void kernel_main();
-extern void bcopy(const char *from, char *to, unsigned int count);
+extern void bcopy(const void *from, void *to, unsigned int count);
 extern void bzero(void * addr, size_t length);
 extern uint64_t tmrCvt(uint64_t time, uint64_t conversion);
 extern void i386_vm_init(uint64_t maxmem, bool IA32e, boot_args	*args);

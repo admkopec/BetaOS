@@ -18,8 +18,7 @@
 #include "misc_protos.h"
 
 //TODO:
-// * Add IDT                    Done (needs a few patches but working)
-// * Add APIC and enable IRQs   In progress....
+// * Add APIC and enable IRQs   In progress.... (Timer - working, Rest - not)
 // * Change pollchar() (start from waiting for IRQ 1 instead of polling)
 // * Add PCI driver             Partialy done
 // * Add SATA driver            Several tests have been conducted :)

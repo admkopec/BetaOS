@@ -132,7 +132,7 @@ void halt_cpu(void);
 void x86_triplefault();
 void x86_init_wrapper(unsigned long, unsigned long) __attribute__((noreturn));
 void bzero(void * addr, size_t length);
-void bcopy(const char * from, char * to, unsigned int count);
+void bcopy(const void * from, void * to, unsigned int count);
 
 #endif /* __ASSEMBLY__ */
 #endif /* asm_h */

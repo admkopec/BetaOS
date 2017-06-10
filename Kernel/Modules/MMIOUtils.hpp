@@ -10,6 +10,8 @@
 #define MMIOUtils_hpp
 
 #include <stdint.h>
+#include <stddef.h>
+#include <OSRuntime.hpp>
 
 class MMIOUtils {
 public:

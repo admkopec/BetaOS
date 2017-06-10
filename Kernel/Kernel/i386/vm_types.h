@@ -9,8 +9,6 @@
 #ifndef vm_types_h
 #define vm_types_h
 
-//#include <i386/pmap.h>
-
 /*
  * A vm_offset_t is a type-neutral pointer,
  * e.g. an offset into a virtual memory space.
@@ -57,7 +55,7 @@ typedef vm_offset_t     vm_address_t;
 
 typedef struct pmap                 *pmap_t;
 typedef struct _vm_map              *vm_map_t;
-//typedef struct vm_object            *vm_object_t;
+typedef struct vm_object            *vm_object_t;
 //typedef struct vm_object_fault_info *vm_object_fault_info_t;
 
 typedef uint64_t		vm_object_offset_t;

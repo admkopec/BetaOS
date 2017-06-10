@@ -127,6 +127,23 @@ typedef struct FADT {
     GenericAddressStructure X_GPE1Block;
 } FADT_t;
 
+typedef struct MADT {
+    struct ACPISDTHeader h;
+    uint32_t LocalControllerAddresss;
+    uint32_t Flags;
+    uint8_t  Entry;
+    uint8_t  EntryLength;
+} MADT_t;
+
+typedef struct {
+    uint8_t EntryType;
+    uint8_t EntryLength;
+    uint8_t ID;
+    uint8_t Reserved;
+    uint32_t Address;
+    uint32_t Interrupt;
+} IOAPICEntry;
+
 int64_t CompareGuid(EFI_GUID *GUID1, EFI_GUID *GUID2) {
     if (GUID1->Data1 == GUID2->Data1) {
         if (GUID1->Data2 == GUID2->Data2) {
@@ -171,7 +188,10 @@ word SLP_EN;
 word SCI_EN;
 byte PM1_CNT_LEN;
 
+extern uint32_t IOAPICAddressPhys;
+
 FADT_t * Fadt;
+MADT_t * Madt;
 
 static int
 ParseRSDP(ACPI_2_Description *RSDP) {
@@ -197,7 +217,25 @@ ParseRSDP(ACPI_2_Description *RSDP) {
     EntryPtr = (uint64_t*) (XSDT + 1);
     for (uint32_t i = 0; i < EntryCount; i++, EntryPtr++) {
         Entry = (ACPISDTHeader_t *) ((uint64_t) (*EntryPtr));
-        //kprintf("Found ACPI table: %s Version %d OEM ID: %s\n", Entry->Signature, Entry->Revision, Entry->OEMID);
+        if (!strncmp("APIC", Entry->Signature, 4)) {
+            DBG("Found MADT!\n");
+            Madt = (MADT_t *)Entry;
+            uint8_t* e;
+            uint8_t* eLength;
+            
+            e = &Madt->Entry;
+            eLength = &Madt->EntryLength;
+            
+            while (e < (uint8_t*)(Madt + Madt->h.Length)) {
+                if (*e == 1) {
+                    IOAPICAddressPhys = *((uint32_t*)(e + 4));
+                    DBG("IOAPIC Address: %X\n", IOAPICAddressPhys);
+                    break;
+                }
+                e = e + *eLength;
+                eLength = eLength + *eLength;
+            }
+        }
         if (!strncmp("FACP", Entry->Signature, 4)) {
             Fadt = (FADT_t *)Entry;
             if (!strncmp("DSDT", ((ACPISDTHeader_t*)(uintptr_t)(Fadt->Dsdt))->Signature, 4)) {
@@ -209,8 +247,6 @@ ParseRSDP(ACPI_2_Description *RSDP) {
                     if (strncmp(S5Addr, "_S5_", 4) == 0) {
                         break;
                     }
-                    if (memcmp(S5Addr, "_S5_", 4) == 0)
-                        break;
                     S5Addr++;
                 }
                 // check if \_S5 was found
@@ -245,14 +281,26 @@ ParseRSDP(ACPI_2_Description *RSDP) {
                         SLP_EN = 1<<13;
                         SCI_EN = 1;
 
-                        return 0;
+                        //return 0;
                     } else {
                         DBG("\\_S5 parse error.\n");
                     }
                 } else {
                     DBG("\\_S5 not present.\n");
                 }
-            }
+            } /*else if (!strncmp("APIC", Entry->Signature, 4)) {
+                Madt = (MADT_t *)Entry;
+                Entry_Madt* eMadt = (Entry_Madt *)&Madt->Entry;
+                for (bool break_ = false; break_ != true;) {
+                    if (eMadt->EntryType == 1) {
+                        IOAPICAddress = *(&eMadt->EntryType + sizeof(uint8_t)*4);
+                        kprintf("Found IOAPIC: Address: %d\n", IOAPICAddress);
+                        break_ = true;
+                        break;
+                    }
+                    eMadt = (Entry_Madt *)eMadt + eMadt->EntryLength;
+                }
+            }*/
         }
     }
 
@@ -300,16 +348,18 @@ int acpiEnable_(void) {
 }
 
 void printGuid(EFI_GUID g1) {
-    DBG("{0x%lx, 0x%x, 0x%x, {0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x}}\n", g1.Data1, g1.Data2, g1.Data3, g1.Data4[0], g1.Data4[1], g1.Data4[2], g1.Data4[3], g1.Data4[4], g1.Data4[5], g1.Data4[6], g1.Data4[7]);
+    DBG("0x%lX-0x%X-0x%X-0x%X%X-0x%X%X%X%X%X%X\n", g1.Data1, g1.Data2, g1.Data3, g1.Data4[0], g1.Data4[1], g1.Data4[2], g1.Data4[3], g1.Data4[4], g1.Data4[5], g1.Data4[6], g1.Data4[7]);
 }
 
 void acpi() {
     uint64_t Address;
     uint64_t Index;
     ACPI_2_Description *RSDP = (void *)0;
+    
+    //printGuid(((EFI_SYSTEM_TABLE_64 *)((uint64_t)(Platform_state.bootArgs->efiSystemTable)))->ConfigurationTable[4].VendorGuid);  // tab[4] for M4600 is APCI 2.0
 
     for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
-        if (*(uint64_t *)(ml_static_ptovirt(Address)) == 0x54445352 || !strncmp((const char*)((uint64_t *)(ml_static_ptovirt(Address))), "RSD PTR ", 8) /*|| !strcmp((const char*)(*(uint64_t *)(Address)), "RSD PTR ") || */) {
+        if (*(uint64_t *)(ml_static_ptovirt(Address)) == 0x54445352 || !strncmp((const char*)((uint64_t *)(ml_static_ptovirt(Address))), "RSD PTR ", 8)) {
             DBG("Found RSDP using Legacy Method!\n");
             RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
             goto parse;
@@ -358,8 +408,6 @@ parse:
 }
 
 void acpipoweroff(void) {
-    DBG("PM1a_CNT = 0x%x\n", PM1a_CNT);
-    DBG("*PM1a_CNT = 0x%x\n", PM1a);
     outw((unsigned int)(PM1a), SLP_TYPa | SLP_EN);
     if (PM1b_CNT != 0) {
         outw((unsigned int)(PM1b), SLP_TYPb | SLP_EN);

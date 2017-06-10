@@ -11,8 +11,10 @@
 #include <i386/asm.h>
 #include <i386/pio.h>
 #include <i386/acpi.h>
+#include "../Modules/ModulesController.hpp"
 
 void reboot() {
+    ModulesStopController();
     //acpireboot();  // Needs troubleshooting
     
     printf("Using legacy reboot method.\n");
@@ -27,6 +29,7 @@ void reboot() {
 }
 
 void shutdown() {
+    ModulesStopController();
     acpipoweroff();
     printf("Something went wrong!\nYou can now manually switch off your computer.");
     halt_cpu();

@@ -275,29 +275,23 @@ static inline int get_cpu_phys_number(void) {
 
 
 static inline void disable_preemption(void) {
-//#if defined(__clang__)
     cpu_data_t GS_RELATIVE *cpu_data = (cpu_data_t GS_RELATIVE *)0UL;
     cpu_data->cpu_preemption_level++;
-//#endif
 }
 
 static inline void enable_preemption(void) {
     assert(get_preemption_level() > 0);
-    
-//#if defined(__clang__)
+
     cpu_data_t GS_RELATIVE *cpu_data = (cpu_data_t GS_RELATIVE *)0UL;
     if (0 == --cpu_data->cpu_preemption_level)
         kernel_preempt_check();
-//#endif
 }
 
 static inline void enable_preemption_no_check(void) {
     assert(get_preemption_level() > 0);
     
-#if defined(__clang__)
     cpu_data_t GS_RELATIVE *cpu_data = (cpu_data_t GS_RELATIVE *)0UL;
     cpu_data->cpu_preemption_level--;
-#endif
 }
 
 static inline void mp_disable_preemption(void) {

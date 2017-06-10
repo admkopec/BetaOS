@@ -31,6 +31,7 @@ int UHCI::init(PCI* pci) {
     printf("UHCIController: UHCI found!\n");
     printf("UHCIController: UHCI Vendor: %X Device: %X\n", pci->VendorID(), pci->DeviceID());
     
+    Used_ = true;
     return 0;
 }
 

@@ -62,6 +62,11 @@ int pollchar() {
         if (c==0xE0) {
             e0ed=true;
         } else if (c > 0x53) {
+            if (c==0xAA||c==0xB6) {
+                goto end_shift;
+            } else {
+                return false;
+            }
             /* Unsupported */
         } else if (e0ed) {
             e0ed = false;
@@ -96,8 +101,9 @@ int pollchar() {
             shifted=true;
             c=inb(0x60);
             if (c==0xAA||c==0xB6) {
+            end_shift:
                 shifted=false;
-                return keymap[c][0];
+                return false;
             }
             return keymap[c][1];
         }

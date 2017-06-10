@@ -15,20 +15,20 @@
 #pragma pack(push, 1)             // enable 8-bit struct packing
 
 struct DMIEntryPoint {
-    uint8_t    anchor[5];
-    uint8_t    checksum;
+    uint8_t     signature[5];
+    uint8_t     checksum;
     uint16_t    tableLength;
-    uint32_t   tableAddress;
+    uint32_t    tableAddress;
     uint16_t    structureCount;
-    uint8_t    bcdRevision;
+    uint8_t     bcdRevision;
 };
 
 struct SMBEntryPoint {
-    uint8_t    anchor[4];
-    uint8_t    checksum;
-    uint8_t    entryPointLength;
-    uint8_t    majorVersion;
-    uint8_t    minorVersion;
+    uint8_t     signature[4];
+    uint8_t     checksum;
+    uint8_t     entryPointLength;
+    uint8_t     majorVersion;
+    uint8_t     minorVersion;
     uint16_t    maxStructureSize;
     uint8_t    entryPointRevision;
     uint8_t    formattedArea[5];
@@ -40,15 +40,14 @@ struct SMBEntryPoint {
 //
 
 struct SMBStructHeader {
-    uint8_t    type;
-    uint8_t    length;
+    uint8_t     type;
+    uint8_t     length;
     uint16_t    handle;
 };
 
 #define SMB_STRUCT_HEADER  SMBStructHeader header;
 
-struct SMBAnchor
-{
+struct SMBAnchor {
     const SMBStructHeader *	header;
     const uint8_t *			next;
     const uint8_t *			end;
@@ -416,8 +415,9 @@ struct SMBOemProcessorBusSpeed {
 
 class SMBiosController {
     void *      SMBiosTable;
-    uint16_t    SMBiosTableLength;
+    //uint16_t    SMBiosTableLength;
 public:
+    static uint16_t    SMBiosTableLength;
     int  init(void);
     void start(void);
 };

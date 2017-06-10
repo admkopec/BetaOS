@@ -12,7 +12,7 @@
 
 #include <i386/asm.h>
 
-/* void bcopy((const char *) from, (char *) to, (unsigned int) count) */
+/* void bcopy((const void *) from, (void *) to, (unsigned int) count) */
 
 ENTRY(bcopy)
 	xchgq	%rsi,%rdi

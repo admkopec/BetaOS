@@ -11,20 +11,28 @@
 
 //#include <stdio.h>
 #include <kernel/misc_protos.h>
+#ifdef __cplusplus
+#include "PCIController.hpp"
+#include "Controller.hpp"
+#endif /* __cplusplus */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
     void ModulesStartController();
+    void ModulesStopController();
+    void SearchForEntrySMBios();
     
 #ifdef __cplusplus
 }
-#define MAX_LOADED_MODULES 1024
+#define MAX_LOADED_MODULES 25
 class Modules {
+    uint32_t    LastLoadedModule = 0;
+    Controller* Controllers[MAX_LOADED_MODULES];
 public:
     void start(void);
+    void stop(void);
 };
-
 
 #endif /* __cplusplus */
 #endif /* ModulesController_hpp */
