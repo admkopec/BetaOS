@@ -9,7 +9,7 @@
 #ifndef _KERNEL_ARCH_H
 #define _KERNEL_ARCH_H
 
-void reboot();
-void shutdown();
+void reboot(void);
+void shutdown(void);
 
 #endif /* arch_h */

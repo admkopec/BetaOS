@@ -43,7 +43,7 @@
 #define PAGE_UP_KEY         0x9A
 #define PAGE_DOWN_KEY       0x9B
 
-int  pollchar();
-void updateLEDs();
+int  pollchar(void);
+void updateLEDs(void);
 
 #endif /* PS2Controller_h */

@@ -19,7 +19,7 @@ typedef struct {
 
 extern bool returnn;
 
-void CommandInit();
-void findcommand();
+void CommandInit(void);
+void findcommand(void);
 
 #endif /* command_h */

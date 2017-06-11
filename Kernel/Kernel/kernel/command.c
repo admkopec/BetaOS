@@ -23,13 +23,22 @@ Command_t command[MAXCOMMANDS];
 extern void
 change_color(uint32_t foreground, uint32_t background);
 extern void
-clear_screen();
+clear_screen(void);
 
 /* Commands prototypes */
 
-void help();
-void version();
+void help(int argc, char* argv[]);
+void version(int argc, char* argv[]);
 void time_(int argc, char* argv[]);
+void reboot_(__unused int argc,__unused char* argv[]) {
+    reboot();
+}
+void shutdown_(__unused int argc, __unused char* argv[]) {
+    shutdown();
+}
+void clear_screen_(__unused int argc, __unused char* argv[]) {
+    clear_screen();
+}
 
 void addCommand(char* name, __unused char* desc, void (*run)(int argc, char* argv[])) {
     for (int i=0; i<num; i++) {
@@ -60,11 +69,11 @@ void addCommand(char* name, __unused char* desc, void (*run)(int argc, char* arg
 void CommandInit() {
     addCommand("help",          "Help command",                                             help);
     addCommand("version",       "Displays version of BetaOS",                               version);
-    addCommand("reboot",        "Reboots the computer",                                     reboot);
-    addCommand("clear",         "Clears the screen",                                        clear_screen);
+    addCommand("reboot",        "Reboots the computer",                                     reboot_);
+    addCommand("clear",         "Clears the screen",                                        clear_screen_);
     addCommand("time",          "Displays the actual time",                                 time_);
-    addCommand("shutdown",      "Shut downs the computer",                                  shutdown);
-    addCommand("stop",          "Shut downs the computer",                                  shutdown);
+    addCommand("shutdown",      "Shut downs the computer",                                  shutdown_);
+    addCommand("stop",          "Shut downs the computer",                                  shutdown_);
 }
 
 void findcommand() {
@@ -108,7 +117,7 @@ void findcommand() {
 
 
 
-void help() {
+void help(int argc, char* argv[]) {
     clear_screen();
     kprintf("======================================HELP======================================\n");
     kprintf("1. Command list\n");
@@ -122,14 +131,14 @@ void help() {
         }
             
         if (getchar()=='\n') {
-            help();
+            help(argc, argv);
             return;
         }
     } else if(menuentry=='2') {
         clear_screen();
-        version();
+        version(argc, argv);
         if (getchar()=='\n') {
-            help();
+            help(argc, argv);
             return;
         }
     } else if(menuentry=='3') {
@@ -141,7 +150,7 @@ void help() {
 #include <platform/boot.h>
 #include <i386/cpuid.h>
 #include <i386/cpu_data.h>
-void version() {
+void version(__unused int argc, __unused char* argv[]) {
     kprintf("%s %d.%d %s\n%s\nBuild Number %s\n", OS_NAME, VERSION_MAJOR, VESRION_MINOR, BUILD_TYPE, COPYRIGHT, BUILD_NUMBER);
     
     kprintf("CPU Vendor %s\n", cpuid_info()->cpuid_vendor);

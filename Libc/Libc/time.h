@@ -37,13 +37,13 @@ enum {
     cmos_data    = 0x71
 };
 
-int get_update_in_progress_flag();
+int get_update_in_progress_flag(void);
 
 unsigned char get_RTC_register(int reg);
 
-void read_rtc();
+void read_rtc(void);
 
-void gettime();
+void gettime(void);
 
 time_t time(void);
 

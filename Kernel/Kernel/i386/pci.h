@@ -19,6 +19,5 @@ typedef struct {
 uint32_t pciGetConfig(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
 uint16_t pciGetVendor(uint8_t bus, uint8_t slot, uint8_t func);
 uint16_t pciGetDevice(uint8_t bus, uint8_t slot, uint8_t func);
-int pcidump();
 
 #endif /* pci_h */

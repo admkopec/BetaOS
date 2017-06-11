@@ -158,8 +158,10 @@ getval(char *s, long long *val, bool skip_equal_sign) {
         has_value = true;
     }
     if (has_value || skip_equal_sign) {
-        if (*s == '-')
-            sign = -1, s++;
+        if (*s == '-') {
+            sign = -1;
+            s++;
+        }
         intval = *s++-'0';
         radix = 10;
         if (intval == 0) {

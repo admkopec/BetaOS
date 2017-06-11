@@ -77,7 +77,7 @@ boolean_t	pmap_disable_kstack_nx = FALSE;
 
 extern long __stack_chk_guard[];
 
-extern void pmap_pcid_configure();
+extern void pmap_pcid_configure(void);
 
 extern	char			*first_avail;
 extern	vm_offset_t		virtual_avail, virtual_end;

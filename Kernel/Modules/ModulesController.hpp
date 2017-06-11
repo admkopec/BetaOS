@@ -19,9 +19,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    void ModulesStartController();
-    void ModulesStopController();
-    void SearchForEntrySMBios();
+    void ModulesStartController(void);
+    void ModulesStopController(void);
+    void SearchForEntrySMBios(void);
     
 #ifdef __cplusplus
 }

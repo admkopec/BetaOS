@@ -404,7 +404,7 @@ extern void cpuid_set_info(void);
 extern i386_vmm_info_t *cpuid_vmm_info(void);
 extern i386_cpu_info_t *cpuid_info(void);
 extern bool cpuid_vmm_present(void);
-extern uint64_t cpuid_features();
+extern uint64_t cpuid_features(void);
 extern uint64_t cpuid_leaf7_features(void);
 
 #endif /* __ASSEMBLY__ */
