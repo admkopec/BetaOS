@@ -14,7 +14,7 @@
 		3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */; };
 		3B389A5A1E6DD817009F1DE6 /* Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B389A581E6DD817009F1DE6 /* Controller.cpp */; };
 		3B3B78BE1E50D7F500F4C176 /* SMBiosController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */; };
-		3B4E19AB1EE81F9800256BD0 /* libc++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B4E19AA1EE81F9800256BD0 /* libc++.a */; };
+		3B45ABBB1EED69350035FC5D /* libc++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B45ABBA1EED69350035FC5D /* libc++.a */; };
 		3B588BCC1D95C89C00087C38 /* ModulesController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC01D95C89C00087C38 /* ModulesController.cpp */; };
 		3B588BCD1D95C89C00087C38 /* IntelE1000Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */; };
 		3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */; };
@@ -93,7 +93,7 @@
 		3B389A591E6DD817009F1DE6 /* Controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Controller.hpp; path = Modules/Controller.hpp; sourceTree = SOURCE_ROOT; };
 		3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SMBiosController.cpp; path = Modules/SMBiosController.cpp; sourceTree = SOURCE_ROOT; };
 		3B3B78BD1E50D7F500F4C176 /* SMBiosController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SMBiosController.hpp; path = Modules/SMBiosController.hpp; sourceTree = SOURCE_ROOT; };
-		3B4E19AA1EE81F9800256BD0 /* libc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libc++.a"; path = "../Libc++/build/Debug/libc++.a"; sourceTree = "<group>"; };
+		3B45ABBA1EED69350035FC5D /* libc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libc++.a"; path = "../../../../Developer/Xcode/DerivedData/BetaOS-gapbhrzafomgsbfxbixzumnpbwhr/Build/Products/Debug/libc++.a"; sourceTree = "<group>"; };
 		3B588BC01D95C89C00087C38 /* ModulesController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ModulesController.cpp; path = Modules/ModulesController.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntelE1000Controller.cpp; path = Modules/IntelE1000Controller.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RTL8111Controller.cpp; path = Modules/RTL8111Controller.cpp; sourceTree = SOURCE_ROOT; };
@@ -217,7 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B7865DD1D9591B800C015DF /* libc.a in Frameworks */,
-				3B4E19AB1EE81F9800256BD0 /* libc++.a in Frameworks */,
+				3B45ABBB1EED69350035FC5D /* libc++.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,7 +361,7 @@
 		3B7865DB1D9591B800C015DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3B4E19AA1EE81F9800256BD0 /* libc++.a */,
+				3B45ABBA1EED69350035FC5D /* libc++.a */,
 				3B7865DC1D9591B800C015DF /* libc.a */,
 			);
 			name = Frameworks;
@@ -492,7 +492,7 @@
 		3B7865B41D958FED00C015DF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Adam Kopeć";
 				TargetAttributes = {
 					3B7865BB1D958FED00C015DF = {
@@ -593,7 +593,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -601,7 +603,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -642,7 +648,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -650,7 +658,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -680,7 +692,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CURRENT_PROJECT_VERSION = 0.30;
+				CURRENT_PROJECT_VERSION = 0.31;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -760,7 +772,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CURRENT_PROJECT_VERSION = 0.30;
+				CURRENT_PROJECT_VERSION = 0.31;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_PREPROCESSOR_DEFINITIONS = (
