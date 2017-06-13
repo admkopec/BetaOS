@@ -16,6 +16,11 @@
 #define PCI_USB_SUBCLASS 0x03
 #define PCI_USB_XHCI     0x30
 
+#define USB_FULLSPEED  1
+#define USB_LOWSPEED   2
+#define USB_HIGHSPEED  3
+#define USB_SUPERSPEED 4
+
 #define kMaxRootPorts 30
 
 typedef struct {

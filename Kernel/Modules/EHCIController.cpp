@@ -154,8 +154,48 @@ EHCI::init(PCI *pci) {
     CapabilityRegisters  = (CapRegisters*)(pci->BAR().u.address);
     OperationalRegisters = (OpRegisters*) (pci->BAR().u.address + CapabilityRegisters->CapabilitiesLength);
     
+    uint16_t EECP = (CapabilityRegisters->HCCParams & HCCPARAMS_EECP_MASK) >> HCCPARAMS_EECP_SHIFT;
+    if (EECP >= 0x40) {
+        int EECP_ID = 0;
+        bool failed;
+        while (EECP) {
+            EECP_ID = pci->Read32(EECP);
+            if (EECP_ID == 1) {
+                Log("Found EECP\n");
+                break;
+            }
+            EECP = pci->Read32(EECP + 0x01);
+        }
+        
+        if ((EECP_ID == 1) && pci->Read32(EECP + 0x02) & 0x01) {
+            pci->Write32(EECP + 0x03, 0x01);
+            failed = true;
+            int i = 0;
+            while ((pci->Read32(EECP + 0x02) & 0x01) && (i < 10000)) {
+                printf("");
+                i++;
+            }
+            i = 0;
+            if (!(pci->Read32(EECP + 0x02) & 0x01)) {
+                while (!(pci->Read32(EECP + 0x03) & 0x01) && (i < 10000)) {
+                    printf("");
+                    i++;
+                }
+                if (pci->Read32(EECP + 0x03) & 0x01) {
+                    failed = false;
+                    Log("Legacy Support success!\n");
+                }
+            }
+            
+            if (failed) {
+                pci->Write32(EECP + 0x04, 0x0000);
+                Log("Legacy Support manual!\n");
+            }
+        }
+    }
+    
     OperationalRegisters->USBCommand |= CMD_RS;
-    if(!Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, 0, 100000)) {
+    if(Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, 0, 100000) != kOSReturnSuccess) {
         Log("Timeout on Start Host!\n");
         return kOSReturnTimeout;
     }
@@ -164,7 +204,7 @@ EHCI::init(PCI *pci) {
         OperationalRegisters->USBCommand &= ~CMD_RS;
     }
     
-    if (!Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, STS_HCHALTED, 100000)) {
+    if (Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, STS_HCHALTED, 100000) != kOSReturnSuccess) {
         Log("Timeout on Stop Host!\n");
         return kOSReturnTimeout;
     }
@@ -244,24 +284,6 @@ EHCI::init(PCI *pci) {
         FrameList[i] = PTR_QH | (uint32_t)(uintptr_t)QH;
     }
     
-    uint16_t EECP = (CapabilityRegisters->HCCParams & HCCPARAMS_EECP_MASK) >> HCCPARAMS_EECP_SHIFT;
-    if (EECP >= 0x40) {
-        // Do something about Legacy Support
-        Log("Legacy Support!\n");
-        
-        uint32_t legsup = pci->Read32(EECP + 0x0);
-        
-        if (legsup & USBLEGSUP_HC_BIOS) {
-            pci->Write32(EECP + 0x0, legsup | USBLEGSUP_HC_OS);
-            for (;;) {
-                legsup = pci->Read32(EECP + 0x0);
-                if (~legsup & USBLEGSUP_HC_BIOS && legsup & USBLEGSUP_HC_OS) {
-                    break;
-                }
-            }
-        }
-    }
-    
     OperationalRegisters->USBInterrupt     = 0;
     OperationalRegisters->FrameIndex       = 0;
     OperationalRegisters->PeriodicListBase = (uint32_t)(uintptr_t)FrameList;
@@ -286,8 +308,8 @@ EHCI::start() {
         uint32_t status = ResetPort(port);
         
         if (status & PORT_ENABLE) {
-            uint32_t speed = USB_HIGH_SPEED;
-            Log("Found Device at port %X with speed: %X\n", port, speed);
+            //uint32_t speed = USB_HIGH_SPEED;
+            Log("Found Device at port %X with speed: %s\n", port, "USB 2.0");
             // Set Up a Device here
         }
     }

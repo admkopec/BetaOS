@@ -200,7 +200,24 @@ XHCI::start() {
             
             Operationals->Ports[port].PortSC |= PS_PR;
             Operationals->Ports[port].PortSC |= PS_PLS_SET(0);
-            DBG("Port (%d) is in enabled state!\n", port);
+            if (Operationals->Ports[port].PortSC & PS_PED) {
+                Log("Port (%d) is in enabled state! Speed: ", port);
+                int speed = (Operationals->Ports[port].PortSC & 0x3C00) >> 10;
+                switch (speed) {
+                    case USB_LOWSPEED: //case USB_FULLSPEED:
+                        printf("USB 1.0\n");
+                        break;
+                    case USB_FULLSPEED:
+                        printf("USB 1.1\n");
+                        break;
+                    case USB_HIGHSPEED:
+                        printf("USB 2.0\n");
+                        break;
+                    case USB_SUPERSPEED: default:
+                        printf("USB 3.0\n");
+                        break;
+                }
+            }
         }
         if (Operationals->Ports[port].PortSC & PS_WRC)
             Operationals->Ports[port].PortSC = (Operationals->Ports[port].PortSC & PS_WRITEBACK_MASK) | PS_WRC;

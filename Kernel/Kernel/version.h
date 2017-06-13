@@ -13,6 +13,6 @@
 #define VERSION_MAJOR   0
 #define VESRION_MINOR   31
 #define COPYRIGHT       "Copyright \xA9 2015-2017 Adam Kopec. All rights reserved."
-#define BUILD_NUMBER    "06.12.17.01 MACH-O64 EFI"
+#define BUILD_NUMBER    "06.13.17.05 MACH-O64 EFI"
 
 #endif /* version_h */
