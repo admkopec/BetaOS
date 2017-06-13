@@ -21,8 +21,8 @@ void Controller::stop() {
     this->release();
 }
 
-int Controller::init(PCI *header __unused) {
-    return -5;
+OSReturn Controller::init(PCI *header __unused) {
+    return kOSReturnError;
 }
 
 Controller::~Controller() {

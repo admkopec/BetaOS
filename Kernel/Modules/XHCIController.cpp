@@ -92,14 +92,14 @@
 #define DBG(x ...)
 #endif
 
-int
+OSReturn
 XHCI::init(PCI *pci) {
     if (!(pci->ClassCode() == PCI_USB_CLASS && pci->SubClass() == PCI_USB_SUBCLASS && pci->ProgIF() == PCI_USB_XHCI)) {
-        return -1;
+        return kOSReturnFailed;
     }
     
     /*if (pci->VendorID() != 0x8086) {
-        return -1;
+        return kOSReturnFailed;
     }*/
     
     Log("XHCI found!\n");
@@ -120,17 +120,17 @@ XHCI::init(PCI *pci) {
     RootHubNumberOfPorts = (int)HCS1_N_PORTS(Capabilities->HCSParams1);
     if (!RootHubNumberOfPorts || RootHubNumberOfPorts > kMaxRootPorts) {
         Log("Invalid number of Root Hub ports = %d\n", RootHubNumberOfPorts);
-        return -2;
+        return kOSReturnError;
     }
     
-    Log("Number of Root Hub ports = %d\n", RootHubNumberOfPorts);
+    DBG("Number of Root Hub ports = %d\n", RootHubNumberOfPorts);
     
     Interrupt::RegisterInterrupt(pci->IntLine(), NULL);
     
     uint32_t ecp = HCC_XECP(Capabilities->HCCParams1);
     if (!ecp) {
         Log("No ECP!\n");
-        return  -2;
+        return  kOSReturnError;
     }
     
     ExtendedCapabilities = (ExtendedCapabilityRegisters*)((uint32_t*)(Capabilities) + ecp);
@@ -148,7 +148,7 @@ XHCI::init(PCI *pci) {
     }
     
     Used_ = true;
-    return 0;
+    return kOSReturnSuccess;
 }
 
 void
@@ -156,7 +156,7 @@ XHCI::start() {
     Log("Starting...\n");
     
     TakeOwnershipFromBios();
-    int status;
+    OSReturn status;
     if (Operationals->USBStatus == ~(uint32_t)0) {
         Log("Card Removed\n");
         return ;
@@ -196,7 +196,6 @@ XHCI::start() {
             return ;
         }
         if (Operationals->Ports[port].PortSC & PS_PP) {
-            DBG("Port (%d) is in disabled state!\n", port);
             Operationals->Ports[port].PortSC |= 0x00020001;
             
             Operationals->Ports[port].PortSC |= PS_PR;

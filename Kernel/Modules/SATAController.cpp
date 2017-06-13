@@ -113,10 +113,10 @@ SATA::port_rebase(HBA_PORT *port, int portno) {
     start_cmd(port);	// Start command engine
 }
 
-int
+OSReturn
 SATA::init(PCI *header) {
     if (!(header->ClassCode() == 0x01 && header->SubClass() == 0x06)) {
-        return -1;
+        return kOSReturnFailed;
     }
     Log("SATA found!\n");
     Log("Vendor ID: %X, Device ID: %X\n", header->VendorID(), header->DeviceID());
@@ -124,7 +124,7 @@ SATA::init(PCI *header) {
         Log("AHCI found!\n");
     } else {
         Log("Unknown Prog IF: %X\n", header->ProgIF());
-        return -2;
+        return kOSReturnError;
     }
     
     header->getBAR(5);
@@ -159,7 +159,7 @@ SATA::init(PCI *header) {
 
     Used_ = true;
     
-    return 0;
+    return kOSReturnSuccess;
 }
 
 void

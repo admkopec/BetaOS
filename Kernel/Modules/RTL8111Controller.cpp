@@ -21,12 +21,10 @@
 //uint64_t    mem_base = 0xEA10000C;        // MMIO Base Address
 //bool        eeprom_exists = false;
 
-int RTL8111::init(PCI *h) {
-    if (h->VendorID() != Realtek_Vendor) {
-        return -1;
-    }
-    if (h->DeviceID() != RTL8168_ID) {
-        return -1;
+OSReturn
+RTL8111::init(PCI *h) {
+    if (h->VendorID() != Realtek_Vendor || h->DeviceID() != RTL8168_ID) {
+        return kOSReturnFailed;
     }
     
     bar_type = h->getBAR(0);
@@ -39,7 +37,7 @@ int RTL8111::init(PCI *h) {
         Log("BAR Address: %X\n", mem_base);
     }
     Used_ = true;
-    return 0;
+    return kOSReturnSuccess;
 }
 
 void RTL8111::start() {

@@ -17,9 +17,10 @@
 #define super Controller
 #define Log(x ...) printf("IntelE1000Controller: " x)
 
-int E1000::init(PCI * pciConfigHeader) {
+OSReturn
+E1000::init(PCI * pciConfigHeader) {
     if (!(pciConfigHeader->VendorID() == Intel_Vendor && ((pciConfigHeader->DeviceID() == E1000_82579LM) || (pciConfigHeader->DeviceID() == E1000_DEV) || (pciConfigHeader->DeviceID() == E1000_I217) || (pciConfigHeader->DeviceID() == E1000_82577LM) || (pciConfigHeader->DeviceID() == E1000_82579V)))) {
-        return -1;
+        return kOSReturnFailed;
     }
     
     // Enable bus mastering
@@ -36,7 +37,7 @@ int E1000::init(PCI * pciConfigHeader) {
     }
     intline = pciConfigHeader->IntLine();
     Used_ = true;
-    return 0;
+    return kOSReturnSuccess;
 }
 
 void E1000::start() {

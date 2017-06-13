@@ -17,11 +17,11 @@ class Controller : public OSObject {
 protected:
     bool Used_;
 public:
-    virtual int  init(PCI *header);
-    virtual void start(void);
-    virtual void stop(void);
-    bool         Used(void);
-    virtual     ~Controller();
+    virtual OSReturn  init(PCI *header);
+    virtual void      start(void);
+    virtual void      stop(void);
+    bool              Used(void);
+    virtual          ~Controller();
 };
 
 #endif /* Controller_hpp */

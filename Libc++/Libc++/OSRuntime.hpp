@@ -19,8 +19,9 @@ public:
 
 typedef int OSReturn;
 
-#define kOSReturnSuccess true
-#define kOSReturnTimeout false
+#define kOSReturnSuccess 0
+#define kOSReturnTimeout -1
+#define kOSReturnFailed  -2
 #define kOSReturnError   -3
 
 #endif /* OSRuntime_hpp */

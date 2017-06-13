@@ -52,7 +52,6 @@ void Modules::start() {
                             }
                         }
                         Controller* module = new XHCI;
-                        //Log("Module at start: %X ", module);
                         if (!module->init(&h)) {
                             Controllers[i] = module;
                             Controllers[i]->start();
@@ -97,7 +96,6 @@ void Modules::start() {
                         } else {
                             delete module;
                         }
-                        //Log("Module at end: %X\n", module);
                         break;
                     }
                 }

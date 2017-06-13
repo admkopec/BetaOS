@@ -135,23 +135,16 @@
 #define QH_CAP_MULT_MASK                0xc0000000  // High-Bandwidth Pipe Multiplier
 #define QH_CAP_MULT_SHIFT                       30
 
-int
+OSReturn
 EHCI::init(PCI *pci) {
     if (!(pci->ClassCode() == PCI_USB_CLASS && pci->SubClass() == PCI_USB_SUBCLASS && pci->ProgIF() == PCI_USB_EHCI)) {
-        return -1;
-    }
-    
-    if (pci->BAR().size != 0) { // Fix condition
-        //Log("ERROR: This EHCIController has been already initialized with different EHCI PCI Device! ");
-        printf("Current: Vendor: %X Device: %X ", pci->VendorID(), pci->DeviceID());
-        printf("Inited with: Vendor: %X Device: %X\n", Vendor, Device);
-        return -3;
+        return kOSReturnFailed;
     }
     
     int bar_type = pci->getBAR(0);
     if (bar_type != 0x00) {
         Log("ERROR: Not using MMIO BAR!\n");
-        return -2;
+        return kOSReturnError;
     }
     
     Log("EHCI found\n");
@@ -164,7 +157,7 @@ EHCI::init(PCI *pci) {
     OperationalRegisters->USBCommand |= CMD_RS;
     if(!Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, 0, 100000)) {
         Log("Timeout on Start Host!\n");
-        return -3;
+        return kOSReturnTimeout;
     }
     
     if (!(OperationalRegisters->USBStatus & STS_HCHALTED)) {
@@ -173,7 +166,7 @@ EHCI::init(PCI *pci) {
     
     if (!Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, STS_HCHALTED, 100000)) {
         Log("Timeout on Stop Host!\n");
-        return -2;
+        return kOSReturnTimeout;
     }
 
     Used_ = true;
@@ -195,7 +188,7 @@ EHCI::init(PCI *pci) {
         }
     } if (qh == end) {
         Log("ERROR: Couldn't allocate QH!\n");
-        return -2;
+        return kOSReturnError;
     }
 
     QH->QueueHeadHorizontalLinkPointer = (uint32_t)(uintptr_t)QH | PTR_QH;
@@ -225,7 +218,7 @@ EHCI::init(PCI *pci) {
         }
     } if (qh == end) {
         Log("ERROR: Couldn't allocate QH!\n");
-        return -2;
+        return kOSReturnError;
     }
     
     QH->QueueHeadHorizontalLinkPointer  = PTR_TERMINATE;
@@ -277,7 +270,7 @@ EHCI::init(PCI *pci) {
     OperationalRegisters->USBStatus        = 0x3F;
     
     Used_ = true;
-    return 0;
+    return kOSReturnSuccess;
 }
 
 void
