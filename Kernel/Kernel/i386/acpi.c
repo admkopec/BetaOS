@@ -357,7 +357,7 @@ void acpi() {
     ACPI_2_Description *RSDP = (void *)0;
     
     //printGuid(((EFI_SYSTEM_TABLE_64 *)((uint64_t)(Platform_state.bootArgs->efiSystemTable)))->ConfigurationTable[4].VendorGuid);  // tab[4] for M4600 is APCI 2.0
-
+    // Bios Version (Scanning)
     for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
         if (*(uint64_t *)(ml_static_ptovirt(Address)) == 0x54445352 || !strncmp((const char*)((uint64_t *)(ml_static_ptovirt(Address))), "RSD PTR ", 8)) {
             DBG("Found RSDP using Legacy Method!\n");
@@ -374,7 +374,7 @@ void acpi() {
             goto parse;
         }
     }
-
+    // EFI Version (Tables)
     if (Platform_state.bootArgs->efiMode != kBootArgsEfiMode64) {
         panic("EFI MODE 32-bit!\n");
     }

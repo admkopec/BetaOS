@@ -82,8 +82,76 @@
 #define	HCC_PSA_SZ_MAX(x)	(((x) >> 12) & 0xFU)	// max pri. stream array size
 #define	HCC_XECP(x)         (((x) >> 16) & 0xFFFFU)	// extended capabilities pointer
 
+// USB Slot Context
+
+#define SCTX_0_ROUTE_SET(x)        ((x)  & 0xFFFFF)
+#define SCTX_0_ROUTE_GET(x)        ((x)  & 0xFFFFF)
+#define SCTX_0_SPEED_SET(x)        (((x) & 0xF) << 20)
+#define SCTX_0_SPEED_GET(x)        (((x) >> 20) & 0xF)
+#define SCTX_0_MTT_SET(x)          (((x) & 0x1) << 25)
+#define SCTX_0_MTT_GET(x)          (((x) >> 25) & 0x1)
+#define SCTX_0_HUB_SET(x)          (((x) & 0x1) << 26)
+#define SCTX_0_HUB_GET(x)          (((x) >> 26) & 0x1)
+#define SCTX_0_CTX_NUM_SET(x)      (((x) & 0x1F) << 27)
+#define SCTX_0_CTX_NUM_GET(x)      (((x) >> 27) & 0x1F)
+#define SCTX_1_MAX_EL_SET(x)        ((x)  & 0xFFFF)
+#define SCTX_1_MAX_EL_GET(x)        ((x)  & 0xFFFF)
+#define SCTX_1_RH_PORT_SET(x)       (((x) & 0xFF) << 16)
+#define SCTX_1_RH_PORT_GET(x)       (((x) >> 16) & 0xFF)
+#define SCTX_1_NUM_PORTS_SET(x)     (((x) & 0xFF) << 24)
+#define SCTX_1_NUM_PORTS_GET(x)     (((x) >> 24) & 0xFF)
+#define SCTX_2_TT_HUB_SID_SET(x)     ((x) & 0xFF)
+#define SCTX_2_TT_HUB_SID_GET(x)     ((x) & 0xFF)
+#define SCTX_2_TT_PORT_NUM_SET(x)   (((x) & 0xFF) << 8)
+#define SCTX_2_TT_PORT_NUM_GET(x)   (((x) >> 8) & 0xFF)
+#define SCTX_2_TT_THINK_TIME_SET(x) (((x) & 0x3) << 16)
+#define SCTX_2_TT_THINK_TIME_GET(x) (((x) >> 16) & 0x3)
+#define SCTX_2_IRQ_TARGET_SET(x)    (((x) & 0x3FF) << 22)
+#define SCTX_2_IRQ_TARGET_GET(x)     ((x) >> 22) & 0x3FF)
+#define SCTX_3_DEV_ADDR_SET(x)       ((x) & 0xFF)
+#define SCTX_3_DEV_ADDR_GET(x)       ((x) & 0xFF)
+#define SCTX_3_SLOT_STATE_SET(x)    (((x) & 0x1F) << 27)
+#define SCTX_3_SLOT_STATE_GET(x)     ((x) >> 27) & 0x1F)
+
+// USB Endpoint Context
+
+#define EPCTX_0_EPSTATE_SET(x)           ((x) & 0x7)
+#define EPCTX_0_EPSTATE_GET(x)           ((x) & 0x7)
+#define EPCTX_0_MULT_SET(x)             (((x) & 0x3) << 8)
+#define EPCTX_0_MULT_GET(x)             (((x) >> 8) & 0x3)
+#define EPCTX_0_MAXP_STREAMS_SET(x)     (((x) & 0x1F) << 10)
+#define EPCTX_0_MAXP_STREAMS_GET(x)     (((x) >> 10) & 0x1F)
+#define EPCTX_0_LSA_SET(x)              (((x) & 0x1) << 15)
+#define EPCTX_0_LSA_GET(x)              (((x) >> 15) & 0x1)
+#define EPCTX_0_IVAL_SET(x)             (((x) & 0xFF) << 16)
+#define EPCTX_0_IVAL_GET(x)             (((x) >> 16) & 0xFF)
+#define EPCTX_1_CERR_SET(x)             (((x) & 0x3) << 1)
+#define EPCTX_1_CERR_GET(x)             (((x) >> 1) & 0x3)
+#define EPCTX_1_EPTYPE_SET(x)           (((x) & 0x7) << 3)
+#define EPCTX_1_EPTYPE_GET(x)           (((x) >> 3) & 0x7)
+#define EPCTX_1_HID_SET(x)              (((x) & 0x1) << 7)
+#define EPCTX_1_HID_GET(x)              (((x) >> 7) & 0x1)
+#define EPCTX_1_MAXB_SET(x)             (((x) & 0xFF) << 8)
+#define EPCTX_1_MAXB_GET(x)             (((x) >> 8) & 0xFF)
+#define EPCTX_1_MAXP_SIZE_SET(x)        (((x) & 0xFFFF) << 16)
+#define EPCTX_1_MAXP_SIZE_GET(x)        (((x) >> 16) & 0xFFFF)
+#define EPCTX_2_DCS_SET(x)               ((x) & 0x1)
+#define EPCTX_2_DCS_GET(x)               ((x) & 0x1)
+#define EPCTX_2_TR_DQ_PTR_MASK           0xFFFFFFFFFFFFFFF0ULL
+#define EPCTX_4_AVG_TRB_LEN_SET(x)       ((x) & 0xFFFF)
+#define EPCTX_4_AVG_TRB_LEN_GET(x)       ((x) & 0xFFFF)
+#define EPCTX_4_MAX_ESIT_PAYLOAD_SET(x) (((x) & 0xFFFF) << 16)
+#define EPCTX_4_MAX_ESIT_PAYLOAD_GET(x) (((x) >> 16) & 0xFFFF)
+
+// USB Input Controller Context
+
+#define INCTX_NON_CTRL_MASK    0xFFFFFFFCU
+#define INCTX_0_DROP_MASK(n)   (1U << (n))
+#define INCTX_1_ADD_MASK(n)    (1U << (n))
 
 #define CONFIG_SLOTS_MASK	0x000000FFU
+
+#define GetPortSC(x) (x & (PS_DR | PS_WAKEBITS | PS_CAS |PS_PIC_SET(3U) | (15U << 10) /* Speed */ | PS_PP | PS_OCA | PS_CCS))
 
 #define Log(x ...) printf("XHCIController: " x)
 #ifdef DEBUG
@@ -98,14 +166,11 @@ XHCI::init(PCI *pci) {
         return kOSReturnFailed;
     }
     
-    /*if (pci->VendorID() != 0x8086) {
-        return kOSReturnFailed;
-    }*/
-    
     Log("XHCI found!\n");
-    Log("Vendor: %X Device: %X\n", pci->VendorID(), pci->DeviceID());
-
+    Log("Vendor: %x Device: %x\n", pci->VendorID(), pci->DeviceID());
+    
     pci->getBAR(0);
+    pci->EnableBusMastering();
     
     RootHubPortStatusChangeBitmap = 0;
     RootHub3Address = 128;
@@ -125,7 +190,7 @@ XHCI::init(PCI *pci) {
     
     DBG("Number of Root Hub ports = %d\n", RootHubNumberOfPorts);
     
-    Interrupt::RegisterInterrupt(pci->IntLine(), NULL);
+    Interrupt::Register(pci->IntLine(), NULL);
     
     uint32_t ecp = HCC_XECP(Capabilities->HCCParams1);
     if (!ecp) {
@@ -147,6 +212,27 @@ XHCI::init(PCI *pci) {
         iterator = (ExtendedCapabilityRegisters*)((uint32_t*)(iterator) + iterator->Next);
     }
     
+    pci->Write32(0xD8, 0xFFFFFFFF);
+    pci->Write32(0xD0, 0xFFFFFFFF);
+    
+    TakeOwnershipFromBios();
+    if (pci->VendorID() == 0x8086) {
+        uint32_t v1, v2, v3, v4;
+        v1 = pci->Read32(PCI_XHCI_INTEL_XUSB2PR);
+        v2 = pci->Read32(PCI_XHCI_INTEL_XUSB2PRM);
+        v3 = pci->Read32(PCI_XHCI_INTEL_USB3_PSSEN);
+        v4 = pci->Read32(PCI_XHCI_INTEL_USB3PRM);
+        if (v1 == UINT32_MAX || v2 == UINT32_MAX || v3 == UINT32_MAX || v4 == UINT32_MAX) {
+            Log("Error Invalid Regspace for Intel XHCI!\n");
+            return kOSReturnError;
+        }
+        v1 &= ~v2;
+        v1 |= v2;
+        pci->Write32(PCI_XHCI_INTEL_XUSB2PR, v1);
+        pci->Write32(PCI_XHCI_INTEL_USB3_PSSEN, (v3 & ~v4) | v4);
+    }
+    
+    NameString = (char*)"XHCIController (USB 3.0)";
     Used_ = true;
     return kOSReturnSuccess;
 }
@@ -155,7 +241,6 @@ void
 XHCI::start() {
     Log("Starting...\n");
     
-    TakeOwnershipFromBios();
     OSReturn status;
     if (Operationals->USBStatus == ~(uint32_t)0) {
         Log("Card Removed\n");
@@ -164,7 +249,7 @@ XHCI::start() {
     
     status = Handshake(&Operationals->USBStatus, STS_CNR, 0, 1000);
     if (status != kOSReturnSuccess) {
-        Log("Handshake Error Code = %X\n", status);
+        Log("Handshake Error Code = %x\n", status);
         return ;
     }
     
@@ -174,19 +259,21 @@ XHCI::start() {
     Operationals->DeviceContextBaseAddressArrayPointer = (uint64_t)&DeviceBaseArray[0];
     //Operationals->DeviceContextBaseAddressArrayPointer = (uint64_t)DeviceBaseArray[0];
     
+    Operationals->USBCommand |= CMD_HCRESET;
+    
     Operationals->USBCommand = 0;
     
     status = Handshake(&Operationals->USBStatus, STS_HALT, UINT32_MAX, 100);
     if (status != kOSReturnSuccess) {
-        Log("Handshake Error Code = %X\n", status);
+        Log("Handshake Error Code = %x\n", status);
         return ;
     }
     
-    Operationals->USBCommand = CMD_RUN;
+    Operationals->USBCommand |= CMD_RUN;
     
     status = Handshake(&Operationals->USBStatus, STS_HALT, 0, 1000);
     if (status != kOSReturnSuccess) {
-        Log("Handshake Error Code = %X\n", status);
+        Log("%s on Run Host!\n", OSReturnStrings[status]);
         return ;
     }
     
@@ -195,14 +282,32 @@ XHCI::start() {
             Log("No Device\n");
             return ;
         }
+        if (Operationals->Ports[port].PortSC & PS_WRC)
+            Operationals->Ports[port].PortSC = (Operationals->Ports[port].PortSC & PS_WRITEBACK_MASK) | PS_WRC;
+        if ((Operationals->Ports[port].PortSC & (PS_CSC | PS_CCS)) == PS_CCS) {
+            RootHubPortEmulateCSC[port] = true;
+            static_cast<void>(__sync_fetch_and_or(&RootHubPortStatusChangeBitmap, (2U << port)));
+        }
+        printf("");
+        uint32_t portSC = GetPortSC(Operationals->Ports[port].PortSC);
+        portSC |= PS_PP;
+        Operationals->Ports[port].PortSC = portSC;
+        status = Handshake(&Operationals->Ports[port].PortSC, PS_PP, portSC, 2000);
+        if(status != kOSReturnSuccess) {
+            Log("Failed powering up port %d, error (%s)", port, OSReturnStrings[status]);
+        }
         if (Operationals->Ports[port].PortSC & PS_PP) {
-            Operationals->Ports[port].PortSC |= 0x00020001;
-            
-            Operationals->Ports[port].PortSC |= PS_PR;
+            Operationals->Ports[port].PortSC = GetPortSC(Operationals->Ports[port].PortSC) | PS_WPR;
+            for (int i = 0; i < 2000; i++) {
+                if (Operationals->Ports[port].PortSC & PS_PRC) {
+                    break;
+                }
+                printf("");
+            }
             Operationals->Ports[port].PortSC |= PS_PLS_SET(0);
             if (Operationals->Ports[port].PortSC & PS_PED) {
                 Log("Port (%d) is in enabled state! Speed: ", port);
-                int speed = (Operationals->Ports[port].PortSC & 0x3C00) >> 10;
+                int speed = PS_SPEED_GET(GetPortSC(Operationals->Ports[port].PortSC));
                 switch (speed) {
                     case USB_LOWSPEED: //case USB_FULLSPEED:
                         printf("USB 1.0\n");
@@ -216,16 +321,22 @@ XHCI::start() {
                     case USB_SUPERSPEED: default:
                         printf("USB 3.0\n");
                         break;
+                        // You should set up a device/host here, but first you need to have a working transfer
                 }
             }
+        } else {
+            Operationals->Ports[port].PortSC |= PS_PP;
+            for (int i = 0; i < 2000; i++) {
+                printf("");
+            }
+            if ((Operationals->Ports[port].PortSC & PS_PP) != 1) {
+                Log("Failed powering up %d port\n", port);
+            }
         }
-        if (Operationals->Ports[port].PortSC & PS_WRC)
-            Operationals->Ports[port].PortSC = (Operationals->Ports[port].PortSC & PS_WRITEBACK_MASK) | PS_WRC;
-        if ((Operationals->Ports[port].PortSC & (PS_CSC | PS_CCS)) == PS_CCS) {
-            RootHubPortEmulateCSC[port] = true;
-            static_cast<void>(__sync_fetch_and_or(&RootHubPortStatusChangeBitmap, (2U << port)));
-        }
+        DBG("Status: %x\n", Operationals->Ports[port].PortSC);
     }
+    Operationals->Configure = ((Operationals->Configure & ~CONFIG_SLOTS_MASK) | NumberOfSlots);
+    Operationals->DeviceNotificationControl = UINT16_MAX;
 }
 
 void
@@ -235,10 +346,9 @@ XHCI::stop() {
         Operationals->USBCommand &= ~CMD_RUN;
     }
     
-    int status;
-    status = Handshake(&Operationals->USBStatus, STS_HALT, STS_HALT, 1000);
+    OSReturn status = Handshake(&Operationals->USBStatus, STS_HALT, STS_HALT, 1000);
     if (status != kOSReturnSuccess) {
-        Log("Stop Handshake Error Code = %X\n", status);
+        Log("%s on Stop Host!\n", OSReturnStrings[status]);
     }
     super::stop();
 }
@@ -248,7 +358,7 @@ XHCI::Handshake(volatile const uint32_t* pReg, uint32_t test_mask, uint32_t test
     for (int32_t count = 0; count < msec; ++count) {
         //if (count)
         //    printf("");
-        //IOSleep(1U);
+        //OSSleep(1U);
         if (*pReg == ~(uint32_t)0) {
             Log("Device Removed\n");
             return kOSReturnError;

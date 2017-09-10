@@ -10,6 +10,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+extern "C" { extern void vsputc(int ch);
+             extern bool experimental;
+             extern bool use_screen_caching;
+             extern void refresh_screen(void);
+}
+
 int printf(const char *s, ...) {
     va_list ap;
     int printedchars=0;
@@ -28,8 +34,8 @@ int printf(const char *s, ...) {
         size = 0;
         neg = 0;
 
-        if (c == 0)
-        break;
+        if (c == 0x00)
+            break;
         else if (c == '%') {
             c = *s++;
             if (c >= '0' && c <= '9') {
@@ -81,8 +87,11 @@ int printf(const char *s, ...) {
                 buf[i] =
                 (j >=
                  0) ? buf[j] : '0';
-
-                printf("0x%s", buf);
+                if (c == 'X') {
+                    printf("%s", buf);
+                } else {
+                    printf("0x%s", buf);
+                }
             } else if (c == 'p') {
                 uival = va_arg(ap, int);
                 itoa(buf, uival, 16);
@@ -98,9 +107,23 @@ int printf(const char *s, ...) {
             } else if (c == 's') {
                 printf((char *) va_arg(ap, char *));
             }
+        } else if (c > 0xC0) {
+            if (c == 0xC2) {
+                c = *s++;
+                vsputc(c);
+            } else if (c == 0xC3) {
+                c = *s++;
+                c |= 0xC0;
+                vsputc(c);
+            } else {
+                continue;
+            }
         } else
-        putchar(c);
+            vsputc(c);
         printedchars++;
+    }
+    if (experimental && use_screen_caching) {
+        refresh_screen();
     }
     return printedchars;
 }

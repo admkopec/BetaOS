@@ -132,9 +132,10 @@ class EHCI : public Controller {
     uint32_t Device;
     
     OSReturn     Handshake  (volatile const uint32_t* pReg, uint32_t test_mask, uint32_t test_target, int32_t msec);
-    unsigned int ResetPort  (unsigned int port);
+    void         ResetPort  (unsigned int port);
     void         PortSet    (volatile uint32_t *reg, uint32_t data);
     void         PortClear  (volatile uint32_t *reg, uint32_t data);
+    void         LineStatusCheck(uint32_t port);
 public:
     virtual int  init(PCI *pci) override;
     virtual void start() override;

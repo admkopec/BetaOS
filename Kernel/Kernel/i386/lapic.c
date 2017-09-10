@@ -241,7 +241,7 @@ lapic_init(void) {
     
     LAPIC_WRITE(LVT_ERROR, LAPIC_VECTOR(ERROR));
     
-    asm("sti");
+    pal_sti();
     
     uint32_t vec;
     mp_disable_preemption();
@@ -277,17 +277,17 @@ lapic_interrupt( int interrupt_num, __unused x86_saved_state_t *state) {
     switch (interrupt_num) {
         case LAPIC_TIMER_INTERRUPT:
             lapic_end_of_interrupt();
-            kprintf("LAPIC Timer\n");
+            DBG("LAPIC Timer\n");
             return 1;
             break;
         case LAPIC_ERROR_INTERRUPT:
             LAPIC_WRITE(LVT_ERROR, LAPIC_READ(LVT_ERROR) | LAPIC_LVT_MASKED);
             lapic_end_of_interrupt();
-            kprintf("LAPIC Error\n");
+            DBG("LAPIC Error\n");
             return 1;
             break;
         case LAPIC_SPURIOUS_INTERRUPT:
-            kprintf("SPURIOUS Interrupt\n");
+            DBG("SPURIOUS Interrupt\n");
             return 1;
             break;
     }

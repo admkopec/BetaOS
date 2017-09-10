@@ -21,16 +21,28 @@ extern "C" vm_offset_t io_map(vm_offset_t phys_addr, vm_size_t size, unsigned in
 uint32_t pciGetConfig(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
     uint32_t address;
     
-    address = (uint32_t)((((uint32_t)(bus)) << 16) | (((uint32_t)(slot)) << 11) | (((uint32_t)func) << 8) | (offset & 0xfc) | ((uint32_t)0x80000000));
+    address = (uint32_t)((((uint32_t)(bus)) << 16) | (((uint32_t)(slot)) << 11) | (((uint32_t)func) << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
     
     outl (0xCF8, address);
-    return inl(0xCFC);
+    return inl(0xCFC >> (8 * (offset % 0x04)));
 }
 
 void pciWriteConfig(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint32_t data) {
-    uint32_t address = (uint32_t)((((uint32_t)(bus)) << 16) | (((uint32_t)(slot)) << 11) | (((uint32_t)func) << 8) | (offset & 0xfc) | ((uint32_t)0x80000000));
+    uint32_t address = (uint32_t)((((uint32_t)(bus)) << 16) | (((uint32_t)(slot)) << 11) | (((uint32_t)func) << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
     outl(0xCF8, address);
     outl(0xCFC, data);
+}
+
+void pciWriteConfig16(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint16_t data) {
+    uint32_t address = (uint32_t)((((uint32_t)(bus)) << 16) | (((uint32_t)(slot)) << 11) | (((uint32_t)func) << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
+    outl(0xCF8, address);
+    outw(0xCFC + (offset & 0x02), data);
+}
+
+void pciWriteConfig8(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint8_t data) {
+    uint32_t address = (uint32_t)((((uint32_t)(bus)) << 16) | (((uint32_t)(slot)) << 11) | (((uint32_t)func) << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
+    outl(0xCF8, address);
+    outb(0xCFC + (offset & 0x03), data);
 }
 
 void PCI::init(int bus, int slot, int function) {
@@ -111,6 +123,20 @@ uint32_t PCI::Read32(uint8_t offset) {
 
 void PCI::Write32(uint8_t offset, uint32_t data) {
     pciWriteConfig(Bus, Slot, Function, offset, data);
+}
+
+void PCI::Write16(uint8_t offset, uint16_t data) {
+    pciWriteConfig16(Bus, Slot, Function, offset, data);
+}
+
+void PCI::Write8(uint8_t offset, uint8_t data) {
+    pciWriteConfig8(Bus, Slot, Function, offset, data);
+}
+
+void PCI::EnableBusMastering() {
+    uint32_t Command = Read32(0x04);
+    Command |= 0x04;
+    Write32(0x04, Command);
 }
 
 uint16_t PCI::VendorID()    { return VendorID_;  }

@@ -1,13 +1,15 @@
 //
-//  PS2Keymap.h
+//  PS2Keymap.hpp
 //  Kernel
 //
 //  Created by Adam Kopeć on 9/25/16.
 //  Copyright © 2016 Adam Kopeć. All rights reserved.
 //
 
-#ifndef PS2Keymap_h
-#define PS2Keymap_h
+#ifndef PS2Keymap_hpp
+#define PS2Keymap_hpp
+
+#include "PS2Controller.hpp"
 
 int keymap[][/* Special Keys, For now only: */ 0x03 ] = {
     
@@ -98,4 +100,4 @@ int keymap[][/* Special Keys, For now only: */ 0x03 ] = {
     /* 0x53 */  { /* Keypad . */    '.',                    '.',                    NULL_KEY        },
 };
 
-#endif /* PS2Keymap_h */
+#endif /* PS2Keymap_hpp */

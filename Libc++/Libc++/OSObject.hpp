@@ -11,12 +11,6 @@
 
 #include "OSRuntime.hpp"
 
-/*#ifdef DEBUG
-#define DBG(x...) printf(x)
-#else
-#define DBG(x...)
-#endif*/
-
 class OSObject {
 protected:
     virtual void release();

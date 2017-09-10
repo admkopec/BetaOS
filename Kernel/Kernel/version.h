@@ -12,7 +12,9 @@
 #define OS_NAME         "BetaOS"
 #define VERSION_MAJOR   0
 #define VESRION_MINOR   31
-#define COPYRIGHT       "Copyright \xA9 2015-2017 Adam Kopec. All rights reserved."
-#define BUILD_NUMBER    "06.13.17.05 MACH-O64 EFI"
+#define VERSION_XMINOR  1
+#define COPYRIGHT       "Copyright © 2015-2017 Adam Kopec. All rights reserved."
+#define BUILD_NUMBER    \
+96847
 
 #endif /* version_h */

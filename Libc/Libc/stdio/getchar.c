@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include <Modules/PS2Controller.h>
+#include <Modules/PS2Controller.hpp>
 
 int getchar() {
     // Get in queue for key down
@@ -21,6 +21,10 @@ int getchar() {
                 // Send kill to process
                 return 0xFF;
             }
+        }
+        if (ch == UP_ARROW_KEY) {
+            // Send previous command to shell
+            
         }
         if (ch == '\r' || ch =='\n' || (ch >= ' ' && ch <= 0x7F) || ch=='\t' || ch == '\b') {
             return ch;

@@ -7,9 +7,17 @@
 //
 
 #include "SATAController.hpp"
+#include <i386/machine_routines.h>
 
 #define super Controller
 #define Log(x ...) printf("SATAController: " x)
+#ifdef DEBUG
+#define DBG(x ...) printf("SATAController: " x)
+#else
+#define DBG(x ...)
+#endif
+
+extern "C" { vm_offset_t io_map(vm_offset_t phys_addr, vm_size_t size, unsigned int flags); }
 
 int
 SATA::check_type(HBA_PORT *port) {
@@ -80,7 +88,7 @@ SATA::find_cmdslot(HBA_PORT *port) {
     return -1;
 }
 
-void
+/*void
 SATA::port_rebase(HBA_PORT *port, int portno) {
     stop_cmd(port);	// Stop command engine
     
@@ -90,7 +98,7 @@ SATA::port_rebase(HBA_PORT *port, int portno) {
     // Command list maxim size = 32*32 = 1K per port
     port->clb = 0x400000 + (portno<<10);
     port->clbu = 0;
-    memset((void*)(port->clb), 0, 1024);
+    memset((void *)((port->clb)), 0, 1024);
     
     // FIS offset: 32K+256*portno
     // FIS entry size = 256 bytes per port
@@ -111,7 +119,7 @@ SATA::port_rebase(HBA_PORT *port, int portno) {
     }
     
     start_cmd(port);	// Start command engine
-}
+}*/
 
 OSReturn
 SATA::init(PCI *header) {
@@ -119,11 +127,11 @@ SATA::init(PCI *header) {
         return kOSReturnFailed;
     }
     Log("SATA found!\n");
-    Log("Vendor ID: %X, Device ID: %X\n", header->VendorID(), header->DeviceID());
+    Log("Vendor ID: %x, Device ID: %x\n", header->VendorID(), header->DeviceID());
     if (header->ProgIF() == 0x01) {
         Log("AHCI found!\n");
     } else {
-        Log("Unknown Prog IF: %X\n", header->ProgIF());
+        Log("Unknown Prog IF: %x\n", header->ProgIF());
         return kOSReturnError;
     }
     
@@ -138,6 +146,13 @@ SATA::init(PCI *header) {
             int dt = check_type(&address->ports[i]);
             if (dt == AHCI_DEV_SATA) {
                 Log("SATA drive found at port %d\n", i);
+                uint64_t addr = (uint64_t)((uint64_t)address->ports[i].fb + ((uint64_t)(address->ports[i].fbu) << 32));
+                DBG("Port phys_addr: %x\n", addr);
+                /*io_map(addr, sizeof(fis), VM_WIMG_IO);
+                FIS_REG_H2D* fFis = (FIS_REG_H2D*)addr;
+                fFis->fis_type = FIS_TYPE_REG_H2D;
+                fFis->c = 1;
+                fFis->command = 0xE6;*/
             }
             else if (dt == AHCI_DEV_SATAPI) {
                 Log("SATAPI drive found at port %d\n", i);
@@ -154,9 +169,10 @@ SATA::init(PCI *header) {
         }
         
         pi >>= 1;
-        i ++;
+        i++;
     }
 
+    NameString = (char*)"SATAController (AHCI)";
     Used_ = true;
     
     return kOSReturnSuccess;

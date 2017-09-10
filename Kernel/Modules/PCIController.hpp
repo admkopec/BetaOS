@@ -44,9 +44,12 @@ public:
     uint8_t  ProgIF();
     uint8_t  IntLine();
     BAR      BAR();
-    int      getBAR(uint16_t index);
-    uint32_t Read32(uint8_t offset);
+    void     EnableBusMastering();
+    int      getBAR (uint16_t index);
+    uint32_t Read32 (uint8_t offset);
     void     Write32(uint8_t offset, uint32_t data);
+    void     Write16(uint8_t offset, uint16_t data);
+    void     Write8 (uint8_t offset, uint8_t  data);
     bool     Valid = true;
     
     void init(int bus = 0, int slot = 0, int function = 0);

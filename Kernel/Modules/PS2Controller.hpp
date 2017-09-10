@@ -1,5 +1,5 @@
 //
-//  PS2Controller.h
+//  PS2Controller.hpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 2/12/16.
@@ -7,10 +7,11 @@
 //
 
 
-#ifndef PS2Controller_h
-#define PS2Controller_h
-
-//#include <sys/cdefs.h>
+#ifndef PS2Controller_hpp
+#define PS2Controller_hpp
+#ifdef __cplusplus
+#include "Controller.hpp"
+#endif
 
 #define NULL_KEY            0x00
 #define ESC_KEY             0x1B
@@ -43,7 +44,23 @@
 #define PAGE_UP_KEY         0x9A
 #define PAGE_DOWN_KEY       0x9B
 
-int  pollchar(void);
-void updateLEDs(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
+    int  pollchar(void);
+#ifdef __cplusplus
+}
+#endif
 
-#endif /* PS2Controller_h */
+#ifdef __cplusplus
+class PS2 : public Controller {
+    __unused char* LastPressedKeys;
+    static void UpdateLEDs();
+public:
+    OSReturn init(PCI* h) override;
+    void     start(void)  override;
+    void     stop(void)   override;
+    static int pollchar();
+};
+#endif
+#endif /* PS2Controller_hpp */

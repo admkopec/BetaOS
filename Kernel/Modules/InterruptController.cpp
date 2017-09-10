@@ -8,21 +8,80 @@
 
 #include "InterruptController.hpp"
 #include <i386/pio.h>
+#include <i386/lapic.h>
 
-int Interrupt::RegisterInterrupt(int InterruptLine, __unused void (*handler)()) {
+#define Log(x ...) printf("InterruptController: " x)
+#ifdef DEBUG
+#define DBG(x ...) Log(x)
+#else
+#define DBG(x ...)
+#endif
+
+OSReturn
+Interrupt::Register(int InterruptLine, Controller* handler) {
     if (InterruptLine > 0xF) {
-        printf("InterruptController: Invalid Interrupt Line value - %X!\n", InterruptLine);
-        return -1;
+        Log("Invalid Interrupt Line value - %x!\n", InterruptLine);
+        return kOSReturnError;
     }
+    if (handler == NULL) {
+        Log("Handler not set!\n");
+        return kOSReturnError;
+    }
+    if (Table[InterruptLine].isSet) {
+        Log("Interrupt is already registered!\n");
+        return kOSReturnError;
+    }
+    Table[InterruptLine].handler = handler;
     int  port;
     char value;
-    if (InterruptLine < 8) {
+    if (InterruptLine <= 7) {
         port = 0x21;
     } else {
         port = 0xA1;
-        InterruptLine -= 8;
+        InterruptLine -= 7;
     }
     value = inb(port) & ~(1 << InterruptLine);
     outb(port, value);
-    return 0;
+    DBG("IRQ: %d registered!\n", InterruptLine);
+    Table[InterruptLine].isSet = true;
+    return kOSReturnSuccess;
 }
+
+OSReturn
+Interrupt::Disable(int InterruptLine) {
+    if (InterruptLine > 0xF) {
+        Log("Invalid Interrupt Line\n");
+        return kOSReturnError;
+    }
+    Table[InterruptLine].handler = NULL;
+    int  port;
+    char value;
+    if (InterruptLine <= 7) {
+        port = 0x21;
+    } else {
+        port = 0xA1;
+        InterruptLine -= 7;
+    }
+    value = inb(port) | (1 << InterruptLine);
+    outb(port, value);
+    Table[InterruptLine].isSet = false;
+    return kOSReturnSuccess;
+}
+
+OSReturn
+Interrupt::Incomming(int InterruptLine) {
+    if (!Table[InterruptLine].isSet) {
+        Log("Interrupt Handler not set!\n");
+        return kOSReturnError;
+    }
+    Table[InterruptLine].handler->handleInterrupt();
+    return kOSReturnSuccess;
+}
+
+void
+IncommingInterrupt(int InterruptNumber) {
+    InterruptNumber -= LAPIC_DEFAULT_INTERRUPT_BASE;
+    Interrupt::Incomming(InterruptNumber);
+}
+
+TableEntry Interrupt::Table[20];

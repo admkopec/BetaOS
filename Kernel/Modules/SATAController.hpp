@@ -48,6 +48,51 @@ typedef volatile struct tagHBA_PORT {
     uint32_t	vendor[4];	// 0x70 ~ 0x7F, vendor specific
 } HBA_PORT;
 
+typedef struct {
+    uint8_t        dsfis [0x1c];     // DMA Setup FIS
+    uint8_t        res1  [0x04];
+    uint8_t        psfis [0x14];     // PIO Setup FIS
+    uint8_t        res2  [0x0c];
+    uint8_t        rfis  [0x14];      // D2H Register FIS
+    uint8_t        res3  [0x04];
+    uint8_t        sdbfis[0x08];    // Set Device Bits FIS
+    uint8_t        ufis  [0x40];      // Unknown FIS
+    uint8_t        res4  [0x60];
+} __packed fis;
+
+typedef enum {
+    FIS_TYPE_REG_H2D    = 0x27,    // Register FIS - host to device
+    FIS_TYPE_REG_D2H    = 0x34,    // Register FIS - device to host
+    FIS_TYPE_DMA_ACT    = 0x39,    // DMA activate FIS - device to host
+    FIS_TYPE_DMA_SETUP  = 0x41,    // DMA setup FIS - bidirectional
+    FIS_TYPE_DATA       = 0x46,    // Data FIS - bidirectional
+    FIS_TYPE_BIST       = 0x58,    // BIST activate FIS - bidirectional
+    FIS_TYPE_PIO_SETUP  = 0x5F,    // PIO setup FIS - device to host
+    FIS_TYPE_DEV_BITS   = 0xA1,    // Set device bits FIS - device to host
+} FIS_TYPE;
+
+typedef struct tagFIS_REG_H2D {
+    uint8_t    fis_type;   // FIS_TYPE_REG_H2D
+    uint8_t    pmport:4;   // Port multiplier
+    uint8_t    rsv0:3;     // Reserved
+    uint8_t    c:1;        // 1: Command, 0: Control
+    uint8_t    command;    // Command register
+    uint8_t    featurel;   // Feature register, 7:0
+    uint8_t    lba0;       // LBA low register, 7:0
+    uint8_t    lba1;       // LBA mid register, 15:8
+    uint8_t    lba2;       // LBA high register, 23:16
+    uint8_t    device;     // Device register
+    uint8_t    lba3;       // LBA register, 31:24
+    uint8_t    lba4;       // LBA register, 39:32
+    uint8_t    lba5;       // LBA register, 47:40
+    uint8_t    featureh;   // Feature register, 15:8
+    uint8_t    countl;     // Count register, 7:0
+    uint8_t    counth;     // Count register, 15:8
+    uint8_t    icc;        // Isochronous command completion
+    uint8_t    control;    // Control register
+    uint8_t    rsv1[4];    // Reserved
+} FIS_REG_H2D;
+
 typedef volatile struct tagHBA_MEM {
     // 0x00 - 0x2B, Generic Host Control
     uint32_t	cap;		// 0x00, Host capability

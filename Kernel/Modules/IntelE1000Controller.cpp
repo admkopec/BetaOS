@@ -13,18 +13,36 @@
 #include "MMIOUtils.hpp"
 #include <stdint.h>
 #include <i386/pio.h>
+#include <OSNetwork.hpp>
 
-#define super Controller
+#define super NetworkController
 #define Log(x ...) printf("IntelE1000Controller: " x)
+#ifdef DEBUG
+#define DBG(x ...) Log(x)
+#else
+#define DBG(x ...)
+#endif
 
 OSReturn
 E1000::init(PCI * pciConfigHeader) {
-    if (!(pciConfigHeader->VendorID() == Intel_Vendor && ((pciConfigHeader->DeviceID() == E1000_82579LM) || (pciConfigHeader->DeviceID() == E1000_DEV) || (pciConfigHeader->DeviceID() == E1000_I217) || (pciConfigHeader->DeviceID() == E1000_82577LM) || (pciConfigHeader->DeviceID() == E1000_82579V)))) {
-        return kOSReturnFailed;
+    for (size_t i = 0; i < sizeof(SupportedVendorIDs); i++) {
+        if (pciConfigHeader->VendorID() == SupportedVendorIDs[i]) {
+            break;
+        } else if (i == (sizeof(SupportedVendorIDs) - 1)) {
+            return kOSReturnFailed;
+        }
+    }
+    
+    for (size_t i = 0; i < sizeof(SupportedDeviceIDs); i++) {
+        if (pciConfigHeader->DeviceID() == SupportedDeviceIDs[i]) {
+            break;
+        } else if (i == (sizeof(SupportedDeviceIDs) - 1)) {
+            return kOSReturnFailed;
+        }
     }
     
     // Enable bus mastering
-    //pciConfigHeader->enablePCIBusMastering();
+    pciConfigHeader->EnableBusMastering();
     eerprom_exists = false;
     bar_type = pciConfigHeader->getBAR(0);
     Log("BAR type    %X\n", bar_type);
@@ -36,6 +54,10 @@ E1000::init(PCI * pciConfigHeader) {
         Log("BAR address %X\n", mem_base);
     }
     intline = pciConfigHeader->IntLine();
+    
+    IP.iIP4 = 0;
+    
+    NameString = (char*)"IntelE1000Controller";
     Used_ = true;
     return kOSReturnSuccess;
 }
@@ -49,21 +71,28 @@ void E1000::start() {
     Log("IRQ = %d\n", intline);
     for(int i = 0; i < 0x80; i++)
         writeCommand(0x5200 + i*4, 0);
-    if (!Interrupt::RegisterInterrupt(intline, NULL)/*interruptManager->registerInterrupt(IRQ0+pciConfigHeader->getIntLine(),this)*/) {
+    if (!Interrupt::Register(intline, (Controller *)this)) {
         enableInterrupt();
         rxinit();
         txinit();
         Log("Device is running!\n");
+        OSNetwork::registerController((super *)this);
+        super::start();
         return /*true*/;
     } else
         return /*false*/;
 }
 
+void E1000::stop() {
+    Log("Stopping...\n");
+    super::stop();
+}
+
 void E1000::rxinit() {
-    uint8_t * ptr;
+    void * ptr;
     struct e1000_rx_desc *descs;
     
-    ptr = (uint8_t *)OSRuntime::OSMalloc((sizeof(struct e1000_rx_desc)*E1000_NUM_RX_DESC + 16)); // Should be a physical address
+    ptr = (void *)OSRuntime::OSMalloc((sizeof(struct e1000_rx_desc)*E1000_NUM_RX_DESC + 16)); // Should be a physical address
     
     descs = (struct e1000_rx_desc *)ptr;
     for(int i = 0; i < E1000_NUM_RX_DESC; i++) {
@@ -89,10 +118,10 @@ void E1000::rxinit() {
 
 
 void E1000::txinit() {
-    uint8_t *  ptr;
+    void *  ptr;
     struct e1000_tx_desc *descs;
     
-    ptr = (uint8_t *)OSRuntime::OSMalloc((sizeof(struct e1000_tx_desc)*E1000_NUM_TX_DESC + 16)); // Should be a physical address
+    ptr = (void *)OSRuntime::OSMalloc((sizeof(struct e1000_tx_desc)*E1000_NUM_TX_DESC + 16)); // Should be a physical address
     
     descs = (struct e1000_tx_desc *)ptr;
     for(int i = 0; i < E1000_NUM_TX_DESC; i++) {
@@ -123,39 +152,85 @@ void E1000::txinit() {
     // For E1000e
     // (Overwrites the line above)
     writeCommand(REG_TCTRL,  0b0110000000000111111000011111010);
-    writeCommand(REG_TIPG,  0x0060200A);
+    writeCommand(REG_TIPG,   0x0060200A);
     
 }
 
-void E1000::handleReceive() {
-    uint16_t old_cur;
-    bool got_packet = false;
-    
-    while((rx_descs[rx_cur]->status & 0x1)) {
-        got_packet = true;
-        uint8_t *buf = (uint8_t *)rx_descs[rx_cur]->addr;
-        uint16_t len = rx_descs[rx_cur]->length;
-        
-        Log("Packet: %s length: %d\n", buf, len);
-        // Here inject the received packet into the network stack
-        
-        rx_descs[rx_cur]->status = 0;
-        old_cur = rx_cur;
-        rx_cur = (rx_cur + 1) % E1000_NUM_RX_DESC;
-        writeCommand(REG_RXDESCTAIL, old_cur );
+void E1000::handleInterrupt() {
+    uint32_t icr = readCommand(REG_ICAUSE);
+    DBG("Interrupt: %x\n", icr);
+    if (icr & ICR_RECEIVE) {
+        handleReceive();
+    } else if (icr & ICR_TRANSMIT) {
+        DBG("Transmit\n");
+    } else if (icr & ICR_LINK_CHANGE) {
+        Log("Link %s\n", (readCommand(REG_STATUS) & STATUS_LINK_UP) ? "up" : "down");
     }
 }
 
-int E1000::sendPacket(const void * p_data, uint16_t p_len) {
+void E1000::handleReceive() {
+    bool got_packet = false;
+    
+    uint32_t head = readCommand(REG_RXDESCHEAD);
+    
+    DBG("Handle Receive\n");
+    
+    while(rx_cur != head) {
+        got_packet = true;
+        uint8_t *buf    = (uint8_t *)rx_descs[rx_cur]->addr;
+        size_t   len    = rx_descs[rx_cur]->length;
+        uint8_t  status = rx_descs[rx_cur]->status;
+        
+        if ((status & 0x1) == 0) {
+            break;
+        }
+        
+        len -= 4;
+        
+        DBG("Packet: %d Bytes received (status = %x)\n", len, status);
+        
+        DBG("Packet: %s length: %d\n", buf, len);
+        // Here inject the received packet into the network stack
+        
+        rx_cur++;
+        rx_cur %= E1000_NUM_RX_DESC;
+        /*rx_descs[rx_cur]->status = 0;
+        writeCommand(REG_RXDESCTAIL, old_cur );*/
+    }
+    if (rx_cur == head) {
+        writeCommand(REG_RXDESCTAIL, (head + E1000_NUM_RX_DESC - 1) % E1000_NUM_RX_DESC);
+    } else {
+        writeCommand(REG_RXDESCTAIL, rx_cur);
+    }
+}
+
+OSReturn E1000::sendPacket(const void * p_data, uint16_t p_len) {
+    uint32_t old_cur = tx_cur;
+    tx_cur++;
+    tx_cur %= E1000_NUM_TX_DESC;
+    uint32_t head = readCommand(REG_TXDESCHEAD);
+    if (tx_cur == head) {
+        Log("No place in Send Queue!\n");
+        tx_cur = old_cur;
+        return kOSReturnFailed;
+    }
+    
+    if (p_len > E1000_SIZE_TX_DESC) {
+        p_len = E1000_SIZE_TX_DESC;
+    }
+    
     tx_descs[tx_cur]->addr = (uint64_t)p_data;
     tx_descs[tx_cur]->length = p_len;
     tx_descs[tx_cur]->cmd = CMD_EOP | CMD_IFCS | CMD_RS | CMD_RPS;
-    tx_descs[tx_cur]->status = 0;
+    
+    writeCommand(REG_RXDESCTAIL, tx_cur);
+    /*tx_descs[tx_cur]->status = 0;
     uint8_t old_cur = tx_cur;
     tx_cur = (tx_cur + 1) % E1000_NUM_TX_DESC;
     writeCommand(REG_TXDESCTAIL, tx_cur);
-    while(!(tx_descs[old_cur]->status & 0xff));
-    return 0;
+    while(!(tx_descs[old_cur]->status & 0xff));*/
+    DBG("Send Packet\n");
+    return kOSReturnSuccess;
 }
 
 void E1000::writeCommand(uint16_t p_address, uint32_t p_value) {
@@ -193,30 +268,25 @@ bool E1000::readMACAddress() {
     if (eerprom_exists) {
         uint32_t temp;
         temp = eepromRead(0);
-        mac[0] = temp &0xff;
-        mac[1] = temp >> 8;
+        MAC[0] = temp &0xff;
+        MAC[1] = temp >> 8;
         temp = eepromRead(1);
-        mac[2] = temp &0xff;
-        mac[3] = temp >> 8;
+        MAC[2] = temp &0xff;
+        MAC[3] = temp >> 8;
         temp = eepromRead(2);
-        mac[4] = temp &0xff;
-        mac[5] = temp >> 8;
+        MAC[4] = temp &0xff;
+        MAC[5] = temp >> 8;
     } else {
         uint8_t * mem_base_mac_8 = (uint8_t *) (mem_base+0x5400);
         uint32_t * mem_base_mac_32 = (uint32_t *) (mem_base+0x5400);
         if (mem_base_mac_32[0] != 0 ) {
             for (int i = 0; i < 6; i++) {
-                mac[i] = mem_base_mac_8[i];
+                MAC[i] = mem_base_mac_8[i];
             }
         }
         else return false;
     }
     return true;
-}
-
-uint8_t * E1000::getMacAddress() {
-    readMACAddress();
-    return mac;
 }
 
 void E1000::enableInterrupt() {
@@ -239,3 +309,13 @@ uint32_t E1000::eepromRead( uint8_t addr) {
     data = (uint16_t)((tmp >> 16) & 0xFFFF);
     return data;
 }
+
+const int
+E1000::SupportedVendorIDs[] = { 0x8086 };
+const int
+E1000::SupportedDeviceIDs[] = { 0x100E, 0x153A, 0x10D3, 0x10EA, 0x1502, 0x1503, 0x1000,
+                                0x1001, 0x1004, 0x1008, 0x1009, 0x100C, 0x100D, 0x1015,
+                                0x1016, 0x1017, 0x101E, 0x100F, 0x1011, 0x1026, 0x1027,
+                                0x1028, 0x1010, 0x1012, 0x101D, 0x1013, 0x1018, 0x1014,
+                                0x1078, 0x1075, 0x1076, 0x1077, 0x107C, 0x1079, 0x107A,
+                                0x107B, 0x108A, 0x1099, 0x1019, 0x101A, 0x10B5, 0x2E6E };

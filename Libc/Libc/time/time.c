@@ -23,12 +23,32 @@ char* dayofweeklong;
 absolute_time_t absolute_UNIX = 0; // 0 - 1 January 1970
 absolute_time_t absolute_Beta = 0;
 
-absolute_time_t time(void) {        // Not working - +1 Day
+#define Is_leap_year(year)  (((1970+year)>0)&&!((1970+year)%4)&&(((1970+year)%100)||!((1970+year)%400)))
+#define Seconds_in_a_day    86400
+#define Seconds_in_an_hour   3600
+#define Seconds_in_a_minute    60
+
+static const uint8_t monthDays[]={31,28,31,30,31,30,31,31,30,31,30,31};
+
+absolute_time_t time(void) {
     read_rtc();
-    uint32_t days_in_year[13] = { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
-    uint32_t abs_year = year - 1900;
-    uint32_t year_day = day + days_in_year[month] + (((month) >= (3)) ? (((year & 3) != (0)) ? (0) : ((year % 100) != 0 || (year % 400) == 0) ? (1) : (0)) : (0));
-    absolute_UNIX = minute * 60 + hour * 3600 + year_day * 86400 + (abs_year - 70) * 31536000 + ((abs_year - 69) / 4) * 86400 - ((abs_year - 1) / 100) * 86400 + ((abs_year + 299) / 400) * 86400;
+    absolute_UNIX = (year - 1970) * (Seconds_in_a_day * 365);
+    for (uint32_t i = 1971; i < year; i++) {
+        if (Is_leap_year(i)) {
+            absolute_UNIX += Seconds_in_a_day;
+        }
+    }
+    for (uint32_t i = 0; i < month-1; i++) {
+        if ((i == 1) && Is_leap_year(year)) {
+            absolute_UNIX += Seconds_in_a_day * 29;
+        } else {
+            absolute_UNIX += Seconds_in_a_day * monthDays[i];
+        }
+    }
+    absolute_UNIX += day    * Seconds_in_a_day;
+    absolute_UNIX += hour   * Seconds_in_an_hour;
+    absolute_UNIX += minute * Seconds_in_a_minute;
+    absolute_UNIX += second;
     
     return absolute_UNIX;
 }

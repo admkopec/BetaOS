@@ -9,7 +9,7 @@
 #ifndef _KERNEL_ARCH_H
 #define _KERNEL_ARCH_H
 
-void reboot(void);
+void reboot(bool ispanic);
 void shutdown(void);
 
 #endif /* arch_h */

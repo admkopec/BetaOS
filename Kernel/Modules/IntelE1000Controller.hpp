@@ -10,20 +10,59 @@
 #define IntelE1000Controller_hpp
 
 #include <stdio.h>
-#include "Controller.hpp"
+#include "NetworkController.hpp"
 
-#define Intel_Vendor   0x8086  // Vendor ID for Intel
-#define E1000_DEV      0x100E  // Device ID for the e1000 Qemu, Bochs, and VirtualBox emmulated NICs
-#define E1000_I217     0x153A  // Device ID for Intel I217
-#define E1000_82577LM  0x10EA  // Device ID for Intel 82577LM
-#define E1000_82579LM  0x1502  // Device ID for Intel 82579LM
-#define E1000_82579V   0x1503  // Device ID for Intel 82579V
+#define Intel_Vendor                0x8086  // Vendor ID for Intel
+#define E1000_82540EM               0x100E  // Device ID for the e1000 Qemu, Bochs, and VirtualBox emmulated NICs
+#define E1000_I217                  0x153A  // Device ID for Intel I217
+#define E1000_82574                 0x10D3  // Device ID for Intel 82574 (not sure if it'll work)
+#define E1000_82577LM               0x10EA  // Device ID for Intel 82577LM
+#define E1000_82579LM               0x1502  // Device ID for Intel 82579LM
+#define E1000_82579V                0x1503  // Device ID for Intel 82579V
+#define E1000_82542                 0x1000
+#define E1000_82543GC_FIBER         0x1001
+#define E1000_82543GC_COPPER        0x1004
+#define E1000_82544EI_COPPER        0x1008
+#define E1000_82544EI_FIBER         0x1009
+#define E1000_82544GC_COPPER        0x100C
+#define E1000_82544GC_LOM           0x100D
+#define E1000_82540EM_LOM           0x1015
+#define E1000_82540EP_LOM           0x1016
+#define E1000_82540EP               0x1017
+#define E1000_82540EP_LP            0x101E
+#define E1000_82545EM_COPPER        0x100F
+#define E1000_82545EM_FIBER         0x1011
+#define E1000_82545GM_COPPER        0x1026
+#define E1000_82545GM_FIBER         0x1027
+#define E1000_82545GM_SERDES        0x1028
+#define E1000_82546EB_COPPER        0x1010
+#define E1000_82546EB_FIBER         0x1012
+#define E1000_82546EB_QUAD_COPPER   0x101D
+#define E1000_82541EI               0x1013
+#define E1000_82541EI_MOBILE        0x1018
+#define E1000_82541ER_LOM           0x1014
+#define E1000_82541ER               0x1078
+#define E1000_82547GI               0x1075
+#define E1000_82541GI               0x1076
+#define E1000_82541GI_MOBILE        0x1077
+#define E1000_82541GI_LF            0x107C
+#define E1000_82546GB_COPPER        0x1079
+#define E1000_82546GB_FIBER         0x107A
+#define E1000_82546GB_SERDES        0x107B
+#define E1000_82546GB_PCIE          0x108A
+#define E1000_82546GB_QUAD_COPPER   0x1099
+#define E1000_82547EI               0x1019
+#define E1000_82547EI_MOBILE        0x101A
+#define E1000_82546GB_QUAD_COPPER_2 0x10B5
+#define E1000_INTEL_CE4100_GBE      0x2E6E
 
 #define REG_CTRL        0x0000
 #define REG_STATUS      0x0008
 #define REG_EEPROM      0x0014
 #define REG_CTRL_EXT    0x0018
+#define REG_ICAUSE      0x00C0
 #define REG_IMASK       0x00D0
+#define REG_IMASKCLR    0x00D8
 #define REG_RCTRL       0x0100
 #define REG_RXDESCLO    0x2800
 #define REG_RXDESCHI    0x2804
@@ -92,6 +131,13 @@
 #define CMD_VLE                         (1 << 6)    // VLAN Packet Enable
 #define CMD_IDE                         (1 << 7)    // Interrupt Delay Enable
 
+// ICR Types
+
+#define ICR_TRANSMIT                    (1 << 0)
+#define ICR_LINK_CHANGE                 (1 << 2)
+#define ICR_RECEIVE                     (1 << 7)
+
+#define STATUS_LINK_UP                  (1 << 1)
 
 // TCTL Register
 
@@ -109,6 +155,8 @@
 
 #define E1000_NUM_RX_DESC 32
 #define E1000_NUM_TX_DESC 8
+#define E1000_SIZE_RX_DESC 2048
+#define E1000_SIZE_TX_DESC 2048
 
 struct e1000_rx_desc {
     volatile uint64_t addr;
@@ -129,19 +177,21 @@ struct e1000_tx_desc {
     volatile uint16_t special;
 } __attribute__((packed));
 
-class E1000 : public Controller /*: public NetworkDriver*/ {
+class E1000 : public NetworkController {
 private:
     uint8_t     bar_type;       // Type of BOR0
     uint8_t     intline;        // Interrupt Line
     uint16_t    io_base;        // IO Base Address
     uint64_t    mem_base;       // MMIO Base Address
     bool        eerprom_exists; // A flag indicating if eeprom exists
-    uint8_t     mac[6];         // A buffer for storing the mack address
+    uint8_t     MAC[6];         // A buffer for storing the mack address
     struct      e1000_rx_desc *rx_descs[E1000_NUM_RX_DESC]; // Receive Descriptor Buffers
     struct      e1000_tx_desc *tx_descs[E1000_NUM_TX_DESC]; // Transmit Descriptor Buffers
     uint16_t    rx_cur;         // Current Receive Descriptor Buffer
     uint16_t    tx_cur;         // Current Transmit Descriptor Buffer
     
+    static const int SupportedVendorIDs[1];
+    static const int SupportedDeviceIDs[42];
     
     // Send Commands and read results From NICs either using MMIO or IO Ports
     void     writeCommand(uint16_t p_address, uint32_t p_value);
@@ -158,10 +208,10 @@ private:
     void        handleReceive();        // Handle a packet reception.
 public:
     virtual int  init(PCI *h) override;
-    virtual void start() override;                              // perform initialization tasks and starts the driver
-    void        fire(/*InterruptContext * p_interruptContext*/);// This method should be called by the interrupt handler
-    uint8_t*    getMacAddress();                                // Returns the MAC address
-    int         sendPacket(const void* p_data, uint16_t p_len); // Send a packet
+    virtual void start() override;                              // Perform initialization tasks and starts the driver
+    virtual void stop()  override;                              // Perform stop routines
+    virtual void handleInterrupt() override;                    // Handle an Interrupt
+    virtual OSReturn sendPacket(const void* data, uint16_t length) override; // Send a packet
 };
 
 #endif /* IntelE1000Controller_hpp */

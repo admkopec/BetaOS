@@ -12,14 +12,18 @@
 #include <i386/proc_reg.h>
 #include <i386/vm_types.h>
 #include <i386/vm_param.h>
+#include <i386/machine_routines.h>
 
 #include <stdio.h>
 #include <time.h>
 
-bool enable=true;
-bool early = false;
+bool enable = true;
+bool early  = false;
 
-extern void putc(int ch);
+extern void vsputc(int ch);
+extern void refresh_screen(void);
+extern bool experimental;
+extern bool use_screen_caching;
 
 #define isdigit(d) ((d) >= '0' && (d) <= '9')
 #define Ctod(c) ((c) - '0')
@@ -44,89 +48,71 @@ _doprnt(register const char	*fmt, va_list *argp, void (*putc)(int), int radix)/*
 void
 kprintf(const char *fmt, ...) {
     va_list     listp;
-    //bool      state;
-    //if (can_use_serial) {
-        //bool early = false;
-        if (rdmsr64(MSR_IA32_GS_BASE) == 0&&enable==false) {
-            //early = true;
-        }
-        if (early) {
-            va_start(listp, fmt);
-            _doprnt_log(fmt, &listp, serial_putc, 16);
-            va_end(listp);
-            return;
-        }
+    bool      state;
+    if (rdmsr64(MSR_IA32_GS_BASE) == 0 && enable == false) {
+        early = true;
+    }
+    if (early) {
+        va_start(listp, fmt);
+        _doprnt_log(fmt, &listp, serial_putc, 16);
+        va_end(listp);
+        return;
+    }
         
-        /*
-         * Spin to get kprintf lock but poll for incoming signals
-         * while interrupts are masked.
-         */
-        /*state = ml_set_interrupts_enabled(FALSE);
+    /*
+     * Spin to get kprintf lock but poll for incoming signals
+     * while interrupts are masked.
+     */
+    state = ml_set_interrupts_enabled(FALSE);
         
-        pal_preemption_assert();
+    /*pal_preemption_assert();
         
-        while (!simple_lock_try(&kprintf_lock)) {
-            (void) cpu_signal_handler(NULL);
-        }
+     while (!simple_lock_try(&kprintf_lock)) {
+         (void) cpu_signal_handler(NULL);
+     }
         
-        if (cpu_number() != cpu_last_locked) {
-            MP_DEBUG_KPRINTF("[cpu%d...]\n", cpu_number());
-            cpu_last_locked = cpu_number();
-        }*/
-    //}   // Quick Fix for can_use_serial
+     if (cpu_number() != cpu_last_locked) {
+         MP_DEBUG_KPRINTF("[cpu%d...]\n", cpu_number());
+         cpu_last_locked = cpu_number();
+     }*/
     
     va_start(listp, fmt);
-    _doprnt(fmt, &listp, putc, 16);
+    _doprnt(fmt, &listp, vsputc, 16);
     va_end(listp);
         
-        /*simple_unlock(&kprintf_lock);
-        ml_set_interrupts_enabled(state);*/
-    //}
+    /*simple_unlock(&kprintf_lock);*/
+    ml_set_interrupts_enabled(state);
 }
 boolean_t kRebootOnPanic = TRUE;
 
-extern void reboot(void);
+extern void reboot(bool ispanic);
 void
 panic(const char *errormsg, ...) {
-#ifdef DEBUG
-    kRebootOnPanic = FALSE;
-#endif
     va_list list;
     kprintf("\nKERNEL PANIC: ");
-    if (can_use_serial) {
-        bool early = false;
-        if (rdmsr64(MSR_IA32_GS_BASE) == 0 && enable == false) {
-            early = true;
-        }
-        if (early) {
-            va_start(list, errormsg);
-            _doprnt_log(errormsg, &list, serial_putc, 16);
-            va_end(list);
-            goto panicing;
-        } else {
-        normal_print:
-            va_start(list, errormsg);
-            _doprnt(errormsg, &list, putc, 16);
-            va_end(list);
-            goto panicing;
-        }
+    if (rdmsr64(MSR_IA32_GS_BASE) == 0 && enable == false) {
+        early = true;
+    }
+    if (early) {
+        va_start(list, errormsg);
+        _doprnt_log(errormsg, &list, serial_putc, 16);
+        va_end(list);
+        goto panicing;
     } else {
-        goto normal_print;
+        va_start(list, errormsg);
+        _doprnt(errormsg, &list, vsputc, 16);
+        va_end(list);
+        goto panicing;
     }
 panicing:
     if (!kRebootOnPanic) {
-        kprintf("\nCPU Halted");
+        kprintf("\nCPU Halted\n");
         pal_stop_cpu(true);
     } else {
+        kprintf("\nRebooting in 3 seconds...\n");
         absolute_time_t start_time = time();
-    condition:
-        if ((start_time + 3) < time()) {
-            goto reboot_;
-        } else {
-            goto condition;
-        }
-    reboot_:
-        reboot();
+        while ((start_time + 3) > time()) { }
+        reboot(true);
     }
 }
 
@@ -227,11 +213,32 @@ __doprnt(const char	*fmt, va_list argp, void (*putc)(int), int radix, int is_log
     int                 nprinted = 0;
     
     while ((c = *fmt) != '\0') {
-        if (c != '%') {
+        if ((c != '%') && (c < 0xC0)) {
             (*putc)(c);
             nprinted++;
             fmt++;
             continue;
+        }
+        
+        if (c > 0xC0) {
+            if (c > 0xC3) {
+                continue;
+            }
+            char c_ = c;
+            fmt++;
+            c = *fmt;
+            if (c_ == 0xC2) {
+                (*putc)(c);
+                nprinted++;
+                fmt++;
+                continue;
+            } else if (c_ == 0xC3) {
+                c |= 0xC0;
+                (*putc)(c);
+                nprinted++;
+                fmt++;
+                continue;
+            }
         }
         
         fmt++;
@@ -426,6 +433,19 @@ __doprnt(const char	*fmt, va_list argp, void (*putc)(int), int radix, int is_log
                 while ((n < prec) && (!(length > 0 && n >= length))) {
                     if (*p == '\0') {
                         break;
+                    }
+                    if (*p > 0xC0) {
+                        if (*p == 0xC2) {
+                            p++;
+                        } else if (*p == 0xC3) {
+                            p++;
+                            char c__ = *p;
+                            c__ |= 0xC0;
+                            (*putc)(c__);
+                            nprinted++;
+                            n++;
+                            continue;
+                        }
                     }
                     (*putc)(*p++);
                     nprinted++;
@@ -635,6 +655,5 @@ __doprnt(const char	*fmt, va_list argp, void (*putc)(int), int radix, int is_log
         }
         fmt++;
     }
-    
     return nprinted;
 }

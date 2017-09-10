@@ -22,7 +22,7 @@ SMBiosController::init() {
 
 void SearchForEntrySMBios(void) {
     uint64_t Address;
-    for (Address = 0x000F0000; Address < 0x000FFFFF; Address += 0x10) {
+    for (Address = 0x000F0000; Address < 0x100000/*0x000FFFFF*/; Address += 0x10) {
         if (!(strncmp((const char*)((uint64_t *)((Address))), "_SM_", 4))) {
             printf("Found SMBios Entry Point!\n");
             SMBEntryPoint* Entry = (SMBEntryPoint *)Address;
@@ -35,6 +35,8 @@ void SearchForEntrySMBios(void) {
                     printf("Type: %d\n", i->type);
                 }
             }*/
+        } else if (!strncmp((const char*)((uint64_t *)((Address))), "_DMI_", 5)) {
+            printf("Found SMBios' DMI Entry Point!\n");
         }
     }
 }

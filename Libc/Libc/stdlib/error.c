@@ -15,3 +15,8 @@ void error(const char* errormsg) {
     gettime();
     kprintf("  %d:%02d:%02d %s %d/%d/%d\n  ERROR: %s\n", hour, minute, second, pmam, month, day, year, errormsg);
 }
+
+void
+abort() {
+    panic("Abort called");
+}

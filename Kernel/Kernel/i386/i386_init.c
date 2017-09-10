@@ -18,6 +18,7 @@
 #include <i386/lapic.h>
 #include <i386/pal.h>
 #include <i386/tsc.h>
+#include <i386/fpu.h>
 #include <i386/machine_routines.h>
 #include <i386/cpu_threads.h>
 #include <i386/thread_status.h>
@@ -279,9 +280,6 @@ vstart(vm_offset_t boot_args_start) {
         // Use for getting offsetof and placing it to #defines in idt64.S
         //DBG("Offset of %p\n", offsetof(pal_rtc_nanotime_t, ns_base));
         
-        // FIX Interrupts
-        // The problem is nearly solved
-        
         cpu = 0;
         cpu_data_alloc(true);
     } else {
@@ -300,6 +298,9 @@ vstart(vm_offset_t boot_args_start) {
 }
 
 extern bool enable;
+extern bool use_screen_caching;
+extern uint64_t Screen;
+extern void * kalloc_(size_t size);
 extern void APICInit(void);
 void
 i386_init(void) {
@@ -316,35 +317,39 @@ i386_init(void) {
     cpu_init();
     
     i386_vm_init(max_mem_touse, IA32e, kernelBootArgs);
+    use_screen_caching = true;
     enable = true;
     
     vm_offset_t v_physAddr = Platform_state.video.v_baseAddr & ~3;
     vm_offset_t v_newAddr  = 0;
-    vm_size_t fbsize = 0;
+    vm_size_t   fbsize     = 0;
     
     if (!v_physAddr) {
-        kprintf("v_physAddr == 0\n");
+        panic("v_physAddr == 0\n");
     } else {
         if (Platform_state.video.v_length != 0) {
             fbsize = (vm_size_t) round_page(Platform_state.video.v_length);
         } else {
             fbsize = (vm_size_t) round_page(Platform_state.video.v_height * Platform_state.video.v_rowBytes);
+            Platform_state.video.v_length = (Platform_state.video.v_height * Platform_state.video.v_rowBytes);
         }
         unsigned int flags = VM_WIMG_IO;
         v_newAddr = io_map((vm_map_offset_t)v_physAddr, fbsize, flags);
         if (v_newAddr != 0) {
             Platform_state.video.v_baseAddr = v_newAddr + Platform_state.video.v_offset;
         } else {
-            kprintf("It didn't work :(\n");
+            panic("Video Framebuffer allocation failed!\n");
         }
     }
     DBG("v_baseAddr = 0x%x\n", Platform_state.video.v_baseAddr);
     early = false;
-    DBG("Got Here!\n");
+    Screen = (uint64_t) kalloc_(fbsize);
+    clear_screen();
     
+    enable_sse();
+    init_fpu();
     lapic_init();
     APICInit();
-    
     //pmInit();
     
     kernel_main();

@@ -17,9 +17,10 @@ public:
     static void  OSFree(void * addr);
 };
 
-typedef int OSReturn;
+typedef int          OSReturn;
+extern  const char * OSReturnStrings[4];
 
-#define kOSReturnSuccess 0
+#define kOSReturnSuccess  0
 #define kOSReturnTimeout -1
 #define kOSReturnFailed  -2
 #define kOSReturnError   -3

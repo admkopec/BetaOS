@@ -16,12 +16,21 @@
 #define PCI_USB_SUBCLASS 0x03
 #define PCI_USB_XHCI     0x30
 
+#define PCI_XHCI_INTEL_XHCC                 0x40U    /* Intel xHC System Bus Configuration Register */
+#define PCI_XHCI_INTEL_XHCC_SWAXHCI                (1U  << 11)
+#define PCI_XHCI_INTEL_XHCC_SWAXHCIP_SET(x) (((x) & 3U) << 12)
+#define PCI_XHCI_INTEL_XUSB2PR              0xD0U    /* Intel USB2 Port Routing */
+#define PCI_XHCI_INTEL_XUSB2PRM             0xD4U    /* Intel USB2 Port Routing Mask */
+#define PCI_XHCI_INTEL_USB3_PSSEN           0xD8U    /* Intel USB3 Port SuperSpeed Enable */
+#define PCI_XHCI_INTEL_USB3PRM              0xDCU    /* Intel USB3 Port Routing Mask */
+
 #define USB_FULLSPEED  1
 #define USB_LOWSPEED   2
 #define USB_HIGHSPEED  3
 #define USB_SUPERSPEED 4
 
-#define kMaxRootPorts 30
+#define kMaxRootPorts   30
+#define kUSBMaxDevices  128
 
 typedef struct {
     uint8_t  CapabilitiesLength;
@@ -95,12 +104,32 @@ typedef struct {
 #define	XHCI_LEGACY_SMI_EVENTS	(7U << 29)
 
 typedef struct {
-    uint32_t Line1;
+    uint32_t dwSctx0;
+    uint32_t dwSctx1;
+    uint32_t dwSctx2;
+    uint32_t dwSctx3;
+    uint32_t pad[4];
 } SlotContext;
 
 typedef struct {
-    SlotContext Slot;
-} DeviceContext;
+    uint32_t dwEpCtx0;
+    uint32_t dwEpCtx1;
+    uint64_t qwEpCtx2;
+    uint32_t dwEpCtx4;
+    uint32_t pad[3];
+} EndpointContext;
+
+typedef struct {
+    uint32_t dwInCtx0;
+    uint32_t dwInCtx1;
+    uint32_t pad[6];
+} InputControlContext;
+
+union DeviceContext{
+    SlotContext     Slot;
+    EndpointContext Endpoint;
+    InputControlContext InputControl;
+};
 
 // Fix static declarations
 

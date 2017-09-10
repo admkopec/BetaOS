@@ -21,6 +21,7 @@ extern "C" {
 #endif
     void ModulesStartController(void);
     void ModulesStopController(void);
+    void PrintLoadedModules(void);
     void SearchForEntrySMBios(void);
     
 #ifdef __cplusplus
@@ -32,6 +33,7 @@ class Modules {
 public:
     void start(void);
     void stop(void);
+    void print(void);
 };
 
 #endif /* __cplusplus */

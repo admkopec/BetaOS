@@ -15,6 +15,12 @@
 
 #define super Controller
 #define Log(x ...) printf("EHCIController: " x)
+#ifdef DEBUG
+#define DBG(x ...) Log(x)
+#else
+#define DBG(x ...)
+#endif
+
 
 // TD Link Pointer
 #define PTR_TERMINATE                   (1 << 0)
@@ -137,9 +143,11 @@
 
 OSReturn
 EHCI::init(PCI *pci) {
+    OSReturn status;
     if (!(pci->ClassCode() == PCI_USB_CLASS && pci->SubClass() == PCI_USB_SUBCLASS && pci->ProgIF() == PCI_USB_EHCI)) {
         return kOSReturnFailed;
     }
+    pci->EnableBusMastering();
     
     int bar_type = pci->getBAR(0);
     if (bar_type != 0x00) {
@@ -148,70 +156,65 @@ EHCI::init(PCI *pci) {
     }
     
     Log("EHCI found\n");
-    Log("Vendor: %X Device: %X\n", pci->VendorID(), pci->DeviceID());
+    Log("Vendor: %x Device: %x\n", pci->VendorID(), pci->DeviceID());
     Vendor = pci->VendorID();
     Device = pci->DeviceID();
     CapabilityRegisters  = (CapRegisters*)(pci->BAR().u.address);
     OperationalRegisters = (OpRegisters*) (pci->BAR().u.address + CapabilityRegisters->CapabilitiesLength);
     
-    uint16_t EECP = (CapabilityRegisters->HCCParams & HCCPARAMS_EECP_MASK) >> HCCPARAMS_EECP_SHIFT;
-    if (EECP >= 0x40) {
-        int EECP_ID = 0;
-        bool failed;
-        while (EECP) {
-            EECP_ID = pci->Read32(EECP);
-            if (EECP_ID == 1) {
-                Log("Found EECP\n");
-                break;
-            }
-            EECP = pci->Read32(EECP + 0x01);
-        }
-        
-        if ((EECP_ID == 1) && pci->Read32(EECP + 0x02) & 0x01) {
-            pci->Write32(EECP + 0x03, 0x01);
-            failed = true;
-            int i = 0;
-            while ((pci->Read32(EECP + 0x02) & 0x01) && (i < 10000)) {
-                printf("");
-                i++;
-            }
-            i = 0;
-            if (!(pci->Read32(EECP + 0x02) & 0x01)) {
-                while (!(pci->Read32(EECP + 0x03) & 0x01) && (i < 10000)) {
-                    printf("");
-                    i++;
-                }
-                if (pci->Read32(EECP + 0x03) & 0x01) {
-                    failed = false;
-                    Log("Legacy Support success!\n");
-                }
-            }
-            
-            if (failed) {
-                pci->Write32(EECP + 0x04, 0x0000);
-                Log("Legacy Support manual!\n");
-            }
-        }
-    }
-    
-    OperationalRegisters->USBCommand |= CMD_RS;
-    if(Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, 0, 100000) != kOSReturnSuccess) {
-        Log("Timeout on Start Host!\n");
-        return kOSReturnTimeout;
-    }
-    
     if (!(OperationalRegisters->USBStatus & STS_HCHALTED)) {
         OperationalRegisters->USBCommand &= ~CMD_RS;
     }
     
-    if (Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, STS_HCHALTED, 100000) != kOSReturnSuccess) {
-        Log("Timeout on Stop Host!\n");
+    if ((status = Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, UINT32_MAX, 100000) != kOSReturnSuccess)) {
+        Log("%s on Stop Host!\n", OSReturnStrings[status]);
         return kOSReturnTimeout;
     }
+    
+    OperationalRegisters->USBCommand |= CMD_HCRESET;
+    
+    if ((status = Handshake(&OperationalRegisters->USBCommand, CMD_HCRESET, 0, 100000)) != kOSReturnSuccess) {
+        Log("%s on HC Reset!\n", OSReturnStrings[status]);
+        return kOSReturnTimeout;
+    }
+    
+    uint32_t EECP = (CapabilityRegisters->HCCParams & HCCPARAMS_EECP_MASK) >> HCCPARAMS_EECP_SHIFT;
+    
+    if (EECP > 0) {
+        DBG("Found EECP\n");
+        uint32_t LegacySupport = pci->Read32(EECP);
+        if ((LegacySupport & USBLEGSUP_CAPID) == 0x01) {
+            if ((LegacySupport & USBLEGSUP_HC_BIOS) != 0) {
+                DBG("BIOS Owns controller\n");
+                pci->Write8(EECP + 0x03, 0x1);
+                for (int i = 0; i < 20; i++) {
+                    LegacySupport = pci->Read32(EECP);
+                    if ((LegacySupport & USBLEGSUP_HC_BIOS) == 0) {
+                        break;
+                    }
+                    DBG("Controller is still BIOS owned!\n");
+                    for (i = 0; i < 50000; i++) {
+                        printf("");
+                    }
+                }
+            }
+            if (LegacySupport & USBLEGSUP_HC_BIOS) {
+                DBG("BIOS won't give up control!\n");
+            } else if (LegacySupport & USBLEGSUP_HC_OS) {
+                DBG("OS owns Controller\n");
+            }
+            pci->Write8 (EECP + 0x02, 0x0);
+            pci->Write32(EECP + 0x04, 0x0);
+        } else {
+            DBG("EECP is not a Legacy Support Register\n");
+        }
+    } else {
+        DBG("No EECP\n");
+    }
+    
+    OperationalRegisters->USBInterrupt     = 0;
+    OperationalRegisters->ControlDSSegment = 0;
 
-    Used_ = true;
-
-    // Nothing below is working
     QHpool = (EhciQH *) OSRuntime::OSMalloc(sizeof(EhciQH) * MAX_QH);
     //memset(QHpool, 0, sizeof(EhciQH) * MAX_QH);
     TDpool = (EhciTD *) OSRuntime::OSMalloc(sizeof(EhciTD) * MAX_TD);
@@ -284,13 +287,15 @@ EHCI::init(PCI *pci) {
         FrameList[i] = PTR_QH | (uint32_t)(uintptr_t)QH;
     }
     
-    OperationalRegisters->USBInterrupt     = 0;
+    OperationalRegisters->USBStatus        = 0x103F;
+    OperationalRegisters->USBInterrupt     = STS_IOAA | STS_HSE | STS_PCD | STS_ERROR | STS_USBINT;
     OperationalRegisters->FrameIndex       = 0;
     OperationalRegisters->PeriodicListBase = (uint32_t)(uintptr_t)FrameList;
     OperationalRegisters->AsyncListAddress = (uint32_t)(uintptr_t)AsyncQH;
-    OperationalRegisters->ControlDSSegment = 0;
-    OperationalRegisters->USBStatus        = 0x3F;
     
+    OperationalRegisters->USBCommand |= (8 << CMD_ITC_SHIFT);
+    
+    NameString = (char*)"EHCIController (USB 2.0)";
     Used_ = true;
     return kOSReturnSuccess;
 }
@@ -298,34 +303,41 @@ EHCI::init(PCI *pci) {
 void
 EHCI::start() {
     Log("Starting...\n");
-    OperationalRegisters->USBCommand = (8 << CMD_ITC_SHIFT) | CMD_PSE | CMD_ASE | CMD_RS;
-    Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, 0, 1000);
-    OperationalRegisters->ConfigFlag = 1;
+    OSReturn status;
+    OperationalRegisters->USBCommand |= (CMD_PSE | CMD_ASE | CMD_RS);
+    
+    if ((status = Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, 0, 100000)) != kOSReturnSuccess) {
+        Log("%s on HC Start!\n", OSReturnStrings[status]);
+    }
+    
+    OperationalRegisters->ConfigFlag = (1U << (0));
     for (int i = 0; i < 10; i++) { printf(""); }
     
     uint32_t portCount = CapabilityRegisters->HCSParams & HCSPARAMS_N_PORTS_MASK;
+    DBG("Port Count: %d\n", portCount);
     for (uint32_t port = 0; port < portCount; port++) {
-        uint32_t status = ResetPort(port);
-        
+        //ResetPort(port);
+        LineStatusCheck(port);
+        /*uint32_t status = ResetPort(port);
+        DBG("Port (%d) status %x\n", port, status);
         if (status & PORT_ENABLE) {
             //uint32_t speed = USB_HIGH_SPEED;
             Log("Found Device at port %X with speed: %s\n", port, "USB 2.0");
             // Set Up a Device here
-        }
+        }*/
     }
 }
 
 void
 EHCI::stop() {
     Log("Stopping...\n");
+    OSReturn status;
     if (!(OperationalRegisters->USBStatus & STS_HCHALTED)) {
         OperationalRegisters->USBCommand &= ~CMD_RS;
     }
     
-    int status;
-    status = Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, STS_HCHALTED, 1000);
-    if (status != kOSReturnSuccess) {
-        Log("Stop Handshake Error Code = %X\n", status);
+    if((status = Handshake(&OperationalRegisters->USBStatus, STS_HCHALTED, UINT32_MAX, 1000)) != kOSReturnSuccess) {
+        Log("%s on Stop Host!\n", OSReturnStrings[status]);
     }
     super::stop();
 }
@@ -335,7 +347,7 @@ EHCI::Handshake(volatile const uint32_t* pReg, uint32_t test_mask, uint32_t test
     for (int32_t count = 0; count < msec; ++count) {
         //if (count)
         //    printf("");
-        //IOSleep(1U);
+        //OSSleep(1U);
         if (*pReg == ~(uint32_t)0) {
             Log("Device Removed\n");
             return kOSReturnError;
@@ -364,11 +376,63 @@ EHCI::PortClear(volatile uint32_t *reg, uint32_t data) {
              *reg    = status;
 }
 
-uint32_t
+void
+EHCI::LineStatusCheck(uint32_t port) {
+    if (!(OperationalRegisters->Ports[port] & PORT_CONNECTION)) {
+        Log("No connection\n");
+        //return ;
+    }
+    for (int i = 0; i < 1000; i++) {
+        printf("");
+    }
+    
+    uint8_t lineStatus = (OperationalRegisters->Ports[port] >> 10) & 3;
+    const char* const state[] = {"SE0", "K-State (1.0, 1.1)", "J-State", "Undefined"};
+    DBG("Line State: %s\n", state[lineStatus]);
+    
+    switch (lineStatus) {
+        case 1:
+            Log("Full-Speed device attached at port %d\n", port);
+            if (CapabilityRegisters->HCSParams & 0xF000) {
+                OperationalRegisters->Ports[port] |= PORT_OWNER;
+            }
+            break;
+        case 0:
+        case 2:
+        case 3:
+            ResetPort(port);
+            if (OperationalRegisters->Ports[port] & PORT_POWER) {
+                if (OperationalRegisters->Ports[port] & PORT_ENABLE) {
+                    Log("High-Speed device attached at port %d\n", port);
+                    
+                } else {
+                    Log("Full-Speed device attached at port %d\n", port);
+                    if (CapabilityRegisters->HCSParams & 0xF000) {
+                        OperationalRegisters->Ports[port] |= PORT_OWNER;
+                    }
+                }
+            }
+            break;
+    }
+}
+
+void
 EHCI::ResetPort(uint32_t port) {
-    volatile uint32_t *reg = &OperationalRegisters->Ports[port];
+    OperationalRegisters->Ports[port] |= PORT_POWER;
+    
+    if (OperationalRegisters->USBStatus & STS_HCHALTED) {
+        Log("HCHalted not good!\n");
+    }
+    
+    OperationalRegisters->Ports[port] = (OperationalRegisters->Ports[port] & ~PORT_ENABLE) | PORT_RESET;
+    for (int i = 0; i < 3000; i++) {
+        printf("");
+    }
+    OperationalRegisters->Ports[port] &= ~PORT_RESET;
+    Handshake(&OperationalRegisters->Ports[port], PORT_RESET, 0, 1000);
+    /*volatile uint32_t *reg = &OperationalRegisters->Ports[port];
     PortSet(reg, PORT_RESET);
-    for (int i = 0; i < 100; i++) { printf(""); }
+    for (int i = 0; i < 200; i++) { printf(""); }
     PortClear(reg, PORT_RESET);
     
     uint32_t status = 0;
@@ -392,6 +456,5 @@ EHCI::ResetPort(uint32_t port) {
             break;
         }
     }
-    return status;
-    return 0;
+    return status;*/
 }

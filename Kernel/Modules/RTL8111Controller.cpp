@@ -13,18 +13,24 @@
 #include "PCIController.hpp"
 #include <i386/pio.h>
 
-#define super Controller
+#define super Network
 #define Log(x ...) printf("RTL8111Controller: " x)
-
-//uint8_t     bar_type = 0;                 // Type of BAR0
-//uint16_t    io_base  = 0xD001;            // IO Base Address
-//uint64_t    mem_base = 0xEA10000C;        // MMIO Base Address
-//bool        eeprom_exists = false;
 
 OSReturn
 RTL8111::init(PCI *h) {
-    if (h->VendorID() != Realtek_Vendor || h->DeviceID() != RTL8168_ID) {
-        return kOSReturnFailed;
+    for (size_t i = 0; i < sizeof(VendorIDs); i++) {
+        if (h->VendorID() == VendorIDs[i]) {
+            break;
+        } else if (i == (sizeof(VendorIDs) - 1)) {
+            return kOSReturnFailed;
+        }
+    }
+    for (size_t i = 0; i < sizeof(DeviceIDs); i++) {
+        if (h->DeviceID() == DeviceIDs[i]) {
+            break;
+        } else if (i == (sizeof(DeviceIDs) - 1)) {
+            return kOSReturnFailed;
+        }
     }
     
     bar_type = h->getBAR(0);
@@ -36,6 +42,7 @@ RTL8111::init(PCI *h) {
         mem_base = (uintptr_t)h->BAR().u.address;
         Log("BAR Address: %X\n", mem_base);
     }
+    NameString = (char*)"RTL8111Controller";
     Used_ = true;
     return kOSReturnSuccess;
 }
@@ -78,3 +85,13 @@ bool RTL8111::detectEEProm() {
     }
     return eeprom_exists;
 }
+
+OSReturn
+RTL8111::sendPacket(__unused const void* data, __unused uint16_t length) {
+    return kOSReturnFailed;
+}
+
+const int
+RTL8111::VendorIDs[] = { 0x10EC };
+const int
+RTL8111::DeviceIDs[] = { 0x8168 };

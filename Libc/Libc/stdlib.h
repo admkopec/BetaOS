@@ -19,6 +19,9 @@ typedef struct Link {
     struct Link *prev;
     struct Link *next;
 } Link;
+    
+void* malloc(size_t size);
+void  free(void* ptr);
 
 //__attribute__((__noreturn__))
 //void panic(const char* errormsg);

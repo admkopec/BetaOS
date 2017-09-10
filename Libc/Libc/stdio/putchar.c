@@ -9,14 +9,20 @@
 #include <stdio.h>
 //#include <kernel/tty.h>
 
-extern void putc(int ch);
+extern void vsputc(int ch);
+extern bool experimental;
+extern bool use_screen_caching;
+extern void refresh_screen(void);
 
 int putchar(int ic)
 {
-    if ((ic<=0x7F&&ic>=0x20)||ic=='\n'||ic=='\t'||ic=='\b'||ic=='\r') {
+    if ((ic<=0xFF&&ic>=0x20)||ic=='\n'||ic=='\t'||ic=='\b'||ic=='\r') {
         char c = (char) ic;
         //serial_putc(c);
-        putc(c);
+        vsputc(c);
+    }
+    if (experimental && use_screen_caching) {
+        refresh_screen();
     }
 	return ic;
 }

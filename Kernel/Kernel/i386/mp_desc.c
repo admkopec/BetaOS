@@ -518,7 +518,7 @@ cpu_data_alloc(bool is_boot_cpu) {
         }
         return cdp;
     }
-    return 0;
+    return NULL;
     //for(; ;) { }
 /*    // Allocate per-cpu data:
     ret = kmem_alloc(kernel_map, (vm_offset_t *) &cdp, sizeof(cpu_data_t), VM_KERN_MEMORY_CPU);

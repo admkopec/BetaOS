@@ -12,14 +12,20 @@
 #include "font.h"
 //#include "../misc_protos.h"
 
+#define MAX_NUMBER_OF_SCREENS 25
+
 static uint32_t color_foreground = 0x00FFFFFF;
 static uint32_t color_background = 0x00000000;
 
+uint64_t Screen;
+bool     use_screen_caching = false;
+const bool     experimental = false;
 /*char painted_chars[1000][1000];
 unsigned long painted_chars_row    = 0;
 unsigned long painted_chars_column = 0;*/
 
-void putc(int ch);
+void vsputc(int ch);
+void refresh_screen(void);
 
 uint32_t row = 0;
 uint32_t column = 0;
@@ -87,22 +93,31 @@ void
 paint_char(unsigned int x, unsigned int y, unsigned char ch) {
     uint32_t *theChar;
     uint32_t *where;
+    uint32_t *where_screen;
     int       i;
     
     render_char(ch, rendered_char, 32);
     theChar = (uint32_t*)(rendered_char);
     
     where = (uint32_t*)(Platform_state.video.v_baseAddr + (y * Platform_state.video.v_rowBytes) + (x * 4));
+    where_screen = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
     
     for (i = 0; i < ISO_CHAR_HEIGHT; i++) {
-        uint32_t *store = where;
+        uint32_t *store  = where;
+        uint32_t *store2 = where_screen;
         int j;
         for (j = 0; j < 8; j++) {
             uint32_t val = *theChar++;
             val = (color_background & ~val) | (color_foreground & val);
-            *store++ = val;
+            if (!use_screen_caching || !experimental) {
+                *store++  = val;
+            }
+            if (use_screen_caching) {
+                *store2++ = val;
+            }
         }
         where = (uint32_t *)(((unsigned char*)where)+Platform_state.video.v_rowBytes);
+        where_screen = (uint32_t *)(((unsigned char*) where_screen) + Platform_state.video.v_rowBytes);
     }
 }
 
@@ -145,28 +160,48 @@ clear_screen_(unsigned int xx, unsigned int yy, unsigned int bottom) {
     }
 }
 void
-scroll_up() {  // Fix half line after to scrolls    // Fix for real hardware - stop reading from Framebuffer
-    uint32_t *from, *to, linelongs, i, line, rowline, rowscanline;
+scroll_up() {  // Fix half line after to scrolls
+    uint32_t *from, *to, *to2, linelongs, i, line, rowline, rowscanline;
     linelongs   = (uint32_t)(Platform_state.video.v_rowBytes * (ISO_CHAR_HEIGHT >> 2));
     rowline     = (uint32_t)(Platform_state.video.v_rowBytes >> 2);
     rowscanline = (uint32_t)((((Platform_state.video.v_depth + 7) / 8) * Platform_state.video.v_width) >> 2);
     to   = (uint32_t *) Platform_state.video.v_baseAddr;
-    from = to + linelongs;
+    if (use_screen_caching) {
+        to2  = (uint32_t *) Screen;
+        from = ((uint32_t *)Screen) + linelongs;
+    } else {
+        to2  = to;
+        from = to + linelongs;
+    }
     i    = (uint32_t)((Platform_state.video.v_height / ISO_CHAR_HEIGHT) - 1);
     
     while (i-- > 0) {
         for (line = 0; line < ISO_CHAR_HEIGHT; line++) {
-            bcopy(from, to, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+            if (!use_screen_caching || !experimental) {
+                bcopy(from, to,  (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+            }
+            bcopy(from, to2, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
             from += rowline;
-            to   += rowline;
+            if (!use_screen_caching || !experimental) {
+                to   += rowline;
+            }
+            to2  += rowline;
         }
     }
     clear_screen_(0, row, (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
     clear_screen_(0, (uint32_t)((Platform_state.video.v_height) - ISO_CHAR_HEIGHT), (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
+    if (experimental) {
+        refresh_screen();
+    }
 }
 
 void
-putc(int ch) {
+refresh_screen() {
+    bcopy((void *) Screen, (void *) Platform_state.video.v_baseAddr, Platform_state.video.v_length);
+}
+
+void
+vsputc(int ch) {
     if (ch=='\n'||ch=='\r') {
         if (row>=(Platform_state.video.v_height-(2*ISO_CHAR_HEIGHT))) {
             scroll_up();
@@ -187,6 +222,7 @@ putc(int ch) {
     paint_char(column, row, ch);
     column+=ISO_CHAR_WIDTH;
     if (column>=(Platform_state.video.v_width)) {
-        putc('\n');
+        vsputc('\n');
     }
+    
 }

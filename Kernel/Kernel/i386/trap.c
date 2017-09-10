@@ -21,6 +21,7 @@
 #include "pio.h"
 
 extern uint64_t col, line;
+extern void IncommingInterrupt(int InterruptNumber);
 
 static void panic_trap(x86_saved_state64_t *regs, uint32_t pl);
 static void set_recovery_ip(x86_saved_state64_t  *saved_state, vm_offset_t ip);
@@ -100,16 +101,17 @@ interrupt(x86_saved_state_t *state) {
      * Handle local APIC interrupts
      * else call platform expert for devices.
      */
-    if (interrupt_num >= 0xD0 && interrupt_num <= 0xDF) {
-        if (interrupt_num < 0xD8) {
-            outb(0x20,0x20);
-        } else {
-            outb(0x20, 0x20); outb(0xA0, 0x20);
-        }
-    }
     
     if (!lapic_interrupt(interrupt_num, state)) {
-        kprintf("");//Platform_incoming_interrupt(interrupt_num);
+        //Platform_incoming_interrupt(interrupt_num);
+        if (interrupt_num >= LAPIC_DEFAULT_INTERRUPT_BASE && interrupt_num <= (LAPIC_DEFAULT_INTERRUPT_BASE + 0x0F)) {
+            IncommingInterrupt(interrupt_num);
+            if (interrupt_num < (LAPIC_DEFAULT_INTERRUPT_BASE + 8)) {
+                outb(0x20,0x20);
+            } else {
+                outb(0x20, 0x20); outb(0xA0, 0x20);
+            }
+        }
     }
     
     if (__improbable(get_preemption_level() != ipl)) {
@@ -166,10 +168,6 @@ interrupt(x86_saved_state_t *state) {
     
     //if (cnum == master_cpu)
     //    ml_entropy_collect();
-    
-    //KERNEL_DEBUG_CONSTANT_IST(KDEBUG_TRACE,
-    //                          MACHDBG_CODE(DBG_MACH_EXCP_INTR, 0) | DBG_FUNC_END,
-    //                          interrupt_num, 0, 0, 0, 0);
     
     assert(ml_get_interrupts_enabled() == FALSE);
 }
@@ -251,8 +249,6 @@ kernel_trap(x86_saved_state_t	*state,
         kprintf("T_PREEMPT!\n");
         goto debugger_entry;
         //ast_taken(AST_PREEMPTION, FALSE);
-        
-		//KERNEL_DEBUG_CONSTANT_IST(KDEBUG_TRACE, (MACHDBG_CODE(DBG_MACH_EXCP_KTRAP_x86, type)) | DBG_FUNC_NONE, 0, 0, 0, VM_KERNEL_UNSLIDE(kern_ip), 0);
 		return;
 	}
 	

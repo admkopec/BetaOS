@@ -12,8 +12,7 @@
 
 #include <kernel/command.h>
 #include <i386/acpi.h>
-#include "../../Modules/ModulesController.hpp"
-#include "../../Modules/PS2Controller.h"
+#include <Modules/ModulesController.hpp>
 
 #include "misc_protos.h"
 
@@ -29,7 +28,6 @@ void kernel_main()
 {
     //acpi();   Needs fix for PMAP as well as reboot, shutdown is "patched"
     ModulesStartController();
-    updateLEDs();
     CommandInit();
     kprintf("Hello!\nWelcome to BetaOS in x86_64 MACH-O EFI mode :) !\n");
     char * username = "root";

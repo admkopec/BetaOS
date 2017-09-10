@@ -25,6 +25,7 @@
 		3B588C071D95D0DF00087C38 /* string.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B588C031D95D0DF00087C38 /* string.h */; };
 		3B588C081D95D0DF00087C38 /* stdlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B588C041D95D0DF00087C38 /* stdlib.h */; };
 		3B588C091D95D0DF00087C38 /* stdio.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B588C051D95D0DF00087C38 /* stdio.h */; };
+		3BECD16C1F6596C300390092 /* pthread.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BECD16B1F6596C300390092 /* pthread.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		3B588C041D95D0DF00087C38 /* stdlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdlib.h; path = Libc/stdlib.h; sourceTree = "<group>"; };
 		3B588C051D95D0DF00087C38 /* stdio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdio.h; path = Libc/stdio.h; sourceTree = "<group>"; };
 		3B7865CF1D95903600C015DF /* libc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BECD16B1F6596C300390092 /* pthread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pthread.c; path = Libc/stdlib/pthread.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			children = (
 				3B588BED1D95D0A500087C38 /* panic.c */,
 				3B588BEE1D95D0A500087C38 /* error.c */,
+				3BECD16B1F6596C300390092 /* pthread.c */,
 			);
 			name = stdlib;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 				3B588BEA1D95D07A00087C38 /* printf.cpp in Sources */,
 				3B588BE71D95D07A00087C38 /* putchar.c in Sources */,
 				3B588BF81D95D0BC00087C38 /* mem.cpp in Sources */,
+				3BECD16C1F6596C300390092 /* pthread.c in Sources */,
 				3B588BFC1D95D0BC00087C38 /* strcmp.cpp in Sources */,
 				3B588BF91D95D0BC00087C38 /* strlcpy.cpp in Sources */,
 				3B588BFA1D95D0BC00087C38 /* strncmp.cpp in Sources */,
@@ -230,7 +234,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -258,7 +262,8 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -284,7 +289,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -312,7 +317,8 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -329,11 +335,11 @@
 		3B7865D41D95903600C015DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				EXECUTABLE_PREFIX = lib;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -347,6 +353,7 @@
 					"$(PROJECT_DIR)/../Kernel/Headers",
 					"$(PROJECT_DIR)/../Kernel/Kernel",
 					"$(PROJECT_DIR)/../Kernel",
+					"$(PROJECT_DIR)/Libc",
 				);
 				OTHER_CFLAGS = (
 					"-ffreestanding",
@@ -369,11 +376,11 @@
 		3B7865D51D95903600C015DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				EXECUTABLE_PREFIX = lib;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					KERNEL,
 					__LP64__,
@@ -385,6 +392,7 @@
 					"$(PROJECT_DIR)/../Kernel/Headers",
 					"$(PROJECT_DIR)/../Kernel/Kernel",
 					"$(PROJECT_DIR)/../Kernel",
+					"$(PROJECT_DIR)/Libc",
 				);
 				OTHER_CFLAGS = (
 					"-ffreestanding",

@@ -17,6 +17,7 @@
 #include "XHCIController.hpp"
 #include "MMIOUtils.hpp"
 #include "SATAController.hpp"
+#include "PS2Controller.hpp"
 #include "PCIController.hpp"
 
 #define Log(x ...) printf("ModulesController: " x)
@@ -32,8 +33,17 @@ void ModulesStartController() {
 void ModulesStopController() {
     ModulesController.stop();
 }
+
+void PrintLoadedModules() {
+    ModulesController.print();
+}
 // Try speeding up and not using "brute force"
 void Modules::start() {
+    Controller* module = new PS2;
+    if (!module->init(nullptr)) {
+        Controllers[LastLoadedModule] = module;
+        Controllers[LastLoadedModule]->start();
+    }
     for (int bus = 0; bus < 256; bus++) {
         PCI t;
         t.init(bus);
@@ -101,6 +111,12 @@ void Modules::start() {
                 }
             }
         }
+    }
+}
+
+void Modules::print() {
+    for (uint32_t i = 0; i <= LastLoadedModule; i++) {
+        printf("%s\n", Controllers[i]->Name());
     }
 }
 

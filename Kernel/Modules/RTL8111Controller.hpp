@@ -11,10 +11,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "Controller.hpp"
-
-#define Realtek_Vendor 0x10EC
-#define RTL8168_ID     0x8168
+#include "NetworkController.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,12 +20,15 @@ extern "C" {
 #ifdef __cplusplus
 }
 
-class RTL8111 : public Controller {
+class RTL8111 : public NetworkController {
     uint8_t     bar_type;       // Type of BOR0
     uint16_t    io_base;        // IO Base Address
     uint64_t    mem_base;       // MMIO Base Address
     bool        eeprom_exists;  // A flag indicating if eeprom exists
-    uint8_t     mac[6];         // A buffer for storing the mack address
+    uint8_t     MAC[6];         // A buffer for storing the mack address
+    
+    static const int VendorIDs[1];
+    static const int DeviceIDs[1];
     
     // Send Commands and read results From NICs either using MMIO or IO Ports
     void     writeCommand(uint16_t p_address, uint32_t p_value);
@@ -40,6 +40,7 @@ class RTL8111 : public Controller {
 public:
     virtual int  init(PCI *h) override;
     virtual void start() override;
+    virtual OSReturn sendPacket(const void* data, uint16_t length) override;
 };
 
 #endif

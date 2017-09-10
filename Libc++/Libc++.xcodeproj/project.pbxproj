@@ -7,18 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B10465E1F47711B003B0CE5 /* UDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B10465C1F47711B003B0CE5 /* UDP.cpp */; };
+		3B10465F1F47711B003B0CE5 /* UDP.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B10465D1F47711B003B0CE5 /* UDP.hpp */; };
+		3B1046621F47712E003B0CE5 /* TCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1046601F47712E003B0CE5 /* TCP.cpp */; };
+		3B1046631F47712E003B0CE5 /* TCP.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B1046611F47712E003B0CE5 /* TCP.hpp */; };
+		3B1046661F478DF5003B0CE5 /* Ethernet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1046641F478DF5003B0CE5 /* Ethernet.cpp */; };
+		3B1046671F478DF5003B0CE5 /* Ethernet.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B1046651F478DF5003B0CE5 /* Ethernet.hpp */; };
+		3B1F2B351F47664E007E395C /* DHCP.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B1F2B331F47664E007E395C /* DHCP.hpp */; };
+		3B1F2B381F47666B007E395C /* IPs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1F2B361F47666B007E395C /* IPs.cpp */; };
+		3B1F2B391F47666B007E395C /* IPs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B1F2B371F47666B007E395C /* IPs.hpp */; };
+		3B1F2B3A1F476751007E395C /* DHCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1F2B321F47664E007E395C /* DHCP.cpp */; };
 		3B4E19A81EE81F2200256BD0 /* OSRuntime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E19A61EE81F2200256BD0 /* OSRuntime.cpp */; };
 		3B4E19A91EE81F2200256BD0 /* OSRuntime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B4E19A71EE81F2200256BD0 /* OSRuntime.hpp */; };
 		3B4E19AE1EE8223D00256BD0 /* OSObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E19AC1EE8223D00256BD0 /* OSObject.cpp */; };
 		3B4E19AF1EE8223D00256BD0 /* OSObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B4E19AD1EE8223D00256BD0 /* OSObject.hpp */; };
+		3B5021B81F49D9D500BA8AF1 /* ARP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5021B61F49D9D500BA8AF1 /* ARP.cpp */; };
+		3B5021B91F49D9D500BA8AF1 /* ARP.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B5021B71F49D9D500BA8AF1 /* ARP.hpp */; };
+		3B7EF03D1F4B449F00FEB086 /* OSNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B7EF03C1F4B449F00FEB086 /* OSNetwork.cpp */; };
+		3B89C0CD1F45F63200F4920E /* OSNetwork.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3B89C0CB1F45F63200F4920E /* OSNetwork.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3B10465C1F47711B003B0CE5 /* UDP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UDP.cpp; path = "Libc++/OSNetwork/UDP.cpp"; sourceTree = "<group>"; };
+		3B10465D1F47711B003B0CE5 /* UDP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = UDP.hpp; path = "Libc++/OSNetwork/UDP.hpp"; sourceTree = "<group>"; };
+		3B1046601F47712E003B0CE5 /* TCP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TCP.cpp; path = "Libc++/OSNetwork/TCP.cpp"; sourceTree = "<group>"; };
+		3B1046611F47712E003B0CE5 /* TCP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TCP.hpp; path = "Libc++/OSNetwork/TCP.hpp"; sourceTree = "<group>"; };
+		3B1046641F478DF5003B0CE5 /* Ethernet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Ethernet.cpp; path = "Libc++/OSNetwork/Ethernet.cpp"; sourceTree = "<group>"; };
+		3B1046651F478DF5003B0CE5 /* Ethernet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Ethernet.hpp; path = "Libc++/OSNetwork/Ethernet.hpp"; sourceTree = "<group>"; };
+		3B1F2B321F47664E007E395C /* DHCP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DHCP.cpp; path = "Libc++/OSNetwork/DHCP.cpp"; sourceTree = "<group>"; };
+		3B1F2B331F47664E007E395C /* DHCP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DHCP.hpp; path = "Libc++/OSNetwork/DHCP.hpp"; sourceTree = "<group>"; };
+		3B1F2B361F47666B007E395C /* IPs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IPs.cpp; path = "Libc++/OSNetwork/IPs.cpp"; sourceTree = "<group>"; };
+		3B1F2B371F47666B007E395C /* IPs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IPs.hpp; path = "Libc++/OSNetwork/IPs.hpp"; sourceTree = "<group>"; };
 		3B4E199A1EE81E9700256BD0 /* libc++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libc++.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4E19A61EE81F2200256BD0 /* OSRuntime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSRuntime.cpp; path = "Libc++/OSRuntime.cpp"; sourceTree = "<group>"; };
 		3B4E19A71EE81F2200256BD0 /* OSRuntime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OSRuntime.hpp; path = "Libc++/OSRuntime.hpp"; sourceTree = "<group>"; };
 		3B4E19AC1EE8223D00256BD0 /* OSObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSObject.cpp; path = "Libc++/OSObject.cpp"; sourceTree = "<group>"; };
 		3B4E19AD1EE8223D00256BD0 /* OSObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OSObject.hpp; path = "Libc++/OSObject.hpp"; sourceTree = "<group>"; };
+		3B5021B61F49D9D500BA8AF1 /* ARP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ARP.cpp; path = "Libc++/OSNetwork/ARP.cpp"; sourceTree = "<group>"; };
+		3B5021B71F49D9D500BA8AF1 /* ARP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ARP.hpp; path = "Libc++/OSNetwork/ARP.hpp"; sourceTree = "<group>"; };
+		3B7EF03C1F4B449F00FEB086 /* OSNetwork.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OSNetwork.cpp; path = "Libc++/OSNetwork/OSNetwork.cpp"; sourceTree = "<group>"; };
+		3B89C0CB1F45F63200F4920E /* OSNetwork.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = OSNetwork.hpp; path = "Libc++/OSNetwork.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +60,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B1F2B311F4765EA007E395C /* OSNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				3B89C0CB1F45F63200F4920E /* OSNetwork.hpp */,
+				3B7EF03C1F4B449F00FEB086 /* OSNetwork.cpp */,
+				3B1F2B331F47664E007E395C /* DHCP.hpp */,
+				3B1F2B321F47664E007E395C /* DHCP.cpp */,
+				3B1F2B371F47666B007E395C /* IPs.hpp */,
+				3B1F2B361F47666B007E395C /* IPs.cpp */,
+				3B5021B71F49D9D500BA8AF1 /* ARP.hpp */,
+				3B5021B61F49D9D500BA8AF1 /* ARP.cpp */,
+				3B10465D1F47711B003B0CE5 /* UDP.hpp */,
+				3B10465C1F47711B003B0CE5 /* UDP.cpp */,
+				3B1046611F47712E003B0CE5 /* TCP.hpp */,
+				3B1046601F47712E003B0CE5 /* TCP.cpp */,
+				3B1046651F478DF5003B0CE5 /* Ethernet.hpp */,
+				3B1046641F478DF5003B0CE5 /* Ethernet.cpp */,
+			);
+			name = OSNetwork;
+			sourceTree = "<group>";
+		};
 		3B4E19911EE81E9700256BD0 = {
 			isa = PBXGroup;
 			children = (
@@ -55,6 +104,7 @@
 				3B4E19AC1EE8223D00256BD0 /* OSObject.cpp */,
 				3B4E19A71EE81F2200256BD0 /* OSRuntime.hpp */,
 				3B4E19A61EE81F2200256BD0 /* OSRuntime.cpp */,
+				3B1F2B311F4765EA007E395C /* OSNetwork */,
 			);
 			name = "Libc++";
 			sourceTree = "<group>";
@@ -66,8 +116,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B10465F1F47711B003B0CE5 /* UDP.hpp in Headers */,
+				3B1046671F478DF5003B0CE5 /* Ethernet.hpp in Headers */,
 				3B4E19A91EE81F2200256BD0 /* OSRuntime.hpp in Headers */,
+				3B5021B91F49D9D500BA8AF1 /* ARP.hpp in Headers */,
+				3B1046631F47712E003B0CE5 /* TCP.hpp in Headers */,
+				3B1F2B351F47664E007E395C /* DHCP.hpp in Headers */,
 				3B4E19AF1EE8223D00256BD0 /* OSObject.hpp in Headers */,
+				3B1F2B391F47666B007E395C /* IPs.hpp in Headers */,
+				3B89C0CD1F45F63200F4920E /* OSNetwork.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +188,13 @@
 			files = (
 				3B4E19AE1EE8223D00256BD0 /* OSObject.cpp in Sources */,
 				3B4E19A81EE81F2200256BD0 /* OSRuntime.cpp in Sources */,
+				3B7EF03D1F4B449F00FEB086 /* OSNetwork.cpp in Sources */,
+				3B1F2B381F47666B007E395C /* IPs.cpp in Sources */,
+				3B10465E1F47711B003B0CE5 /* UDP.cpp in Sources */,
+				3B1046661F478DF5003B0CE5 /* Ethernet.cpp in Sources */,
+				3B5021B81F49D9D500BA8AF1 /* ARP.cpp in Sources */,
+				3B1046621F47712E003B0CE5 /* TCP.cpp in Sources */,
+				3B1F2B3A1F476751007E395C /* DHCP.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +207,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -197,7 +261,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -241,10 +305,12 @@
 		3B4E199F1EE81E9700256BD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				EXECUTABLE_PREFIX = lib;
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					KERNEL,
@@ -258,6 +324,7 @@
 					"$(PROJECT_DIR)/../Kernel/Kernel",
 					"$(PROJECT_DIR)/../Kernel",
 					"$(PROJECT_DIR)/../Libc/Libc",
+					"$(PROJECT_DIR)/Libc++",
 				);
 				OTHER_CFLAGS = (
 					"-ffreestanding",
@@ -278,10 +345,12 @@
 		3B4E19A01EE81E9700256BD0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				EXECUTABLE_PREFIX = lib;
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					KERNEL,
 					__LP64__,
@@ -294,6 +363,7 @@
 					"$(PROJECT_DIR)/../Kernel/Kernel",
 					"$(PROJECT_DIR)/../Kernel",
 					"$(PROJECT_DIR)/../Libc/Libc",
+					"$(PROJECT_DIR)/Libc++",
 				);
 				OTHER_CFLAGS = (
 					"-ffreestanding",

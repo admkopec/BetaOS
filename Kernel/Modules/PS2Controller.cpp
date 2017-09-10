@@ -1,22 +1,51 @@
 //
-//  PS2Controller.c
+//  PS2Controller.cpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 2/12/16.
 //  Copyright © 2016 Adam Kopeć. All rights reserved.
 //
 
-#include "PS2Controller.h"
-#include "PS2Keymap.h"
+#include "PS2Controller.hpp"
+#include "PS2Keymap.hpp"
+#include "InterruptController.hpp"
 #include <stdbool.h>
 #include <i386/pio.h>
 #include <stdio.h>
+
+#define super Controller
+#define Log(x ...) printf("PS2Controller: " x)
+#ifdef DBG
+#define DBG(x ...) Log(x)
+#else
+#define DBG(X ...)
+#endif
 
 bool shifted=false;
 bool capsed=false;
 bool e0ed=false;
 
-void updateLEDs() {
+OSReturn
+PS2::init(__unused PCI* h = nullptr) {
+    UpdateLEDs();
+    NameString = (char*)"PS2Controller";
+    Used_ = true;
+    return kOSReturnSuccess;
+}
+
+void
+PS2::start() {
+    super::start();
+}
+
+void
+PS2::stop() {
+    Log("Stopping...\n");
+    super::stop();
+}
+
+void
+PS2::UpdateLEDs() {
     uint8_t state = ((capsed << 2) | (0 << 1) | 0);
     uint8_t i;
     int j = 0;
@@ -41,7 +70,7 @@ void updateLEDs() {
     if (j == 1000) {
         return;
     }
-
+    
     i = 0;
     do {
         i = inb(0x64);
@@ -55,7 +84,8 @@ void updateLEDs() {
     } while (i != 0xFA);
 }
 
-int pollchar() {
+int
+PS2::pollchar() {
     int c;
     if (inb(0x64)&(1 << 0)) {
         c=inb(0x60);
@@ -78,7 +108,7 @@ int pollchar() {
             } else {
                 capsed=false;
             }
-            updateLEDs();
+            UpdateLEDs();
         }
         if (capsed) {
             if (c==0x2A||c==0x36||shifted) {
@@ -89,7 +119,7 @@ int pollchar() {
                 } else {
                     shifted=false;
                 }
-
+                
             }
             if ((c>=0x10&&c<=0x19)||(c>=0x1E&&c<=0x26)||(c>=0x2C&&c<=0x32)) {
                 return keymap[c][1];
@@ -110,4 +140,8 @@ int pollchar() {
         return keymap[c][0];
     }
     return false;
+}
+
+int pollchar() {
+    return PS2::pollchar();
 }

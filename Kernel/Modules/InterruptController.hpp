@@ -10,10 +10,21 @@
 #define InterruptController_hpp
 
 #include <stdio.h>
+#include "Controller.hpp"
+
+extern "C" { void IncommingInterrupt(int InterruptNumber); }
+
+struct TableEntry {
+    bool isSet;
+    Controller* handler;
+};
 
 class Interrupt {
+    static TableEntry Table[20];
 public:
-    static int RegisterInterrupt(int InterruptLine, void (*handler)());
+    static OSReturn Register (int InterruptLine, Controller* handler);
+    static OSReturn Disable  (int InterruptLine);
+    static OSReturn Incomming(int InterruptLine);
 };
 
 #endif /* InterruptController_hpp */

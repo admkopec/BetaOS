@@ -12,7 +12,7 @@ int UHCI::init(PCI* pci) {
     if (!(pci->ClassCode() == PCI_USB_CLASS && pci->SubClass() == PCI_USB_SUBCLASS && pci->ProgIF() == PCI_USB_UHCI)) {
         if ((pci->ClassCode() == PCI_USB_CLASS && pci->SubClass() == PCI_USB_SUBCLASS && pci->ProgIF() == PCI_USB_OHCI)) {
             printf("UHCIController: OHCI found!\n");
-            printf("UHCIController: OHCI Vendor: %X Device: %X\n", pci->VendorID(), pci->DeviceID());
+            printf("UHCIController: OHCI Vendor: %x Device: %x\n", pci->VendorID(), pci->DeviceID());
         }
         return -1;
     }
@@ -29,8 +29,9 @@ int UHCI::init(PCI* pci) {
     }
     
     printf("UHCIController: UHCI found!\n");
-    printf("UHCIController: UHCI Vendor: %X Device: %X\n", pci->VendorID(), pci->DeviceID());
+    printf("UHCIController: UHCI Vendor: %x Device: %x\n", pci->VendorID(), pci->DeviceID());
     
+    NameString = (char*)"UHCIController (Legacy USB)";
     Used_ = true;
     return 0;
 }

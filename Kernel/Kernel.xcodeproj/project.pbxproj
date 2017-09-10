@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B1BBCC71F44BE740001347A /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BBCC51F44BE740001347A /* NetworkController.cpp */; };
+		3B2576581F522483002EBB98 /* fpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2576561F522483002EBB98 /* fpu.c */; };
 		3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC01E4FCACB000204B1 /* kdp.c */; };
 		3B2D0EC61E4FCB11000204B1 /* EHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */; };
 		3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC41E4FCB11000204B1 /* PCIController.cpp */; };
@@ -14,12 +16,12 @@
 		3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */; };
 		3B389A5A1E6DD817009F1DE6 /* Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B389A581E6DD817009F1DE6 /* Controller.cpp */; };
 		3B3B78BE1E50D7F500F4C176 /* SMBiosController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */; };
-		3B45ABBB1EED69350035FC5D /* libc++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B45ABBA1EED69350035FC5D /* libc++.a */; };
+		3B3F42031F588A640059964E /* SPIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B3F42011F588A640059964E /* SPIController.cpp */; };
 		3B588BCC1D95C89C00087C38 /* ModulesController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC01D95C89C00087C38 /* ModulesController.cpp */; };
 		3B588BCD1D95C89C00087C38 /* IntelE1000Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */; };
 		3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC31D95C89C00087C38 /* RTL8111Controller.cpp */; };
 		3B588BD01D95C89C00087C38 /* MMIOUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */; };
-		3B588BD11D95C89C00087C38 /* PS2Controller.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC91D95C89C00087C38 /* PS2Controller.c */; };
+		3B588BD11D95C89C00087C38 /* PS2Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BC91D95C89C00087C38 /* PS2Controller.cpp */; };
 		3B588BDA1D95CEF200087C38 /* assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BD91D95CEF200087C38 /* assert.c */; };
 		3B588BDF1D95CF0500087C38 /* asmlib.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BDC1D95CF0500087C38 /* asmlib.S */; };
 		3B588BE01D95CF0500087C38 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BDD1D95CF0500087C38 /* arch.c */; };
@@ -32,7 +34,8 @@
 		3B5F797A1D9597EC006EC205 /* platform_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79771D9597EC006EC205 /* platform_init.c */; };
 		3B5F797B1D9597EC006EC205 /* bootargs.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79781D9597EC006EC205 /* bootargs.c */; };
 		3B660AC01E623B8E003EE3C1 /* SATAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B660ABE1E623B8E003EE3C1 /* SATAController.cpp */; };
-		3B7865DD1D9591B800C015DF /* libc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7865DC1D9591B800C015DF /* libc.a */; };
+		3B6BC4171F56DE7D00F12220 /* libc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7865DC1D9591B800C015DF /* libc.a */; };
+		3B6BC4181F56DE8200F12220 /* libc++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B45ABBA1EED69350035FC5D /* libc++.a */; };
 		3B7865E91D9592F500C015DF /* low_mem_vectors.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865DF1D9592F500C015DF /* low_mem_vectors.c */; };
 		3B7865EA1D9592F500C015DF /* idt64.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865E01D9592F500C015DF /* idt64.S */; };
 		3B7865EB1D9592F500C015DF /* bcopy.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865E11D9592F500C015DF /* bcopy.S */; };
@@ -45,7 +48,6 @@
 		3B7866261D95947500C015DF /* mp_desc.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865F51D95947500C015DF /* mp_desc.c */; };
 		3B7866291D95947500C015DF /* rtclock.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865F91D95947500C015DF /* rtclock.c */; };
 		3B78662A1D95947500C015DF /* syscall.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865FA1D95947500C015DF /* syscall.c */; };
-		3B78662B1D95947500C015DF /* pci.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865FF1D95947500C015DF /* pci.c */; };
 		3B78662C1D95947500C015DF /* machine_routines.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866011D95947500C015DF /* machine_routines.c */; };
 		3B78662D1D95947500C015DF /* cpuid.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866061D95947500C015DF /* cpuid.c */; };
 		3B78662E1D95947500C015DF /* lapic.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866071D95947500C015DF /* lapic.c */; };
@@ -59,6 +61,7 @@
 		3B7866361D95947500C015DF /* ldt.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661E1D95947500C015DF /* ldt.c */; };
 		3B7866371D95947500C015DF /* mp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661F1D95947500C015DF /* mp.c */; };
 		3B78663C1D95948B00C015DF /* renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866391D95948B00C015DF /* renderer.c */; };
+		3B8D46BB1F65914700AC1679 /* sse.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D46BA1F65914700AC1679 /* sse.c */; };
 		3BACBC2F1EC0A73000977F9F /* apic.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BACBC2E1EC0A73000977F9F /* apic.c */; };
 		3BE700E11EE71DE50063D66A /* InterruptController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BE700DF1EE71DE50063D66A /* InterruptController.cpp */; };
 		3BF071D11E59E75000BFF155 /* io_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF071D01E59E75000BFF155 /* io_map.c */; };
@@ -79,6 +82,10 @@
 
 /* Begin PBXFileReference section */
 		3B0860021E58B79A00AAD780 /* vm_prot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vm_prot.h; path = i386/vm_prot.h; sourceTree = "<group>"; };
+		3B1BBCC51F44BE740001347A /* NetworkController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NetworkController.cpp; path = Modules/NetworkController.cpp; sourceTree = SOURCE_ROOT; };
+		3B1BBCC61F44BE740001347A /* NetworkController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NetworkController.hpp; path = Modules/NetworkController.hpp; sourceTree = SOURCE_ROOT; };
+		3B2576561F522483002EBB98 /* fpu.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = fpu.c; path = i386/fpu.c; sourceTree = "<group>"; };
+		3B2576571F522483002EBB98 /* fpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fpu.h; path = i386/fpu.h; sourceTree = "<group>"; };
 		3B2D0EC01E4FCACB000204B1 /* kdp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kdp.c; path = i386/kdp.c; sourceTree = "<group>"; };
 		3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EHCIController.cpp; path = Modules/EHCIController.cpp; sourceTree = SOURCE_ROOT; };
 		3B2D0EC31E4FCB11000204B1 /* EHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EHCIController.hpp; path = Modules/EHCIController.hpp; sourceTree = SOURCE_ROOT; };
@@ -93,6 +100,8 @@
 		3B389A591E6DD817009F1DE6 /* Controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Controller.hpp; path = Modules/Controller.hpp; sourceTree = SOURCE_ROOT; };
 		3B3B78BC1E50D7F500F4C176 /* SMBiosController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SMBiosController.cpp; path = Modules/SMBiosController.cpp; sourceTree = SOURCE_ROOT; };
 		3B3B78BD1E50D7F500F4C176 /* SMBiosController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SMBiosController.hpp; path = Modules/SMBiosController.hpp; sourceTree = SOURCE_ROOT; };
+		3B3F42011F588A640059964E /* SPIController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SPIController.cpp; path = Modules/SPIController.cpp; sourceTree = SOURCE_ROOT; };
+		3B3F42021F588A640059964E /* SPIController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SPIController.hpp; path = Modules/SPIController.hpp; sourceTree = SOURCE_ROOT; };
 		3B45ABBA1EED69350035FC5D /* libc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libc++.a"; path = "../../../../Developer/Xcode/DerivedData/BetaOS-gapbhrzafomgsbfxbixzumnpbwhr/Build/Products/Debug/libc++.a"; sourceTree = "<group>"; };
 		3B588BC01D95C89C00087C38 /* ModulesController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ModulesController.cpp; path = Modules/ModulesController.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC11D95C89C00087C38 /* IntelE1000Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntelE1000Controller.cpp; path = Modules/IntelE1000Controller.cpp; sourceTree = SOURCE_ROOT; };
@@ -102,8 +111,8 @@
 		3B588BC61D95C89C00087C38 /* RTL8111Controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RTL8111Controller.hpp; path = Modules/RTL8111Controller.hpp; sourceTree = SOURCE_ROOT; };
 		3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMIOUtils.cpp; path = Modules/MMIOUtils.cpp; sourceTree = SOURCE_ROOT; };
 		3B588BC81D95C89C00087C38 /* MMIOUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MMIOUtils.hpp; path = Modules/MMIOUtils.hpp; sourceTree = SOURCE_ROOT; };
-		3B588BC91D95C89C00087C38 /* PS2Controller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PS2Controller.c; path = Modules/PS2Controller.c; sourceTree = SOURCE_ROOT; };
-		3B588BCB1D95C89C00087C38 /* PS2Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PS2Controller.h; path = Modules/PS2Controller.h; sourceTree = SOURCE_ROOT; };
+		3B588BC91D95C89C00087C38 /* PS2Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PS2Controller.cpp; path = Modules/PS2Controller.cpp; sourceTree = SOURCE_ROOT; };
+		3B588BCB1D95C89C00087C38 /* PS2Controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PS2Controller.hpp; path = Modules/PS2Controller.hpp; sourceTree = SOURCE_ROOT; };
 		3B588BD41D95CAB400087C38 /* stdbool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdbool.h; path = Headers/stdbool.h; sourceTree = SOURCE_ROOT; };
 		3B588BD51D95CAB400087C38 /* stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdint.h; path = Headers/stdint.h; sourceTree = SOURCE_ROOT; };
 		3B588BD61D95CAB400087C38 /* stdarg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdarg.h; path = Headers/stdarg.h; sourceTree = SOURCE_ROOT; };
@@ -138,7 +147,7 @@
 		3B5F797F1D9597F8006EC205 /* efi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = efi.h; path = Platform/platform/efi.h; sourceTree = "<group>"; };
 		3B660ABE1E623B8E003EE3C1 /* SATAController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SATAController.cpp; path = Modules/SATAController.cpp; sourceTree = SOURCE_ROOT; };
 		3B660ABF1E623B8E003EE3C1 /* SATAController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SATAController.hpp; path = Modules/SATAController.hpp; sourceTree = SOURCE_ROOT; };
-		3B7381A61D984A1C0001846F /* PS2Keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PS2Keymap.h; path = Modules/PS2Keymap.h; sourceTree = SOURCE_ROOT; };
+		3B7381A61D984A1C0001846F /* PS2Keymap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PS2Keymap.hpp; path = Modules/PS2Keymap.hpp; sourceTree = SOURCE_ROOT; };
 		3B7865BC1D958FEE00C015DF /* Kernel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Kernel; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B7865DC1D9591B800C015DF /* libc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libc.a; path = "../../../../Developer/Xcode/DerivedData/BetaOS-gapbhrzafomgsbfxbixzumnpbwhr/Build/Products/Debug/libc.a"; sourceTree = "<group>"; };
 		3B7865DF1D9592F500C015DF /* low_mem_vectors.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = low_mem_vectors.c; path = x86_64/low_mem_vectors.c; sourceTree = "<group>"; };
@@ -162,7 +171,6 @@
 		3B7865FC1D95947500C015DF /* syscall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = syscall.h; path = i386/syscall.h; sourceTree = "<group>"; };
 		3B7865FD1D95947500C015DF /* rtclock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rtclock.h; path = i386/rtclock.h; sourceTree = "<group>"; };
 		3B7865FE1D95947500C015DF /* pal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pal.h; path = i386/pal.h; sourceTree = "<group>"; };
-		3B7865FF1D95947500C015DF /* pci.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pci.c; path = i386/pci.c; sourceTree = "<group>"; };
 		3B7866001D95947500C015DF /* proc_reg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = proc_reg.h; path = i386/proc_reg.h; sourceTree = "<group>"; };
 		3B7866011D95947500C015DF /* machine_routines.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = machine_routines.c; path = i386/machine_routines.c; sourceTree = "<group>"; };
 		3B7866021D95947500C015DF /* machine_routines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = machine_routines.h; path = i386/machine_routines.h; sourceTree = "<group>"; };
@@ -197,12 +205,12 @@
 		3B78661F1D95947500C015DF /* mp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mp.c; path = i386/mp.c; sourceTree = "<group>"; };
 		3B7866201D95947500C015DF /* tss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tss.h; path = i386/tss.h; sourceTree = "<group>"; };
 		3B7866211D95947500C015DF /* apic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apic.h; path = i386/apic.h; sourceTree = "<group>"; };
-		3B7866221D95947500C015DF /* pci.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pci.h; path = i386/pci.h; sourceTree = "<group>"; };
 		3B7866231D95947500C015DF /* pio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pio.h; path = i386/pio.h; sourceTree = "<group>"; };
 		3B7866241D95947500C015DF /* sel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sel.h; path = i386/sel.h; sourceTree = "<group>"; };
 		3B7866391D95948B00C015DF /* renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = renderer.c; path = i386/video/renderer.c; sourceTree = "<group>"; };
 		3B78663A1D95948B00C015DF /* colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colors.h; path = i386/video/colors.h; sourceTree = "<group>"; };
 		3B78663B1D95948B00C015DF /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = font.h; path = i386/video/font.h; sourceTree = "<group>"; };
+		3B8D46BA1F65914700AC1679 /* sse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = sse.c; path = i386/sse.c; sourceTree = "<group>"; };
 		3BACBC2E1EC0A73000977F9F /* apic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apic.c; path = i386/apic.c; sourceTree = "<group>"; };
 		3BE700DF1EE71DE50063D66A /* InterruptController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InterruptController.cpp; path = Modules/InterruptController.cpp; sourceTree = SOURCE_ROOT; };
 		3BE700E01EE71DE50063D66A /* InterruptController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InterruptController.hpp; path = Modules/InterruptController.hpp; sourceTree = SOURCE_ROOT; };
@@ -216,8 +224,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B7865DD1D9591B800C015DF /* libc.a in Frameworks */,
-				3B45ABBB1EED69350035FC5D /* libc++.a in Frameworks */,
+				3B6BC4171F56DE7D00F12220 /* libc.a in Frameworks */,
+				3B6BC4181F56DE8200F12220 /* libc++.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,8 +250,12 @@
 			children = (
 				3B389A591E6DD817009F1DE6 /* Controller.hpp */,
 				3B389A581E6DD817009F1DE6 /* Controller.cpp */,
+				3B1BBCC61F44BE740001347A /* NetworkController.hpp */,
+				3B1BBCC51F44BE740001347A /* NetworkController.cpp */,
 				3B2D0EC51E4FCB11000204B1 /* PCIController.hpp */,
 				3B2D0EC41E4FCB11000204B1 /* PCIController.cpp */,
+				3B3F42021F588A640059964E /* SPIController.hpp */,
+				3B3F42011F588A640059964E /* SPIController.cpp */,
 				3B588BC41D95C89C00087C38 /* ModulesController.hpp */,
 				3B588BC01D95C89C00087C38 /* ModulesController.cpp */,
 				3B588BC51D95C89C00087C38 /* IntelE1000Controller.hpp */,
@@ -258,9 +270,9 @@
 				3BE700DF1EE71DE50063D66A /* InterruptController.cpp */,
 				3B588BC81D95C89C00087C38 /* MMIOUtils.hpp */,
 				3B588BC71D95C89C00087C38 /* MMIOUtils.cpp */,
-				3B7381A61D984A1C0001846F /* PS2Keymap.h */,
-				3B588BCB1D95C89C00087C38 /* PS2Controller.h */,
-				3B588BC91D95C89C00087C38 /* PS2Controller.c */,
+				3B7381A61D984A1C0001846F /* PS2Keymap.hpp */,
+				3B588BCB1D95C89C00087C38 /* PS2Controller.hpp */,
+				3B588BC91D95C89C00087C38 /* PS2Controller.cpp */,
 				3B2D0EC81E4FCB1A000204B1 /* USBController */,
 			);
 			name = Modules;
@@ -400,6 +412,8 @@
 				3B7866051D95947500C015DF /* cpu_threads.h */,
 				3B7866181D95947500C015DF /* cpu_threads.c */,
 				3B78660F1D95947500C015DF /* eflags.h */,
+				3B2576571F522483002EBB98 /* fpu.h */,
+				3B2576561F522483002EBB98 /* fpu.c */,
 				3B78661C1D95947500C015DF /* gdt.c */,
 				3B7866071D95947500C015DF /* lapic.c */,
 				3B7866081D95947500C015DF /* lapic.h */,
@@ -419,12 +433,11 @@
 				3B7865F51D95947500C015DF /* mp_desc.c */,
 				3B78661B1D95947500C015DF /* seg.h */,
 				3B7866241D95947500C015DF /* sel.h */,
+				3B8D46BA1F65914700AC1679 /* sse.c */,
 				3B7865FC1D95947500C015DF /* syscall.h */,
 				3B7865FA1D95947500C015DF /* syscall.c */,
 				3B7865FE1D95947500C015DF /* pal.h */,
 				3B78661A1D95947500C015DF /* pal.c */,
-				3B7866221D95947500C015DF /* pci.h */,
-				3B7865FF1D95947500C015DF /* pci.c */,
 				3B7866231D95947500C015DF /* pio.h */,
 				3B7866001D95947500C015DF /* proc_reg.h */,
 				3B78660B1D95947500C015DF /* pmap.h */,
@@ -473,6 +486,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3B7865C31D958FEE00C015DF /* Build configuration list for PBXNativeTarget "Kernel" */;
 			buildPhases = (
+				3BC6EED31F40E07300290F65 /* Increment Build Number */,
 				3B7865B81D958FED00C015DF /* Sources */,
 				3B7865B91D958FED00C015DF /* Frameworks */,
 				3B7865BA1D958FED00C015DF /* CopyFiles */,
@@ -519,6 +533,23 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3BC6EED31F40E07300290F65 /* Increment Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Increment Build Number";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(sed -n -e \"18 p\" \"$PROJECT_DIR/Kernel/version.h\")\nbuildNumber=$(($buildNumber + 1))\nsed -i -e \"18s/.*/${buildNumber}/\" \"$PROJECT_DIR/Kernel/version.h\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3B7865B81D958FED00C015DF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -527,15 +558,16 @@
 				3B3B78BE1E50D7F500F4C176 /* SMBiosController.cpp in Sources */,
 				3BACBC2F1EC0A73000977F9F /* apic.c in Sources */,
 				3B78662C1D95947500C015DF /* machine_routines.c in Sources */,
-				3B78662B1D95947500C015DF /* pci.c in Sources */,
 				3B5F79721D9596E7006EC205 /* kernel_header.c in Sources */,
 				3B5F79791D9597EC006EC205 /* DeviceTree.c in Sources */,
 				3B7866321D95947500C015DF /* cpu_threads.c in Sources */,
 				3B5F796E1D9596E7006EC205 /* command.c in Sources */,
 				3B7866291D95947500C015DF /* rtclock.c in Sources */,
+				3B2576581F522483002EBB98 /* fpu.c in Sources */,
 				3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */,
+				3B3F42031F588A640059964E /* SPIController.cpp in Sources */,
 				3B7866371D95947500C015DF /* mp.c in Sources */,
-				3B588BD11D95C89C00087C38 /* PS2Controller.c in Sources */,
+				3B588BD11D95C89C00087C38 /* PS2Controller.cpp in Sources */,
 				3B389A5A1E6DD817009F1DE6 /* Controller.cpp in Sources */,
 				3BF071D11E59E75000BFF155 /* io_map.c in Sources */,
 				3B7866251D95947500C015DF /* i386_init.c in Sources */,
@@ -547,7 +579,9 @@
 				3B588BDF1D95CF0500087C38 /* asmlib.S in Sources */,
 				3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */,
 				3B7865EF1D9592F500C015DF /* pmap_pcid.c in Sources */,
+				3B8D46BB1F65914700AC1679 /* sse.c in Sources */,
 				3B78663C1D95948B00C015DF /* renderer.c in Sources */,
+				3B1BBCC71F44BE740001347A /* NetworkController.cpp in Sources */,
 				3B78662D1D95947500C015DF /* cpuid.c in Sources */,
 				3BF2954B1E003EF8006716EB /* acpi.c in Sources */,
 				3B7865F01D9592F500C015DF /* boot_pt.c in Sources */,
@@ -690,11 +724,12 @@
 		3B7865C41D958FEE00C015DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CURRENT_PROJECT_VERSION = 0.31;
+				CURRENT_PROJECT_VERSION = 0.31.1;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -702,7 +737,7 @@
 					__LP64__,
 					__x86_64__,
 					"KERNEL_BASE_OFFSET=0x1000",
-					"BUILD_TYPE=\"\\\"Internal\\\"\"",
+					"BUILD_TYPE=\"\\\"Internal \\\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Kernel",
@@ -710,6 +745,7 @@
 					"$(PROJECT_DIR)/Headers",
 					"$(PROJECT_DIR)/../Libc/Libc",
 					"$(PROJECT_DIR)/../Libc++/Libc++",
+					"$(PROJECT_DIR)",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
@@ -770,17 +806,18 @@
 		3B7865C51D958FEE00C015DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CURRENT_PROJECT_VERSION = 0.31;
+				CURRENT_PROJECT_VERSION = 0.31.1;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					KERNEL,
 					__LP64__,
 					__x86_64__,
 					"KERNEL_BASE_OFFSET=0x1000",
-					"BUILD_TYPE=\"\\\"Release\\\"\"",
+					"BUILD_TYPE=\"\\\"\\\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Kernel",
@@ -788,6 +825,7 @@
 					"$(PROJECT_DIR)/Headers",
 					"$(PROJECT_DIR)/../Libc/Libc",
 					"$(PROJECT_DIR)/../Libc++/Libc++",
+					"$(PROJECT_DIR)",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (

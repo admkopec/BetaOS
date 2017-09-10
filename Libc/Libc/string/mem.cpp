@@ -39,11 +39,14 @@ void* memset(void* bufptr, int value, size_t size) {
     return bufptr;
 }
 
+void* memsetw(void* dest, uint16_t w, size_t count) {
+    return memset(dest, w, count);
+}
+
 /*
  * Compare memory regions.
  */
-int
-memcmp(const void *s1, const void *s2, size_t size) {
+int memcmp(const void *s1, const void *s2, size_t size) {
     if (size != 0) {
         const unsigned char *p1 = (const uint8_t *)s1, *p2 = (const uint8_t *)s2;
         do {
@@ -52,4 +55,14 @@ memcmp(const void *s1, const void *s2, size_t size) {
         } while (--size != 0);
     }
     return (0);
+}
+
+void* memchr(const void *s1, int c, size_t size) {
+    unsigned char *p = (unsigned char*)s1;
+    while( size-- )
+        if( *p != (unsigned char)c )
+            p++;
+        else
+            return p;
+    return 0;
 }

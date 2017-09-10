@@ -15,12 +15,15 @@
 
 class Controller : public OSObject {
 protected:
-    bool Used_;
+    bool  Used_;
+    char* NameString = (char*)"Generic Controller";
 public:
     virtual OSReturn  init(PCI *header);
     virtual void      start(void);
     virtual void      stop(void);
+    virtual void      handleInterrupt(void);
     bool              Used(void);
+    char*             Name(void);
     virtual          ~Controller();
 };
 
