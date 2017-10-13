@@ -128,10 +128,16 @@ __cxa_atexit(void (*func) (void *), void *arg, void *dso_handle) {
 }
 
 extern "C" {
+#include <i386/vm_param.h>
+#include <i386/vm_types.h>
     void * malloc(size_t size) {
         return OSRuntime::OSMalloc(size);
     }
     void free(void *ptr) {
         OSRuntime::OSFree(ptr);
+    }
+    
+    size_t malloc_size(__unused void* ptr) {
+        return round_page(16);
     }
 }

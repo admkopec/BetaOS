@@ -1,0 +1,701 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3B1A24361F90C59B00BF40FE /* objc.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24351F90C59B00BF40FE /* objc.m */; };
+		3B1A243A1F90C60800BF40FE /* runtime.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1A24381F90C60800BF40FE /* runtime.h */; };
+		3B1A243B1F90C60800BF40FE /* runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24391F90C60800BF40FE /* runtime.m */; };
+		3B1A243F1F90DCB200BF40FE /* NSObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1A243D1F90DCB200BF40FE /* NSObject.h */; };
+		3B1A24401F90DCB200BF40FE /* NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A243E1F90DCB200BF40FE /* NSObject.m */; };
+		3B1A24431F90DD4200BF40FE /* Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1A24411F90DD4200BF40FE /* Protocol.h */; };
+		3B1A24441F90DD4200BF40FE /* Protocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24421F90DD4200BF40FE /* Protocol.m */; };
+		3BD8AA841F90EA8300A7ADBC /* Unicode Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */; };
+		3BD8AA851F90EA8300A7ADBC /* Unicode Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA831F90EA8300A7ADBC /* Unicode Support.m */; };
+		3BD8AA881F90EB0D00A7ADBC /* Mobile.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BD8AA861F90EB0D00A7ADBC /* Mobile.h */; };
+		3BD8AA891F90EB0D00A7ADBC /* Mobile.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA871F90EB0D00A7ADBC /* Mobile.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3B1A242F1F90C4ED00BF40FE /* libobjc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libobjc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B1A24351F90C59B00BF40FE /* objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = objc.m; path = "Objective-C Runtime/objc.m"; sourceTree = "<group>"; };
+		3B1A24371F90C5AB00BF40FE /* objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = objc.h; path = "Objective-C Runtime/objc.h"; sourceTree = "<group>"; };
+		3B1A24381F90C60800BF40FE /* runtime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = runtime.h; path = "Objective-C Runtime/runtime.h"; sourceTree = "<group>"; };
+		3B1A24391F90C60800BF40FE /* runtime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = runtime.m; path = "Objective-C Runtime/runtime.m"; sourceTree = "<group>"; };
+		3B1A243D1F90DCB200BF40FE /* NSObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NSObject.h; path = "Objective-C Runtime/NSObject.h"; sourceTree = "<group>"; };
+		3B1A243E1F90DCB200BF40FE /* NSObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NSObject.m; path = "Objective-C Runtime/NSObject.m"; sourceTree = "<group>"; };
+		3B1A24411F90DD4200BF40FE /* Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Protocol.h; path = "Objective-C Runtime/Protocol.h"; sourceTree = "<group>"; };
+		3B1A24421F90DD4200BF40FE /* Protocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Protocol.m; path = "Objective-C Runtime/Protocol.m"; sourceTree = "<group>"; };
+		3BD8AA751F90EA0C00A7ADBC /* libcucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BD8AA7E1F90EA3200A7ADBC /* libicucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libicucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Unicode Support.h"; path = "Objective-C Runtime/Unicode Support/Unicode Support.h"; sourceTree = "<group>"; };
+		3BD8AA831F90EA8300A7ADBC /* Unicode Support.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Unicode Support.m"; path = "Objective-C Runtime/Unicode Support/Unicode Support.m"; sourceTree = "<group>"; };
+		3BD8AA861F90EB0D00A7ADBC /* Mobile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mobile.h; path = "Objective-C Runtime/Unicode Support/Mobile/Mobile.h"; sourceTree = "<group>"; };
+		3BD8AA871F90EB0D00A7ADBC /* Mobile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Mobile.m; path = "Objective-C Runtime/Unicode Support/Mobile/Mobile.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B1A242C1F90C4ED00BF40FE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BD8AA721F90EA0C00A7ADBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BD8AA7B1F90EA3200A7ADBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B1A24241F90C4B500BF40FE = {
+			isa = PBXGroup;
+			children = (
+				3B1A24341F90C4F500BF40FE /* Objective-C Runtime */,
+				3B1A24451F90E7B600BF40FE /* Unicode Support */,
+				3B1A24301F90C4ED00BF40FE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3B1A24301F90C4ED00BF40FE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B1A242F1F90C4ED00BF40FE /* libobjc.a */,
+				3BD8AA751F90EA0C00A7ADBC /* libcucore.a */,
+				3BD8AA7E1F90EA3200A7ADBC /* libicucore.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B1A24341F90C4F500BF40FE /* Objective-C Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				3B1A243D1F90DCB200BF40FE /* NSObject.h */,
+				3B1A243E1F90DCB200BF40FE /* NSObject.m */,
+				3B1A24411F90DD4200BF40FE /* Protocol.h */,
+				3B1A24421F90DD4200BF40FE /* Protocol.m */,
+				3B1A24371F90C5AB00BF40FE /* objc.h */,
+				3B1A24351F90C59B00BF40FE /* objc.m */,
+				3B1A24381F90C60800BF40FE /* runtime.h */,
+				3B1A24391F90C60800BF40FE /* runtime.m */,
+			);
+			name = "Objective-C Runtime";
+			sourceTree = "<group>";
+		};
+		3B1A24451F90E7B600BF40FE /* Unicode Support */ = {
+			isa = PBXGroup;
+			children = (
+				3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */,
+				3BD8AA831F90EA8300A7ADBC /* Unicode Support.m */,
+				3BD8AA791F90EA1F00A7ADBC /* Mobile */,
+			);
+			name = "Unicode Support";
+			sourceTree = "<group>";
+		};
+		3BD8AA791F90EA1F00A7ADBC /* Mobile */ = {
+			isa = PBXGroup;
+			children = (
+				3BD8AA861F90EB0D00A7ADBC /* Mobile.h */,
+				3BD8AA871F90EB0D00A7ADBC /* Mobile.m */,
+			);
+			name = Mobile;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3B1A242D1F90C4ED00BF40FE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B1A243F1F90DCB200BF40FE /* NSObject.h in Headers */,
+				3B1A24431F90DD4200BF40FE /* Protocol.h in Headers */,
+				3B1A243A1F90C60800BF40FE /* runtime.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BD8AA731F90EA0C00A7ADBC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BD8AA841F90EA8300A7ADBC /* Unicode Support.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BD8AA7C1F90EA3200A7ADBC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BD8AA881F90EB0D00A7ADBC /* Mobile.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3B1A242E1F90C4ED00BF40FE /* Objective-C Runtime */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B1A24311F90C4ED00BF40FE /* Build configuration list for PBXNativeTarget "Objective-C Runtime" */;
+			buildPhases = (
+				3B1A242B1F90C4ED00BF40FE /* Sources */,
+				3B1A242C1F90C4ED00BF40FE /* Frameworks */,
+				3B1A242D1F90C4ED00BF40FE /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Objective-C Runtime";
+			productName = "Objective-C Runtime";
+			productReference = 3B1A242F1F90C4ED00BF40FE /* libobjc.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		3BD8AA741F90EA0C00A7ADBC /* Unicode Support */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BD8AA761F90EA0C00A7ADBC /* Build configuration list for PBXNativeTarget "Unicode Support" */;
+			buildPhases = (
+				3BD8AA711F90EA0C00A7ADBC /* Sources */,
+				3BD8AA721F90EA0C00A7ADBC /* Frameworks */,
+				3BD8AA731F90EA0C00A7ADBC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Unicode Support";
+			productName = "Unicode Support";
+			productReference = 3BD8AA751F90EA0C00A7ADBC /* libcucore.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		3BD8AA7D1F90EA3200A7ADBC /* Unicode Support Mobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BD8AA7F1F90EA3200A7ADBC /* Build configuration list for PBXNativeTarget "Unicode Support Mobile" */;
+			buildPhases = (
+				3BD8AA7A1F90EA3200A7ADBC /* Sources */,
+				3BD8AA7B1F90EA3200A7ADBC /* Frameworks */,
+				3BD8AA7C1F90EA3200A7ADBC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Unicode Support Mobile";
+			productName = "Unicode Support Mobile";
+			productReference = 3BD8AA7E1F90EA3200A7ADBC /* libicucore.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3B1A24251F90C4B500BF40FE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0900;
+				TargetAttributes = {
+					3B1A242E1F90C4ED00BF40FE = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+					3BD8AA741F90EA0C00A7ADBC = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+					3BD8AA7D1F90EA3200A7ADBC = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 3B1A24281F90C4B500BF40FE /* Build configuration list for PBXProject "Swift Compatibility Layer" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3B1A24241F90C4B500BF40FE;
+			productRefGroup = 3B1A24301F90C4ED00BF40FE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3B1A242E1F90C4ED00BF40FE /* Objective-C Runtime */,
+				3BD8AA741F90EA0C00A7ADBC /* Unicode Support */,
+				3BD8AA7D1F90EA3200A7ADBC /* Unicode Support Mobile */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B1A242B1F90C4ED00BF40FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B1A24401F90DCB200BF40FE /* NSObject.m in Sources */,
+				3B1A243B1F90C60800BF40FE /* runtime.m in Sources */,
+				3B1A24361F90C59B00BF40FE /* objc.m in Sources */,
+				3B1A24441F90DD4200BF40FE /* Protocol.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BD8AA711F90EA0C00A7ADBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BD8AA851F90EA8300A7ADBC /* Unicode Support.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BD8AA7A1F90EA3200A7ADBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BD8AA891F90EB0D00A7ADBC /* Mobile.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3B1A24291F90C4B500BF40FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../Kernel/Headers",
+					"$(PROJECT_DIR)/../Libc/Libc",
+				);
+				OTHER_CFLAGS = (
+					"-ffreestanding",
+					"-fno-builtin",
+					"-nostdlib",
+					"-nostdinc",
+					"-mkernel",
+					"-msoft-float",
+				);
+			};
+			name = Debug;
+		};
+		3B1A242A1F90C4B500BF40FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../Kernel/Headers",
+					"$(PROJECT_DIR)/../Libc/Libc",
+				);
+				OTHER_CFLAGS = (
+					"-ffreestanding",
+					"-fno-builtin",
+					"-nostdlib",
+					"-nostdinc",
+					"-mkernel",
+					"-msoft-float",
+				);
+			};
+			name = Release;
+		};
+		3B1A24321F90C4ED00BF40FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = NO;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = NO;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = S73MBXSV7H;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					KERNEL,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../Kernel/Headers",
+					"$(PROJECT_DIR)/../Libc/Libc",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = objc;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3B1A24331F90C4ED00BF40FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = NO;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = NO;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = S73MBXSV7H;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = KERNEL;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../Kernel/Headers",
+					"$(PROJECT_DIR)/../Libc/Libc",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = objc;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3BD8AA771F90EA0C00A7ADBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = S73MBXSV7H;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					KERNEL,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = cucore;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3BD8AA781F90EA0C00A7ADBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = S73MBXSV7H;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = KERNEL;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = cucore;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3BD8AA801F90EA3200A7ADBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = S73MBXSV7H;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					KERNEL,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = icucore;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3BD8AA811F90EA3200A7ADBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = S73MBXSV7H;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = KERNEL;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = icucore;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3B1A24281F90C4B500BF40FE /* Build configuration list for PBXProject "Swift Compatibility Layer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B1A24291F90C4B500BF40FE /* Debug */,
+				3B1A242A1F90C4B500BF40FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B1A24311F90C4ED00BF40FE /* Build configuration list for PBXNativeTarget "Objective-C Runtime" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B1A24321F90C4ED00BF40FE /* Debug */,
+				3B1A24331F90C4ED00BF40FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3BD8AA761F90EA0C00A7ADBC /* Build configuration list for PBXNativeTarget "Unicode Support" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BD8AA771F90EA0C00A7ADBC /* Debug */,
+				3BD8AA781F90EA0C00A7ADBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3BD8AA7F1F90EA3200A7ADBC /* Build configuration list for PBXNativeTarget "Unicode Support Mobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BD8AA801F90EA3200A7ADBC /* Debug */,
+				3BD8AA811F90EA3200A7ADBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3B1A24251F90C4B500BF40FE /* Project object */;
+}

@@ -26,7 +26,6 @@
 		3B588BDF1D95CF0500087C38 /* asmlib.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BDC1D95CF0500087C38 /* asmlib.S */; };
 		3B588BE01D95CF0500087C38 /* arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BDD1D95CF0500087C38 /* arch.c */; };
 		3B5F796E1D9596E7006EC205 /* command.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F795D1D9596E7006EC205 /* command.c */; };
-		3B5F796F1D9596E7006EC205 /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F795E1D9596E7006EC205 /* kernel.c */; };
 		3B5F79711D9596E7006EC205 /* kprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79621D9596E7006EC205 /* kprintf.c */; };
 		3B5F79721D9596E7006EC205 /* kernel_header.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79651D9596E7006EC205 /* kernel_header.c */; };
 		3B5F79731D9596E7006EC205 /* kalloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79671D9596E7006EC205 /* kalloc.c */; };
@@ -63,6 +62,13 @@
 		3B78663C1D95948B00C015DF /* renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866391D95948B00C015DF /* renderer.c */; };
 		3B8D46BB1F65914700AC1679 /* sse.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D46BA1F65914700AC1679 /* sse.c */; };
 		3BACBC2F1EC0A73000977F9F /* apic.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BACBC2E1EC0A73000977F9F /* apic.c */; };
+		3BD8AA8C1F90EBA100A7ADBC /* kernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA8B1F90EBA100A7ADBC /* kernel.swift */; };
+		3BD8AA901F90EC8300A7ADBC /* kprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA8F1F90EC8300A7ADBC /* kprint.swift */; };
+		3BD8AA921F90EDD800A7ADBC /* command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA911F90EDD800A7ADBC /* command.swift */; };
+		3BD8AA951F90EE5C00A7ADBC /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA941F90EE5C00A7ADBC /* String.swift */; };
+		3BD8AA961F90EF2F00A7ADBC /* libobjc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD8AA971F90EF2F00A7ADBC /* libobjc.a */; };
+		3BD8AA981F90EF3300A7ADBC /* libcucore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD8AA991F90EF3300A7ADBC /* libcucore.a */; };
+		3BD8AA9A1F90EF3600A7ADBC /* libicucore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD8AA9B1F90EF3600A7ADBC /* libicucore.a */; };
 		3BE700E11EE71DE50063D66A /* InterruptController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BE700DF1EE71DE50063D66A /* InterruptController.cpp */; };
 		3BF071D11E59E75000BFF155 /* io_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF071D01E59E75000BFF155 /* io_map.c */; };
 		3BF2954B1E003EF8006716EB /* acpi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF295491E003EF8006716EB /* acpi.c */; };
@@ -125,7 +131,6 @@
 		3B588BDE1D95CF0500087C38 /* arch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arch.h; sourceTree = "<group>"; };
 		3B588C0A1D95D11900087C38 /* cdefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cdefs.h; path = Headers/sys/cdefs.h; sourceTree = SOURCE_ROOT; };
 		3B5F795D1D9596E7006EC205 /* command.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = command.c; path = kernel/command.c; sourceTree = "<group>"; };
-		3B5F795E1D9596E7006EC205 /* kernel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kernel.c; path = kernel/kernel.c; sourceTree = "<group>"; };
 		3B5F795F1D9596E7006EC205 /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = command.h; path = kernel/command.h; sourceTree = "<group>"; };
 		3B5F79621D9596E7006EC205 /* kprintf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kprintf.c; path = kernel/kprintf.c; sourceTree = "<group>"; };
 		3B5F79631D9596E7006EC205 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thread.h; path = kernel/thread.h; sourceTree = "<group>"; };
@@ -212,6 +217,14 @@
 		3B78663B1D95948B00C015DF /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = font.h; path = i386/video/font.h; sourceTree = "<group>"; };
 		3B8D46BA1F65914700AC1679 /* sse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = sse.c; path = i386/sse.c; sourceTree = "<group>"; };
 		3BACBC2E1EC0A73000977F9F /* apic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apic.c; path = i386/apic.c; sourceTree = "<group>"; };
+		3BD8AA8A1F90EBA100A7ADBC /* Kernel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Kernel-Bridging-Header.h"; sourceTree = "<group>"; };
+		3BD8AA8B1F90EBA100A7ADBC /* kernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = kernel.swift; path = kernel/kernel.swift; sourceTree = "<group>"; };
+		3BD8AA8F1F90EC8300A7ADBC /* kprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = kprint.swift; path = kernel/kprint.swift; sourceTree = "<group>"; };
+		3BD8AA911F90EDD800A7ADBC /* command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = command.swift; path = kernel/command.swift; sourceTree = "<group>"; };
+		3BD8AA941F90EE5C00A7ADBC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = String.swift; path = "Swift Extensions/String.swift"; sourceTree = "<group>"; };
+		3BD8AA971F90EF2F00A7ADBC /* libobjc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libobjc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BD8AA991F90EF3300A7ADBC /* libcucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libcucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BD8AA9B1F90EF3600A7ADBC /* libicucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libicucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BE700DF1EE71DE50063D66A /* InterruptController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InterruptController.cpp; path = Modules/InterruptController.cpp; sourceTree = SOURCE_ROOT; };
 		3BE700E01EE71DE50063D66A /* InterruptController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InterruptController.hpp; path = Modules/InterruptController.hpp; sourceTree = SOURCE_ROOT; };
 		3BF071D01E59E75000BFF155 /* io_map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = io_map.c; path = i386/io_map.c; sourceTree = "<group>"; };
@@ -226,6 +239,9 @@
 			files = (
 				3B6BC4171F56DE7D00F12220 /* libc.a in Frameworks */,
 				3B6BC4181F56DE8200F12220 /* libc++.a in Frameworks */,
+				3BD8AA961F90EF2F00A7ADBC /* libobjc.a in Frameworks */,
+				3BD8AA981F90EF3300A7ADBC /* libcucore.a in Frameworks */,
+				3BD8AA9A1F90EF3600A7ADBC /* libicucore.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +303,7 @@
 				3B588BD51D95CAB400087C38 /* stdint.h */,
 				3B588BD61D95CAB400087C38 /* stdarg.h */,
 				3B588BD71D95CAB400087C38 /* stddef.h */,
+				3BD8AA8A1F90EBA100A7ADBC /* Kernel-Bridging-Header.h */,
 			);
 			name = Headers;
 			path = Kernel;
@@ -305,9 +322,11 @@
 			children = (
 				3B588BD91D95CEF200087C38 /* assert.c */,
 				3B5F79621D9596E7006EC205 /* kprintf.c */,
-				3B5F795E1D9596E7006EC205 /* kernel.c */,
+				3BD8AA8F1F90EC8300A7ADBC /* kprint.swift */,
+				3BD8AA8B1F90EBA100A7ADBC /* kernel.swift */,
 				3B5F795F1D9596E7006EC205 /* command.h */,
 				3B5F795D1D9596E7006EC205 /* command.c */,
+				3BD8AA911F90EDD800A7ADBC /* command.swift */,
 				3B5F79631D9596E7006EC205 /* thread.h */,
 				3B5F79641D9596E7006EC205 /* misc_protos.h */,
 				3B5F79651D9596E7006EC205 /* kernel_header.c */,
@@ -341,6 +360,7 @@
 			children = (
 				3B7865BE1D958FEE00C015DF /* Kernel */,
 				3B588BD21D95C94E00087C38 /* Headers */,
+				3BD8AA931F90EE2D00A7ADBC /* Swift Extensions */,
 				3B5F79751D959786006EC205 /* Platform */,
 				3B7865BD1D958FEE00C015DF /* Products */,
 				3B7865DB1D9591B800C015DF /* Frameworks */,
@@ -375,6 +395,9 @@
 			children = (
 				3B45ABBA1EED69350035FC5D /* libc++.a */,
 				3B7865DC1D9591B800C015DF /* libc.a */,
+				3BD8AA971F90EF2F00A7ADBC /* libobjc.a */,
+				3BD8AA991F90EF3300A7ADBC /* libcucore.a */,
+				3BD8AA9B1F90EF3600A7ADBC /* libicucore.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -479,6 +502,14 @@
 			name = sys;
 			sourceTree = "<group>";
 		};
+		3BD8AA931F90EE2D00A7ADBC /* Swift Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3BD8AA941F90EE5C00A7ADBC /* String.swift */,
+			);
+			name = "Swift Extensions";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -512,6 +543,7 @@
 					3B7865BB1D958FED00C015DF = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = S73MBXSV7H;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -563,6 +595,7 @@
 				3B7866321D95947500C015DF /* cpu_threads.c in Sources */,
 				3B5F796E1D9596E7006EC205 /* command.c in Sources */,
 				3B7866291D95947500C015DF /* rtclock.c in Sources */,
+				3BD8AA8C1F90EBA100A7ADBC /* kernel.swift in Sources */,
 				3B2576581F522483002EBB98 /* fpu.c in Sources */,
 				3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */,
 				3B3F42031F588A640059964E /* SPIController.cpp in Sources */,
@@ -575,7 +608,6 @@
 				3B7866301D95947500C015DF /* tsc.c in Sources */,
 				3B7866331D95947500C015DF /* pal.c in Sources */,
 				3B588BDA1D95CEF200087C38 /* assert.c in Sources */,
-				3B5F796F1D9596E7006EC205 /* kernel.c in Sources */,
 				3B588BDF1D95CF0500087C38 /* asmlib.S in Sources */,
 				3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */,
 				3B7865EF1D9592F500C015DF /* pmap_pcid.c in Sources */,
@@ -589,6 +621,7 @@
 				3B78662A1D95947500C015DF /* syscall.c in Sources */,
 				3B2D0EC61E4FCB11000204B1 /* EHCIController.cpp in Sources */,
 				3B7865ED1D9592F500C015DF /* start.S in Sources */,
+				3BD8AA901F90EC8300A7ADBC /* kprint.swift in Sources */,
 				3BE700E11EE71DE50063D66A /* InterruptController.cpp in Sources */,
 				3B7865EE1D9592F500C015DF /* pmap.c in Sources */,
 				3B5F79731D9596E7006EC205 /* kalloc.c in Sources */,
@@ -596,12 +629,14 @@
 				3B588BCC1D95C89C00087C38 /* ModulesController.cpp in Sources */,
 				3B7866361D95947500C015DF /* ldt.c in Sources */,
 				3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */,
+				3BD8AA951F90EE5C00A7ADBC /* String.swift in Sources */,
 				3B2D0ECD1E4FCB3D000204B1 /* UHCIController.cpp in Sources */,
 				3B588BE01D95CF0500087C38 /* arch.c in Sources */,
 				3B7866261D95947500C015DF /* mp_desc.c in Sources */,
 				3B5F79711D9596E7006EC205 /* kprintf.c in Sources */,
 				3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */,
 				3B5F797A1D9597EC006EC205 /* platform_init.c in Sources */,
+				3BD8AA921F90EDD800A7ADBC /* command.swift in Sources */,
 				3B660AC01E623B8E003EE3C1 /* SATAController.cpp in Sources */,
 				3B5F797B1D9597EC006EC205 /* bootargs.c in Sources */,
 				3B7866311D95947500C015DF /* trap.c in Sources */,
@@ -725,8 +760,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CURRENT_PROJECT_VERSION = 0.31.1;
+				CURRENT_PROJECT_VERSION = 0.35;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -737,7 +773,6 @@
 					__LP64__,
 					__x86_64__,
 					"KERNEL_BASE_OFFSET=0x1000",
-					"BUILD_TYPE=\"\\\"Internal \\\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Kernel",
@@ -747,6 +782,7 @@
 					"$(PROJECT_DIR)/../Libc++/Libc++",
 					"$(PROJECT_DIR)",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
 					"-ffreestanding",
@@ -791,7 +827,10 @@
 					"-Wl,-sectalign,__HIB,__llvm_prf_data,0x1000",
 					"-Wl,-sectalign,__HIB,__textcoal_nt,0x1000",
 				);
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Kernel/Kernel-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "";
 				VERSION_INFO_BUILDER = "Adam Kopeć";
 				VERSION_INFO_EXPORT_DECL = "";
@@ -807,8 +846,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CURRENT_PROJECT_VERSION = 0.31.1;
+				CURRENT_PROJECT_VERSION = 0.35;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -817,7 +857,6 @@
 					__LP64__,
 					__x86_64__,
 					"KERNEL_BASE_OFFSET=0x1000",
-					"BUILD_TYPE=\"\\\"\\\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/Kernel",
@@ -827,6 +866,7 @@
 					"$(PROJECT_DIR)/../Libc++/Libc++",
 					"$(PROJECT_DIR)",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
 					"-ffreestanding",
@@ -871,7 +911,10 @@
 					"-Wl,-sectalign,__HIB,__llvm_prf_data,0x1000",
 					"-Wl,-sectalign,__HIB,__textcoal_nt,0x1000",
 				);
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Kernel/Kernel-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "";
 				VERSION_INFO_BUILDER = "Adam Kopeć";
 				VERSION_INFO_EXPORT_DECL = "";

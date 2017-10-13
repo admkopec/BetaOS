@@ -387,7 +387,9 @@ EHCI::LineStatusCheck(uint32_t port) {
     }
     
     uint8_t lineStatus = (OperationalRegisters->Ports[port] >> 10) & 3;
+#ifdef DEBUG
     const char* const state[] = {"SE0", "K-State (1.0, 1.1)", "J-State", "Undefined"};
+#endif
     DBG("Line State: %s\n", state[lineStatus]);
     
     switch (lineStatus) {

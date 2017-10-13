@@ -7,12 +7,14 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 //#include <kernel/tty.h>
 
 extern void vsputc(int ch);
 extern bool experimental;
 extern bool use_screen_caching;
 extern void refresh_screen(void);
+extern void panic(const char*, ...);
 
 int putchar(int ic)
 {
@@ -25,4 +27,33 @@ int putchar(int ic)
         refresh_screen();
     }
 	return ic;
+}
+
+int
+fputc(int ch, void *stream) {
+    if (stream != stderr && stream != stdout) {
+        panic("putc stream = %p", stream);
+    } else {
+        return putchar(ch);
+    }
+    return -1;
+}
+
+int
+putc(int ch, void *stream) {
+    if (stream != stderr && stream != stdout) {
+        panic("putc stream = %p", stream);
+    } else {
+        return putchar(ch);
+    }
+    return -1;
+}
+
+int fputs(const char* ch, void *stream) {
+    if (stream != stderr && stream != stdout) {
+        panic("puts stream = %p", stream);
+    } else {
+        return puts(ch);
+    }
+    return -1;
 }

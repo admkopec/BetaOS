@@ -352,7 +352,7 @@ i386_init(void) {
     APICInit();
     //pmInit();
     
-    kernel_main();
+    kernelMain();
 }
 
 void

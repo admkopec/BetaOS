@@ -16,11 +16,15 @@
 extern "C" {
 #endif
 
-int printf(const char*, ...);
-int putchar(int);
-int puts(const char*);
-int getchar(void);
-char* gets(char*);
+int    printf   (const char*, ...);
+int    vasprintf(char **strp, const char * format, va_list argp);
+int    asprintf (char **strp, const char * format, ...);
+int    snprintf (char * buf, size_t size, const char * format, ...);
+size_t write    (int fd, const void *buf, size_t nbyte);
+int    putchar  (int);
+int    puts     (const char*);
+int    getchar  (void);
+char*  gets     (char*);
 
 #ifdef __cplusplus
 }

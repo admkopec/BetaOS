@@ -14,7 +14,6 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
-#include <kernel/kalloc.h>
 #include <assert.h>
 
 #ifndef NULL

@@ -15,6 +15,17 @@
 extern "C" {
 #endif
     
+// Default FILE * for stdio, faked values
+// OSX symbol names
+extern void *__stderrp;
+extern void *__stdinp;
+extern void *__stdoutp;
+    
+// Linux symbol names
+extern void *stderr;
+extern void *stdin;
+extern void *stdout;
+    
 typedef struct Link {
     struct Link *prev;
     struct Link *next;

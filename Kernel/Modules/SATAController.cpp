@@ -146,7 +146,9 @@ SATA::init(PCI *header) {
             int dt = check_type(&address->ports[i]);
             if (dt == AHCI_DEV_SATA) {
                 Log("SATA drive found at port %d\n", i);
+#ifdef DEBUG
                 uint64_t addr = (uint64_t)((uint64_t)address->ports[i].fb + ((uint64_t)(address->ports[i].fbu) << 32));
+#endif
                 DBG("Port phys_addr: %x\n", addr);
                 /*io_map(addr, sizeof(fis), VM_WIMG_IO);
                 FIS_REG_H2D* fFis = (FIS_REG_H2D*)addr;

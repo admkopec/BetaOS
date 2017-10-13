@@ -8,12 +8,79 @@
 
 #include <stdbool.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 extern "C" { extern void vsputc(int ch);
              extern bool experimental;
              extern bool use_screen_caching;
              extern void refresh_screen(void);
+             extern int  kvsnprintf(char *buf, size_t size, const char *fmt, va_list args);
+             extern void panic(const char* fmt, ...);
+}
+
+size_t
+write(int fd, const void *buf, size_t nbyte) {
+    //    printf("write(fd=%d, buf=%p nbyte=%lu\n", fd, buf, nbyte);
+    
+    if (fd == 1 || fd == 2) {
+        printf((const char *)buf);
+    } else {
+        panic("write() with fd = %d\n", fd);
+    }
+    return nbyte;
+}
+
+int
+vasprintf(char **strp, const char * format, va_list argp) {
+    char buf[128];
+    
+    // len = number of characters in final string, not that fit in buffer
+    // excludes terminating '\0'
+    int len = kvsnprintf(buf, 128, format, argp);
+    *strp = (char *)malloc(len + 1);
+    if (*strp == NULL) {
+        return -1;
+    }
+    
+    if (len > 127) {
+        return kvsnprintf(buf, len + 1, format, argp);
+    } else {
+        memcpy(*strp, buf, len + 1);
+    }
+    
+    return len;
+}
+
+int
+asprintf(char **strp, const char * format, ...) {
+    char buf[2048];
+    // FIXME: use the size
+    
+    va_list argp;
+    va_start(argp, format);
+    kvsnprintf(buf, 2048, format, argp);
+    va_end(argp);
+    
+    int len = (int)strlen(buf);
+    char *result = (char *)malloc(len);
+    memcpy(result, buf, len+1);
+    *strp = result;
+    
+    return len;
+}
+
+
+int
+snprintf(char * buf, __unused size_t size, __unused const char * format, ...) {
+    // FIXME: use the size
+//    printf("snprintf(%s)=", format);
+//    va_list argp;
+//    ksprintf(buf, format, argp);
+//    va_end(argp);
+//    print_string(buf);
+    
+    return (int)strlen(buf);
 }
 
 int printf(const char *s, ...) {

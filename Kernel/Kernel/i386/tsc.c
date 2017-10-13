@@ -113,6 +113,7 @@ tsc_init(void) {
     }
     
     switch (cpuid_info()->cpuid_cpufamily) {
+        case CPUFAMILY_INTEL_KABYLAKE:
         case CPUFAMILY_INTEL_SKYLAKE: {
             /*
              * SkyLake and later has an Always Running Timer (ART) providing

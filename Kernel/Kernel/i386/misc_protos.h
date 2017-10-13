@@ -24,7 +24,7 @@ extern bool can_use_serial;
 extern bool is_new_paging_enabled;
 extern void kprintf(const char *fmt, ...);
 extern void panic(const char* errormsg, ...);
-extern void kernel_main(void);
+extern void kernelMain(void);
 extern void enable_sse(void);
 extern void bcopy(const void *from, void *to, unsigned int count);
 extern void bzero(void * addr, size_t length);

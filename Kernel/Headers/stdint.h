@@ -9,7 +9,7 @@
 #ifndef _KERNEL_STDINT_H_
 #define _KERNEL_STDINT_H_
 
-#ifndef KERNEL    /* Xcode IntelliSense doesn't like this if */
+#ifndef KERNEL
 /* For user-space code that may include this header */
 #include_next <stdint.h>
 #else /* KERNEL */

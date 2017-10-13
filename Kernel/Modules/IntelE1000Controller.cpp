@@ -177,7 +177,9 @@ void E1000::handleReceive() {
     
     while(rx_cur != head) {
         got_packet = true;
+#ifdef DEBUG
         uint8_t *buf    = (uint8_t *)rx_descs[rx_cur]->addr;
+#endif
         size_t   len    = rx_descs[rx_cur]->length;
         uint8_t  status = rx_descs[rx_cur]->status;
         

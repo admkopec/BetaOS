@@ -193,6 +193,8 @@ extern uint32_t IOAPICAddressPhys;
 FADT_t * Fadt;
 MADT_t * Madt;
 
+bool VendorisApple = false;
+
 static int
 ParseRSDP(ACPI_2_Description *RSDP) {
     ACPISDTHeader_t *XSDT, *Entry;
@@ -201,22 +203,33 @@ ParseRSDP(ACPI_2_Description *RSDP) {
     DBG("Found RSDP, Version: %d OEM ID: %s\n", RSDP->Revision, RSDP->OemId);
     if (RSDP->Revision >= 0x02) {
         XSDT = (ACPISDTHeader_t *) (RSDP->XsdtAddress);
+    } else if(RSDP->Revision == 0x00) {
+        XSDT = (ACPISDTHeader_t *) (uint64_t)(RSDP->RsdtAddress);
+        VendorisApple = true;
     } else {
         DBG("NO XSDT table found!\n");
         return 1;
     }
 
-    if (strncmp("XSDT", XSDT->Signature, 4)) {
+    if (strncmp("XSDT", XSDT->Signature, 4) && strncmp("RSDT", XSDT->Signature, 4)) {
         DBG("Invalid XSDT!\n");
         return 1;
     }
-
-    EntryCount = (XSDT->Length - sizeof(ACPISDTHeader_t)) / sizeof(uint64_t);
+    
+    if (!VendorisApple) {
+        EntryCount = (XSDT->Length - sizeof(ACPISDTHeader_t)) / sizeof(uint64_t);
+    } else {
+        EntryCount = (XSDT->Length - sizeof(ACPISDTHeader_t)) / sizeof(uint32_t);
+    }
     DBG("Found XSDT OEM ID: %s Entry Count: %d\n", XSDT->OEMID, EntryCount);
 
     EntryPtr = (uint64_t*) (XSDT + 1);
     for (uint32_t i = 0; i < EntryCount; i++, EntryPtr++) {
-        Entry = (ACPISDTHeader_t *) ((uint64_t) (*EntryPtr));
+        if (VendorisApple) {
+            Entry = (ACPISDTHeader_t *) (uint64_t)((uint32_t) (*EntryPtr));
+        } else {
+            Entry = (ACPISDTHeader_t *) ((uint64_t) (*EntryPtr));
+        }
         if (!strncmp("APIC", Entry->Signature, 4)) {
             DBG("Found MADT!\n");
             Madt = (MADT_t *)Entry;
@@ -347,9 +360,15 @@ int acpiEnable_(void) {
     }
 }
 
+#ifdef DEBUG
 void printGuid(EFI_GUID g1) {
     DBG("0x%lX-0x%X-0x%X-0x%X%X-0x%X%X%X%X%X%X\n", g1.Data1, g1.Data2, g1.Data3, g1.Data4[0], g1.Data4[1], g1.Data4[2], g1.Data4[3], g1.Data4[4], g1.Data4[5], g1.Data4[6], g1.Data4[7]);
 }
+#else
+void printGuid(__unused EFI_GUID g1) {
+    return;
+}
+#endif
 
 void acpi() {
     uint64_t Address;
@@ -357,23 +376,7 @@ void acpi() {
     ACPI_2_Description *RSDP = (void *)0;
     
     //printGuid(((EFI_SYSTEM_TABLE_64 *)((uint64_t)(Platform_state.bootArgs->efiSystemTable)))->ConfigurationTable[4].VendorGuid);  // tab[4] for M4600 is APCI 2.0
-    // Bios Version (Scanning)
-    for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
-        if (*(uint64_t *)(ml_static_ptovirt(Address)) == 0x54445352 || !strncmp((const char*)((uint64_t *)(ml_static_ptovirt(Address))), "RSD PTR ", 8)) {
-            DBG("Found RSDP using Legacy Method!\n");
-            RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
-            goto parse;
-        }
-    }
-
-    Address = (*(uint16_t *)(uint64_t)(0x40E)) << 4;
-    for (Index = 0; Index < 0x400; Index += 16) {
-        if (*(uint64_t *)(ml_static_ptovirt(Address + Index)) == 0x54445352 || !strncmp((const char *)((uint64_t*)(ml_static_ptovirt(Address + Index))), "RSD PTR ", 8)) {
-            DBG("Found RSDP using EBDA Method!\n");
-            RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
-            goto parse;
-        }
-    }
+    
     // EFI Version (Tables)
     if (Platform_state.bootArgs->efiMode != kBootArgsEfiMode64) {
         panic("EFI MODE 32-bit!\n");
@@ -391,6 +394,24 @@ void acpi() {
             }
         }
         configtab++;
+    }
+    
+    // Bios Version (Scanning)
+    for (Address = 0xe0000; Address < 0xFFFFF; Address += 0x10) {
+        if (*(uint64_t *)(ml_static_ptovirt(Address)) == 0x54445352 || !strncmp((const char*)((uint64_t *)(ml_static_ptovirt(Address))), "RSD PTR ", 8)) {
+            DBG("Found RSDP using Legacy Method!\n");
+            RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
+            goto parse;
+        }
+    }
+
+    Address = (*(uint16_t *)(uint64_t)(0x40E)) << 4;
+    for (Index = 0; Index < 0x400; Index += 16) {
+        if (*(uint64_t *)(ml_static_ptovirt(Address + Index)) == 0x54445352 || !strncmp((const char *)((uint64_t*)(ml_static_ptovirt(Address + Index))), "RSD PTR ", 8)) {
+            DBG("Found RSDP using EBDA Method!\n");
+            RSDP = (ACPI_2_Description *)ml_static_ptovirt(Address);
+            goto parse;
+        }
     }
 
     if (RSDP == (void *)0) {

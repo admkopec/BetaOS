@@ -1,11 +1,16 @@
 # BetaOS
 The BetaOS in this version is not yet officially ready for use on real hardware. It shouldn't break your machine, although use with caution.<br />
 For your and your hardware safety use it only as VM.<br />
-To compile the source code you need Apple's Xcode.<br />
-Now installation got even easier with dmg disk for VMs (or you can restore it to USB) and USB directory which contents you only need to copy to your USB to make it bootable.<br />
+To compile the source code you need Apple's Xcode 9.0 or later.<br />
+Now installation got even easier with dmg disk for VMs (or you can restore it to USB) and USB directory which contents you only need to copy to your USB to make it bootable, proper blessing is required on Mac.<br />
 PC users should use Clover bootloader to boot the MACH-O binary through included boot.efi(Apple).
 
 ## Changelog:
+### Version 0.35:
+* Added Swift language support for Kernel development using Xcode 9.0 or later. (More code will be translated into it in the future.)
+* Added full Kaby Lake support.
+* Added support for Mac's ACPI tables.
+
 ### Version 0.31.1:
 * Added Screen Caching.
 * Added USB Ports detection.

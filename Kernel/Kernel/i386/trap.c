@@ -535,13 +535,18 @@ kprintf_state(x86_saved_state64_t *saved_state) {
 }
 #endif
 
+#ifdef DEBUG
 void
 panic_idt64(x86_saved_state_t *rsp) {
-#ifdef DEBUG
     kprintf_state((x86_saved_state64_t *)(ml_static_ptovirt((vm_offset_t)saved_state64(rsp))));
-#endif
     panic("panic_idt64");
 }
+#else
+void
+panic_idt64(__unused x86_saved_state_t *rsp) {
+    panic("panic_idt64");
+}
+#endif
 
 void
 panic_64(x86_saved_state_t *sp, const char *msg, boolean_t do_mca_dump) {

@@ -116,6 +116,49 @@ panicing:
     }
 }
 
+struct string_buf {
+    char *data;
+    size_t count;
+    size_t max_len;
+};
+
+void* buf_p = NULL;
+
+static void
+b_print_char(int ch) {
+    struct string_buf *buf = buf_p;
+    if (buf->count+1 < buf->max_len) {
+        *(buf->data + buf->count) = (char)ch;
+        buf->count++;
+        *(buf->data + buf->count) = '\0';
+    }
+}
+
+int
+kvsnprintf(char *buf, size_t size, const char *fmt, va_list args) {
+    struct string_buf string_buf = { .data = buf, .count = 0, .max_len = size };
+    if (size < 1) {
+        return 0;
+    }
+    *buf = '\0';
+    
+    buf_p = &string_buf;
+    
+    __doprnt(fmt, args, b_print_char, 16, false);
+    return (int)size;
+}
+
+
+int
+ksnprintf(char *buf, size_t size, const char *fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    int len = kvsnprintf(buf, size, fmt, args);
+    va_end(args);
+    
+    return len;
+}
+
 void hexdump(char *desc, void *addr, int len) {
     int i;
     unsigned char buff[17];
