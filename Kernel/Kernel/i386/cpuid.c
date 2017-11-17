@@ -1,20 +1,25 @@
 //
-//  cpuid.c
+//  cpuid.cpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/18/16.
 //  Copyright © 2016 Adam Kopeć. All rights reserved.
 //
 
-#include <i386/cpuid.h>
 #include <string.h>
+#include <stdio.h>
+extern "C" {
+#include <i386/cpuid.h>
 #include "proc_reg.h"
 #include "misc_protos.h"
-//#define DEBUG 1
+
+#undef strlcpy
+#ifndef DBG
 #ifdef DEBUG
-#define DBG(x...) kprintf(x)
+#define DBG(x...) printf(x)
 #else
 #define DBG(x...)
+#endif
 #endif
 
 #define min(a,b)    ((a) < (b) ? (a) : (b))
@@ -243,7 +248,7 @@ cpuid_set_cache_info( i386_cpu_info_t * info_p )
     uint32_t        linesizes[LCACHE_MAX];
     unsigned int	i;
     unsigned int	j;
-    boolean_t       cpuid_deterministic_supported = FALSE;
+    bool            cpuid_deterministic_supported = false;
     
     DBG("cpuid_set_cache_info(%p)\n", info_p);
     
@@ -276,7 +281,7 @@ cpuid_set_cache_info( i386_cpu_info_t * info_p )
      */
     cpuid_fn(0, cpuid_result);
     if (cpuid_result[eax] >= 4)
-        cpuid_deterministic_supported = TRUE;
+        cpuid_deterministic_supported = true;
     
     for (index = 0; cpuid_deterministic_supported; index++) {
         cache_type_t type = Lnone;
@@ -463,9 +468,9 @@ cpuid_set_generic_info(i386_cpu_info_t *info_p) {
     /* do cpuid 0 to get vendor */
     cpuid_fn(0, reg);
     info_p->cpuid_max_basic = reg[eax];
-    bcopy((char *)&reg[ebx], &info_p->cpuid_vendor[0], 4); /* ug */
-    bcopy((char *)&reg[ecx], &info_p->cpuid_vendor[8], 4);
-    bcopy((char *)&reg[edx], &info_p->cpuid_vendor[4], 4);
+    memcpy((char *)&reg[ebx], &info_p->cpuid_vendor[0], 4); /* ug */
+    memcpy((char *)&reg[ecx], &info_p->cpuid_vendor[8], 4);
+    memcpy((char *)&reg[edx], &info_p->cpuid_vendor[4], 4);
     info_p->cpuid_vendor[12] = 0;
     
     /* get extended cpuid results */
@@ -479,11 +484,11 @@ cpuid_set_generic_info(i386_cpu_info_t *info_p) {
          * be NUL terminated.
          */
         cpuid_fn(0x80000002, reg);
-        bcopy((char *)reg, &str[0], 16);
+        memcpy((char *)reg, &str[0], 16);
         cpuid_fn(0x80000003, reg);
-        bcopy((char *)reg, &str[16], 16);
+        memcpy((char *)reg, &str[16], 16);
         cpuid_fn(0x80000004, reg);
-        bcopy((char *)reg, &str[32], 16);
+        memcpy((char *)reg, &str[32], 16);
         for (p = str; *p != '\0'; p++) {
             if (*p != ' ') break;
         }
@@ -788,21 +793,21 @@ void
 cpuid_set_info(void)
 {
     i386_cpu_info_t	*info_p = &cpuid_cpu_info;
-    bool 		    enable_x86_64h = TRUE;
+    bool 		    enable_x86_64h = true;
     
     cpuid_set_generic_info(info_p);
     
     /* verify we are running on a supported CPU */
     if ((strncmp(CPUID_VID_INTEL, info_p->cpuid_vendor, min(strlen(CPUID_STRING_UNKNOWN) + 1, sizeof(info_p->cpuid_vendor)))) || (cpuid_set_cpufamily(info_p) == CPUFAMILY_UNKNOWN))
-        kprintf("Unsupported CPU");//panic("Unsupported CPU");
+        printf("Unsupported CPU");//panic("Unsupported CPU");
     
     info_p->cpuid_cpu_type = CPU_TYPE_X86;
     
     //if (!Parse_boot_argn("-enable_x86_64h", &enable_x86_64h, sizeof(enable_x86_64h))) {
-    //    boolean_t		disable_x86_64h = FALSE;
+    //    boolean_t		disable_x86_64h = false;
     //
     //    if (Parse_boot_argn("-disable_x86_64h", &disable_x86_64h, sizeof(disable_x86_64h))) {
-    //        enable_x86_64h = FALSE;
+    //        enable_x86_64h = false;
     //    }
     //}
     
@@ -882,9 +887,9 @@ cpuid_init_vmm_info(i386_vmm_info_t *info_p) {
     /* do cpuid 0x40000000 to get VMM vendor */
     cpuid_fn(0x40000000, reg);
     max_vmm_leaf = reg[eax];
-    bcopy((char *)&reg[ebx], &info_p->cpuid_vmm_vendor[0], 4);
-    bcopy((char *)&reg[ecx], &info_p->cpuid_vmm_vendor[4], 4);
-    bcopy((char *)&reg[edx], &info_p->cpuid_vmm_vendor[8], 4);
+    memcpy((char *)&reg[ebx], &info_p->cpuid_vmm_vendor[0], 4);
+    memcpy((char *)&reg[ecx], &info_p->cpuid_vmm_vendor[4], 4);
+    memcpy((char *)&reg[edx], &info_p->cpuid_vmm_vendor[8], 4);
     info_p->cpuid_vmm_vendor[12] = '\0';
     
     if (true == strcmp(info_p->cpuid_vmm_vendor, CPUID_VMM_ID_VMWARE)) {
@@ -950,4 +955,5 @@ cpuid_vmm_info(void) {
 bool
 cpuid_vmm_present(void) {
     return (cpuid_features() & CPUID_FEATURE_VMM) ? true : false;
+}
 }

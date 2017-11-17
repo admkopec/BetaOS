@@ -1,20 +1,19 @@
 //
-//  itoa.cpp
+//  itoa.c
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/8/15.
 //  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void itoa(char *buf, unsigned long int n, int base)
 {
-    unsigned long int tmp;
-    int i, j;
-
-    tmp = n;
-    i = 0;
+    unsigned long int tmp = n;
+    int i = 0, j;
 
     do {
         tmp = n % base;

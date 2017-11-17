@@ -7,8 +7,9 @@
 //
 
 #include <stdint.h>
+#include <stddef.h>
 #include <platform/platform.h>
-#include <sys/cdefs.h>
+#include <string.h>
 #include "font.h"
 //#include "../misc_protos.h"
 
@@ -19,7 +20,7 @@ static uint32_t color_background = 0x00000000;
 
 uint64_t Screen;
 bool     use_screen_caching = false;
-const bool     experimental = false;
+const bool     experimental = true;
 /*char painted_chars[1000][1000];
 unsigned long painted_chars_row    = 0;
 unsigned long painted_chars_column = 0;*/
@@ -35,6 +36,15 @@ static unsigned char rendered_char[ISO_CHAR_HEIGHT * ((REN_MAX_DEPTH / 8) * ISO_
 
 void
 paint_char(unsigned int x, unsigned int y, unsigned char ch);
+
+uint32_t get_font_color() {
+    return color_foreground;
+}
+
+void
+change_font_color(uint32_t foreground) {
+    color_foreground = foreground;
+}
 
 void
 change_color(uint32_t foreground, uint32_t background) {
@@ -121,7 +131,7 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
     }
 }
 
-extern void bcopy(void *, void *, size_t);
+extern void bcopy_(void *, void *, size_t);
 
 static void
 clear_line(unsigned int xx, unsigned int yy) {
@@ -178,9 +188,9 @@ scroll_up() {  // Fix half line after to scrolls
     while (i-- > 0) {
         for (line = 0; line < ISO_CHAR_HEIGHT; line++) {
             if (!use_screen_caching || !experimental) {
-                bcopy(from, to,  (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+                bcopy_(from, to,  (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
             }
-            bcopy(from, to2, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+            bcopy_(from, to2, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
             from += rowline;
             if (!use_screen_caching || !experimental) {
                 to   += rowline;
@@ -190,14 +200,14 @@ scroll_up() {  // Fix half line after to scrolls
     }
     clear_screen_(0, row, (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
     clear_screen_(0, (uint32_t)((Platform_state.video.v_height) - ISO_CHAR_HEIGHT), (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
-    if (experimental) {
-        refresh_screen();
-    }
+//    if (experimental) {
+//        refresh_screen();
+//    }
 }
 
 void
 refresh_screen() {
-    bcopy((void *) Screen, (void *) Platform_state.video.v_baseAddr, Platform_state.video.v_length);
+    memcpy((void *) Screen, (void *) Platform_state.video.v_baseAddr, Platform_state.video.v_length);
 }
 
 void

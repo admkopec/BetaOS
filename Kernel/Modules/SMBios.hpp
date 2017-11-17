@@ -1,13 +1,13 @@
 //
-//  SMBiosController.hpp
+//  SMBios.hpp
 //  Kernel
 //
 //  Created by Adam Kopeć on 2/12/17.
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-#ifndef SMBiosController_hpp
-#define SMBiosController_hpp
+#ifndef SMBios_hpp
+#define SMBios_hpp
 
 #include <stdio.h>
 #include <stdint.h>
@@ -57,7 +57,7 @@ struct SMBAnchor {
 ((x) && ((x)->header) && ((x)->next) && ((x)->end))
 
 #define SMB_ANCHOR_RESET(x)		\
-bzero(x, sizeof(struct SMBAnchor));
+bzero_(x, sizeof(struct SMBAnchor));
 
 //
 // SMBIOS structure types.
@@ -412,14 +412,5 @@ struct SMBOemProcessorBusSpeed {
 };
 
 #pragma pack(pop) // reset to default struct packing
-
-class SMBiosController {
-    void *      SMBiosTable;
-    //uint16_t    SMBiosTableLength;
-public:
-    static uint16_t    SMBiosTableLength;
-    int  init(void);
-    void start(void);
-};
 
 #endif /* SMBiosController_hpp */

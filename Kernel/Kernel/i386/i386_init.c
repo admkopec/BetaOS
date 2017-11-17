@@ -1,11 +1,14 @@
 //
-//  i386_init.c
+//  i386_init.cpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/1/16.
 //  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
+#include <stdio.h>
+#include <string.h>
+extern "C" {
 #include <i386/cpu_data.h>
 #include <i386/cpuid.h>
 #include <i386/proc_reg.h>
@@ -37,7 +40,7 @@ extern void clear_screen(void);
 int master_cpu;
 
 #if DEBUG
-#define DBG(x...)   kprintf(x)
+#define DBG(x...)   printf(x)
 #else
 #define DBG(x...)
 #endif
@@ -77,7 +80,7 @@ ALLOCPAGES(int npages) {
 static void
 fillkpt(pt_entry_t *base, int prot, unsigned long src, int index, int count) {
     for (int i=0; i<count; i++) {
-        kprintf("");
+        printf("");
         base[index] = src | prot | INTEL_PTE_VALID;
         src += PAGE_SIZE;
         index++;
@@ -95,6 +98,10 @@ void __stack_chk_fail(void) {
     panic("Kernel stack memory corruption detected");
     for (; ;) { }
 }
+    
+struct mapL2 {
+    pt_entry_t entries[PTE_PER_PAGE];
+};
 
 // Set up the physical mapping - NPHYSMAP GB of memory mapped at a high address
 // NPHYSMAP is determined by the maximum supported RAM size plus 4GB to account
@@ -107,10 +114,8 @@ extern int maxphymapsupported[NPHYSMAP <= (PTE_PER_PAGE/2) ? 1 : -1];
 
 static void
 physmap_init(void) {
-    pt_entry_t *physmapL3 = ALLOCPAGES(1);
-    struct {
-        pt_entry_t entries[PTE_PER_PAGE];
-    } * physmapL2 = ALLOCPAGES(NPHYSMAP);
+    pt_entry_t *physmapL3 = (pt_entry_t *)ALLOCPAGES(1);
+    mapL2* physmapL2 = (mapL2 *)ALLOCPAGES(NPHYSMAP);
     
     uint8_t  phys_random_L3 = /*early_random()*/ 1145125151236523357 & 0xFF;
     //                        ^^^^^^^^^^^^^^ Implement!
@@ -140,7 +145,7 @@ physmap_init(void) {
             | INTEL_PTE_NX
             | INTEL_PTE_WRITE;
             if (j > 0x1FE) {       // Using the same hack as above :)
-                kprintf("");
+                printf("");
             }
         }
     }
@@ -176,17 +181,17 @@ descriptor_alias_init() {
     DBG("master_idt_alias_phys:  %p\n", (void *) master_idt_alias_phys);
     
     KPTphys[atop_kernel(master_gdt_alias_phys)] = master_gdt_phys | INTEL_PTE_VALID | INTEL_PTE_NX | INTEL_PTE_WRITE;
-    kprintf(""); // Same hack as above :)
+    printf(""); // Same hack as above :)
     KPTphys[atop_kernel(master_idt_alias_phys)] = master_idt_phys | INTEL_PTE_VALID | INTEL_PTE_NX;	/* read-only */
 }
-
+extern bool early;
 static void
 Idle_PTs_init(void) {
     /* Allocate the "idle" kernel page tables: */
-    KPTphys  = ALLOCPAGES(NKPT);	/* level 1 */
-    IdlePTD  = ALLOCPAGES(NPGPTD);	/* level 2 */
-    IdlePDPT = ALLOCPAGES(1);		/* level 3 */
-    IdlePML4 = ALLOCPAGES(1);		/* level 4 */
+    KPTphys  = (pd_entry_t   *)ALLOCPAGES(NKPT);	/* level 1 */
+    IdlePTD  = (pdpt_entry_t *)ALLOCPAGES(NPGPTD);	/* level 2 */
+    IdlePDPT = (pdpt_entry_t *)ALLOCPAGES(1);		/* level 3 */
+    IdlePML4 = (pml4_entry_t *)ALLOCPAGES(1);		/* level 4 */
     
     // Fill the lowest level with everything up to physfree
     fillkpt(KPTphys, INTEL_PTE_WRITE, 0, 0, (int)(((unsigned long)physfree) >> PAGE_SHIFT));
@@ -206,6 +211,7 @@ Idle_PTs_init(void) {
     
     // Switch to the page tables..
     DBG("Before Switch....\n");
+    early = true;
     set_cr3_raw((unsigned long)ID_MAP_VTOP(IdlePML4));
 }
 
@@ -224,9 +230,7 @@ Idle_PTs_init(void) {
  * Non-bootstrap processors are called with argument boot_args_start NULL.
  * These processors switch immediately to the existing kernel page tables.
  */
-extern bool early;
 extern void acpi(void);
-extern void SearchForEntrySMBios(void);
 void
 vstart(vm_offset_t boot_args_start) {
     bool        is_boot_cpu = !(boot_args_start == 0);
@@ -237,7 +241,7 @@ vstart(vm_offset_t boot_args_start) {
         // Get startup parameters
         kernelBootArgs  = (boot_args *)boot_args_start;
         lphysfree       = kernelBootArgs->kaddr + kernelBootArgs->ksize;
-        physfree        = (void *)(unsigned long)((lphysfree + PAGE_SIZE - 1) &~ (PAGE_SIZE - 1));
+        physfree        = (char *)(uintptr_t)((lphysfree + PAGE_SIZE - 1) &~ (PAGE_SIZE - 1));
 
 #if DEBUG
         serial_init();
@@ -246,11 +250,10 @@ vstart(vm_offset_t boot_args_start) {
         
         kernelBootArgs = (boot_args *)ml_static_ptovirt(boot_args_start);
         DBG("i386_init(0x%lx) kernelBootArgs=%p\n", (unsigned long)boot_args_start, kernelBootArgs);
-        Platform_init(FALSE, kernelBootArgs);
+        Platform_init(false, kernelBootArgs);
         
         clear_screen();
         acpi();
-        SearchForEntrySMBios();
         
         DBG("revision      0x%X\n", kernelBootArgs->Revision);
         DBG("version       0x%X\n", kernelBootArgs->Version);
@@ -265,7 +268,7 @@ vstart(vm_offset_t boot_args_start) {
                                                     &kernelBootArgs->kaddr);
         DBG("SMBIOS mem sz 0x%llx\n", kernelBootArgs->PhysicalMemorySize);
         DBG("EFI mode      %d\n",     kernelBootArgs->efiMode);
-        DBG("Video BAR     0x%X\n",   kernelBootArgs->Video.v_baseAddr);
+        DBG("Video BAR     0x%llX\n", kernelBootArgs->Video.v_baseAddr);
         DBG("Video Display %d\n",     kernelBootArgs->Video.v_display);
         DBG("Video rowbyte %d\n",     kernelBootArgs->Video.v_rowBytes);
         DBG("Video width   %d\n",     kernelBootArgs->Video.v_width);
@@ -273,12 +276,8 @@ vstart(vm_offset_t boot_args_start) {
         DBG("Video depth   %d\n",     kernelBootArgs->Video.v_depth);
         
         Idle_PTs_init();      // Using Boot Page Tables
-        early = true;
         
         first_avail = (vm_offset_t)ID_MAP_VTOP(physfree);
-        
-        // Use for getting offsetof and placing it to #defines in idt64.S
-        //DBG("Offset of %p\n", offsetof(pal_rtc_nanotime_t, ns_base));
         
         cpu = 0;
         cpu_data_alloc(true);
@@ -296,12 +295,15 @@ vstart(vm_offset_t boot_args_start) {
         cpu_mode_init(current_cpu_datap()); // cpu_mode_init() will be invoked on the APs via i386_init_slave()
     x86_init_wrapper(is_boot_cpu ? (uintptr_t) i386_init : (uintptr_t) i386_init_slave, cpu_datap(cpu)->cpu_int_stack_top);
 }
-
+#include "acpi.h"
 extern bool enable;
 extern bool use_screen_caching;
 extern uint64_t Screen;
-extern void * kalloc_(size_t size);
+extern RSDP_for_Swift RSDP_;
+extern SMBIOS_for_Swift SMBIOS_;
 extern void APICInit(void);
+extern void PITInit(uint16_t divisor);
+extern bool experimental;
 void
 i386_init(void) {
     //unsigned int max_mem;
@@ -309,7 +311,7 @@ i386_init(void) {
     //unsigned int cpus = 0;
     //bool         fidn;
     bool         IA32e = true;
-    
+    enable_sse();
     tsc_init();
     rtclock_early_init();
     
@@ -341,22 +343,32 @@ i386_init(void) {
             panic("Video Framebuffer allocation failed!\n");
         }
     }
-    DBG("v_baseAddr = 0x%x\n", Platform_state.video.v_baseAddr);
+    DBG("v_baseAddr = 0x%lx\n", Platform_state.video.v_baseAddr);
     early = false;
-    Screen = (uint64_t) kalloc_(fbsize);
+    Screen = (uint64_t) malloc(fbsize);
     clear_screen();
     
-    enable_sse();
+    if (RSDP_.OriginalAddress != 0) {
+        RSDP_.RSDP     = (ACPI_2_Description *)io_map(((vm_offset_t)RSDP_.OriginalAddress & ~3), round_page(sizeof(ACPI_2_Description)), VM_WIMG_IO);
+    } if (SMBIOS_.OriginalAddress != 0) {
+        SMBIOS_.SMBIOS = (SMBIOSHeader *)io_map(((vm_offset_t)SMBIOS_.OriginalAddress & ~3), round_page(sizeof(SMBIOSHeader)), VM_WIMG_IO);
+    }
+    
     init_fpu();
     lapic_init();
     APICInit();
     //pmInit();
+    
+    if (experimental) {
+        PITInit(1193182 / 60);
+    }
     
     kernelMain();
 }
 
 void
 i386_init_slave(void) {
-    kprintf("Init Slave!\n");
+    printf("Init Slave!\n");
     //i386_init();
+}
 }
