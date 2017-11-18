@@ -10,6 +10,7 @@
 #include "cpu_data.h"
 #include "cpuid.h"
 #include "cpu_topology.h"
+#include <stddef.h>
 
 x86_pkg_t                   *x86_pkgs		= NULL;
 uint32_t                    num_Lx_caches[MAX_CACHE_DEPTH]	= { 0 };
@@ -22,5 +23,5 @@ __unused static uint32_t             num_dies	= 0;
 __unused static x86_cpu_cache_t      *x86_caches	= NULL;
 __unused static uint32_t             num_caches	= 0;
 
-__unused static bool                 topoParmsInited	= FALSE;
+__unused static bool                 topoParmsInited	= false;
 x86_topology_parameters_t	topoParms;

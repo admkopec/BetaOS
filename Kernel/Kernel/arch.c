@@ -14,13 +14,19 @@
 #include <i386/acpi.h>
 #include "../Modules/ModulesController.hpp"
 
-void reboot(bool ispanic) {
+extern bool VendorisApple;
+
+void reboot_system(bool ispanic) {
     if (ispanic) {
         pal_cli();
-        unsigned char good = 0x02;
-        while ((good & 0x02) != 0)
-            good = inb(0x64);
-        outb(0x64, 0xFE);
+        if (!VendorisApple) {
+            unsigned char good = 0x02;
+            while ((good & 0x02) != 0)
+                good = inb(0x64);
+            outb(0x64, 0xFE);
+        } else {
+            pal_hlt();
+        }
         return;
     }
     ModulesStopController();
@@ -38,7 +44,7 @@ void reboot(bool ispanic) {
 
 }
 
-void shutdown() {
+void shutdown_system() {
     ModulesStopController();
     pal_cli();
     acpipoweroff();

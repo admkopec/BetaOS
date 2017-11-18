@@ -11,13 +11,14 @@
 
 #include <sys/cdefs.h>
 #include <OSRuntime.hpp>
+#include <stdint.h>
 
 namespace Ethernet {
     struct Packet {
         uint8_t  receverMAC[6];
         uint8_t  senderMAC[6];
         uint16_t type_len;
-    } __packed;
+    } __attribute__((packed));
     
     OSReturn send(const void* data, uint32_t length, const uint8_t MAC[6], uint16_t type, uint8_t offloading);
 }

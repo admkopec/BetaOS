@@ -6,8 +6,10 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-fileprivate func mapAddress(start: UInt, size: Int) -> UInt {
-    return UInt(io_map(UInt64(start & ~3), UInt((size + Int(4095)) & ~4095), (0x2 | 0x4 | 0x1)))
+import Darwin
+
+fileprivate func mapAddress(start: UInt, size: UInt) -> UInt {
+    return UInt(io_map(UInt64(start & ~3), UInt((size + vm_page_mask) & ~vm_page_mask), (0x2 | 0x4 | 0x1)))
 }
 
 public final class Address: Numeric, Comparable, BinaryInteger {
@@ -21,6 +23,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     public typealias IntegerLiteralType = UInt
     public typealias Words = UInt.Words
     fileprivate var rawValue: UInt
+    fileprivate var rawValueVirt: UInt
     public var description: String {
         return "Physical Address is 0x\(String(rawValue, radix: 16)), Virtual Address is 0x\(String(virtual, radix: 16))"
     }
@@ -28,21 +31,31 @@ public final class Address: Numeric, Comparable, BinaryInteger {
      Virtual address represented as a bit pattern.
      */
     public var virtual: UInt {
-        if rawValue >= (0xffffff8000000000 as UInt) {
-            return rawValue
-        }
-        if baseAddr != (0x0, 0x0) {
-            if rawValue - baseAddr.0 + baseAddr.1 < 4096 + baseAddr.1 {
-                return rawValue - baseAddr.0 + baseAddr.1
-            } else {
-                let mapped = mapAddress(start: rawValue, size: 4096)
-                baseAddr = (rawValue, mapped)
-                return mapped
-            }
+        if rawValueVirt >= 0xffffff8000000000 as UInt {
+            return rawValueVirt
         } else {
-            let mapped = mapAddress(start: rawValue, size: 4096)
-            baseAddr = (rawValue, mapped)
-            return mapped
+            guard baseAddr != (0x0, 0x0) else {
+                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                baseAddr = (physical, rawValueVirt)
+                return rawValueVirt
+            }
+            guard Int(max(physical, baseAddr.original)) - Int(min(physical, baseAddr.original)) < Int(vm_page_size) else {
+                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                baseAddr = (physical, rawValueVirt)
+                return rawValueVirt
+            }
+            guard Int(Int(physical) - Int(baseAddr.original)) > Int(0) else {
+                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                baseAddr = (physical, rawValueVirt)
+                return rawValueVirt
+            }
+            guard UInt64((UInt64(physical) + UInt64(baseAddr.mapped) - UInt64(baseAddr.original))) > UInt64(0) else {
+                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                baseAddr = (physical, rawValueVirt)
+                return rawValueVirt
+            }
+            rawValueVirt  = physical - baseAddr.original + baseAddr.mapped
+            return rawValueVirt
         }
     }
     /**
@@ -54,10 +67,18 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     /**
      Represents last mapped physical to virtual address pair
      */
-    fileprivate(set) public var baseAddr: (UInt, UInt) = (0x0, 0x0)
+    fileprivate(set) public var baseAddr: (original: UInt, mapped: UInt) = (0x0, 0x0)
     
     public static func ==(lhs: Address, rhs: Address) -> Bool {
         return lhs.rawValue == rhs.rawValue
+    }
+    
+    public static func ==(lhs: Address, rhs: UInt) -> Bool {
+        return lhs.rawValue == rhs
+    }
+    
+    public static func ==(lhs: UInt, rhs: Address) -> Bool {
+        return lhs == rhs.rawValue
     }
     
     public static func <(lhs: Address, rhs: Address) -> Bool {
@@ -140,6 +161,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init(_ address: UInt, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
         rawValue             = address
+        rawValueVirt         = rawValue
         baseAddr             = baseAddress
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
@@ -150,6 +172,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init(_ address64: UInt64, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
         rawValue             = UInt(address64)
+        rawValueVirt         = rawValue
         baseAddr             = baseAddress
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
@@ -160,6 +183,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init(_ address32: UInt32, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
         rawValue             = UInt(address32)
+        rawValueVirt         = rawValue
         baseAddr             = baseAddress
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
@@ -170,6 +194,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init(integerLiteral value: UInt) {
         rawValue             = value
+        rawValueVirt         = rawValue
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
         words                = rawValue.words
@@ -180,6 +205,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     public init?<T>(exactly source: T) where T : BinaryInteger {
         if let value = UInt(exactly: source) {
             rawValue             = value
+            rawValueVirt         = rawValue
             magnitude            = rawValue
             hashValue            = rawValue.hashValue
             words                = rawValue.words
@@ -192,6 +218,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init<T>(_ source: T) where T : BinaryInteger {
         rawValue             = UInt(source)
+        rawValueVirt         = rawValue
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
         words                = rawValue.words
@@ -201,6 +228,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init<T>(truncatingIfNeeded source: T) where T : BinaryInteger {
         rawValue             = UInt(truncatingIfNeeded: source)
+        rawValueVirt         = rawValue
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
         words                = rawValue.words
@@ -210,6 +238,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init<T>(_ source: T) where T : BinaryFloatingPoint {
         rawValue             = UInt(source)
+        rawValueVirt         = rawValue
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
         words                = rawValue.words
@@ -219,6 +248,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     
     public init<T>(clamping source: T) where T : BinaryInteger {
         rawValue             = UInt(clamping: source)
+        rawValueVirt         = rawValue
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
         words                = rawValue.words

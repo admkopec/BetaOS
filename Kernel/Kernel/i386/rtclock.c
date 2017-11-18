@@ -10,6 +10,7 @@
 #include "machine_routines.h"
 #include "tsc.h"
 #include <platform/platform.h>
+#include <stdio.h>
 
 #include "misc_protos.h"
 
@@ -17,11 +18,11 @@ static void rtc_set_timescale(uint64_t cycles);
 
 typedef unsigned spl_t;
 
-#define	splhigh()	(spl_t) ml_set_interrupts_enabled(FALSE)
-#define	splsched()	(spl_t) ml_set_interrupts_enabled(FALSE)
-#define	splclock()	(spl_t) ml_set_interrupts_enabled(FALSE)
+#define	splhigh()	(spl_t) ml_set_interrupts_enabled(false)
+#define	splsched()	(spl_t) ml_set_interrupts_enabled(false)
+#define	splclock()	(spl_t) ml_set_interrupts_enabled(false)
 #define	splx(x)		(void)  ml_set_interrupts_enabled(x)
-#define	spllo()		(void)  ml_set_interrupts_enabled(TRUE)
+#define	spllo()		(void)  ml_set_interrupts_enabled(true)
 
 /*
  * Re-evaluate the outstanding deadlines and select the most proximate.
@@ -108,7 +109,7 @@ rtc_export_speed(uint64_t cycles_per_sec) {
     uint64_t            cycles;
     
     if (rntp->shift != 0 )
-        kprintf("Slow TSC, rtc_nanotime.shift == %d\n", rntp->shift);
+        printf("Slow TSC, rtc_nanotime.shift == %d\n", rntp->shift);
     
     /* Round: */
     cycles = ((cycles_per_sec + (10000000/2)) / 10000000) * 10000000;
@@ -122,7 +123,7 @@ rtc_export_speed(uint64_t cycles_per_sec) {
     }
     gClockFrequencyInfo.cpu_frequency_hz = cycles;
     
-    kprintf("[RTCLOCK] frequency %llu (%llu)\n", cycles, cycles_per_sec);
+    printf("[RTCLOCK] frequency %llu (%llu)\n", cycles, cycles_per_sec);
     return(cycles);
 }
 

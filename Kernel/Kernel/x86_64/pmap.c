@@ -16,24 +16,26 @@
 #include <i386/vm_prot.h>
 #include <kernel/misc_protos.h>
 #include <sys/cdefs.h>
+#include <stddef.h>
+#include <stdio.h>
 
 #include <platform/platform.h>
 #include <platform/boot.h>
 
 // Compile time assert
 char pmap_cpu_data_assert[(((offsetof(cpu_data_t, cpu_tlb_invalid) - offsetof(cpu_data_t, cpu_active_cr3)) == 8) && (offsetof(cpu_data_t, cpu_active_cr3) % 64 == 0)) ? 1 : -1];
-boolean_t pmap_trace = FALSE;
+bool pmap_trace = false;
 #ifdef DEBUG
-boolean_t	no_shared_cr3 = TRUE;		/* TRUE for DEBUG by default */
+bool no_shared_cr3 = true;		/* true for DEBUG by default */
 #else
-boolean_t   no_shared_cr3 = FALSE;
+bool no_shared_cr3 = false;
 #endif
 
 int nx_enabled = 1;                 /* enable no-execute protection */
 //int allow_data_exec  = VM_ABI_32;	/* 32-bit apps may execute data by default, 64-bit apps may not */
 int allow_stack_exec = 0;           /* No apps may execute from the stack by default */
 
-const boolean_t cpu_64bit  = TRUE;
+const bool cpu_64bit  = true;
 
 uint64_t max_preemption_latency_tsc = 0;
 
@@ -54,8 +56,8 @@ long long       alloc_ptepages_count __attribute__((aligned(8))) = 0; /* aligned
 unsigned int	bootstrap_wired_pages =  0;
 int             pt_fake_zone_index    = -1;
 extern 	long	NMIPI_acks;
-boolean_t       kernel_text_ps_4K = TRUE;
-boolean_t       wpkernel          = TRUE;
+bool       kernel_text_ps_4K = true;
+bool       wpkernel          = true;
 extern char     end;
 
 // Temp
@@ -64,16 +66,16 @@ extern char     end;
 uint32_t	vm_lopage_free_count = 0;
 uint32_t	vm_lopage_free_limit = 0;
 uint32_t	vm_lopage_lowater    = 0;
-bool        vm_lopage_refill     = FALSE;
-bool        vm_lopage_needed     = FALSE;
+bool        vm_lopage_refill     = false;
+bool        vm_lopage_needed     = false;
 
 uint64_t	max_valid_dma_address = 0xffffffffffffffffULL;
 ppnum_t		max_valid_low_ppnum   = 0xffffffff;
 
 static int	nkpt;
 
-boolean_t	pmap_disable_kheap_nx  = FALSE;
-boolean_t	pmap_disable_kstack_nx = FALSE;
+bool	pmap_disable_kheap_nx  = false;
+bool	pmap_disable_kstack_nx = false;
 
 extern long __stack_chk_guard[];
 
@@ -172,7 +174,7 @@ pfp_exit:
 }
 
 void cpu_pmc_control(void *enablep) {
-    boolean_t enable = *(boolean_t *)enablep;
+    bool enable = *(bool *)enablep;
     cpu_data_t	*cdp = current_cpu_datap();
     
     if (enable) {
@@ -203,26 +205,26 @@ pmap_cpu_init(void) {
      */
     cdp->cpu_kernel_cr3 = kernel_pmap->pm_cr3;
     cdp->cpu_active_cr3 = kernel_pmap->pm_cr3;
-    cdp->cpu_tlb_invalid = FALSE;
+    cdp->cpu_tlb_invalid = false;
     cdp->cpu_task_map = TASK_MAP_64BIT;
     pmap_pcid_configure();
     if (cpuid_leaf7_features() & CPUID_LEAF7_FEATURE_SMEP) {
         bool nsmep;
         if (!Parse_boot_argn("-pmap_smep_disable", &nsmep, sizeof(nsmep))) {
             set_cr4(get_cr4() | CR4_SMEP);
-            pmap_smep_enabled = TRUE;
+            pmap_smep_enabled = true;
         }
     }
     if (cpuid_leaf7_features() & CPUID_LEAF7_FEATURE_SMAP) {
         bool nsmap;
         if (!Parse_boot_argn("-pmap_smap_disable", &nsmap, sizeof(nsmap))) {
             set_cr4(get_cr4() | CR4_SMAP);
-            pmap_smap_enabled = TRUE;
+            pmap_smap_enabled = true;
         }
     }
     
     if (cdp->cpu_fixed_pmcs_enabled) {
-        bool enable = TRUE;
+        bool enable = true;
         cpu_pmc_control(&enable);
     }
 }
@@ -257,7 +259,7 @@ pmap_bootstrap(__unused vm_offset_t	load_start, bool IA32e) {
     
     kernel_pmap = &kernel_pmap_store;
     kernel_pmap->ref_count   = 1;
-    kernel_pmap->nx_enabled  = TRUE;
+    kernel_pmap->nx_enabled  = true;
     kernel_pmap->pm_task_map = TASK_MAP_64BIT;
     //kernel_pmap->pm_obj = (vm_object_t) NULL;
     kernel_pmap->dirbase = (pd_entry_t *)((uintptr_t)IdlePTD);
@@ -291,11 +293,11 @@ v = (c)va; va += ((n)*INTEL_PGBYTES);
     
     for (i=0; i<PMAP_NWINDOWS; i++) {
 #if 1
-        kprintf("trying to do SYSMAP idx %d %p\n", i,
+        printf("trying to do SYSMAP idx %d %p\n", i,
                 current_cpu_datap());
-        kprintf("cpu_pmap %p\n", current_cpu_datap()->cpu_pmap);
-        kprintf("mapwindow %p\n", current_cpu_datap()->cpu_pmap->mapwindow);
-        kprintf("two stuff %p %p\n",
+        printf("cpu_pmap %p\n", current_cpu_datap()->cpu_pmap);
+        printf("mapwindow %p\n", current_cpu_datap()->cpu_pmap->mapwindow);
+        printf("two stuff %p %p\n",
                 (void *)(current_cpu_datap()->cpu_pmap->mapwindow[i].prv_CMAP),
                 (void *)(current_cpu_datap()->cpu_pmap->mapwindow[i].prv_CADDR));
 #endif
@@ -333,18 +335,18 @@ v = (c)va; va += ((n)*INTEL_PGBYTES);
     pmap_cpu_init();
     
     if (pmap_pcid_ncpus)
-        kprintf("PMAP: PCID enabled\n");
+        printf("PMAP: PCID enabled\n");
     
     if (pmap_smep_enabled)
-        kprintf("PMAP: Supervisor Mode Execute Protection enabled\n");
+        printf("PMAP: Supervisor Mode Execute Protection enabled\n");
     if (pmap_smap_enabled)
-        kprintf("PMAP: Supervisor Mode Access Protection enabled\n");
+        printf("PMAP: Supervisor Mode Access Protection enabled\n");
     
 #if	DEBUG
-    kprintf("Stack canary: 0x%lx\n", __stack_chk_guard[0]);
-    //kprintf("early_random(): 0x%qx\n", early_random());
+    printf("Stack canary: 0x%lx\n", __stack_chk_guard[0]);
+    //printf("early_random(): 0x%qx\n", early_random());
 #endif
-    boolean_t ptmp;
+    bool ptmp;
     /* Check if the user has requested disabling stack or heap no-execute
      * enforcement. These are "const" variables; that qualifier is cast away
      * when altering them. The TEXT/DATA const sections are marked
@@ -352,21 +354,21 @@ v = (c)va; va += ((n)*INTEL_PGBYTES);
      * them is possible at this point, in pmap_bootstrap().
      */
     if (Parse_boot_argn("-pmap_disable_kheap_nx", &ptmp, sizeof(ptmp))) {
-        boolean_t *pdknxp = (boolean_t *) &pmap_disable_kheap_nx;
-        *pdknxp = TRUE;
+        bool *pdknxp = (bool *) &pmap_disable_kheap_nx;
+        *pdknxp = true;
     }
     
     if (Parse_boot_argn("-pmap_disable_kstack_nx", &ptmp, sizeof(ptmp))) {
-        boolean_t *pdknhp = (boolean_t *) &pmap_disable_kstack_nx;
-        *pdknhp = TRUE;
+        bool *pdknhp = (bool *) &pmap_disable_kstack_nx;
+        *pdknhp = true;
     }
     boot_args *args = (boot_args *)Platform_state.bootArgs;
     if (args->efiMode == kBootArgsEfiMode32) {
-        kprintf("EFI32: kernel virtual space limited to 4GB\n");
+        printf("EFI32: kernel virtual space limited to 4GB\n");
         virtual_end = VM_MAX_KERNEL_ADDRESS_EFI32;
     }
-    kprintf("Kernel virtual space from 0x%lx to 0x%lx.\n", (long)KERNEL_BASE, (long)virtual_end);
-    kprintf("Available physical space from 0x%llx to 0x%llx\n", avail_start, avail_end);
+    printf("Kernel virtual space from 0x%lx to 0x%lx.\n", (long)KERNEL_BASE, (long)virtual_end);
+    printf("Available physical space from 0x%llx to 0x%llx\n", avail_start, avail_end);
     
     /*
      * The -no_shared_cr3 boot-arg is a debugging feature (set by default
@@ -377,11 +379,11 @@ v = (c)va; va += ((n)*INTEL_PGBYTES);
      */
     (void) Parse_boot_argn("-no_shared_cr3", &no_shared_cr3, sizeof (no_shared_cr3));
     if (no_shared_cr3)
-        kprintf("Kernel not sharing user map\n");
+        printf("Kernel not sharing user map\n");
     
 #ifdef	PMAP_TRACES
     if (Parse_boot_argn("-pmap_trace", &pmap_trace, sizeof (pmap_trace))) {
-       kprintf("Kernel traces for pmap operations enabled\n");
+       printf("Kernel traces for pmap operations enabled\n");
     }
 #endif	/* PMAP_TRACES */
 }
@@ -435,13 +437,13 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
     //cpumask_t       cpus_to_signal = 0;
     unsigned int	my_cpu = cpu_number();
     pmap_paddr_t	pmap_cr3 = pmap->pm_cr3;
-    boolean_t       flush_self = FALSE;
+    bool     flush_self = false;
     __unused uint64_t        deadline;
-    boolean_t       pmap_is_shared = (pmap->pm_shared || (pmap == kernel_pmap));
-    boolean_t       need_global_flush = FALSE;
+    bool      pmap_is_shared = (pmap->pm_shared || (pmap == kernel_pmap));
+    bool      need_global_flush = false;
     __unused uint32_t        event_code;
     vm_map_offset_t	event_startv, event_endv;
-    boolean_t       is_ept = is_ept_pmap(pmap);
+    bool      is_ept = is_ept_pmap(pmap);
     
     //assert((processor_avail_count < 2) || (ml_get_interrupts_enabled() && get_preemption_level() != 0));
     
@@ -473,7 +475,7 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
      */
     if (pmap_pcid_ncpus) {
         if (pmap_is_shared)
-            need_global_flush = TRUE;
+            need_global_flush = true;
         pmap_pcid_invalidate_all_cpus(pmap);
         mfence();
     }
@@ -486,20 +488,20 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
         if ((pmap_cr3 == cpu_task_cr3) || (pmap_cr3 == cpu_active_cr3) || (pmap_is_shared)) {
             
             //if (options & PMAP_DELAY_TLB_FLUSH) {
-            //    if (need_global_flush == TRUE)
+            //    if (need_global_flush == true)
             //        pfc->pfc_invalid_global |= cpu_bit;
             //    pfc->pfc_cpus |= cpu_bit;
             //
             //    continue;
             //}
             if (cpu == my_cpu) {
-                flush_self = TRUE;
+                flush_self = true;
                 continue;
             }
-            if (need_global_flush == TRUE)
-                cpu_datap(cpu)->cpu_tlb_invalid_global = TRUE;
+            if (need_global_flush == true)
+                cpu_datap(cpu)->cpu_tlb_invalid_global = true;
             else
-                cpu_datap(cpu)->cpu_tlb_invalid_local = TRUE;
+                cpu_datap(cpu)->cpu_tlb_invalid_local = true;
             mfence();
             
             /*
@@ -549,7 +551,7 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
     //
     //    deadline = absolute_time() +
     //    (TLBTimeOut ? TLBTimeOut : LockTimeOut);
-    //    boolean_t is_timeout_traced = FALSE;
+    //    boolean_t is_timeout_traced = false;
     //
     //    /*
     //     * Wait for those other cpus to acknowledge
@@ -563,7 +565,7 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
     //             */
     //            if ((cpus_to_respond & cpu_bit) != 0) {
     //                if (!cpu_datap(cpu)->cpu_running ||
-    //                    cpu_datap(cpu)->cpu_tlb_invalid == FALSE ||
+    //                    cpu_datap(cpu)->cpu_tlb_invalid == false ||
     //                    !CPU_CR3_IS_ACTIVE(cpu)) {
     //                    cpus_to_respond &= ~cpu_bit;
     //                }
@@ -580,10 +582,10 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
     //                if (is_timeout_traced)
     //                    continue;
     //                PMAP_TRACE_CONSTANT(PMAP_CODE(PMAP__FLUSH_TLBS_TO), VM_KERNEL_UNSLIDE_OR_PERM(pmap), cpus_to_signal, cpus_to_respond, 0, 0);
-    //                is_timeout_traced = TRUE;
+    //                is_timeout_traced = true;
     //                continue;
     //            }
-    //            pmap_tlb_flush_timeout = TRUE;
+    //            pmap_tlb_flush_timeout = true;
     //            orig_acks = NMIPI_acks;
     //            mp_cpus_NMIPI(cpus_to_respond);
     //
@@ -593,12 +595,12 @@ pmap_flush_tlbs(pmap_t	pmap, vm_map_offset_t startv, vm_map_offset_t endv, __unu
     //    }
     //}
     
-    if (__improbable((pmap == kernel_pmap) && (flush_self != TRUE))) {
-        kprintf("I'm here in flush _improbable panic()!\n");
-        panic("pmap_flush_tlbs: pmap == kernel_pmap && flush_self != TRUE; kernel CR3: 0x%llX, pmap_cr3: 0x%llx, CPU active CR3: 0x%llX, CPU Task Map: %d", kernel_pmap->pm_cr3, pmap_cr3, current_cpu_datap()->cpu_active_cr3, current_cpu_datap()->cpu_task_map);
+    if (__improbable((pmap == kernel_pmap) && (flush_self != true))) {
+        printf("I'm here in flush _improbable panic()!\n");
+        panic("pmap_flush_tlbs: pmap == kernel_pmap && flush_self != true; kernel CR3: 0x%llX, pmap_cr3: 0x%llx, CPU active CR3: 0x%llX, CPU Task Map: %d", kernel_pmap->pm_cr3, pmap_cr3, current_cpu_datap()->cpu_active_cr3, current_cpu_datap()->cpu_task_map);
     }
     
 out:
     //PMAP_TRACE_CONSTANT(event_code | DBG_FUNC_END, VM_KERNEL_UNSLIDE_OR_PERM(pmap), cpus_to_signal, event_startv, event_endv, 0);
-    kprintf("");
+    printf("");
 }

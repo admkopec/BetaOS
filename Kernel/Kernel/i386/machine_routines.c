@@ -29,11 +29,11 @@ bool ml_get_interrupts_enabled(void) {
 /* Set Interrupts Enabled */
 bool ml_set_interrupts_enabled(bool enable) {
     unsigned long flags;
-    boolean_t     istate;
+    bool     istate;
     
     __asm__ volatile("pushf; pop	%0" :  "=r" (flags));
     
-    assert(get_interrupt_level() ? (enable == FALSE) : TRUE);
+    assert(get_interrupt_level() ? (enable == false) : true);
     
     istate = ((flags & EFL_IF) != 0);
     

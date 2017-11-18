@@ -9,31 +9,35 @@
 /**
  Writes the textual representations of the given items in kernel space.
  
- - parameter item: Zero or more items to print.
- - parameter terminator: The string to print after all items have been printed. The default is a newline ("\n").
+ - parameter items: Zero or more items to print.
+ - parameter separator: A string to print between each item. The default is a single space (`" "`).
+ - parameter terminator: The string to print after all items have been printed. The default is a newline (`"\n"`).
  
  */
-
-func kprint(_ item: String, terminator: String = "\n") -> Void {
+public func kprint(_ items: String..., separator: String = " ", terminator: String = "\n") -> Void {
+    let item = items.map {"\($0)"} .joined(separator: separator)
     if item.isEmpty {
         return
     }
-    var isNext = false
-    for 😀 in item.utf8 {
-        if 😀 >= 0xC0 && 😀 <= 0xDF {
-            if 😀 == 0xC2 {
-                continue
-            } else if 😀 == 0xC3 {
-                isNext = true
-                continue
-            }
-        }
-        if !isNext {
-            putchar(Int32(😀))
-        } else {
-            putchar(Int32(😀 | 0xC0))
-            isNext = false
-        }
+    for 😀 in item.unicodeScalars {
+        putchar(Int32(😀.value))
     }
+//    var isNext = false
+//    for 😀 in item.utf8 {
+//        if 😀 >= 0xC0 && 😀 <= 0xDF {
+//            if 😀 == 0xC2 {
+//                continue
+//            } else if 😀 == 0xC3 {
+//                isNext = true
+//                continue
+//            }
+//        }
+//        if !isNext {
+//            putchar(Int32(😀))
+//        } else {
+//            putchar(Int32(😀 | 0xC0))
+//            isNext = false
+//        }
+//    }
     kprint(terminator, terminator: "")
 }

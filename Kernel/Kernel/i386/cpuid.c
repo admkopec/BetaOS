@@ -1,19 +1,17 @@
 //
-//  cpuid.cpp
+//  cpuid.c
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/18/16.
 //  Copyright © 2016 Adam Kopeć. All rights reserved.
 //
 
+#include <i386/cpuid.h>
 #include <string.h>
 #include <stdio.h>
-extern "C" {
-#include <i386/cpuid.h>
 #include "proc_reg.h"
 #include "misc_protos.h"
 
-#undef strlcpy
 #ifndef DBG
 #ifdef DEBUG
 #define DBG(x...) printf(x)
@@ -29,6 +27,11 @@ extern "C" {
 #define bit32(n)            (1U << (n))
 #define bitmask32(h,l)		((bit32(h)|(bit32(h)-1)) & ~(bit32(l)-1))
 #define bitfield32(x,h,l)	((((x) & bitmask32(h,l)) >> l))
+
+#undef strlcpy
+#undef memcpy
+#undef bzero
+#undef bcopy
 
 extern uint32_t vm_cache_geometry_colors;
 
@@ -458,6 +461,9 @@ cpuid_set_cache_info( i386_cpu_info_t * info_p )
     DBG("\n");
 }
 
+#undef bcopy
+#undef strlcpy
+
 static void
 cpuid_set_generic_info(i386_cpu_info_t *info_p) {
     uint32_t	reg[4];
@@ -468,9 +474,9 @@ cpuid_set_generic_info(i386_cpu_info_t *info_p) {
     /* do cpuid 0 to get vendor */
     cpuid_fn(0, reg);
     info_p->cpuid_max_basic = reg[eax];
-    memcpy((char *)&reg[ebx], &info_p->cpuid_vendor[0], 4); /* ug */
-    memcpy((char *)&reg[ecx], &info_p->cpuid_vendor[8], 4);
-    memcpy((char *)&reg[edx], &info_p->cpuid_vendor[4], 4);
+    bcopy((char *)&reg[ebx], &info_p->cpuid_vendor[0], 4); /* ug */
+    bcopy((char *)&reg[ecx], &info_p->cpuid_vendor[8], 4);
+    bcopy((char *)&reg[edx], &info_p->cpuid_vendor[4], 4);
     info_p->cpuid_vendor[12] = 0;
     
     /* get extended cpuid results */
@@ -484,11 +490,11 @@ cpuid_set_generic_info(i386_cpu_info_t *info_p) {
          * be NUL terminated.
          */
         cpuid_fn(0x80000002, reg);
-        memcpy((char *)reg, &str[0], 16);
+        bcopy((char *)reg, &str[0], 16);
         cpuid_fn(0x80000003, reg);
-        memcpy((char *)reg, &str[16], 16);
+        bcopy((char *)reg, &str[16], 16);
         cpuid_fn(0x80000004, reg);
-        memcpy((char *)reg, &str[32], 16);
+        bcopy((char *)reg, &str[32], 16);
         for (p = str; *p != '\0'; p++) {
             if (*p != ' ') break;
         }
@@ -887,9 +893,9 @@ cpuid_init_vmm_info(i386_vmm_info_t *info_p) {
     /* do cpuid 0x40000000 to get VMM vendor */
     cpuid_fn(0x40000000, reg);
     max_vmm_leaf = reg[eax];
-    memcpy((char *)&reg[ebx], &info_p->cpuid_vmm_vendor[0], 4);
-    memcpy((char *)&reg[ecx], &info_p->cpuid_vmm_vendor[4], 4);
-    memcpy((char *)&reg[edx], &info_p->cpuid_vmm_vendor[8], 4);
+    bcopy((char *)&reg[ebx], &info_p->cpuid_vmm_vendor[0], 4);
+    bcopy((char *)&reg[ecx], &info_p->cpuid_vmm_vendor[4], 4);
+    bcopy((char *)&reg[edx], &info_p->cpuid_vmm_vendor[8], 4);
     info_p->cpuid_vmm_vendor[12] = '\0';
     
     if (true == strcmp(info_p->cpuid_vmm_vendor, CPUID_VMM_ID_VMWARE)) {
@@ -955,5 +961,4 @@ cpuid_vmm_info(void) {
 bool
 cpuid_vmm_present(void) {
     return (cpuid_features() & CPUID_FEATURE_VMM) ? true : false;
-}
 }

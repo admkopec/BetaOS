@@ -57,7 +57,7 @@ struct SMBAnchor {
 ((x) && ((x)->header) && ((x)->next) && ((x)->end))
 
 #define SMB_ANCHOR_RESET(x)		\
-bzero_(x, sizeof(struct SMBAnchor));
+bzero(x, sizeof(struct SMBAnchor));
 
 //
 // SMBIOS structure types.

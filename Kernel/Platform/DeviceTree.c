@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdlib.h>
 #include <platform/device_tree.h>
 
 // Portions Copyright © Apple, Inc.
@@ -253,7 +254,7 @@ DTLookupEntry(const DTEntry searchPoint, const char *pathName, DTEntry *foundEnt
 }
 
 int
-DTCreateEntryIterator(const DTEntry startEntry, __unused DTEntryIterator *iterator)
+DTCreateEntryIterator(const DTEntry startEntry, DTEntryIterator *iterator)
 {
     RealDTEntryIterator iter;
     
@@ -403,7 +404,7 @@ DTGetProperty(const DTEntry entry, const char *propertyName, void **propertyValu
 }
 
 int
-DTCreatePropertyIterator(__unused const DTEntry entry, __unused DTPropertyIterator *iterator)
+DTCreatePropertyIterator(const DTEntry entry, DTPropertyIterator *iterator)
 {
     RealDTPropertyIterator iter;
     
@@ -418,8 +419,9 @@ DTCreatePropertyIterator(__unused const DTEntry entry, __unused DTPropertyIterat
 }
 
 int
-DTDisposePropertyIterator(__unused DTPropertyIterator iterator)
+DTDisposePropertyIterator(DTPropertyIterator iterator)
 {
+    free(iterator);
     //kfree(iterator, sizeof(struct OpaqueDTPropertyIterator));
     return kSuccess;
 }

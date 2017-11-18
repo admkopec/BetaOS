@@ -9,9 +9,15 @@
 #ifndef vm_param_h
 #define vm_param_h
 
+/* Kernel-wide values */
+
+#define KB        (1024ULL)
+#define MB        (1024*KB)
+#define GB        (1024*MB)
+
 #define BYTE_SIZE           8		/* byte size in bits */
 
-#define I386_PGBYTES		4096	/* bytes per 80386 page */
+#define I386_PGBYTES	    4096	/* bytes per 80386 page */
 #define I386_PGSHIFT		12		/* bitshift for pages */
 
 #define INTSTACK_SIZE        (I386_PGBYTES*4)
@@ -64,12 +70,6 @@
 
 #define round_page_64(x) (((uint64_t)(x) + PAGE_MASK_64) & ~((uint64_t)PAGE_MASK_64))
 #define trunc_page_64(x) ((uint64_t)(x) & ~((uint64_t)PAGE_MASK_64))
-
-/* Kernel-wide values */
-
-#define KB		(1024ULL)
-#define MB		(1024*KB)
-#define GB		(1024*MB)
 
 /*
  * Maximum physical memory supported.

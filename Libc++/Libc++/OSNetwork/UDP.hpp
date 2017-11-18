@@ -18,7 +18,7 @@ namespace UDP {
         uint16_t destinationPort;
         uint16_t length;
         uint16_t checksum;
-    } __packed;
+    } __attribute__((packed));
     void send(const void* data, uint32_t length, uint16_t sourcePort, uint16_t destinationPort, IP4_t destinationIP);
 }
 

@@ -6,6 +6,17 @@ Now installation got even easier with dmg disk for VMs (or you can restore it to
 PC users should use Clover bootloader to boot the MACH-O binary through included boot.efi(Apple).
 
 ## Changelog:
+### Version 0.36:
+* Fixed broken time command.
+* Translated more code into Swift.
+* Added automatic memory addresses management.
+* Added improved high-speed memcpy for use in framebuffer writes.
+* Expanded ACPI table support (but only on EFI systems).
+* Implemented simple power saving methods (waiting for IRQs, made a screen refresh at steady 60Hz)
+* Started using built-in POSIX header for improved compatibility.
+* Added statically-linked Swift frameworks to offload some code form main module. (Needs more troubleshooting, though)
+* Added nice, colorful Logging for code written in Swift.
+
 ### Version 0.35:
 * Added Swift language support for Kernel development using Xcode 9.0 or later. (More code will be translated into it in the future.)
 * Added full Kaby Lake support.

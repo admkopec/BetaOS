@@ -18,6 +18,11 @@
 #include <i386/eflags.h>
 #include <assert.h>
 #include <kernel/misc_protos.h>
+#include <string.h>
+
+#undef strlcpy
+#undef bzero
+#undef bcopy
 
 unsigned int real_ncpus;    // Real number of CPUs
 unsigned int max_ncpus;     // Max  number of CPUs
@@ -382,7 +387,7 @@ cpu_desc_init64(cpu_data_t *cdp) {
          * Set the NMI/fault stacks as IST2/IST1 in the 64-bit TSS
          * Note: this will be dynamically re-allocated in VM later.
          */
-        master_ktss64.ist2 = (unsigned long) low_eintstack; kprintf("");
+        master_ktss64.ist2 = (unsigned long) low_eintstack; printf("");
         master_ktss64.ist1 = (unsigned long) low_eintstack - sizeof(x86_64_intr_stack_frame_t);     // Working with my hack
     } else if (cdi->cdi_ktss == NULL) {	/* Skipping re-init on wake */
         cpu_desc_table64_t	*cdt = (cpu_desc_table64_t *) cdp->cpu_desc_tablep;
@@ -427,7 +432,7 @@ cpu_desc_init64(cpu_data_t *cdp) {
  
         /* Set (zeroed) fault stack as IST1, NMI intr stack IST2 */
         bzero((void *) cdt->fstk, sizeof(cdt->fstk));
-        cdt->ktss.ist2 = (unsigned long)cdt->fstk + sizeof(cdt->fstk); kprintf("");
+        cdt->ktss.ist2 = (unsigned long)cdt->fstk + sizeof(cdt->fstk); printf("");
         cdt->ktss.ist1 = cdt->ktss.ist2 - sizeof(x86_64_intr_stack_frame_t);
     }
     
@@ -448,16 +453,16 @@ cpu_desc_load64(cpu_data_t *cdp) {
      * for the case of reloading descriptors at wake to avoid
      * their complete re-initialization.
      */
-    kprintf("");
+    printf("");
     gdt_desc_p(KERNEL_TSS)->access &= ~ACC_TSS_BUSY;
-    kprintf("");
+    printf("");
     
     /* Load the GDT, LDT, IDT and TSS */
     cdi->cdi_gdt.size = sizeof(struct real_descriptor)*GDTSZ - 1;
     cdi->cdi_idt.size = 0x1000 + cdp->cpu_number;
     lgdt ((unsigned long *) &cdi->cdi_gdt);
     lidt ((unsigned long *) &cdi->cdi_idt);
-    lldt  (KERNEL_LDT);   // CPU Crash
+    lldt  (KERNEL_LDT);
     set_tr(KERNEL_TSS);
 #if GPROF // Hack to enable mcount to work on K64
     __asm__ volatile("mov %0, %%gs" : : "rm" ((unsigned short)(KERNEL_DS)));
@@ -582,7 +587,7 @@ cpu_data_alloc(bool is_boot_cpu) {
     
     cdp->cpu_nanotime = &pal_rtc_nanotime_info;
     
-    kprintf("cpu_data_alloc(%d) %p desc_table: %p "
+    printf("cpu_data_alloc(%d) %p desc_table: %p "
             "ldt: %p "
             "int_stack: 0x%lx-0x%lx\n",
             cdp->cpu_number, cdp, cdp->cpu_desc_tablep, cdp->cpu_ldtp,

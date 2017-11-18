@@ -51,7 +51,7 @@ E1000::init(PCI * pciConfigHeader) {
         Log("BAR port    %X\n", io_base);
     } else {
         mem_base = (uintptr_t)pciConfigHeader->BAR().u.address;
-        Log("BAR address %X\n", mem_base);
+        Log("BAR address %llX\n", mem_base);
     }
     intline = pciConfigHeader->IntLine();
     
@@ -158,7 +158,7 @@ void E1000::txinit() {
 
 void E1000::handleInterrupt() {
     uint32_t icr = readCommand(REG_ICAUSE);
-    DBG("Interrupt: %x\n", icr);
+    DBG("Interrupt: 0x%X\n", icr);
     if (icr & ICR_RECEIVE) {
         handleReceive();
     } else if (icr & ICR_TRANSMIT) {
@@ -169,70 +169,102 @@ void E1000::handleInterrupt() {
 }
 
 void E1000::handleReceive() {
-    bool got_packet = false;
-    
-    uint32_t head = readCommand(REG_RXDESCHEAD);
-    
     DBG("Handle Receive\n");
-    
-    while(rx_cur != head) {
-        got_packet = true;
-#ifdef DEBUG
-        uint8_t *buf    = (uint8_t *)rx_descs[rx_cur]->addr;
-#endif
-        size_t   len    = rx_descs[rx_cur]->length;
-        uint8_t  status = rx_descs[rx_cur]->status;
-        
-        if ((status & 0x1) == 0) {
-            break;
+    e1000_rx_desc * desc = rx_descs[rx_cur];
+    while (desc->status & (1 << 0)) {
+        if (desc->errors) {
+            Log("Packet has errors: (0x%X)\n", desc->errors);
+        } else {
+            DBG("Packet: %hu Bytes recived (status = 0x%X)\n", desc->length, desc->status);
+            uint8_t * buf = (uint8_t *)desc->addr;
+            DBG("Packet: %s lebgth: %hu\n", buf, desc->length);
         }
+        desc->status = 0;
         
-        len -= 4;
-        
-        DBG("Packet: %d Bytes received (status = %x)\n", len, status);
-        
-        DBG("Packet: %s length: %d\n", buf, len);
-        // Here inject the received packet into the network stack
-        
-        rx_cur++;
-        rx_cur %= E1000_NUM_RX_DESC;
-        /*rx_descs[rx_cur]->status = 0;
-        writeCommand(REG_RXDESCTAIL, old_cur );*/
-    }
-    if (rx_cur == head) {
-        writeCommand(REG_RXDESCTAIL, (head + E1000_NUM_RX_DESC - 1) % E1000_NUM_RX_DESC);
-    } else {
         writeCommand(REG_RXDESCTAIL, rx_cur);
+        
+        rx_cur = (rx_cur + 1) & (E1000_NUM_RX_DESC - 1);
+        desc = rx_descs[rx_cur];
     }
+//    bool got_packet = false;
+//
+//    uint32_t head = readCommand(REG_RXDESCHEAD);
+//
+//    DBG("Handle Receive\n");
+//
+//    while(rx_cur != head) {
+//        got_packet = true;
+//#ifdef DEBUG
+//        uint8_t *buf    = (uint8_t *)rx_descs[rx_cur]->addr;
+//#endif
+//        size_t   len    = rx_descs[rx_cur]->length;
+//        uint8_t  status = rx_descs[rx_cur]->status;
+//        uint8_t  errors = rx_descs[rx_cur]->errors;
+//
+//        if ((status & 0x1) == 0) {
+//            break;
+//        }
+//
+//        len -= 4;
+//
+//        DBG("Packet: %zu Bytes received (status = %x)\n", len, status);
+//
+//        DBG("Packet: %s length: %zu\n", buf, len);
+//        // Here inject the received packet into the network stack
+//
+//        rx_cur++;
+//        rx_cur %= E1000_NUM_RX_DESC;
+//        /*rx_descs[rx_cur]->status = 0;
+//        writeCommand(REG_RXDESCTAIL, old_cur );*/
+//    }
+//    if (rx_cur == head) {
+//        writeCommand(REG_RXDESCTAIL, (head + E1000_NUM_RX_DESC - 1) % E1000_NUM_RX_DESC);
+//    } else {
+//        writeCommand(REG_RXDESCTAIL, rx_cur);
+//    }
 }
 
 OSReturn E1000::sendPacket(const void * p_data, uint16_t p_len) {
-    uint32_t old_cur = tx_cur;
-    tx_cur++;
-    tx_cur %= E1000_NUM_TX_DESC;
-    uint32_t head = readCommand(REG_TXDESCHEAD);
-    if (tx_cur == head) {
-        Log("No place in Send Queue!\n");
-        tx_cur = old_cur;
-        return kOSReturnFailed;
+    e1000_tx_desc* desc = tx_descs[tx_cur];
+    while (!(desc->status & 0xF)) {
+        printf("");
     }
+    desc->addr   = (uintptr_t)p_data;
+    desc->length = p_len;
+    desc->cmd    = CMD_EOP | CMD_IFCS | CMD_RS;
+    desc->status = 0;
     
-    if (p_len > E1000_SIZE_TX_DESC) {
-        p_len = E1000_SIZE_TX_DESC;
-    }
-    
-    tx_descs[tx_cur]->addr = (uint64_t)p_data;
-    tx_descs[tx_cur]->length = p_len;
-    tx_descs[tx_cur]->cmd = CMD_EOP | CMD_IFCS | CMD_RS | CMD_RPS;
-    
-    writeCommand(REG_RXDESCTAIL, tx_cur);
-    /*tx_descs[tx_cur]->status = 0;
-    uint8_t old_cur = tx_cur;
-    tx_cur = (tx_cur + 1) % E1000_NUM_TX_DESC;
+    tx_cur = (tx_cur + 1) & (E1000_NUM_TX_DESC - 1);
     writeCommand(REG_TXDESCTAIL, tx_cur);
-    while(!(tx_descs[old_cur]->status & 0xff));*/
-    DBG("Send Packet\n");
+    DBG("Packet Send!\n");
     return kOSReturnSuccess;
+//    uint32_t old_cur = tx_cur;
+//    tx_cur++;
+//    tx_cur %= E1000_NUM_TX_DESC;
+//    uint32_t head = readCommand(REG_TXDESCHEAD);
+//    if (tx_cur == head) {
+//        Log("No place in Send Queue!\n");
+//        tx_cur = old_cur;
+//        return kOSReturnFailed;
+//    }
+//
+//    if (p_len > E1000_SIZE_TX_DESC) {
+//        p_len = E1000_SIZE_TX_DESC;
+//    }
+//
+//    tx_descs[tx_cur]->addr = (uint64_t)p_data;
+//    tx_descs[tx_cur]->length = p_len;
+//    tx_descs[tx_cur]->cmd = CMD_EOP | CMD_IFCS | CMD_RS | CMD_RPS;
+//    tx_descs[tx_cur]->status = 0;
+//
+//    writeCommand(REG_TXDESCTAIL, tx_cur);
+//    /*tx_descs[tx_cur]->status = 0;
+//    uint8_t old_cur = tx_cur;
+//    tx_cur = (tx_cur + 1) % E1000_NUM_TX_DESC;
+//    writeCommand(REG_TXDESCTAIL, tx_cur);
+//    while(!(tx_descs[old_cur]->status & 0xff));*/
+//    DBG("Send Packet\n");
+//    return kOSReturnSuccess;
 }
 
 void E1000::writeCommand(uint16_t p_address, uint32_t p_value) {

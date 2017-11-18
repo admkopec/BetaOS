@@ -207,9 +207,6 @@ extern cpu_data_t	*cpu_data_ptr[];
 /* Macro to generate inline bodies to retrieve per-cpu data fields. */
 #if defined(__clang__)
 #define GS_RELATIVE volatile __attribute__((address_space(256)))
-#ifndef offsetof
-#define offsetof(TYPE,MEMBER) __builtin_offsetof(TYPE,MEMBER)
-#endif
 
 #define CPU_DATA_GET(member,type)										\
 cpu_data_t GS_RELATIVE *cpu_data =                                      \

@@ -1,5 +1,5 @@
 //
-//  itoa.c
+//  itoa.cpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/8/15.
@@ -10,8 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-void itoa(char *buf, unsigned long int n, int base)
-{
+extern "C" {
+void itoa(char *buf, unsigned long int n, int base) {
     unsigned long int tmp = n;
     int i = 0, j;
 
@@ -26,4 +26,5 @@ void itoa(char *buf, unsigned long int n, int base)
         buf[j] = buf[i];
         buf[i] = tmp;
     }
+}
 }

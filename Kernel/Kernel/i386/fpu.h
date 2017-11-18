@@ -53,7 +53,7 @@ struct x86_fx_thread_state {
     unsigned int    fp_valid;
     unsigned int    fp_save_layout;
     unsigned char   fx_pad[8];
-} __packed;
+} __attribute__((packed));
 
 struct x86_avx_thread_state {
     unsigned short  fx_control;     /* control */
@@ -83,7 +83,7 @@ struct x86_avx_thread_state {
     }_xh;
     
     unsigned int    x_YMMH_reg[4][16];    /* Offset 576, high YMMs*/
-} __packed;
+} __attribute__((packed));
 
 /*
  * Control register

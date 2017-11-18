@@ -11,6 +11,7 @@
 
 #include <i386/vm_types.h>
 #include <i386/cpu_data.h>
+#include <stddef.h>
 #include "eflags.h"
 #include "machine_routines.h"
 #include "misc_protos.h"

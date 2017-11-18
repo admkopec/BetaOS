@@ -10,6 +10,8 @@
 #define OSRuntime_hpp
 
 #include <stddef.h>
+#include <stdint.h>
+#include <string.h>
 
 class OSRuntime {
 public:

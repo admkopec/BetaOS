@@ -14,23 +14,29 @@
 #include "cpu_data.h"
 #include "vm_map.h"
 #include "pmap.h"
+#include <stdio.h>
 
 lapic_ops_table_t       *lapic_ops;     /* Lapic operations switch */
 static vm_map_offset_t	lapic_pbase;	/* Physical base memory-mapped regs */
 static vm_offset_t      lapic_vbase;	/* Virtual base memory-mapped regs */
 //static i386_intr_func_t	lapic_intr_func[LAPIC_FUNC_TABLE_SIZE];
-/* TRUE if local APIC was enabled by the OS not by the EFI */
-//static bool     lapic_os_enabled = FALSE;
-//static bool     lapic_errors_masked = FALSE;
+/* true if local APIC was enabled by the OS not by the EFI */
+//static bool     lapic_os_enabled = false;
+//static bool     lapic_errors_masked = false;
 //static uint64_t lapic_last_master_error = 0;
 //static uint64_t lapic_error_time_threshold = 0;
 //static unsigned lapic_master_error_count = 0;
 //static unsigned lapic_error_count_threshold = 5;
-//static bool     lapic_dont_panic = FALSE;
+//static bool     lapic_dont_panic = false;
 /* Base vector for local APIC interrupt sources */
-int lapic_interrupt_base = LAPIC_REDUCED_INTERRUPT_BASE;
+int lapic_interrupt_base = LAPIC_DEFAULT_INTERRUPT_BASE;
 int		lapic_to_cpu[MAX_LAPICIDS];
 int		cpu_to_lapic[MAX_CPUS];
+
+extern void refresh_screen(void);
+extern bool use_screen_caching;
+extern bool experimental;
+extern bool early;
 
 void
 lapic_cpu_map_init(void) {
@@ -84,12 +90,12 @@ lapic_cpu_map_dump(void) {
 	for (i = 0; i < MAX_CPUS; i++) {
 		if (cpu_to_lapic[i] == -1)
 			continue;
-		kprintf("cpu_to_lapic[%d]: %d\n", i, cpu_to_lapic[i]);
+		printf("cpu_to_lapic[%d]: %d\n", i, cpu_to_lapic[i]);
 	}
 	for (i = 0; i < MAX_LAPICIDS; i++) {
 		if (lapic_to_cpu[i] == -1)
 			continue;
-		kprintf("lapic_to_cpu[%d]: %d\n", i, lapic_to_cpu[i]);
+		printf("lapic_to_cpu[%d]: %d\n", i, lapic_to_cpu[i]);
 	}
 }
 #endif /* DEBUG */
@@ -100,7 +106,7 @@ legacy_init(void) {
     __unused vm_map_entry_t  entry;
     __unused vm_map_offset_t lapic_vbase64;
     
-    kprintf("Legacy Init\n");
+    printf("Legacy Init\n");
     
     if (lapic_vbase == 0) {
         lapic_vbase = io_map(lapic_pbase, round_page(LAPIC_SIZE), VM_WIMG_IO);
@@ -151,7 +157,7 @@ x2apic_init(void) {
 	if ((low  & MSR_IA32_APIC_BASE_EXTENDED) == 0)  {
 		 low |= MSR_IA32_APIC_BASE_EXTENDED;
 		wrmsr(MSR_IA32_APIC_BASE, low, high);
-		kprintf("x2APIC mode enabled\n");
+		printf("x2APIC mode enabled\n");
 	}
 }
 
@@ -187,6 +193,8 @@ static lapic_ops_table_t x2apic_ops = {
 	x2apic_write_icr
 };
 
+extern uint64_t busFreq;
+
 void
 lapic_init(void) {
     uint32_t low;
@@ -207,7 +215,7 @@ lapic_init(void) {
     
     // If x2APIC is available and not enabled, enable it
     if (!is_x2apic && (cpuid_features() & CPUID_FEATURE_x2APIC)) {
-        kprintf("x2APIC supported and will be enabled\n");
+        printf("x2APIC supported and will be enabled\n");
     }
     
     lapic_ops = is_x2apic ? &x2apic_ops : &legacy_ops;
@@ -246,13 +254,11 @@ lapic_init(void) {
     uint32_t vec;
     mp_disable_preemption();
     vec = LAPIC_READ(LVT_TIMER);
-    vec &= ~(LAPIC_LVT_MASKED|LAPIC_LVT_PERIODIC|LAPIC_LVT_TSC_DEADLINE);
+    vec &= ~(LAPIC_LVT_MASKED|LAPIC_LVT_TSC_DEADLINE);
+    vec |= LAPIC_LVT_PERIODIC;
     LAPIC_WRITE(LVT_TIMER, vec);
     LAPIC_WRITE(TIMER_DIVIDE_CONFIG, divide_by_16);
     mp_enable_preemption();
-    
-    LAPIC_WRITE(LVT_TIMER, LAPIC_READ(LVT_TIMER) & ~LAPIC_LVT_MASKED);
-    LAPIC_WRITE(TIMER_INITIAL_COUNT, 1000);
 }
 
 void

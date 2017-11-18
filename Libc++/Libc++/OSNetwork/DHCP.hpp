@@ -35,7 +35,7 @@ namespace DHCP {
         char     sname[64];
         char     file[128];
         uint8_t  options[OPTIONSIZE];
-    } __packed;
+    } __attribute__((packed));
     
     void Discover();
     void Request(IP4_t requestedIP);

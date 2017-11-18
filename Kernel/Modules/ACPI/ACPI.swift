@@ -6,56 +6,46 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-protocol ACPITable {
-    //
+//import Addressing
+
+protocol ACPITable: CustomStringConvertible {
+    var Header: SDTHeader { get }
 }
 
 struct ACPI: Module {
     let Name = "ACPI"
-    private(set) var tables: [ACPITable] = []
+    fileprivate(set) var tables = [ACPITable]()
     var description: String {
         return Name + " " + "Module"
     }
     
-    init(rsdp: RSDP) {
-        let RSDT = ACPIHeader(ptr: UnsafePointer(bitPattern: rsdp.RSDT)!)
-        kprint("\(rsdp)")
-        kprint("\(RSDT)")
-        if RSDT.Length < (0x1000 - 0x68) {
-            kprint("It'll fit: \(RSDT.Length)")
-        } else {
-            kprint("It won't fit: \(RSDT.Length)")
+    init?(rsdp: RSDP?) {
+        if rsdp == nil {
+            Log("RSDP == nil", level: .Error)
+            return nil
         }
-    }
-}
-
-struct ACPIHeader: CustomStringConvertible {
-    let Signature:  String
-    let Length:     UInt32
-    let Revision:   UInt8
-    let Checksum:   UInt8
-    let OemID:      String
-    let OemTableID: String
-    let OemRev:     UInt32
-    let CreatorID:  String
-    let CreatorRev: UInt32
-    
-    var description: String {
-        return "ACPI: \(Signature): \(OemID): \(CreatorID): \(OemTableID): rev: \(Revision)"
-    }
-    
-    init(ptr: UnsafePointer<ACPISDTHeader_t>) {
-        let CCreatorID = [CChar(ptr.pointee.CreatorID.0), CChar(ptr.pointee.CreatorID.1), CChar(ptr.pointee.CreatorID.2), CChar(ptr.pointee.CreatorID.3), CChar(0)]
-        let COEMTableID = [CChar(ptr.pointee.OEMTableID.0), CChar(ptr.pointee.OEMTableID.1), CChar(ptr.pointee.OEMTableID.2), CChar(ptr.pointee.OEMTableID.3), CChar(ptr.pointee.OEMTableID.4), CChar(ptr.pointee.OEMTableID.5), CChar(ptr.pointee.OEMTableID.6), CChar(ptr.pointee.OEMTableID.7), CChar(0)]
-        let COEMID = [CChar(ptr.pointee.OEMID.0), CChar(ptr.pointee.OEMID.1), CChar(ptr.pointee.OEMID.2), CChar(ptr.pointee.OEMID.3), CChar(ptr.pointee.OEMID.4), CChar(ptr.pointee.OEMID.5), CChar(0)]
-        Signature  = String(ptr, maxLength: 4)
-        Length     = ptr.pointee.Length
-        Revision   = ptr.pointee.Revision
-        Checksum   = ptr.pointee.Checksum
-        OemID      = String(cString: COEMID)
-        OemTableID = String(cString: COEMTableID)
-        OemRev     = ptr.pointee.OEMRevision
-        CreatorID  = String(cString: CCreatorID)
-        CreatorRev = ptr.pointee.CreatorRevision
+        Log("\(rsdp!.description)", level: .Verbose)
+        tables.append(RSDT(address: rsdp!.RSDT))
+        for _addr in (tables[0] as! RSDT).SDTAddresses {
+            let addr = Address(_addr.physical, baseAddress: _addr.baseAddr)
+//            let addr = _addr
+            
+            let SDT = SDTHeader(ptr: (UnsafeMutablePointer<ACPISDTHeader_t>(bitPattern: addr.virtual))!)
+            switch SDT.Signature {
+            case "MCFG":
+                tables.append(MCFG(ptr: addr))
+            case "FACP":
+                tables.append(FADT(ptr: addr))
+            case "APIC":
+                tables.append(MADT(ptr: addr))
+            case "HPET":
+                tables.append(HPET(ptr: addr))
+            default:
+                Log("Unsupported Table: \(SDT.Signature), skipping...", level: .Warning)
+            }
+        }
+        for table in tables {
+            Log("\(table.description)", level: .Verbose)
+        }
     }
 }

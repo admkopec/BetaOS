@@ -58,7 +58,7 @@ typedef struct {
     uint8_t        sdbfis[0x08];    // Set Device Bits FIS
     uint8_t        ufis  [0x40];      // Unknown FIS
     uint8_t        res4  [0x60];
-} __packed fis;
+} __attribute__((packed)) fis;
 
 typedef enum {
     FIS_TYPE_REG_H2D    = 0x27,    // Register FIS - host to device

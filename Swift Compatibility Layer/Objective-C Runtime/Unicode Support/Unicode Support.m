@@ -7,6 +7,14 @@
 
 #import "Unicode Support.h"
 
+#define UNIMPLEMENTED(x) void x() { ULTDBG(__func__); }
+
+#ifdef ULTDEBUG
+#define ULTDBG(x...) printf(x)
+#else
+#define ULTDBG(x...)
+#endif
+
 // Unicode
 UNIMPLEMENTED(u_strToLower)
 UNIMPLEMENTED(u_strToUpper)

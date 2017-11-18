@@ -40,7 +40,7 @@ RTL8111::init(PCI *h) {
         Log("BAR Port:    %X\n", io_base);
     } else {
         mem_base = (uintptr_t)h->BAR().u.address;
-        Log("BAR Address: %X\n", mem_base);
+        Log("BAR Address: %llX\n", mem_base);
     }
     NameString = (char*)"RTL8111Controller";
     Used_ = true;

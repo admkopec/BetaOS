@@ -19,6 +19,11 @@
 #define MAX_QH              8
 #define MAX_TD             32
 
+typedef struct Link {
+    struct Link *prev;
+    struct Link *next;
+} Link;
+
 typedef struct {
     uint8_t len;
     uint8_t type;
@@ -27,7 +32,7 @@ typedef struct {
     uint8_t descCount;
     uint8_t descType;
     uint16_t descLen;
-} __packed USBHidDesc;
+} __attribute__((packed)) USBHidDesc;
 typedef struct {
     uint8_t len;
     uint8_t type;
@@ -36,7 +41,7 @@ typedef struct {
     uint8_t portPowerTime;
     uint8_t current;
     // removable/power control bits vary in size
-} __packed USBHubDesc;
+} __attribute__((packed)) USBHubDesc;
 typedef struct {
     uint8_t len;
     uint8_t type;
@@ -44,7 +49,7 @@ typedef struct {
     uint8_t attributes;
     uint16_t maxPacketSize;
     uint8_t interval;
-} __packed USBEndpointDesc;
+} __attribute__((packed)) USBEndpointDesc;
 typedef struct {
     USBEndpointDesc desc;
     uint16_t        toggle;
@@ -55,7 +60,7 @@ typedef struct {
     uint16_t value;
     uint16_t index;
     uint16_t len;
-} __packed USBDevReq;
+} __attribute__((packed)) USBDevReq;
 typedef struct {
     USBEndpoint *endp;
     USBDevReq   *req;
@@ -103,7 +108,7 @@ typedef struct {
     uint32_t HCSParams;
     uint32_t HCCParams;
     uint64_t HCSPPortRoute;
-} __packed CapRegisters;
+} __attribute__((packed)) CapRegisters;
 typedef struct {
     volatile uint32_t USBCommand;
     volatile uint32_t USBStatus;

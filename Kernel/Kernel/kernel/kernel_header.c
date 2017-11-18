@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <i386/vm_types.h>
+#include <mach/vm_types.h>
 #include "kernel_header.h"
 
 /*
@@ -83,17 +84,17 @@ getuuidfromheader(kernel_mach_header_t *mhp, unsigned long *size) {
  *
  * This routine can operate against any kernel mach header.
  */
-void *
-getsectdatafromheader(kernel_mach_header_t *mhp, const char *segname, const char *sectname, unsigned long *size){
+char *
+getsectdatafromheader(const struct mach_header *mhp, const char *segname, const char *sectname, uint32_t *size){
     const kernel_section_t *sp;
     void *result;
     
-    sp = getsectbynamefromheader(mhp, segname, sectname);
+    sp = (const struct section_64 *)getsectbynamefromheader(mhp, segname, sectname);
     if(sp == (kernel_section_t *)0){
         *size = 0;
         return((char *)0);
     }
-    *size = sp->size;
+    *size = (uint32_t)sp->size;
     result = (void *)sp->addr;
     return result;
 }
@@ -126,8 +127,7 @@ getsegdatafromheader(kernel_mach_header_t *mhp, const char *segname, unsigned lo
  *
  * This routine can operate against any kernel mach header.
  */
-kernel_section_t *
-getsectbynamefromheader(kernel_mach_header_t *mhp, const char *segname, const char *sectname) {
+const struct section *getsectbynamefromheader(const struct mach_header *mhp, const char *segname, const char *sectname) {
     kernel_segment_command_t *sgp;
     kernel_section_t *sp;
     unsigned long i, j;
@@ -145,14 +145,14 @@ getsectbynamefromheader(kernel_mach_header_t *mhp, const char *segname, const ch
                                sizeof(sp->sectname)) == 0 &&
                        strncmp(sp->segname, segname,
                                sizeof(sp->segname)) == 0)
-                        return(sp);
+                        return(const struct section*)(sp);
                     sp = (kernel_section_t *)((uintptr_t)sp +
                                               sizeof(kernel_section_t));
                 }
             }
         sgp = (kernel_segment_command_t *)((uintptr_t)sgp + sgp->cmdsize);
     }
-    return((kernel_section_t *)NULL);
+    return((const struct section*)NULL);
 }
 
 /*
@@ -242,10 +242,9 @@ getsegbyname(const char *seg_name) {
  * section in the named segment if it exists in the currently executing
  * kernel, which it is presumed to be linked into.  Otherwise it returns NULL.
  */
-kernel_section_t *
-getsectbyname(const char *segname, const char *sectname) {
-    return(getsectbynamefromheader(
-                                   (kernel_mach_header_t *)&_mh_execute_header, segname, sectname));
+const struct section_64 *getsectbyname(const char *segname, const char *sectname) {
+    return(const struct section_64 *)(const struct section_64 *)(getsectbynamefromheader(
+                                   (const struct mach_header *)&_mh_execute_header, segname, sectname));
 }
 
 /*

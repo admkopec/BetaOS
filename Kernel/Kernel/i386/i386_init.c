@@ -1,5 +1,5 @@
 //
-//  i386_init.cpp
+//  i386_init.c
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/1/16.
@@ -8,7 +8,6 @@
 
 #include <stdio.h>
 #include <string.h>
-extern "C" {
 #include <i386/cpu_data.h>
 #include <i386/cpuid.h>
 #include <i386/proc_reg.h>
@@ -63,7 +62,7 @@ pml4_entry_t		*IdlePML4;
 char                *physfree;
 
 extern pmap_paddr_t first_avail;
-
+#undef bzero
 /*
  * Note: ALLOCPAGES() can only be used safely within Idle_PTs_init()
  * due to the mutation of physfree.
@@ -96,12 +95,8 @@ uintptr_t __stack_chk_guard = STACK_CHK_GUARD;
 __attribute__((noreturn))
 void __stack_chk_fail(void) {
     panic("Kernel stack memory corruption detected");
-    for (; ;) { }
+    for (; ;) { pal_stop_cpu(true); }
 }
-    
-struct mapL2 {
-    pt_entry_t entries[PTE_PER_PAGE];
-};
 
 // Set up the physical mapping - NPHYSMAP GB of memory mapped at a high address
 // NPHYSMAP is determined by the maximum supported RAM size plus 4GB to account
@@ -114,8 +109,10 @@ extern int maxphymapsupported[NPHYSMAP <= (PTE_PER_PAGE/2) ? 1 : -1];
 
 static void
 physmap_init(void) {
-    pt_entry_t *physmapL3 = (pt_entry_t *)ALLOCPAGES(1);
-    mapL2* physmapL2 = (mapL2 *)ALLOCPAGES(NPHYSMAP);
+    pt_entry_t *physmapL3 = ALLOCPAGES(1);
+    struct {
+        pt_entry_t entries[PTE_PER_PAGE];
+    } * physmapL2 = ALLOCPAGES(NPHYSMAP);
     
     uint8_t  phys_random_L3 = /*early_random()*/ 1145125151236523357 & 0xFF;
     //                        ^^^^^^^^^^^^^^ Implement!
@@ -188,10 +185,10 @@ extern bool early;
 static void
 Idle_PTs_init(void) {
     /* Allocate the "idle" kernel page tables: */
-    KPTphys  = (pd_entry_t   *)ALLOCPAGES(NKPT);	/* level 1 */
-    IdlePTD  = (pdpt_entry_t *)ALLOCPAGES(NPGPTD);	/* level 2 */
-    IdlePDPT = (pdpt_entry_t *)ALLOCPAGES(1);		/* level 3 */
-    IdlePML4 = (pml4_entry_t *)ALLOCPAGES(1);		/* level 4 */
+    KPTphys  = ALLOCPAGES(NKPT);	/* level 1 */
+    IdlePTD  = ALLOCPAGES(NPGPTD);	/* level 2 */
+    IdlePDPT = ALLOCPAGES(1);		/* level 3 */
+    IdlePML4 = ALLOCPAGES(1);		/* level 4 */
     
     // Fill the lowest level with everything up to physfree
     fillkpt(KPTphys, INTEL_PTE_WRITE, 0, 0, (int)(((unsigned long)physfree) >> PAGE_SHIFT));
@@ -241,7 +238,7 @@ vstart(vm_offset_t boot_args_start) {
         // Get startup parameters
         kernelBootArgs  = (boot_args *)boot_args_start;
         lphysfree       = kernelBootArgs->kaddr + kernelBootArgs->ksize;
-        physfree        = (char *)(uintptr_t)((lphysfree + PAGE_SIZE - 1) &~ (PAGE_SIZE - 1));
+        physfree        = (void *)(unsigned long)((lphysfree + PAGE_SIZE - 1) &~ (PAGE_SIZE - 1));
 
 #if DEBUG
         serial_init();
@@ -301,6 +298,8 @@ extern bool use_screen_caching;
 extern uint64_t Screen;
 extern RSDP_for_Swift RSDP_;
 extern SMBIOS_for_Swift SMBIOS_;
+extern SMBIOSHeader SmbiosHeaderForBiosSearch;
+extern ACPI_2_Description RsdpForBiosSearch;
 extern void APICInit(void);
 extern void PITInit(uint16_t divisor);
 extern bool experimental;
@@ -311,7 +310,6 @@ i386_init(void) {
     //unsigned int cpus = 0;
     //bool         fidn;
     bool         IA32e = true;
-    enable_sse();
     tsc_init();
     rtclock_early_init();
     
@@ -345,23 +343,24 @@ i386_init(void) {
     }
     DBG("v_baseAddr = 0x%lx\n", Platform_state.video.v_baseAddr);
     early = false;
-    Screen = (uint64_t) malloc(fbsize);
+    Screen = (uintptr_t) malloc(fbsize);
     clear_screen();
     
-    if (RSDP_.OriginalAddress != 0) {
+    if (RSDP_.foundInBios) {
+        RSDP_.RSDP = &RsdpForBiosSearch;
+    } else if (RSDP_.OriginalAddress != 0) {
         RSDP_.RSDP     = (ACPI_2_Description *)io_map(((vm_offset_t)RSDP_.OriginalAddress & ~3), round_page(sizeof(ACPI_2_Description)), VM_WIMG_IO);
-    } if (SMBIOS_.OriginalAddress != 0) {
+    } if (SMBIOS_.foundInBios) {
+        SMBIOS_.SMBIOS = &SmbiosHeaderForBiosSearch;
+    } else if (SMBIOS_.OriginalAddress != 0) {
         SMBIOS_.SMBIOS = (SMBIOSHeader *)io_map(((vm_offset_t)SMBIOS_.OriginalAddress & ~3), round_page(sizeof(SMBIOSHeader)), VM_WIMG_IO);
     }
     
     init_fpu();
+    enable_sse();
     lapic_init();
     APICInit();
     //pmInit();
-    
-    if (experimental) {
-        PITInit(1193182 / 60);
-    }
     
     kernelMain();
 }
@@ -370,5 +369,4 @@ void
 i386_init_slave(void) {
     printf("Init Slave!\n");
     //i386_init();
-}
 }

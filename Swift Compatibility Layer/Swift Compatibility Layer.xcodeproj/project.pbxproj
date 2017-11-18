@@ -8,11 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3B1A24361F90C59B00BF40FE /* objc.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24351F90C59B00BF40FE /* objc.m */; };
-		3B1A243A1F90C60800BF40FE /* runtime.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1A24381F90C60800BF40FE /* runtime.h */; };
 		3B1A243B1F90C60800BF40FE /* runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24391F90C60800BF40FE /* runtime.m */; };
-		3B1A243F1F90DCB200BF40FE /* NSObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1A243D1F90DCB200BF40FE /* NSObject.h */; };
 		3B1A24401F90DCB200BF40FE /* NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A243E1F90DCB200BF40FE /* NSObject.m */; };
-		3B1A24431F90DD4200BF40FE /* Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1A24411F90DD4200BF40FE /* Protocol.h */; };
 		3B1A24441F90DD4200BF40FE /* Protocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24421F90DD4200BF40FE /* Protocol.m */; };
 		3BD8AA841F90EA8300A7ADBC /* Unicode Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */; };
 		3BD8AA851F90EA8300A7ADBC /* Unicode Support.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA831F90EA8300A7ADBC /* Unicode Support.m */; };
@@ -23,13 +20,10 @@
 /* Begin PBXFileReference section */
 		3B1A242F1F90C4ED00BF40FE /* libobjc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libobjc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B1A24351F90C59B00BF40FE /* objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = objc.m; path = "Objective-C Runtime/objc.m"; sourceTree = "<group>"; };
-		3B1A24371F90C5AB00BF40FE /* objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = objc.h; path = "Objective-C Runtime/objc.h"; sourceTree = "<group>"; };
-		3B1A24381F90C60800BF40FE /* runtime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = runtime.h; path = "Objective-C Runtime/runtime.h"; sourceTree = "<group>"; };
 		3B1A24391F90C60800BF40FE /* runtime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = runtime.m; path = "Objective-C Runtime/runtime.m"; sourceTree = "<group>"; };
-		3B1A243D1F90DCB200BF40FE /* NSObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NSObject.h; path = "Objective-C Runtime/NSObject.h"; sourceTree = "<group>"; };
 		3B1A243E1F90DCB200BF40FE /* NSObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NSObject.m; path = "Objective-C Runtime/NSObject.m"; sourceTree = "<group>"; };
-		3B1A24411F90DD4200BF40FE /* Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Protocol.h; path = "Objective-C Runtime/Protocol.h"; sourceTree = "<group>"; };
 		3B1A24421F90DD4200BF40FE /* Protocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Protocol.m; path = "Objective-C Runtime/Protocol.m"; sourceTree = "<group>"; };
+		3B33ADC51FAD1F9C00C4D9BE /* libc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA751F90EA0C00A7ADBC /* libcucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA7E1F90EA3200A7ADBC /* libicucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libicucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Unicode Support.h"; path = "Objective-C Runtime/Unicode Support/Unicode Support.h"; sourceTree = "<group>"; };
@@ -66,9 +60,11 @@
 		3B1A24241F90C4B500BF40FE = {
 			isa = PBXGroup;
 			children = (
+				3B27FFBD1FB362D1008452AC /* Foundation */,
 				3B1A24341F90C4F500BF40FE /* Objective-C Runtime */,
 				3B1A24451F90E7B600BF40FE /* Unicode Support */,
 				3B1A24301F90C4ED00BF40FE /* Products */,
+				3B33ADC31FAD1F9C00C4D9BE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,13 +81,9 @@
 		3B1A24341F90C4F500BF40FE /* Objective-C Runtime */ = {
 			isa = PBXGroup;
 			children = (
-				3B1A243D1F90DCB200BF40FE /* NSObject.h */,
 				3B1A243E1F90DCB200BF40FE /* NSObject.m */,
-				3B1A24411F90DD4200BF40FE /* Protocol.h */,
 				3B1A24421F90DD4200BF40FE /* Protocol.m */,
-				3B1A24371F90C5AB00BF40FE /* objc.h */,
 				3B1A24351F90C59B00BF40FE /* objc.m */,
-				3B1A24381F90C60800BF40FE /* runtime.h */,
 				3B1A24391F90C60800BF40FE /* runtime.m */,
 			);
 			name = "Objective-C Runtime";
@@ -105,6 +97,21 @@
 				3BD8AA791F90EA1F00A7ADBC /* Mobile */,
 			);
 			name = "Unicode Support";
+			sourceTree = "<group>";
+		};
+		3B27FFBD1FB362D1008452AC /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Foundation;
+			sourceTree = "<group>";
+		};
+		3B33ADC31FAD1F9C00C4D9BE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B33ADC51FAD1F9C00C4D9BE /* libc.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		3BD8AA791F90EA1F00A7ADBC /* Mobile */ = {
@@ -123,9 +130,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B1A243F1F90DCB200BF40FE /* NSObject.h in Headers */,
-				3B1A24431F90DD4200BF40FE /* Protocol.h in Headers */,
-				3B1A243A1F90C60800BF40FE /* runtime.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +209,8 @@
 		3B1A24251F90C4B500BF40FE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastSwiftUpdateCheck = 0910;
+				LastUpgradeCheck = 0910;
 				TargetAttributes = {
 					3B1A242E1F90C4ED00BF40FE = {
 						CreatedOnToolsVersion = 9.0;
@@ -274,15 +279,37 @@
 		3B1A24291F90C4B500BF40FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Kernel/Headers",
-					"$(PROJECT_DIR)/../Libc/Libc",
-				);
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-ffreestanding",
 					"-fno-builtin",
 					"-nostdlib",
-					"-nostdinc",
 					"-mkernel",
 					"-msoft-float",
 				);
@@ -292,15 +319,35 @@
 		3B1A242A1F90C4B500BF40FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Kernel/Headers",
-					"$(PROJECT_DIR)/../Libc/Libc",
-				);
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				OTHER_CFLAGS = (
 					"-ffreestanding",
 					"-fno-builtin",
 					"-nostdlib",
-					"-nostdinc",
 					"-mkernel",
 					"-msoft-float",
 				);
@@ -351,7 +398,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					KERNEL,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -359,10 +405,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Kernel/Headers",
-					"$(PROJECT_DIR)/../Libc/Libc",
-				);
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -411,17 +454,14 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = KERNEL;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Kernel/Headers",
-					"$(PROJECT_DIR)/../Libc/Libc",
-				);
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
@@ -474,7 +514,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					KERNEL,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -529,7 +568,7 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = KERNEL;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -587,7 +626,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					KERNEL,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -642,7 +680,7 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = KERNEL;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

@@ -11,6 +11,9 @@
 #include "cpuid.h"
 #include "proc_reg.h"
 
+bool isSSEenabled = false;
+bool canUseSSEmemcpy = false;
+
 void enable_sse(void) {
     if (cpuid_features() & CPUID_FEATURE_SSE) {
         pal_cr_t cr0 = get_cr0();
@@ -21,5 +24,6 @@ void enable_sse(void) {
         cr4 |= CR4_OSXMM;
         set_cr0(cr0);
         set_cr4(cr4);
+        isSSEenabled = true;
     }
 }

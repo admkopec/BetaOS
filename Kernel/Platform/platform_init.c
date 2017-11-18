@@ -17,6 +17,8 @@
 #include <i386/machine_routines.h>
 #include <i386/misc_protos.h>
 
+#undef bzero
+
 /* private globals */
 Platform_state_t  Platform_state;
 
@@ -101,7 +103,7 @@ void Platform_init(bool vm_initialized, void * _args) {
     if (Platform_state.initialized == false) {
         Platform_state.initialized  = true;
         
-        Platform_state.bootArgs           = (boot_args *)args;
+        Platform_state.bootArgs           = args;
         Platform_state.deviceTreeHead	  = (void *) ml_static_ptovirt(args->deviceTreeP);
         if (args->Video.v_baseAddr) {
             Platform_state.video.v_baseAddr   = args->Video.v_baseAddr; // remains physical address

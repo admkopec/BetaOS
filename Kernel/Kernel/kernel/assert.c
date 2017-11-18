@@ -9,9 +9,8 @@
 #include <assert.h>
 #include <kernel/misc_protos.h>
 
-void Assert(const char* file,
-            int         line,
-            const char* expression) {
+void __assert_rtn(const char * msg, const char * file, int line, const char * expression) {
     // Implement properly!
-    panic("(%s:%d) Assertion failed %s", file, line, expression);
+    panic("(%s:%d) Assertion failed %s %s", file, line, expression, msg);
+    for (; ;) { }
 }

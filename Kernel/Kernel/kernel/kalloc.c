@@ -40,7 +40,7 @@ vm_offset_t	kalloc_map_max;
 
 void * kalloc_(uint32_t size) {
 	uint64_t res;
-	res = (uint64_t) io_map(first_avail, size, 0);
+	res = (uint64_t) io_map(first_avail, round_page(size), 0);
 	first_avail += round_page(size);
 	return (void *) res;
 }

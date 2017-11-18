@@ -14,9 +14,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <i386/mp.h>
-#include <i386/vm_param.h>
 #include <i386/vm_types.h>
 #include <sys/cdefs.h>
+#include "vm_param.h"
+
+#ifndef MIN
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#endif /* MIN */
+#ifndef MAX
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#endif  /* MAX */
 
 #endif /* __ASSEMBLY__ */
 

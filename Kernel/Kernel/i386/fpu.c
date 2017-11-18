@@ -117,7 +117,7 @@ init_fpu(void) {
             assert(xsp->extended_state[0] & (uint32_t) XFEM_SSE);
             // XSAVE container size for all features
             fp_register_state_size = sizeof(struct x86_avx_thread_state);
-            fpu_YMM_present = TRUE;
+            fpu_YMM_present = true;
             set_cr4(get_cr4() | CR4_OSXSAVE);
             xsetbv(0, XMASK);
             // Verify that now selected state can be accommodated
@@ -125,7 +125,7 @@ init_fpu(void) {
         }
     }
     else*/
-        fpu_YMM_present = FALSE;
+        fpu_YMM_present = false;
     
     fpinit();
 }

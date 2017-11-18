@@ -33,7 +33,7 @@ extern uint32_t pmap_pcid_ncpus;
 static inline void
 tlb_flush_global(void) {
     uintptr_t cr4 = get_cr4();
-    assert(ml_get_interrupts_enabled() == FALSE || get_preemption_level() !=0);
+    assert(ml_get_interrupts_enabled() == false || get_preemption_level() !=0);
     //assert(((cr4 & CR4_PGE) || ml_at_interrupt_context()), "CR4: 0x%lx", cr4);
     assert((cr4 &CR4_PGE) || ml_at_interrupt_context());
     /*

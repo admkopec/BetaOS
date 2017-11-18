@@ -5,10 +5,139 @@
 //  Created by Adam Kopeć on 10/13/17.
 //
 
-#import "objc.h"
+#define UNIMPLEMENTED(x) void x() { ULTDBG(__func__); }
+
+#ifdef ULTDEBUG
+#define ULTDBG(x...) printf(x)
+#else
+#define ULTDBG(x...)
+#endif
+
+#define likely(x)      __builtin_expect(!!(x), 1)
+#define unlikely(x)    __builtin_expect(!!(x), 0)
+
+UNIMPLEMENTED(getline)
+UNIMPLEMENTED(getsectiondata)
+UNIMPLEMENTED(__error)
+UNIMPLEMENTED(malloc_zone_from_ptr)
+UNIMPLEMENTED(snprintf_l)
+UNIMPLEMENTED(vdprintf)
+UNIMPLEMENTED(fprintf)
+UNIMPLEMENTED(dlsym)
+UNIMPLEMENTED(dladdr)
+UNIMPLEMENTED(getenv)
+UNIMPLEMENTED(close)
+UNIMPLEMENTED(read)
+UNIMPLEMENTED(asl_log)
+UNIMPLEMENTED(__swbuf)
+UNIMPLEMENTED(_tlv_bootstrap)
+UNIMPLEMENTED(malloc_default_zone)
+
+/*
+ * Math functions
+ */
+
+
+UNIMPLEMENTED(arc4random)
+UNIMPLEMENTED(arc4random_uniform)
+UNIMPLEMENTED(ceil)
+UNIMPLEMENTED(ceill)
+UNIMPLEMENTED(cos)
+UNIMPLEMENTED(cosf)
+UNIMPLEMENTED(exp)
+UNIMPLEMENTED(exp2)
+UNIMPLEMENTED(exp2f)
+UNIMPLEMENTED(expf)
+UNIMPLEMENTED(floor)
+UNIMPLEMENTED(floorf)
+UNIMPLEMENTED(floorl)
+UNIMPLEMENTED(fma)
+UNIMPLEMENTED(fmaf)
+UNIMPLEMENTED(fmal)
+UNIMPLEMENTED(fmod)
+UNIMPLEMENTED(fmodf)
+UNIMPLEMENTED(fmodl)
+UNIMPLEMENTED(log)
+UNIMPLEMENTED(log10)
+UNIMPLEMENTED(log10f)
+UNIMPLEMENTED(log2)
+UNIMPLEMENTED(log2f)
+UNIMPLEMENTED(logf)
+UNIMPLEMENTED(nearbyint)
+UNIMPLEMENTED(nearbyintf)
+UNIMPLEMENTED(rint)
+UNIMPLEMENTED(rintf)
+UNIMPLEMENTED(rintl)
+UNIMPLEMENTED(round)
+UNIMPLEMENTED(roundf)
+UNIMPLEMENTED(roundl)
+UNIMPLEMENTED(sin)
+UNIMPLEMENTED(sinf)
+UNIMPLEMENTED(lgamma_r)
+UNIMPLEMENTED(lgammaf_r)
+UNIMPLEMENTED(lgammal_r)
+
+/*
+ * Misc
+ */
+
+UNIMPLEMENTED(strtod_l)
+UNIMPLEMENTED(strtof_l)
+UNIMPLEMENTED(strtold_l)
+UNIMPLEMENTED(remainder)
+UNIMPLEMENTED(remainderf)
+UNIMPLEMENTED(remainderl)
+UNIMPLEMENTED(__memcpy_chk)
+UNIMPLEMENTED(__memmove_chk)
+UNIMPLEMENTED(__strlcpy_chk)
+
+UNIMPLEMENTED(sysconf)
+UNIMPLEMENTED(trunc)
+UNIMPLEMENTED(truncf)
+UNIMPLEMENTED(truncl)
+
+UNIMPLEMENTED(fcntl)
+UNIMPLEMENTED(ioctl)
+
+UNIMPLEMENTED(open)
+UNIMPLEMENTED(openat)
+UNIMPLEMENTED(sem_open)
+
+UNIMPLEMENTED(__fpclassifyd)
+UNIMPLEMENTED(__fpclassifyf)
+
+id _Nullable
+objc_msgSend(id _Nullable self, SEL _Nonnull op, ...){
+    ULTDBG("objc_msgSend!\n");
+    return 0;
+}
+
+#import <objc/objc.h>
+#import <objc/runtime.h>
 #import <stdlib.h>
+#import <string.h>
+#import <stdio.h>
+#import <objc/Protocol.h>
+#undef strlcpy
+#undef strcpy
+#undef memcpy
 
 int kCFNull;
+
+// Temp values
+
+// Default FILE * for stdio, faked values
+// OSX symbol names
+FILE *__stderrp = (void *)0xF2;
+FILE *__stdinp  = (void *)0xF0;
+FILE *__stdoutp = (void *)0xF1;
+
+// Linux symbol names
+//FILE *stderr = (void *)0xF2;
+//FILE *stdin  = (void *)0xF0;
+//FILE *stdout = (void *)0xF1;
+
+extern void panic(const char*, ...);
 
 UNIMPLEMENTED(CFErrorGetTypeID)
 UNIMPLEMENTED(CFGetTypeID)
@@ -45,21 +174,69 @@ UNIMPLEMENTED(OBJC_METACLASS_$_NSSet)
 UNIMPLEMENTED(OBJC_METACLASS_$_NSString)
 UNIMPLEMENTED(__CFConstantStringClassReference)
 UNIMPLEMENTED(_objc_empty_cache)
-UNIMPLEMENTED(class_conformsToProtocol)
-UNIMPLEMENTED(class_copyIvarList)
-UNIMPLEMENTED(class_createInstance)
-UNIMPLEMENTED(class_getInstanceSize)
-UNIMPLEMENTED(class_getName)
-UNIMPLEMENTED(class_getSuperclass)
-UNIMPLEMENTED(class_isMetaClass)
-UNIMPLEMENTED(class_respondsToSelector)
-UNIMPLEMENTED(ivar_getOffset)
+
+Ivar _Nonnull * _Nullable
+class_copyIvarList(Class _Nullable cls, unsigned int * _Nullable outCount)  {
+    return (Ivar *) 0;
+}
+
+id
+class_createInstance(Class cls, size_t extraBytes) {
+    return nil;
+}
+
+size_t
+class_getInstanceSize(Class _Nullable cls) {
+    return 0;
+}
+
+const char * _Nonnull
+class_getName(Class _Nullable cls) {
+    return "NSObject";
+}
+
+Class _Nullable
+class_getSuperclass(Class _Nullable cls) {
+    return Nil;
+}
+
+BOOL
+class_isMetaClass(Class _Nullable cls) {
+    return NO;
+}
+
+BOOL
+class_respondsToSelector(Class _Nullable cls, SEL _Nonnull sel) {
+    return NO;
+}
+
+ptrdiff_t
+ivar_getOffset(Ivar _Nonnull v) {
+    return (ptrdiff_t) 0;
+}
+
+//UNIMPLEMENTED(class_copyIvarList)
+//UNIMPLEMENTED(class_createInstance)
+//UNIMPLEMENTED(class_getInstanceSize)
+//UNIMPLEMENTED(class_getName)
+//UNIMPLEMENTED(class_getSuperclass)
+//UNIMPLEMENTED(class_isMetaClass)
+//UNIMPLEMENTED(class_respondsToSelector)
+//UNIMPLEMENTED(ivar_getOffset)
+
 UNIMPLEMENTED(objc_autorelease)
 UNIMPLEMENTED(objc_autoreleaseReturnValue)
 UNIMPLEMENTED(objc_copyWeak)
 UNIMPLEMENTED(objc_debug_isa_class_mask)
 UNIMPLEMENTED(objc_destroyWeak)
-UNIMPLEMENTED(objc_destructInstance)
+
+void * _Nullable
+objc_destructInstance(id _Nullable obj) {
+    return NULL;
+}
+
+//UNIMPLEMENTED(objc_destructInstance)
+
 UNIMPLEMENTED(objc_initWeak)
 UNIMPLEMENTED(objc_loadWeakRetained)
 UNIMPLEMENTED(objc_moveWeak)
@@ -69,16 +246,57 @@ UNIMPLEMENTED(objc_readClassPair)
 UNIMPLEMENTED(objc_release)
 UNIMPLEMENTED(objc_retain)
 UNIMPLEMENTED(objc_retainAutoreleasedReturnValue)
-UNIMPLEMENTED(objc_storeWeak)
-UNIMPLEMENTED(objc_lookUpClass)
-UNIMPLEMENTED(objc_constructInstance)
-UNIMPLEMENTED(object_dispose)
-UNIMPLEMENTED(object_isClass)
-UNIMPLEMENTED(object_setClass)
-UNIMPLEMENTED(protocol_getName)
-UNIMPLEMENTED(sel_getName)
 
-UNIMPLEMENTED(_Block_copy)
+id _Nullable
+objc_storeWeak(id _Nullable * _Nonnull location, id _Nullable obj) {
+    return nil;
+}
+
+Class _Nullable
+objc_lookUpClass(const char * _Nonnull name) {
+    return Nil;
+}
+
+id _Nullable
+objc_constructInstance(Class _Nullable cls, void * _Nullable bytes) {
+    return nil;
+}
+
+id _Nullable
+object_dispose(id _Nullable obj) {
+    return nil;
+}
+
+Class _Nullable
+object_setClass(id _Nullable obj, Class _Nonnull cls) {
+    return Nil;
+}
+
+const char * _Nonnull
+protocol_getName(Protocol * _Nonnull proto) {
+    return "Protocol";
+}
+
+const char * _Nonnull
+sel_getName(SEL _Nonnull sel) {
+    return "SEL";
+}
+
+//UNIMPLEMENTED(objc_storeWeak)
+//UNIMPLEMENTED(objc_lookUpClass)
+//UNIMPLEMENTED(objc_constructInstance)
+//UNIMPLEMENTED(object_dispose)
+//UNIMPLEMENTED(object_setClass)
+//UNIMPLEMENTED(protocol_getName)
+//UNIMPLEMENTED(sel_getName)
+
+void *
+_Block_copy(const void *aBlock) {
+    return NULL;
+}
+
+//UNIMPLEMENTED(_Block_copy)
+
 UNIMPLEMENTED(_Block_release)
 UNIMPLEMENTED(_NSGetArgc)
 UNIMPLEMENTED(_NSGetArgv)
@@ -94,60 +312,43 @@ UNIMPLEMENTED(_ZNKSt3__120__vector_base_commonILb1EE20__throw_length_errorEv)
 UNIMPLEMENTED(_dyld_register_func_for_add_image)
 UNIMPLEMENTED(dyld_stub_binder)
 
-UNIMPLEMENTED(getline)
-UNIMPLEMENTED(getsectiondata)
-UNIMPLEMENTED(__error)
-UNIMPLEMENTED(malloc_zone_from_ptr)
-UNIMPLEMENTED(snprintf_l)
-
 void
-flockfile(void *stream) {
+flockfile(FILE *stream) {
     if (stream != stderr && stream != stdout) {
         panic("flockfile stream = %p", stream);
     }
     
 }
 
-UNIMPLEMENTED(fprintf)
-UNIMPLEMENTED(fwrite)
-
 void
-funlockfile(void *stream) {
+funlockfile(FILE *stream) {
     if (stream != stderr && stream != stdout) {
         panic("funlockfile stream = %p", stream);
     }
 }
 
-UNIMPLEMENTED(dlsym)
-UNIMPLEMENTED(dladdr)
-UNIMPLEMENTED(getenv)
-UNIMPLEMENTED(close)
-UNIMPLEMENTED(read)
-UNIMPLEMENTED(asl_log)
-UNIMPLEMENTED(__swbuf)
-UNIMPLEMENTED(_tlv_bootstrap)
-UNIMPLEMENTED(malloc_default_zone)
+extern ssize_t write(int fd, const void *buf, size_t nbyte);
 
-id
-objc_msgSend(id self, SEL op, ...) {
-    ULTDBG("objc_msgSend!\n");
-    return 0;
+size_t
+fwrite(const void* buf, size_t size, size_t count, FILE *stream) {
+    flockfile(stream);
+    write(1, buf, size);
+    funlockfile(stream);
+    return count;
 }
 
-UNIMPLEMENTED(vsnprintf)
+BOOL class_conformsToProtocol(Class cls, Protocol *protocol) {
+    return NO;
+}
 
-/*
- * Math functions
- */
+BOOL object_isClass(id obj) {
+    return NO;
+}
 
 UNIMPLEMENTED(__divti3)
 UNIMPLEMENTED(__udivti3)
 UNIMPLEMENTED(__modti3)
 UNIMPLEMENTED(__umodti3)
-UNIMPLEMENTED(arc4random)
-UNIMPLEMENTED(arc4random_uniform)
-UNIMPLEMENTED(ceil)
-UNIMPLEMENTED(ceill)
 
 
 float ceilf(float f) {
@@ -156,60 +357,10 @@ float ceilf(float f) {
         result++;
     }
     float resultf = (float)result;
-    //    kprintf("ceilf(%ld)=%ld\n", (long)f, (long)resultf);
+    //    printf("ceilf(%ld)=%ld\n", (long)f, (long)resultf);
     
     return resultf;
 }
-
-
-UNIMPLEMENTED(cos)
-UNIMPLEMENTED(cosf)
-UNIMPLEMENTED(exp)
-UNIMPLEMENTED(exp2)
-UNIMPLEMENTED(exp2f)
-UNIMPLEMENTED(expf)
-UNIMPLEMENTED(floor)
-UNIMPLEMENTED(floorf)
-UNIMPLEMENTED(floorl)
-UNIMPLEMENTED(fma)
-UNIMPLEMENTED(fmaf)
-UNIMPLEMENTED(fmal)
-UNIMPLEMENTED(fmod)
-UNIMPLEMENTED(fmodf)
-UNIMPLEMENTED(fmodl)
-UNIMPLEMENTED(log)
-UNIMPLEMENTED(log10)
-UNIMPLEMENTED(log10f)
-UNIMPLEMENTED(log2)
-UNIMPLEMENTED(log2f)
-UNIMPLEMENTED(logf)
-UNIMPLEMENTED(nearbyint)
-UNIMPLEMENTED(nearbyintf)
-UNIMPLEMENTED(rint)
-UNIMPLEMENTED(rintf)
-UNIMPLEMENTED(rintl)
-UNIMPLEMENTED(round)
-UNIMPLEMENTED(roundf)
-UNIMPLEMENTED(roundl)
-UNIMPLEMENTED(sin)
-UNIMPLEMENTED(sinf)
-
-
-/*
- * Misc
- */
-
-UNIMPLEMENTED(strtod_l)
-UNIMPLEMENTED(strtof_l)
-UNIMPLEMENTED(strtold_l)
-UNIMPLEMENTED(remainder)
-UNIMPLEMENTED(remainderf)
-UNIMPLEMENTED(remainderl)
-
-UNIMPLEMENTED(sysconf)
-UNIMPLEMENTED(trunc)
-UNIMPLEMENTED(truncf)
-UNIMPLEMENTED(truncl)
 
 UNIMPLEMENTED(backtrace)
 
@@ -617,8 +768,14 @@ _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6resizeEmc(struct
 
 
 void
-_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7reserveEm() {
-    panic("Calling _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7reserveEm\n");
+_ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7reserveEm(struct basic_string *this, size_t new_cap) {
+    ULTDBG("Calling _ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7reserveEm\nThis function doesn't work\n");
+    if (new_cap != get_str_capacity(this)) {
+        if (new_cap < get_str_size(this)) {
+            new_cap = get_str_size(this);
+        }
+        __ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9__grow_byEmmmmmm(this, get_str_capacity(this), new_cap - get_str_size(this), get_str_size(this), get_str_size(this), 0, new_cap - get_str_size(this));
+    }
 }
 
 

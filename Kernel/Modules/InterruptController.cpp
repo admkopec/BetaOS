@@ -70,8 +70,12 @@ Interrupt::Disable(int InterruptLine) {
 
 OSReturn
 Interrupt::Incomming(int InterruptLine) {
+    if (InterruptLine == 1 || InterruptLine == 0) {
+        // Just go through to get the CPU out of the hlt in getchar()
+        return kOSReturnSuccess;
+    }
     if (!Table[InterruptLine].isSet) {
-        Log("Interrupt Handler not set!\n");
+        Log("Interrupt Handler not set (Line: %d, Number: 0x%X)!\n", InterruptLine, InterruptLine + LAPIC_DEFAULT_INTERRUPT_BASE);
         return kOSReturnError;
     }
     Table[InterruptLine].handler->handleInterrupt();

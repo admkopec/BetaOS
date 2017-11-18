@@ -17,7 +17,7 @@
 
 char		mp_slave_stack[PAGE_SIZE] __attribute__((aligned(PAGE_SIZE))); // Temp stack for slave init
 
-bool 		smp_initialized = FALSE;
+bool 		smp_initialized = false;
 
 void
 i386_activate_cpu(void) {
@@ -26,12 +26,12 @@ i386_activate_cpu(void) {
     assert(!ml_get_interrupts_enabled());
     
     if (!smp_initialized) {
-        cdp->cpu_running = TRUE;
+        cdp->cpu_running = true;
         return;
     }
     
     //simple_lock(&x86_topo_lock);
-    cdp->cpu_running = TRUE;
+    cdp->cpu_running = true;
     //started_cpu();
     //simple_unlock(&x86_topo_lock);
     flush_tlb_raw();

@@ -9,7 +9,9 @@
 #ifndef _KERNEL_ARCH_H
 #define _KERNEL_ARCH_H
 
-void reboot(bool ispanic);
-void shutdown(void);
+#include <stdbool.h>
+
+void reboot_system(bool ispanic);
+void shutdown_system(void);
 
 #endif /* arch_h */

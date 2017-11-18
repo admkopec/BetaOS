@@ -1,5 +1,5 @@
 //
-//  puts.c
+//  puts.cpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/8/15.
@@ -8,7 +8,6 @@
 
 #include <stdio.h>
 
-int puts(const char* string)
-{
+int puts(const char* string) {
 	return printf("%s\n", string);
 }

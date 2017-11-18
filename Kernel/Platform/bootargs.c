@@ -79,8 +79,8 @@ Parse_boot_argn(const char *arg_string, void *arg_ptr, int max_len) {
     char *cp, c;
     uintptr_t i;
     long long val;
-    boolean_t arg_bool;
-    boolean_t arg_found;
+    bool arg_bool;
+    bool arg_found;
     
     args = Platform_state.bootArgs->CommandLine;
     if (*args == '\0')

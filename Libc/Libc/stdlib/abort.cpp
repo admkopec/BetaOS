@@ -7,7 +7,8 @@
 //
 
 #include <stdlib.h>
-#include <kernel/misc_protos.h>
+
+extern "C" void panic(const char *, ...);
 
 void
 abort() {

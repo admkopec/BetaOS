@@ -7,61 +7,158 @@
 //
 
 @_silgen_name("version")
-func version() -> Void {
+public func version() -> Void {
     kprint("\(OS_NAME) \(VERSION_MAJOR).\(VERSION_MINOR)", terminator: "");
     if (VERSION_XMINOR > 0) {
         kprint(".\(VERSION_XMINOR)", terminator: "");
     }
     kprint(" \(BUILD_TYPE)(\(String(BUILD_NUMBER, radix: 16, uppercase: true)))")
+    
+    kprint(" ")
+    
+    kprint("\(System.sharedInstance.DeviceName):")
+    kprint("    CPU Vendor \(String(&cpuid_info().pointee.cpuid_vendor.0, maxLength: MemoryLayout.size(ofValue: cpuid_info().pointee.cpuid_vendor)))")
+    kprint("    CPU \(String(&cpuid_info().pointee.cpuid_brand_string.0, maxLength: MemoryLayout.size(ofValue: cpuid_info().pointee.cpuid_brand_string)))")
+    kprint("    Memory \(Int(Platform_state.bootArgs.pointee.PhysicalMemorySize) / GB) GB")
+    kprint("    Serial Number: \(System.sharedInstance.SerialNumber)")
+    
+    kprint(" ")
+    
     kprint(COPYRIGHT)
-    
-    let vendor = withUnsafePointer(to: &cpuid_info().pointee.cpuid_vendor) {
-        $0.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: cpuid_info().pointee.cpuid_vendor)) {
-            String(cString: $0)
-        }
-    }
-    
-    let brand = withUnsafePointer(to: &cpuid_info().pointee.cpuid_brand_string) {
-        $0.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: cpuid_info().pointee.cpuid_brand_string)) {
-            String(cString: $0)
-        }
-    }
-    
-    kprint("CPU Vendor \(vendor)")
-    kprint("CPU \(brand)")
-    kprint("Memory \(Platform_state.bootArgs.pointee.PhysicalMemorySize / GB) GB")
 }
 
 @_silgen_name("printLoadedModules")
-func printLoadedModules() -> Void {
+public func printLoadedModules() -> Void {
     kprint("Loaded C++ Modules:")
     PrintLoadedModules()
-//    kprint("Loaded Swift Modules:")
-//    ModulesController.sharedInstance.printLoadedModules()
+    kprint("\(System.sharedInstance.modulesController)")
 }
 
 @_silgen_name("time_")
-func time_(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
+public func time_(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
     var arguments : [String] = [String(cString: argv[0]!)]
     if argc > 1 {
         for arg in 1 ..< argc {
             arguments.append(String(cString: argv[arg]!))
         }
     }
-    gettime()
-    if argc == 2 {
+    
+    let UNIXtime   = time(nil)
+    let TimeStruct = gmtime(nil)
+    var hour   = TimeStruct!.pointee.tm_hour
+    let minute = TimeStruct!.pointee.tm_min
+    let second = TimeStruct!.pointee.tm_sec
+    let wday   = TimeStruct!.pointee.tm_wday
+    let mday   = TimeStruct!.pointee.tm_mday
+    let mon    = TimeStruct!.pointee.tm_mon
+    var year   = TimeStruct!.pointee.tm_year
+    
+    year += 1900
+    var pmam = ""
+    
+    if (hour<12 && hour>0) {
+        pmam="AM";
+    } else if (hour>12 && hour<24) {
+        hour-=12;
+        pmam="PM";
+    } else if (hour==12) {
+        pmam="PM";
+    } else if (hour==0 || hour==24) {
+        hour=12;
+        pmam="AM";
+    }
+    
+    var dayofweeklong = ""
+    var dayofweekshort = ""
+    
+    switch (wday) {
+    case 0:
+        dayofweeklong = "Sunday";
+        dayofweekshort = "Sun";
+        break;
+    case 1:
+        dayofweeklong = "Monday";
+        dayofweekshort = "Mon";
+        break;
+    case 2:
+        dayofweeklong = "Tuesday";
+        dayofweekshort = "Tue";
+        break;
+    case 3:
+        dayofweeklong = "Wednesday";
+        dayofweekshort = "Wed";
+        break;
+    case 4:
+        dayofweeklong = "Thursday";
+        dayofweekshort = "Thu";
+        break;
+    case 5:
+        dayofweeklong = "Friday";
+        dayofweekshort = "Fri";
+        break;
+    case 6:
+        dayofweeklong = "Saturday";
+        dayofweekshort = "Sat";
+        break;
+    default:
+        break;
+    }
+    var monthl = ""
+    switch (mon) {
+    case 1:
+        monthl="January";
+        break;
+    case 2:
+        monthl="February";
+        break;
+    case 3:
+        monthl="March";
+        break;
+    case 4:
+        monthl="April";
+        break;
+    case 5:
+        monthl="May";
+        break;
+    case 6:
+        monthl="June";
+        break;
+    case 7:
+        monthl="July";
+        break;
+    case 8:
+        monthl="August";
+        break;
+    case 9:
+        monthl="September";
+        break;
+    case 10:
+        monthl="October";
+        break;
+    case 11:
+        monthl="November";
+        break;
+    case 12:
+        monthl="December";
+        break;
+        
+    default:
+        break;
+    }
+    
+    if arguments.count == 2 {
         if arguments[1] == "long" {
-            kprint("\(hour):\(String(minute).leftPadding(toLength: 2, withPad: "0")):\(String(second).leftPadding(toLength: 2, withPad: "0")) \(String(cString: pmam))")
-            kprint("\(String(cString: dayofweeklong)), \(String(cString: monthl)) \(day), \(year)")
+            kprint("\(hour):\(String(minute).leftPadding(toLength: 2, withPad: "0")):\(String(second).leftPadding(toLength: 2, withPad: "0")) \(pmam)")
+            kprint("\(dayofweeklong), \(monthl) \(mday), \(year)")
         } else if arguments[1] == "absolute" {
-            kprint("Absolute time is: \(time())")
+            kprint("Absolute time is: \(UNIXtime)")
             kprint("Mach Absolute time is: \(mach_absolute_time())")
         } else {
             kprint("Usage: time [long | absolute]")
             return
         }
-    } else if argc == 1 {
-        kprint("\(String(cString: dayofweekshort)) \(hour):\(String(minute).leftPadding(toLength: 2, withPad: "0")) \(String(cString: pmam))")
+    } else if arguments.count == 1 {
+        kprint("\(dayofweekshort) \(hour):\(String(minute).leftPadding(toLength: 2, withPad: "0")) \(pmam)")
     } else {
         kprint("Usage: time [long | absolute]")
         return
@@ -69,14 +166,14 @@ func time_(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -
 }
 
 @_silgen_name("set_color")
-func set_color(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
+public func set_color(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
     var arguments : [String] = [String(cString: argv[0]!)]
     if argc > 1 {
         for arg in 1 ..< argc {
             arguments.append(String(cString: argv[arg]!))
         }
     }
-    if argc == 7 {
+    if arguments.count == 7 {
         let redF   = Int(arguments[1], radix: 16)
         let greenF = Int(arguments[2], radix: 16)
         let blueF  = Int(arguments[3], radix: 16)

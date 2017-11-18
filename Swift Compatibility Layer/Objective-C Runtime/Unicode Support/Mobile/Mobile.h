@@ -5,4 +5,4 @@
 //  Created by Adam Kopeć on 10/13/17.
 //
 
-#import "../../objc.h"
+#import <objc/objc.h>

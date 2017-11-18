@@ -6,6 +6,7 @@
 //  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
 //
 
+#include <stdio.h>
 #include "trap.h"
 #include "cpu_threads.h"
 #include "thread_status.h"
@@ -22,19 +23,20 @@
 
 extern uint64_t col, line;
 extern void IncommingInterrupt(int InterruptNumber);
+extern void refresh_screen(void);
 
 static void panic_trap(x86_saved_state64_t *regs, uint32_t pl);
 static void set_recovery_ip(x86_saved_state64_t  *saved_state, vm_offset_t ip);
 
 #ifdef DEBUG
-void kprintf_state(x86_saved_state64_t *saved_state);
+void printf_state(x86_saved_state64_t *saved_state);
 #endif
 
 void
 i386_exception(int exc, uint64_t code, uint64_t subcode) {
 	uint64_t   codes[EXCEPTION_CODE_MAX];
     
-	kprintf("i386_exception: exc=%d code=0x%llx subcode=0x%llx\n", exc, code, subcode);
+	printf("i386_exception: exc=%d code=0x%llx subcode=0x%llx\n", exc, code, subcode);
 	codes[0] = code;		/* new exception interface */
 	codes[1] = subcode;
 	//exception_triage(exc, codes, 2);
@@ -77,7 +79,7 @@ interrupt(x86_saved_state_t *state) {
         rsp             = state32->uesp;
         interrupt_num   = state32->trapno;
     }
-    kprintf("Interrupt_Num: 0x%x\n", interrupt_num);
+//    printf("Interrupt_Num: 0x%x\n", interrupt_num);
     /*if (cpu_data_ptr[cnum]->lcpu.package->num_idle == topoParms.nLThreadsPerPackage)
         cpu_data_ptr[cnum]->cpu_hwIntpexits[interrupt_num]++;
     if (interrupt_num == (LAPIC_DEFAULT_INTERRUPT_BASE + LAPIC_INTERPROCESSOR_INTERRUPT))
@@ -103,6 +105,9 @@ interrupt(x86_saved_state_t *state) {
      */
     
     if (!lapic_interrupt(interrupt_num, state)) {
+        if (interrupt_num == LAPIC_DEFAULT_INTERRUPT_BASE) {
+            refresh_screen();
+        }
         //Platform_incoming_interrupt(interrupt_num);
         if (interrupt_num >= LAPIC_DEFAULT_INTERRUPT_BASE && interrupt_num <= (LAPIC_DEFAULT_INTERRUPT_BASE + 0x0F)) {
             IncommingInterrupt(interrupt_num);
@@ -169,7 +174,7 @@ interrupt(x86_saved_state_t *state) {
     //if (cnum == master_cpu)
     //    ml_entropy_collect();
     
-    assert(ml_get_interrupts_enabled() == FALSE);
+    assert(ml_get_interrupts_enabled() == false);
 }
 
 static inline void
@@ -189,7 +194,7 @@ kernel_trap(x86_saved_state_t	*state,
 	kern_return_t		result = KERN_FAILURE;
 	//thread_t            thread;
 	//ast_t               *myast;
-	boolean_t           intr;
+	bool               intr;
 	vm_prot_t         prot;
     //struct recovery		*rp;
 	vm_offset_t         kern_ip;
@@ -246,14 +251,14 @@ kernel_trap(x86_saved_state_t	*state,
 	 * as soon we possibly can to hold latency down
 	 */
 	if (__improbable(T_PREEMPT == type)) {
-        kprintf("T_PREEMPT!\n");
+        printf("T_PREEMPT!\n");
         goto debugger_entry;
-        //ast_taken(AST_PREEMPTION, FALSE);
+        //ast_taken(AST_PREEMPTION, false);
 		return;
 	}
 	
 	if (T_PAGE_FAULT == type) {
-        kprintf("Page Fault!\n");
+        printf("Page Fault!\n");
         goto debugger_entry;
 		/*
 		 * assume we're faulting in the kernel map
@@ -326,7 +331,7 @@ kernel_trap(x86_saved_state_t	*state,
 				if (no_shared_cr3 &&
 				    (thread->machine.specFlags&CopyIOActive) &&
 				    map->pmap->pm_cr3 != get_cr3_base()) {
-					pmap_assert(current_cpu_datap()->cpu_pmap_pcid_enabled == FALSE);
+					pmap_assert(current_cpu_datap()->cpu_pmap_pcid_enabled == false);
 					set_cr3_raw(map->pmap->pm_cr3);
 					return;
 				}
@@ -345,29 +350,29 @@ kernel_trap(x86_saved_state_t	*state,
             
 	    case T_NO_FPU:
             //fpnoextflt();
-            kprintf("T_NO_FPU!\n");
+            printf("T_NO_FPU!\n");
             goto debugger_entry;
             return;
             
 	    case T_FPU_FAULT:
             //fpextovrflt();
-            kprintf("T_FPU_FAULT!\n");
+            printf("T_FPU_FAULT!\n");
             goto debugger_entry;
             return;
             
 	    case T_FLOATING_POINT_ERROR:
             //fpexterrflt();
-            kprintf("T_FLOATING_POINT_ERROR!\n");
+            printf("T_FLOATING_POINT_ERROR!\n");
             goto debugger_entry;
             return;
             
 	    case T_SSE_FLOAT_ERROR:
 	        //fpSSEexterrflt();
-            kprintf("T_SSE_FLOAT_ERROR!\n");
+            printf("T_SSE_FLOAT_ERROR!\n");
             goto debugger_entry;
             return;
  	    case T_DEBUG:
-            kprintf("T_DEBUG!\n");
+            printf("T_DEBUG!\n");
 		    if ((saved_state->isf.rflags & EFL_TF) == 0 /*&& NO_WATCHPOINTS*/) {
 			    /* We've somehow encountered a debug
 			     * register match that does not belong
@@ -380,11 +385,11 @@ kernel_trap(x86_saved_state_t	*state,
 		    goto debugger_entry;
 #ifdef __x86_64__
 	    case T_INT3:
-            kprintf("T_INT3!\n");
+            printf("T_INT3!\n");
             goto debugger_entry;
 #endif
 	    case T_PAGE_FAULT:
-            kprintf("T_PAGE_FAULT\n");
+            printf("T_PAGE_FAULT\n");
             goto debugger_entry;
 #if CONFIG_DTRACE
             //if (thread != THREAD_NULL && thread->options & TH_OPT_DTRACE) {	/* Executing under dtrace_probe? */
@@ -406,12 +411,12 @@ kernel_trap(x86_saved_state_t	*state,
             if (code & T_PF_EXECUTE)
 		        prot |= VM_PROT_EXECUTE;
             
-            //result = vm_fault(map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, FALSE, THREAD_UNINT, NULL, 0);
+            //result = vm_fault(map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, false, THREAD_UNINT, NULL, 0);
             
             if (result == KERN_SUCCESS) {
 #if NCOPY_WINDOWS > 0
                 /*if (fault_in_copy_window != -1) {
-                    ml_set_interrupts_enabled(FALSE);
+                    ml_set_interrupts_enabled(false);
                     copy_window_fault(thread, map,
                                       fault_in_copy_window);
                     (void) ml_set_interrupts_enabled(intr);
@@ -427,7 +432,7 @@ kernel_trap(x86_saved_state_t	*state,
 #endif /* CONFIG_DTRACE */
             
 	    case T_GENERAL_PROTECTION:
-            kprintf("T_GENERAL_PROTECTION!\n");
+            printf("T_GENERAL_PROTECTION!\n");
             goto debugger_entry;
             /*
              * If there is a failure recovery address
@@ -460,7 +465,7 @@ kernel_trap(x86_saved_state_t	*state,
              * spuriously. Seen at startup on AMD Athlon-64.
              */
 	    	if (type == 15) {
-                kprintf("kernel_trap() ignoring spurious trap 15\n");
+                printf("kernel_trap() ignoring spurious trap 15\n");
                 return;
             }
         debugger_entry:
@@ -469,7 +474,7 @@ kernel_trap(x86_saved_state_t	*state,
              * context at the moment of the trap, to facilitate
              * access through the debugger.
              */
-            kprintf("");
+            printf("");
             //sync_iss_to_iks(state);
 /*#if KDP
             if (current_debugger != KDB_CUR_DB) {
@@ -495,50 +500,50 @@ unsigned        TRAP_TYPES  = sizeof(trap_type)/sizeof(trap_type[0]);
 
 #if defined(__x86_64__) && DEBUG
 void
-kprintf_state(x86_saved_state64_t *saved_state) {
-	kprintf("current_cpu_datap() 0x%lx\n",  (uintptr_t)current_cpu_datap());
-	kprintf("Current GS base MSR 0x%llx\n", rdmsr64(MSR_IA32_GS_BASE));
-	kprintf("Kernel  GS base MSR 0x%llx\n", rdmsr64(MSR_IA32_KERNEL_GS_BASE));
-	kprintf("state at 0x%lx:\n",            (uintptr_t) saved_state);
+printf_state(x86_saved_state64_t *saved_state) {
+    printf("current_cpu_datap() 0x%llx\n",  (uintptr_t)current_cpu_datap());
+	printf("Current GS base MSR 0x%llx\n", rdmsr64(MSR_IA32_GS_BASE));
+	printf("Kernel  GS base MSR 0x%llx\n", rdmsr64(MSR_IA32_KERNEL_GS_BASE));
+    printf("state at 0x%llx:\n",            (uintptr_t) saved_state);
     
-	kprintf("      rdi    0x%llx\n", saved_state->rdi);
-	kprintf("      rsi    0x%llx\n", saved_state->rsi);
-	kprintf("      rdx    0x%llx\n", saved_state->rdx);
-	kprintf("      r10    0x%llx\n", saved_state->r10);
-	kprintf("      r8     0x%llx\n", saved_state->r8);
-	kprintf("      r9     0x%llx\n", saved_state->r9);
+	printf("      rdi    0x%llx\n", saved_state->rdi);
+	printf("      rsi    0x%llx\n", saved_state->rsi);
+	printf("      rdx    0x%llx\n", saved_state->rdx);
+	printf("      r10    0x%llx\n", saved_state->r10);
+	printf("      r8     0x%llx\n", saved_state->r8);
+	printf("      r9     0x%llx\n", saved_state->r9);
     
-	kprintf("      cr2    0x%llx\n", saved_state->cr2);
-	kprintf("real  cr2    0x%lx\n",  get_cr2());
-	kprintf("      r15    0x%llx\n", saved_state->r15);
-	kprintf("      r14    0x%llx\n", saved_state->r14);
-	kprintf("      r13    0x%llx\n", saved_state->r13);
-	kprintf("      r12    0x%llx\n", saved_state->r12);
-	kprintf("      r11    0x%llx\n", saved_state->r11);
-	kprintf("      rbp    0x%llx\n", saved_state->rbp);
-	kprintf("      rbx    0x%llx\n", saved_state->rbx);
-	kprintf("      rcx    0x%llx\n", saved_state->rcx);
-	kprintf("      rax    0x%llx\n", saved_state->rax);
+	printf("      cr2    0x%llx\n", saved_state->cr2);
+	printf("real  cr2    0x%lx\n",  get_cr2());
+	printf("      r15    0x%llx\n", saved_state->r15);
+	printf("      r14    0x%llx\n", saved_state->r14);
+	printf("      r13    0x%llx\n", saved_state->r13);
+	printf("      r12    0x%llx\n", saved_state->r12);
+	printf("      r11    0x%llx\n", saved_state->r11);
+	printf("      rbp    0x%llx\n", saved_state->rbp);
+	printf("      rbx    0x%llx\n", saved_state->rbx);
+	printf("      rcx    0x%llx\n", saved_state->rcx);
+	printf("      rax    0x%llx\n", saved_state->rax);
     
-	kprintf("      gs     0x%x\n", saved_state->gs);
-	kprintf("      fs     0x%x\n", saved_state->fs);
+	printf("      gs     0x%x\n", saved_state->gs);
+	printf("      fs     0x%x\n", saved_state->fs);
     
-	kprintf("  isf.trapno 0x%x\n",   saved_state->isf.trapno);
-	kprintf("  isf._pad   0x%x\n",   saved_state->isf._pad);
-	kprintf("  isf.trapfn 0x%llx\n", saved_state->isf.trapfn);
-	kprintf("  isf.err    0x%llx\n", saved_state->isf.err);
-	kprintf("  isf.rip    0x%llx\n", saved_state->isf.rip);
-	kprintf("  isf.cs     0x%llx\n", saved_state->isf.cs);
-	kprintf("  isf.rflags 0x%llx\n", saved_state->isf.rflags);
-	kprintf("  isf.rsp    0x%llx\n", saved_state->isf.rsp);
-	kprintf("  isf.ss     0x%llx\n", saved_state->isf.ss);
+	printf("  isf.trapno 0x%x\n",   saved_state->isf.trapno);
+	printf("  isf._pad   0x%x\n",   saved_state->isf._pad);
+	printf("  isf.trapfn 0x%llx\n", saved_state->isf.trapfn);
+	printf("  isf.err    0x%llx\n", saved_state->isf.err);
+	printf("  isf.rip    0x%llx\n", saved_state->isf.rip);
+	printf("  isf.cs     0x%llx\n", saved_state->isf.cs);
+	printf("  isf.rflags 0x%llx\n", saved_state->isf.rflags);
+	printf("  isf.rsp    0x%llx\n", saved_state->isf.rsp);
+	printf("  isf.ss     0x%llx\n", saved_state->isf.ss);
 }
 #endif
 
 #ifdef DEBUG
 void
 panic_idt64(x86_saved_state_t *rsp) {
-    kprintf_state((x86_saved_state64_t *)(ml_static_ptovirt((vm_offset_t)saved_state64(rsp))));
+    printf_state((x86_saved_state64_t *)(ml_static_ptovirt((vm_offset_t)saved_state64(rsp))));
     panic("panic_idt64");
 }
 #else
@@ -549,7 +554,7 @@ panic_idt64(__unused x86_saved_state_t *rsp) {
 #endif
 
 void
-panic_64(x86_saved_state_t *sp, const char *msg, boolean_t do_mca_dump) {
+panic_64(x86_saved_state_t *sp, const char *msg, bool do_mca_dump) {
 	/*
 	 * Issue an I/O port read if one has been requested - this is an
 	 * event logic analyzers can use as a trigger point.
@@ -558,10 +563,10 @@ panic_64(x86_saved_state_t *sp, const char *msg, boolean_t do_mca_dump) {
     
 	
 	/*
-	 * Break kprintf lock in case of recursion,
+	 * Break printf lock in case of recursion,
 	 * and record originally faulted instruction address.
 	 */
-	//kprintf_break_lock();
+	//printf_break_lock();
     
 	if (do_mca_dump) {
 		/*
@@ -592,13 +597,13 @@ panic_64(x86_saved_state_t *sp, const char *msg, boolean_t do_mca_dump) {
 void
 panic_double_fault64(x86_saved_state_t *sp) {
 	//(void)OSCompareAndSwap((UInt32) -1, (UInt32) cpu_number(), (volatile UInt32 *)&panic_double_fault_cpu);
-	panic_64(sp, "Double fault", FALSE);
+	panic_64(sp, "Double fault", false);
     
 }
 void
 
 panic_machine_check64(x86_saved_state_t *sp) {
-	panic_64(sp, "Machine Check", TRUE);
+	panic_64(sp, "Machine Check", true);
     
 }
 
@@ -607,11 +612,11 @@ panic_trap(x86_saved_state64_t *regs, __unused uint32_t pl) {
     regs = (x86_saved_state64_t *)ml_static_ptovirt((vm_offset_t)regs);
 	const char	*trapname = "Unknown";
 	pal_cr_t	cr0 = 0, cr2 = 0, cr3 = 0, cr4 = 0;
-	bool        potential_smep_fault = FALSE, potential_kernel_NX_fault = FALSE;
-	bool        potential_smap_fault = FALSE;
+	bool        potential_smep_fault = false, potential_kernel_NX_fault = false;
+	bool        potential_smap_fault = false;
     
 	pal_get_control_registers( &cr0, &cr2, &cr3, &cr4 );
-	assert(ml_get_interrupts_enabled() == FALSE);
+	assert(ml_get_interrupts_enabled() == false);
 	current_cpu_datap()->cpu_fatal_trap_state = regs;
 	/*
 	 * Issue an I/O port read if one has been requested - this is an
@@ -619,9 +624,9 @@ panic_trap(x86_saved_state64_t *regs, __unused uint32_t pl) {
 	 */
 	//panic_io_port_read();
     
-	kprintf("panic trap number 0x%x, rip 0x%016llx\n",
+	printf("panic trap number 0x%x, rip 0x%016llx\n",
             regs->isf.trapno, regs->isf.rip);
-	kprintf("cr0 0x%016llx cr2 0x%016llx cr3 0x%016llx cr4 0x%016llx\n",
+	printf("cr0 0x%016llx cr2 0x%016llx cr3 0x%016llx cr4 0x%016llx\n",
             cr0, cr2, cr3, cr4);
     
 	if (regs->isf.trapno < TRAP_TYPES)
@@ -629,12 +634,12 @@ panic_trap(x86_saved_state64_t *regs, __unused uint32_t pl) {
     
 	if ((regs->isf.trapno == T_PAGE_FAULT) && (regs->isf.err == (T_PF_PROT | T_PF_EXECUTE)) && (regs->isf.rip == regs->cr2)) {
 		//if (pmap_smep_enabled && (regs->isf.rip < VM_MAX_USER_PAGE_ADDRESS)) {
-		//	potential_smep_fault = TRUE;
+		//	potential_smep_fault = true;
 		//} else if (regs->isf.rip >= VM_MIN_KERNEL_AND_KEXT_ADDRESS) {
-		//	potential_kernel_NX_fault = TRUE;
+		//	potential_kernel_NX_fault = true;
 		//}
 	}// else if (pmap_smap_enabled && regs->isf.trapno == T_PAGE_FAULT && regs->isf.err & T_PF_PROT && regs->cr2 < VM_MAX_USER_PAGE_ADDRESS && regs->isf.rip >= VM_MIN_KERNEL_AND_KEXT_ADDRESS) {
-     //	potential_smap_fault = TRUE;
+     //	potential_smap_fault = true;
      //}
     
 #undef panic
@@ -732,7 +737,7 @@ user_trap(x86_saved_state_t *saved_state) {
 	exc     = 0;
     
 #if DEBUG
-	kprintf("user_trap(0x%08x) type=%d vaddr=0x%016llx\n", saved_state, type, vaddr);
+    printf("user_trap(0x%08llx) type=%d vaddr=0x%016llx\n", (uintptr_t)saved_state, type, vaddr);
 #endif
     
 	//perfASTCallback astfn = perfASTHook;
@@ -816,13 +821,13 @@ user_trap(x86_saved_state_t *saved_state) {
             
 	    case T_NO_FPU:
             //fpnoextflt();
-            kprintf("T_NO_FPU! User\n");
+            printf("T_NO_FPU! User\n");
             for (; ;) { }
             return;
             
 	    case T_FPU_FAULT:
             //fpextovrflt(); /* Propagates exception directly, doesn't return */
-            kprintf("T_FPU_FAULT! User\n");
+            printf("T_FPU_FAULT! User\n");
             for (; ;) { }
             return;
             
@@ -873,7 +878,7 @@ user_trap(x86_saved_state_t *saved_state) {
             if (__improbable(err & T_PF_EXECUTE))
 		        prot |= VM_PROT_EXECUTE;
 #endif
-            //kret = vm_fault(thread->map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, FALSE, THREAD_ABORTSAFE, NULL, 0);
+            //kret = vm_fault(thread->map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, false, THREAD_ABORTSAFE, NULL, 0);
             
             if (__probable((kret == KERN_SUCCESS) || (kret == KERN_ABORTED))) {
                 //thread_exception_return();

@@ -43,7 +43,7 @@ typedef struct {
     uint32_t DoorbellOffset;
     uint32_t RuntimeRegSpaceOffset;
     uint32_t HCCParams2;
-} __packed CapabilityRegisters;
+} __attribute__((packed)) CapabilityRegisters;
 
 typedef struct {
     uint32_t PortSC;

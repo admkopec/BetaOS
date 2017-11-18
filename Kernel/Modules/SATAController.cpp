@@ -149,7 +149,7 @@ SATA::init(PCI *header) {
 #ifdef DEBUG
                 uint64_t addr = (uint64_t)((uint64_t)address->ports[i].fb + ((uint64_t)(address->ports[i].fbu) << 32));
 #endif
-                DBG("Port phys_addr: %x\n", addr);
+                DBG("Port phys_addr: %llx\n", addr);
                 /*io_map(addr, sizeof(fis), VM_WIMG_IO);
                 FIS_REG_H2D* fFis = (FIS_REG_H2D*)addr;
                 fFis->fis_type = FIS_TYPE_REG_H2D;

@@ -402,6 +402,9 @@ typedef struct {
     uint32_t	cpuid_vmm_tsc_frequency;
 } i386_vmm_info_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern void cpuid(uint32_t *data);
 extern void do_cpuid(uint32_t selector, uint32_t *data);
 extern void cpuid_fn(uint32_t selector, uint32_t *result);
@@ -412,6 +415,9 @@ extern i386_cpu_info_t *cpuid_info(void);
 extern bool cpuid_vmm_present(void);
 extern uint64_t cpuid_features(void);
 extern uint64_t cpuid_leaf7_features(void);
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __ASSEMBLY__ */
 

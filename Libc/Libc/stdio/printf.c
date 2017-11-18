@@ -2,30 +2,26 @@
 //  printf.c
 //  BetaOS
 //
-//  Created by Adam Kopeć on 12/8/15.
+//  Created by Adam Kopeć on 11/11/17.
 //  Copyright © 2015 Adam Kopeć. All rights reserved.
 //
 
 #include <stdbool.h>
 #include <stdarg.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <mach/vm_types.h>
-#undef memcpy
-#undef vsnprintf
-#undef snprintf
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-             extern void vsputc(int ch);
-             extern bool experimental;
-             extern bool use_screen_caching;
-             extern void refresh_screen(void);
              extern int  kvsnprintf(char *buf, size_t size, const char *fmt, va_list args);
              extern void panic(const char* fmt, ...);
              extern void itoa(char *buf, unsigned long int n, int base);
+             extern bool use_screen_caching;
+             extern bool early;
+             extern void refresh_screen(void);
+             extern bool experimental;
 #ifdef __cplusplus
 }
 #endif
@@ -58,100 +54,6 @@ write(int fd, const void *buf, size_t nbyte) {
     }
     return nbyte;
 }
-#undef vsnprintf
-#undef snprintf
-int
-vasprintf(char **strp, const char * format, va_list argp) {
-    char buf[128];
-    
-    // len = number of characters in final string, not that fit in buffer
-    // excludes terminating '\0'
-    int len = vsnprintf(buf, 128, format, argp);
-    *strp = (char *)malloc(len + 1);
-    if (*strp == NULL) {
-        return -1;
-    }
-    
-    if (len > 127) {
-        return vsnprintf(buf, len + 1, format, argp);
-    } else {
-        memcpy(*strp, buf, len + 1);
-    }
-    
-    return len;
-}
-
-int
-asprintf(char **strp, const char * format, ...) {
-    char buf[2048];
-    // FIXME: use the size
-    
-    va_list argp;
-    va_start(argp, format);
-    vsnprintf(buf, 2048, format, argp);
-    va_end(argp);
-    
-    int len = (int)strlen(buf);
-    char *result = (char *)malloc(len);
-    memcpy(result, buf, len+1);
-    *strp = result;
-    
-    return len;
-}
-
-struct string_buf {
-    char *data;
-    size_t count;
-    size_t max_len;
-};
-
-void* buf_p = NULL;
-
-static void
-b_print_char(int ch) {
-    struct string_buf *buf = buf_p;
-    if (buf->count+1 < buf->max_len) {
-        *(buf->data + buf->count) = (char)ch;
-        buf->count++;
-        *(buf->data + buf->count) = '\0';
-    }
-}
-
-int
-snprintf(char *buf, size_t size, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    int len = vsnprintf(buf, size, fmt, args);
-    va_end(args);
-    
-    return len;
-}
-
-int
-vsnprintf(char *buf, size_t size, const char *fmt, va_list args) {
-    struct string_buf string_buf = { .data = buf, .count = 0, .max_len = size };
-    if (size < 1) {
-        return 0;
-    }
-    *buf = '\0';
-    
-    buf_p = &string_buf;
-    
-    __doprnt(fmt, args, b_print_char, 16, false);
-    return (int)size;
-}
-
-//int
-//snprintf(char * buf, __unused size_t size, __unused const char * format, ...) {
-//    // FIXME: use the size
-////    printf("snprintf(%s)=", format);
-////    va_list argp;
-////    ksprintf(buf, format, argp);
-////    va_end(argp);
-////    print_string(buf);
-//
-//    return (int)strlen(buf);
-//}
 
 int printf(const char *restrict s, ...) {
     va_list     listp;

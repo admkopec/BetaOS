@@ -8,8 +8,9 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <platform/platform.h>
 #include <string.h>
+extern "C" {
+#include <platform/platform.h>
 #include "font.h"
 //#include "../misc_protos.h"
 
@@ -17,13 +18,13 @@
 
 static uint32_t color_foreground = 0x00FFFFFF;
 static uint32_t color_background = 0x00000000;
+    
+extern bool canUseSSEmemcpy;
 
-uint64_t Screen;
+uintptr_t Screen;
 bool     use_screen_caching = false;
-const bool     experimental = true;
-/*char painted_chars[1000][1000];
-unsigned long painted_chars_row    = 0;
-unsigned long painted_chars_column = 0;*/
+bool     experimental = true;
+bool     modified = true;
 
 void vsputc(int ch);
 void refresh_screen(void);
@@ -106,6 +107,7 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
     uint32_t *where_screen;
     int       i;
     
+    modified = true;
     render_char(ch, rendered_char, 32);
     theChar = (uint32_t*)(rendered_char);
     
@@ -130,8 +132,26 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
         where_screen = (uint32_t *)(((unsigned char*) where_screen) + Platform_state.video.v_rowBytes);
     }
 }
-
-extern void bcopy_(void *, void *, size_t);
+    
+void
+paint_rectangle(unsigned int x, unsigned int y, uint8_t r, uint8_t g, uint8_t b, uint8_t width, uint8_t height) {
+    // Not working very well right now
+    if (!use_screen_caching) {
+        return;
+    }
+    uint32_t* where = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
+    int i, j;
+    for (i = 0; i < width; i++) {
+        for (j = 0; j < height; j++) {
+            //putpixel(vram, 64 + j, 64 + i, (r << 16) + (g << 8) + b);
+            where[j * 4] = r;
+            where[j * 4 + 1] = g;
+            where[j * 4 + 2] = b;
+        }
+//        where+=3200;
+        where+=Platform_state.video.v_rowBytes;
+    }
+}
 
 static void
 clear_line(unsigned int xx, unsigned int yy) {
@@ -149,6 +169,8 @@ clear_screen_(unsigned int xx, unsigned int yy, unsigned int bottom) {
     uint32_t *p, *endp, *_row;
     int linelongs, _col;
     int rowline, rowlongs;
+    
+    modified = true;
     
     linelongs   = (int)(Platform_state.video.v_rowBytes * (ISO_CHAR_HEIGHT >> 2));
     rowline     = (int)((((Platform_state.video.v_depth + 7) / 8) * Platform_state.video.v_width) >> 2);
@@ -170,7 +192,7 @@ clear_screen_(unsigned int xx, unsigned int yy, unsigned int bottom) {
     }
 }
 void
-scroll_up() {  // Fix half line after to scrolls
+scroll_up() {
     uint32_t *from, *to, *to2, linelongs, i, line, rowline, rowscanline;
     linelongs   = (uint32_t)(Platform_state.video.v_rowBytes * (ISO_CHAR_HEIGHT >> 2));
     rowline     = (uint32_t)(Platform_state.video.v_rowBytes >> 2);
@@ -184,15 +206,15 @@ scroll_up() {  // Fix half line after to scrolls
         from = to + linelongs;
     }
     i    = (uint32_t)((Platform_state.video.v_height / ISO_CHAR_HEIGHT) - 1);
-    
+    canUseSSEmemcpy = true;
     while (i-- > 0) {
         for (line = 0; line < ISO_CHAR_HEIGHT; line++) {
-            if (!use_screen_caching || !experimental) {
-                bcopy_(from, to,  (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+            if (!use_screen_caching) {
+                memcpy(to, from,  (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
             }
-            bcopy_(from, to2, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
+            memcpy(to2, from, (size_t)(((char *)(from+rowscanline) - (char *)from) << 2));
             from += rowline;
-            if (!use_screen_caching || !experimental) {
+            if (!use_screen_caching) {
                 to   += rowline;
             }
             to2  += rowline;
@@ -200,14 +222,21 @@ scroll_up() {  // Fix half line after to scrolls
     }
     clear_screen_(0, row, (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
     clear_screen_(0, (uint32_t)((Platform_state.video.v_height) - ISO_CHAR_HEIGHT), (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
-//    if (experimental) {
-//        refresh_screen();
-//    }
+    if (!experimental) {
+        refresh_screen();
+    }
+    canUseSSEmemcpy = false;
 }
 
 void
 refresh_screen() {
-    memcpy((void *) Screen, (void *) Platform_state.video.v_baseAddr, Platform_state.video.v_length);
+    if (!modified) {
+        return;
+    }
+    modified = false;
+    canUseSSEmemcpy = true;
+    memcpy((void *) Platform_state.video.v_baseAddr, (void *) Screen, Platform_state.video.v_length);
+    canUseSSEmemcpy = false;
 }
 
 void
@@ -235,4 +264,6 @@ vsputc(int ch) {
         vsputc('\n');
     }
     
+}
+
 }

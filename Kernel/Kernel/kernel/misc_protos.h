@@ -11,15 +11,17 @@
 
 #include <stdarg.h>
 #include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
 #include <sys/cdefs.h>
+
+#define    __probable(x)    __builtin_expect(!!((long)(x)), 1L)
+#define    __improbable(x)    __builtin_expect(!!((long)(x)), 0L)
 
 extern bool can_use_serial;
 extern bool is_new_paging_enabled;
-extern void kprintf(const char* fmt, ...);
 extern void panic(const char* errormsg, ...);
 extern void kernelMain(void);
-extern void bcopy(const void *from, void *to, unsigned int count);
-extern void bzero(void * addr, size_t length);
 extern uint64_t tmrCvt(uint64_t time, uint64_t conversion);
 
 #endif /* misc_protos_h */

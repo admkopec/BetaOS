@@ -9,6 +9,8 @@
 #include <time.h>
 #include <i386/pio.h>
 
+#define CURRENT_CENTURY 21
+
 unsigned char second;
 unsigned char minute;
 unsigned char hour;
@@ -20,17 +22,32 @@ char* monthl;
 char* dayofweekshort;
 char* dayofweeklong;
 
-absolute_time_t absolute_UNIX = 0; // 0 - 1 January 1970
-absolute_time_t absolute_Beta = 0;
+static int century_register = 0x00;
 
+void read_rtc(void);
+enum {
+    cmos_address = 0x70,
+    cmos_data    = 0x71
+};
+
+int get_update_in_progress_flag(void);
+unsigned char get_RTC_register(int reg);
+
+
+//absolute_time_t absolute_UNIX = 0; // 0 - 1 January 1970
+//absolute_time_t absolute_Beta = 0;
+time_t absolute_UNIX = 0; // 0 - 1 January 1970
+time_t absolute_Beta = 0;
+//
 #define Is_leap_year(year)  (((1970+year)>0)&&!((1970+year)%4)&&(((1970+year)%100)||!((1970+year)%400)))
 #define Seconds_in_a_day    86400
 #define Seconds_in_an_hour   3600
 #define Seconds_in_a_minute    60
-
+//
 static const uint8_t monthDays[]={31,28,31,30,31,30,31,31,30,31,30,31};
+//
 
-absolute_time_t time(void) {
+time_t time(time_t * value) {
     read_rtc();
     absolute_UNIX = (year - 1970) * (Seconds_in_a_day * 365);
     for (uint32_t i = 1971; i < year; i++) {
@@ -49,7 +66,9 @@ absolute_time_t time(void) {
     absolute_UNIX += hour   * Seconds_in_an_hour;
     absolute_UNIX += minute * Seconds_in_a_minute;
     absolute_UNIX += second;
-    
+    if (value != NULL) {
+        *value = absolute_UNIX;
+    }
     return absolute_UNIX;
 }
 
@@ -137,106 +156,128 @@ void read_rtc() {
     }
 }
 
-void translateMonth() {
-    switch (month) {
-        case 1:
-            monthl="January";
-            break;
-        case 2:
-            monthl="February";
-            break;
-        case 3:
-            monthl="March";
-            break;
-        case 4:
-            monthl="April";
-            break;
-        case 5:
-            monthl="May";
-            break;
-        case 6:
-            monthl="June";
-            break;
-        case 7:
-            monthl="July";
-            break;
-        case 8:
-            monthl="August";
-            break;
-        case 9:
-            monthl="September";
-            break;
-        case 10:
-            monthl="October";
-            break;
-        case 11:
-            monthl="November";
-            break;
-        case 12:
-            monthl="December";
-            break;
-
-        default:
-            break;
-    }
-}
-
-void translateDay() {
+struct tm *gmtime_r(const time_t * timer __unused, struct tm * ptm) {
+    ptm->tm_hour = hour;
+    ptm->tm_min  = minute;
+    ptm->tm_sec  = second;
+    ptm->tm_mday = day;
+    ptm->tm_mon  = month;
+    ptm->tm_year = year - 1900;
     int y = year;
     static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
     y -= month < 3;
     int dayofweek = (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7;
-
-    switch (dayofweek) {
-        case 0:
-            dayofweeklong = "Sunday";
-            dayofweekshort = "Sun";
-            break;
-        case 1:
-            dayofweeklong = "Monday";
-            dayofweekshort = "Mon";
-            break;
-        case 2:
-            dayofweeklong = "Tuesday";
-            dayofweekshort = "Tue";
-            break;
-        case 3:
-            dayofweeklong = "Wednesday";
-            dayofweekshort = "Wed";
-            break;
-        case 4:
-            dayofweeklong = "Thursday";
-            dayofweekshort = "Thu";
-            break;
-        case 5:
-            dayofweeklong = "Friday";
-            dayofweekshort = "Fri";
-            break;
-        case 6:
-            dayofweeklong = "Saturday";
-            dayofweekshort = "Sat";
-            break;
-        default:
-            break;
-    }
-}
-void translateHour() {
-    if (hour<12 && hour>0) {
-        pmam="AM";
-    } else if (hour>12 && hour<24) {
-        hour-=12;
-        pmam="PM";
-    } else if (hour==12) {
-        pmam="PM";
-    } else if (hour==0 || hour==24) {
-        hour=12;
-        pmam="AM";
-    }
+    ptm->tm_wday = dayofweek;
+    
+    return ptm;
 }
 
-void gettime() {
-    read_rtc();
-    translateHour();
-    translateDay();
-    translateMonth();
+struct tm *gmtime(const time_t * timer) {
+    struct tm time;
+    return gmtime_r(timer, &time);
 }
+//
+//void translateMonth() {
+//    switch (month) {
+//        case 1:
+//            monthl="January";
+//            break;
+//        case 2:
+//            monthl="February";
+//            break;
+//        case 3:
+//            monthl="March";
+//            break;
+//        case 4:
+//            monthl="April";
+//            break;
+//        case 5:
+//            monthl="May";
+//            break;
+//        case 6:
+//            monthl="June";
+//            break;
+//        case 7:
+//            monthl="July";
+//            break;
+//        case 8:
+//            monthl="August";
+//            break;
+//        case 9:
+//            monthl="September";
+//            break;
+//        case 10:
+//            monthl="October";
+//            break;
+//        case 11:
+//            monthl="November";
+//            break;
+//        case 12:
+//            monthl="December";
+//            break;
+//
+//        default:
+//            break;
+//    }
+//}
+//
+//void translateDay() {
+//    int y = year;
+//    static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+//    y -= month < 3;
+//    int dayofweek = (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7;
+//
+//    switch (dayofweek) {
+//        case 0:
+//            dayofweeklong = "Sunday";
+//            dayofweekshort = "Sun";
+//            break;
+//        case 1:
+//            dayofweeklong = "Monday";
+//            dayofweekshort = "Mon";
+//            break;
+//        case 2:
+//            dayofweeklong = "Tuesday";
+//            dayofweekshort = "Tue";
+//            break;
+//        case 3:
+//            dayofweeklong = "Wednesday";
+//            dayofweekshort = "Wed";
+//            break;
+//        case 4:
+//            dayofweeklong = "Thursday";
+//            dayofweekshort = "Thu";
+//            break;
+//        case 5:
+//            dayofweeklong = "Friday";
+//            dayofweekshort = "Fri";
+//            break;
+//        case 6:
+//            dayofweeklong = "Saturday";
+//            dayofweekshort = "Sat";
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//void translateHour() {
+//    if (hour<12 && hour>0) {
+//        pmam="AM";
+//    } else if (hour>12 && hour<24) {
+//        hour-=12;
+//        pmam="PM";
+//    } else if (hour==12) {
+//        pmam="PM";
+//    } else if (hour==0 || hour==24) {
+//        hour=12;
+//        pmam="AM";
+//    }
+//}
+//
+//void gettime() {
+//    read_rtc();
+//    translateHour();
+//    translateDay();
+//    translateMonth();
+//}
+

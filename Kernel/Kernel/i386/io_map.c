@@ -9,9 +9,9 @@
 #include <stdint.h>
 #include <i386/pmap.h>
 #include <i386/vm_prot.h>
-#include <i386/vm_param.h>
 #include <i386/pmap_internal.h>
 #include "misc_protos.h"
+#include "vm_param.h"
 
 extern vm_offset_t virtual_avail;
 extern vm_offset_t pmap_map_bd(vm_offset_t virt, vm_map_offset_t start_addr, vm_map_offset_t end_addr, vm_prot_t prot, unsigned int flags);

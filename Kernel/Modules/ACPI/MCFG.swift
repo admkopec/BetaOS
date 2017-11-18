@@ -6,4 +6,18 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-import Foundation
+//import Addressing
+import Loggable
+
+struct MCFG: Loggable, ACPITable {
+    let Name = "MCFG"
+    var Header: SDTHeader
+    
+    var description: String {
+        return "MCFG: \(Header)"
+    }
+    
+    init(ptr: Address) {
+        Header = SDTHeader(ptr: (UnsafeMutablePointer<ACPISDTHeader_t>(bitPattern: ptr.virtual))!)
+    }
+}

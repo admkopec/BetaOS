@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <kernel/command.h>
 #include <version.h>
 #include <time.h>
@@ -35,11 +36,12 @@ void version(int argc, char* argv[]);
 void time_(int argc, char* argv[]);
 void set_color(int argc, char* argv[]);
 void printLoadedModules(int argc, char* argv[]);
+//void swiftFunctionWrapper(void(*function)(void), int argc, char* argv[]);
 void reboot_(__unused int argc,__unused char* argv[]) {
-    reboot(false);
+    reboot_system(false);
 }
 void shutdown_(__unused int argc, __unused char* argv[]) {
-    shutdown();
+    shutdown_system();
 }
 void clear_screen_(__unused int argc, __unused char* argv[]) {
     clear_screen();
@@ -48,24 +50,24 @@ void clear_screen_(__unused int argc, __unused char* argv[]) {
 void addCommand(char* name, __unused char* desc, void (*run)(int argc, char* argv[])) {
     for (int i=0; i<num; i++) {
         if (command[i].name==name) {
-            error("Failed to add command. Reason: The command's name's been already taken");
+            printf("Failed to add command. Reason: The command's name's been already taken");
             return;
         }
     }
     command[num].name=name;
     if (command[num].name==NULL || command[num].name!=name) {
-        error("Failed to add command. Reason: name=NULL");
+        printf("Failed to add command. Reason: name=NULL");
         return;
     }
-    kprintf("");
+    printf("");
     command[num].desc=desc;
     if (command[num].desc==NULL || command[num].desc!=desc) {
-        error("Failed to add command. Reason: desc=NULL");
+        printf("Failed to add command. Reason: desc=NULL");
         return;
     }
     command[num].run=run;
     if (command[num].run==NULL || command[num].run!=run) {
-        error("Failed to add command. Reason: run=NULL");
+        printf("Failed to add command. Reason: run=NULL");
         return;
     }
     num++;
@@ -124,27 +126,28 @@ void findcommand() {
             } else {
                 LastRunCommand = 1;
             }
+//            swiftFunctionWrapper((void(*)(void))command[i].run, argc, argv);
             command[i].run(argc, argv);
             return;
         }
     }
 fail:
-    kprintf("Command not found!\n");
+    printf("Command not found!\n");
 }
 
 
 
 void help(int argc, char* argv[]) {
     clear_screen();
-    kprintf("======================================HELP======================================\n");
-    kprintf("1. Command list\n");
-    kprintf("2. Basic information about the OS\n");
-    kprintf("3. Exit help\n");
+    printf("======================================HELP======================================\n");
+    printf("1. Command list\n");
+    printf("2. Basic information about the OS\n");
+    printf("3. Exit help\n");
     char menuentry=getchar();
     if (menuentry=='1') {
         clear_screen();
         for (int i=0; i<num; i++) {
-            kprintf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
+            printf("Command name: %s\nCommand description: %s\n\n", command[i].name, command[i].desc);
         }
             
         if (getchar()=='\n') {

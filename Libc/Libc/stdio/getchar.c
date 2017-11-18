@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <i386/pal.h>
 #include <Modules/PS2Controller.hpp>
 
 int getchar() {
@@ -29,5 +30,6 @@ int getchar() {
         if (ch == '\r' || ch =='\n' || (ch >= ' ' && ch <= 0x7F) || ch=='\t' || ch == '\b') {
             return ch;
         }
+        pal_hlt();
     }
 }

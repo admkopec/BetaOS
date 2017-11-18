@@ -45,6 +45,7 @@
 		3B4E19AD1EE8223D00256BD0 /* OSObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OSObject.hpp; path = "Libc++/OSObject.hpp"; sourceTree = "<group>"; };
 		3B5021B61F49D9D500BA8AF1 /* ARP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ARP.cpp; path = "Libc++/OSNetwork/ARP.cpp"; sourceTree = "<group>"; };
 		3B5021B71F49D9D500BA8AF1 /* ARP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ARP.hpp; path = "Libc++/OSNetwork/ARP.hpp"; sourceTree = "<group>"; };
+		3B5098971FB11B8800B9A90A /* libkern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libkern.h; path = "Libc++/libkern/libkern.h"; sourceTree = "<group>"; };
 		3B7EF03C1F4B449F00FEB086 /* OSNetwork.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OSNetwork.cpp; path = "Libc++/OSNetwork/OSNetwork.cpp"; sourceTree = "<group>"; };
 		3B89C0CB1F45F63200F4920E /* OSNetwork.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = OSNetwork.hpp; path = "Libc++/OSNetwork.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +106,7 @@
 				3B4E19A71EE81F2200256BD0 /* OSRuntime.hpp */,
 				3B4E19A61EE81F2200256BD0 /* OSRuntime.cpp */,
 				3B1F2B311F4765EA007E395C /* OSNetwork */,
+				3B5098971FB11B8800B9A90A /* libkern.h */,
 			);
 			name = "Libc++";
 			sourceTree = "<group>";
@@ -305,6 +307,7 @@
 		3B4E199F1EE81E9700256BD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
@@ -320,17 +323,14 @@
 					"BUILD_TYPE=\"\\\"Internal\\\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Kernel/Headers",
 					"$(PROJECT_DIR)/../Kernel/Kernel",
-					"$(PROJECT_DIR)/../Kernel",
-					"$(PROJECT_DIR)/../Libc/Libc",
 					"$(PROJECT_DIR)/Libc++",
+					"\"$(SRCROOT)/../Kernel\"",
 				);
 				OTHER_CFLAGS = (
 					"-ffreestanding",
 					"-fno-builtin",
 					"-nostdlib",
-					"-nostdinc",
 					"-mkernel",
 					"-msoft-float",
 				);
@@ -345,6 +345,7 @@
 		3B4E19A01EE81E9700256BD0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
@@ -359,17 +360,14 @@
 					"BUILD_TYPE=\"\\\"Release\\\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Kernel/Headers",
 					"$(PROJECT_DIR)/../Kernel/Kernel",
-					"$(PROJECT_DIR)/../Kernel",
-					"$(PROJECT_DIR)/../Libc/Libc",
 					"$(PROJECT_DIR)/Libc++",
+					"\"$(SRCROOT)/../Kernel\"",
 				);
 				OTHER_CFLAGS = (
 					"-ffreestanding",
 					"-fno-builtin",
 					"-nostdlib",
-					"-nostdinc",
 					"-mkernel",
 					"-msoft-float",
 				);

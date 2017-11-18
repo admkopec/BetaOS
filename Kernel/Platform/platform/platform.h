@@ -80,7 +80,7 @@ typedef struct Platform_Video       Platform_Video;
 #define kPBaseAddressChange      8
 #define kPRefreshBootGraphics	 9
 
-typedef struct Platform_state {
+typedef struct {
     bool            initialized;
     Platform_Video  video;
     void*           deviceTreeHead;

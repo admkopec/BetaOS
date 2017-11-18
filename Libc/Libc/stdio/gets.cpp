@@ -1,5 +1,5 @@
 //
-//  gets.c
+//  gets.cpp
 //  BetaOS
 //
 //  Created by Adam Kopeć on 2/14/16.
@@ -8,8 +8,7 @@
 
 #include <stdio.h>
 
-char *gets(char *buf)
-{
+char *gets(char *buf) {
     char *p = buf;
     int ch;
 

@@ -10,6 +10,7 @@
 #define IPs_hpp
 
 #include <sys/cdefs.h>
+#include <stdint.h>
 #include <OSRuntime.hpp>
 
 // IP templates
@@ -41,12 +42,12 @@
 struct IP4_t {
     uint8_t IP4[4];
     uint32_t iIP4;
-} __packed;
+} __attribute__((packed));
 
 struct IP6_t {
     uint16_t IP6[8];
     uint64_t iIP6[2]; // prefix and interface ID
-} __packed;
+} __attribute__((packed));
 
 namespace IP {
     struct Packetv4 {
@@ -61,7 +62,7 @@ namespace IP {
         uint16_t checksum;
         IP4_t     sourceIP;
         IP4_t     destIP;
-    } __packed;
+    } __attribute__((packed));
     bool     sameSubnet(IP4_t IP1, IP4_t IP2, IP4_t subent);
     void     send(const void* data, uint32_t length, IP4_t IP, uint8_t protocol, uint8_t offloading);
     OSReturn sendPacket(const Packetv4* packet, uint32_t length, IP4_t IP, uint8_t features);

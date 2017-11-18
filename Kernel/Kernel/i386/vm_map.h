@@ -16,6 +16,13 @@
 #include <stdbool.h>
 #include <sys/cdefs.h>
 
+#define RB_ENTRY(type)                              \
+struct {                                            \
+struct type *rbe_left;        /* left element */        \
+struct type *rbe_right;        /* right element */        \
+struct type *rbe_parent;    /* parent element */    \
+}
+
 struct vm_map_store {
     RB_ENTRY(vm_map_store) entry;
 };
@@ -38,7 +45,7 @@ struct vm_map_links {
 struct vm_map_header {
     struct vm_map_links	links;		/* first, last, min, max */
     int                 nentries;	/* Number of entries */
-    boolean_t           entries_pageable;
+    bool          entries_pageable;
     /* are map entries pageable? */
     vm_map_offset_t		highest_entry_end_addr;	/* The ending address of the highest allocated vm_entry_t */
     //struct rb_head      rb_head_store;
@@ -150,7 +157,7 @@ struct _vm_map {
 #if CONFIG_FREEZE
     void                *default_freezer_handle;
 #endif
-    boolean_t           jit_entry_exists;
+    bool           jit_entry_exists;
 } ;
 
 

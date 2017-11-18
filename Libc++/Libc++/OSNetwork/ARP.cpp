@@ -11,13 +11,24 @@
 #include <OSNetwork.hpp>
 #include <OSRuntime.hpp>
 
+// Net defs
+
+// hton = Host To Network
+static inline short htons_(short v) {
+    __asm__("xchg %h0, %b0" : "+Q"(v));
+    return (v);
+}
+// ntoh = Network To Host
+#define ntohs_(v) htons(v)
+#define ntohl_(v) htonl(v)
+
 void
 ARP::SendRequest(IP4_t searchedIP) {
     Packet request;
     
-    request.operation = htons(1);
-    request.hardware_addresstype = htons(1);
-    request.protocol_addresstype = htons(0x0800);
+    request.operation = htons_(1);
+    request.hardware_addresstype = htons_(1);
+    request.protocol_addresstype = htons_(0x0800);
     request.hardware_addresssize = 6;
     request.protocol_addresssize = 4;
     

@@ -314,7 +314,7 @@ L_common_dispatch:
 	 * If, however, the invalid cr3 flag is set, we have to flush tlbs
 	 * since the kernel's mapping was changed while we were in userspace.
 	 *
-	 * But: if global no_shared_cr3 is TRUE we do switch to the kernel's cr3
+	 * But: if global no_shared_cr3 is true we do switch to the kernel's cr3
 	 * so that illicit accesses to userspace can be trapped.
 	 */
 	mov	%gs:CPU_KERNEL_CR3, %rcx

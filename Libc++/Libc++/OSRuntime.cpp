@@ -9,8 +9,10 @@
 #include "OSRuntime.hpp"
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
 
-extern "C" { void * kalloc_(uint32_t size); void free_(void * data, uint32_t size); void bzero(void * addr, size_t length); void panic(const char* fmt, ...); void kprintf(const char* fmt, ...); }
+extern "C" { void * kalloc_(uint32_t size); void free_(void * data, uint32_t size); void panic(const char* fmt, ...); }
 
 const char * OSReturnStrings[4] = { "Success", "Timeout", "Failure", "Error" };
 
@@ -110,19 +112,19 @@ namespace std {
 
 int
 __cxa_guard_acquire(void *guard) {
-    kprintf("__cxa_guard_acquire(%p)\n", guard);
+    printf("__cxa_guard_acquire(%p)\n", guard);
     return 0;
 }
 
 void
 __cxa_guard_release(void *guard) {
-    kprintf("__cxa_guard_release(%p)\n", guard);
+    printf("__cxa_guard_release(%p)\n", guard);
 }
 
 
 int
 __cxa_atexit(void (*func) (void *), void *arg, void *dso_handle) {
-    kprintf("__cxa_atexit(%p, %p, %p)\n", func, arg, dso_handle);
+    printf("__cxa_atexit(%p, %p, %p)\n", func, arg, dso_handle);
     // Exit never occurs so ignore this handler, return success
     return 0;
 }

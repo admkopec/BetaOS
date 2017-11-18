@@ -23,11 +23,14 @@
 #include <platform/efi.h>
 
 #include <x86_64/lowglobals.h>
+#include <stdio.h>
 
+#ifndef DBG
 #ifdef DEBUG
-#define DBG(x...) kprintf(x)
+#define DBG(x...) printf(x)
 #else
 #define DBG(x...) 
+#endif
 #endif
 
 uint8_t __attribute__((section("__DATA,__const"))) dataconst = 0xFF; // Just to fill __DATA,__const
@@ -45,9 +48,9 @@ uint8_t __attribute__((section("__DATA,__const"))) dataconst = 0xFF; // Just to 
  *	module must use the PAGE_SIZE, PAGE_MASK and PAGE_SHIFT
  *	constants.
  */
-vm_size_t	page_size  = PAGE_SIZE;
-vm_size_t	page_mask  = PAGE_MASK;
-int         page_shift = PAGE_SHIFT;
+vm_size_t	vm_page_size  = PAGE_SIZE;
+vm_size_t	vm_page_mask  = PAGE_MASK;
+int         vm_page_shift = PAGE_SHIFT;
 
 /*
  *	vm_set_page_size:
@@ -60,15 +63,15 @@ int         page_shift = PAGE_SHIFT;
  */
 void
 vm_set_page_size(void) {
-    page_size  = PAGE_SIZE;
-    page_mask  = PAGE_MASK;
-    page_shift = PAGE_SHIFT;
+    vm_page_size  = PAGE_SIZE;
+    vm_page_mask  = PAGE_MASK;
+    vm_page_shift = PAGE_SHIFT;
     
-    if ((page_mask & page_size) != 0)
+    if ((vm_page_mask & vm_page_size) != 0)
         panic("vm_set_page_size: page size not a power of two");
     
-    for (page_shift = 0; ; page_shift++)
-        if ((1U << page_shift) == page_size)
+    for (vm_page_shift = 0; ; vm_page_shift++)
+        if ((1U << vm_page_shift) == vm_page_size)
             break;
 }
 
@@ -130,7 +133,7 @@ uint32_t pmap_reserved_range_indices[PMAP_MAX_RESERVED_RANGES];
 uint32_t pmap_last_reserved_range_index = 0;
 uint32_t pmap_reserved_ranges = 0;
 
-extern unsigned int bsd_mbuf_cluster_reserve(boolean_t *);
+extern unsigned int bsd_mbuf_cluster_reserve(bool *);
 
 pmap_paddr_t        avail_start, avail_end;
 vm_offset_t         virtual_avail, virtual_end;
@@ -150,7 +153,7 @@ vm_offset_t segPRELINKINFOB; unsigned long segSizePRELINKINFO;
 vm_offset_t segHIBB; unsigned long segSizeHIB;
 vm_offset_t sectCONSTB; unsigned long sectSizeConst;
 
-bool        doconstro_override = FALSE;
+bool        doconstro_override = false;
 
 static kernel_segment_command_t *segTEXT, *segDATA;
 static kernel_section_t         *cursectTEXT, *lastsectTEXT;
@@ -196,7 +199,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
     uint32_t    maxloreserve;
     //uint32_t    maxdmaaddr;
     uint32_t    mbuf_reserve  = 0;
-    bool        mbuf_override = FALSE;
+    bool        mbuf_override = false;
     bool        coalescing_permitted;
     vm_kernel_base_page = i386_btop(args->kaddr);
     vm_offset_t base_address;
@@ -209,12 +212,12 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
     base_address        = ml_static_ptovirt(args->kaddr);
     vm_kernel_slide     = base_address - static_base_address;
     if (args->kslide) {
-        kprintf("KASLR slide: 0x%016lx dynamic\n", vm_kernel_slide);
+        printf("KASLR slide: 0x%016llx dynamic\n", vm_kernel_slide);
         if (vm_kernel_slide != ((vm_offset_t)args->kslide))
             panic("Kernel base inconsistent with slide - rebased?");
     } else {
         /* No slide relative to on-disk symbols */
-        kprintf("KASLR slide: 0x%016lx static and ignored\n", vm_kernel_slide);
+        printf("KASLR slide: 0x%016llx static and ignored\n", vm_kernel_slide);
         vm_kernel_slide = 0;
     }
     
@@ -231,7 +234,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
                 dysymtab = (struct dysymtab_command *)loadcmd;
                 dysymtab->nlocrel = 0;
                 dysymtab->locreloff = 0;
-                kprintf("Hiding local relocations\n");
+                printf("Hiding local relocations\n");
                 break;
             }
             loadcmd = (struct load_command *)((uintptr_t)loadcmd + loadcmd->cmdsize);
@@ -250,7 +253,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
     segPRELINKINFOB = (vm_offset_t) getsegdatafromheader(&_mh_execute_header, "__PRELINK_INFO", &segSizePRELINKINFO);
     segTEXT = getsegbynamefromheader(&_mh_execute_header, "__TEXT");
     segDATA = getsegbynamefromheader(&_mh_execute_header, "__DATA");
-    sectDCONST = getsectbynamefromheader(&_mh_execute_header, "__DATA", "__const");
+    sectDCONST = (const struct section_64 *)getsectbynamefromheader((const struct mach_header *)&_mh_execute_header, "__DATA", "__const");
     cursectTEXT = lastsectTEXT = firstsect(segTEXT);
     /* Discover the last TEXT section within the TEXT segment */
     while ((cursectTEXT = nextsect(segTEXT, cursectTEXT)) != NULL) {
@@ -278,9 +281,9 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
     if (sectSizeConst & PAGE_MASK) {
         kernel_section_t *ns = nextsect(segDATA, sectDCONST);
         if (ns && !(ns->addr & PAGE_MASK))
-            doconstro_override = TRUE;
+            doconstro_override = true;
     } else
-        doconstro_override = TRUE;
+        doconstro_override = true;
     
     DBG("segTEXTB    = %p\n", (void *) segTEXTB);
     DBG("segDATAB    = %p\n", (void *) segDATAB);
@@ -337,7 +340,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
         uint64_t region_bytes = 0;
         
         if (pmap_memory_region_count >= PMAP_MEMORY_REGIONS_SIZE) {
-            kprintf("WARNING: truncating memory region count at %d\n", pmap_memory_region_count);
+            printf("WARNING: truncating memory region count at %d\n", pmap_memory_region_count);
             break;
         }
         base = (ppnum_t)   (mptr->PhysicalStart  >> I386_PGSHIFT);
@@ -349,7 +352,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
              * very first possible physical page and the roll-over
              * to -1; just ignore that page.
              */
-            kprintf("WARNING: ignoring first page in [0x%llx:0x%llx]\n", (uint64_t) base, (uint64_t) top);
+            printf("WARNING: ignoring first page in [0x%llx:0x%llx]\n", (uint64_t) base, (uint64_t) top);
             base++;
         }
         if (top + 1 == 0) {
@@ -358,7 +361,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
              * very last possible physical page and the roll-over
              * to 0; just ignore that page.
              */
-            kprintf("WARNING: ignoring last page in [0x%llx:0x%llx]\n", (uint64_t) base, (uint64_t) top);
+            printf("WARNING: ignoring last page in [0x%llx:0x%llx]\n", (uint64_t) base, (uint64_t) top);
             top--;
         }
         if (top < base) {
@@ -569,7 +572,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
         uint64_t region_start, region_end;
         uint64_t efi_start, efi_end;
         for (j=0;j<pmap_memory_region_count;j++, p++) {
-            kprintf("pmap region %d type %d base 0x%llx alloc_up 0x%llx alloc_down 0x%llx top 0x%llx\n",
+            printf("pmap region %d type %d base 0x%llx alloc_up 0x%llx alloc_down 0x%llx top 0x%llx\n",
                     j, p->type,
                     (uint64_t) p->base  << I386_PGSHIFT,
                     (uint64_t) p->alloc_up << I386_PGSHIFT,
@@ -588,7 +591,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
                     efi_end = efi_start + ((vm_offset_t)mptr->NumberOfPages << I386_PGSHIFT) - 1;
                     if ((efi_start >= region_start && efi_start <= region_end) ||
                         (efi_end >= region_start && efi_end <= region_end)) {
-                        kprintf(" *** Overlapping region with EFI runtime region %d\n", i);
+                        printf(" *** Overlapping region with EFI runtime region %d\n", i);
                     }
                 }
             }
@@ -607,7 +610,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
      */
     sane_size = (sane_size + 128 * MB - 1) & ~((uint64_t)(128 * MB - 1));
     if (sane_size != mem_actual)
-        kprintf("mem_actual: 0x%llx\n legacy sane_size: 0x%llx\n", mem_actual, sane_size);
+        printf("mem_actual: 0x%llx\n legacy sane_size: 0x%llx\n", mem_actual, sane_size);
     sane_size = mem_actual;
     
     /*
@@ -616,7 +619,7 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
      */
     if (maxmem == 0 && sane_size > KERNEL_MAXMEM) {
         maxmem = KERNEL_MAXMEM;
-        kprintf("Physical memory %lld bytes capped at %dGB\n", sane_size, (uint32_t) (KERNEL_MAXMEM/GB));
+        printf("Physical memory %lld bytes capped at %dGB\n", sane_size, (uint32_t) (KERNEL_MAXMEM/GB));
     }
     
     /*
@@ -664,10 +667,9 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
         mem_size = (vm_size_t)sane_size;
     max_mem = sane_size;
     
-    kprintf("Physical memory %llu MB\n", sane_size/MB);
+    printf("Physical memory %llu MB\n", sane_size/MB);
     
     max_valid_low_ppnum = (2 * GB) / PAGE_SIZE;
-    
     //if (!PE_parse_boot_argn("max_valid_dma_addr", &maxdmaaddr, sizeof (maxdmaaddr))) {
         max_valid_dma_address = (uint64_t)4 * (uint64_t)GB;
     //} else {
@@ -693,14 +695,14 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
         if (maxloreserve) {
             vm_lopage_free_limit = maxloreserve;
             
-            if (mbuf_override == TRUE) {
+            if (mbuf_override == true) {
                 vm_lopage_free_limit += mbuf_reserve;
                 vm_lopage_lowater = 0;
             } else
                 vm_lopage_lowater = vm_lopage_free_limit / 16;
             
-            vm_lopage_refill = TRUE;
-            vm_lopage_needed = TRUE;
+            vm_lopage_refill = true;
+            vm_lopage_needed = true;
         }
     }
     
@@ -708,6 +710,6 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
      *	Initialize kernel physical map.
      *	Kernel virtual address starts at VM_KERNEL_MIN_ADDRESS.
      */
-    kprintf("avail_remaining = 0x%lx\n", (unsigned long)avail_remaining);
+    printf("avail_remaining = 0x%lx\n", (unsigned long)avail_remaining);
     pmap_bootstrap(0, IA32e);
 }

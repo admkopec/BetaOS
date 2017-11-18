@@ -29,7 +29,7 @@ namespace ARP {
         IP4_t    sourceIP;
         uint8_t  dest_mac[6];
         IP4_t    destIP;
-    } __packed;
+    } __attribute__((packed));
     
     TableEntry* FindEntry(IP4_t IP);
     void SendRequest(IP4_t searchedIP);

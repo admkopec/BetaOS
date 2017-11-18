@@ -20,15 +20,24 @@ class Tests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
+    func testNSObject_conformsToProtocol() {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        var item = ""
+        let int: Any = Int(1)
+        if case let printable as CustomStringConvertible = int {
+            printable.description.write(to: &item)
+        }
+        XCTAssert(item == "1", "item is \(item)")
     }
     
-    func testPerformanceExample() {
+    func testPerformance() {
         // This is an example of a performance test case.
         self.measure {
-            // Put the code you want to measure the time of here.
+            var item = ""
+            let int: Any = Int(1)
+            if case let printable as CustomStringConvertible = int {
+                printable.description.write(to: &item)
+            }
         }
     }
     

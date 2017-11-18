@@ -10,6 +10,7 @@
 #define kmalloc_h
 
 #include <stddef.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <i386/vm_types.h>
 #include <sys/cdefs.h>
@@ -22,26 +23,26 @@ kalloc_canblock(
 
 #define kalloc(size)				\
 ({ static vm_allocation_site_t site __attribute__((section("__DATA, __data"))); \
-kalloc_canblock((size), TRUE, &site); })
+kalloc_canblock((size), true, &site); })
 
 #define kalloc_tag(size, tag)			\
 ({ static vm_allocation_site_t site __attribute__((section("__DATA, __data"))) \
 = { (tag), 0 } ; \
-kalloc_canblock((size), TRUE, &site); })
+kalloc_canblock((size), true, &site); })
 
 #define kalloc_tag_bt(size, tag)		\
 ({ static vm_allocation_site_t site __attribute__((section("__DATA, __data"))) \
 = { (tag), VM_TAG_BT }; \
-kalloc_canblock((size), TRUE, &site); })
+kalloc_canblock((size), true, &site); })
 
 #define kalloc_noblock(size)			\
 ({ static vm_allocation_site_t site __attribute__((section("__DATA, __data"))); \
-kalloc_canblock((size), FALSE, &site); })
+kalloc_canblock((size), false, &site); })
 
 #define kalloc_noblock_tag_bt(size, tag)	\
 ({ static vm_allocation_site_t site __attribute__((section("__DATA, __data"))) \
 = { (tag), VM_TAG_BT }; \
-kalloc_canblock((size), FALSE, &site); })
+kalloc_canblock((size), false, &site); })
 
 extern void kfree(void		*data, vm_size_t	size);
 

@@ -5,8 +5,8 @@
 //  Created by Adam Kopeć on 10/13/17.
 //
 
-#import "runtime.h"
-#import "objc.h"
+#import <objc/runtime.h>
+#import <objc/objc.h>
 
 void objc_release(id);
 id objc_autorelease(id);

@@ -26,8 +26,32 @@ typedef struct {
 } ACPI_2_Description;
 
 typedef struct {
+    char anchor[4];         // '_SM_'
+    unsigned char esp_checksum;
+    unsigned char ep_length;
+    unsigned char major_version;
+    unsigned char minor_version;
+    unsigned short max_structure_size;
+    unsigned char eps_revision;
+    unsigned char formatted_area[5];
+    char dmi_anchor[5];     // '_DMI_'
+    unsigned char intermediate_checksum;
+    unsigned short table_length;
+    unsigned int  table_address;
+    unsigned short entry_count;
+    unsigned char bcd_revision;
+} SMBIOSHeader;
+
+typedef struct {
+    SMBIOSHeader * SMBIOS;
+    uintptr_t      OriginalAddress;
+    bool           foundInBios;
+} SMBIOS_for_Swift;
+
+typedef struct {
     ACPI_2_Description *RSDP;
     uintptr_t           OriginalAddress;
+    bool                foundInBios;
 } RSDP_for_Swift;
 
 typedef struct ACPISDTHeader {

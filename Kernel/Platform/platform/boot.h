@@ -63,7 +63,7 @@ typedef struct EfiMemoryRange {
  * Video information..
  */
 
-struct Boot_Video {
+struct Boot_VideoV1 {
     uint32_t	v_baseAddr;	/* Base address of video memory */
     uint32_t	v_display;	/* Display Code */
     uint32_t	v_rowBytes;	/* Number of bytes per pixel row */
@@ -72,7 +72,18 @@ struct Boot_Video {
     uint32_t	v_depth;	/* Pixel Depth */
 };
 
-typedef struct Boot_Video	Boot_Video;
+typedef struct Boot_VideoV1	Boot_VideoV1;
+
+struct Boot_Video {
+    uint32_t    v_display;    /* Display Code (if Applicable */
+    uint32_t    v_rowBytes;    /* Number of bytes per pixel row */
+    uint32_t    v_width;    /* Width */
+    uint32_t    v_height;    /* Height */
+    uint32_t    v_depth;    /* Pixel Depth */
+    uint32_t    v_resv[7];    /* Reserved */
+    uint64_t    v_baseAddr;    /* Base address of video memory */
+};
+typedef struct Boot_Video    Boot_Video;
 
 /* Values for v_display */
 
@@ -130,7 +141,7 @@ typedef struct boot_args {
     uint32_t    MemoryMapDescriptorSize;
     uint32_t    MemoryMapDescriptorVersion;
     
-    Boot_Video	Video;            /* Video Information */
+    Boot_VideoV1	VideoV1;            /* Video Information */
     
     uint32_t    deviceTreeP;	  /* Physical address of flattened device tree */
     uint32_t    deviceTreeLength; /* Length of flattened tree */
@@ -138,17 +149,17 @@ typedef struct boot_args {
     uint32_t    kaddr;            /* Physical address of beginning of kernel text */
     uint32_t    ksize;            /* Size of combined kernel text+data+efi */
     
-    uint32_t    efiRuntimeServicesPageStart;        /* physical address of defragmented runtime pages */
+    uint32_t    efiRuntimeServicesPageStart;        /* Physical address of defragmented runtime pages */
     uint32_t    efiRuntimeServicesPageCount;
-    uint64_t    efiRuntimeServicesVirtualPageStart; /* virtual address  of defragmented runtime pages */
+    uint64_t    efiRuntimeServicesVirtualPageStart; /* Virtual address  of defragmented runtime pages */
     
-    uint32_t    efiSystemTable;                     /* physical address of system table in runtime area */
+    uint32_t    efiSystemTable;                     /* Physical address of system table in runtime area */
     uint32_t    kslide;
     
-    uint32_t    performanceDataStart; /* physical address of log */
+    uint32_t    performanceDataStart; /* Physical address of log */
     uint32_t    performanceDataSize;
     
-    uint32_t    keyStoreDataStart; /* physical address of key store data */
+    uint32_t    keyStoreDataStart; /* Physical address of key store data */
     uint32_t    keyStoreDataSize;
     uint64_t	bootMemStart;
     uint64_t	bootMemSize;
@@ -162,8 +173,12 @@ typedef struct boot_args {
     uint32_t    boot_SMC_plimit;
     uint16_t    bootProgressMeterStart;
     uint16_t    bootProgressMeterEnd;
-    uint32_t    __reserved4[726];
+    Boot_Video    Video;        /* Video Information */
     
+    uint32_t    apfsDataStart; /* Physical address of apfs volume key structure */
+    uint32_t    apfsDataSize;
+    
+    uint32_t    __reserved4[710];
 } boot_args;
 
 extern char assert_boot_args_size_is_4096[sizeof(boot_args) == 4096 ? 1 : -1];

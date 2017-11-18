@@ -279,7 +279,7 @@ struct thread {
 active:1,				/* Thread is active and has not been terminated */
 started:1,				/* Thread has been started after creation */
 static_param:1,			/* Disallow policy parameter changes */
-inspection:1,			/* TRUE when task is being inspected by crash reporter */
+inspection:1,			/* true when task is being inspected by crash reporter */
 policy_reset:1,			/* Disallow policy parameter changes on terminating threads */
     :0;
     

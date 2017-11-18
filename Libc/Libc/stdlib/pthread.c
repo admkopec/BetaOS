@@ -20,12 +20,12 @@ extern void panic(const char*, ...);
  * threaded version.
  */
 
-typedef struct pthread_mutex pthread_mutex_t;
-typedef struct pthread_mutexaddr pthread_mutexattr_t;
-typedef struct pthread_cond pthread_cond_t;
-typedef struct pthread_rw_lock pthread_rwlock_t;
-typedef int pthread_key_t;
-typedef int pthread_t;
+//typedef struct pthread_mutex pthread_mutex_t;
+//typedef struct pthread_mutexaddr pthread_mutexattr_t;
+//typedef struct pthread_cond pthread_cond_t;
+//typedef struct pthread_rw_lock pthread_rwlock_t;
+//typedef int pthread_key_t;
+//typedef int pthread_t;
 typedef long dispatch_once_t;
 
 void dispatch_once_f(dispatch_once_t *predicate, void *context, void (*function)(void *)) {
@@ -93,7 +93,7 @@ pthread_mutexattr_destroy(__unused pthread_mutexattr_t *attr) {
 
 
 int
-pthread_cond_init(__unused pthread_cond_t *restrict cond, __unused const /*pthread_condattr_t*/void *restrict cond_attr) {
+pthread_cond_init(__unused pthread_cond_t *restrict cond, __unused const pthread_condattr_t * _Nullable restrict cond_attr) {
     ULTDBG("pthread_cond_init(%p,%p)\n", cond, cond_attr);
     //    memset(cond, 0, sizeof(pthread_cond_t));
     return 0;
@@ -129,7 +129,7 @@ pthread_cond_wait(__unused pthread_cond_t *restrict cond, __unused pthread_mutex
 
 
 int
-pthread_rwlock_init(__unused pthread_rwlock_t *restrict rwlock, __unused const /*pthread_rwlockattr_t*/void *restrict attr) {
+pthread_rwlock_init(__unused pthread_rwlock_t *restrict rwlock, __unused const pthread_rwlockattr_t * _Nullable restrict attr) {
     ULTDBG("pthread_rwlock_init(%p, %p)\n", rwlock, attr);
     return 0;
 }
@@ -180,7 +180,7 @@ pthread_rwlock_unlock(__unused pthread_rwlock_t *rwlock) {
 pthread_t
 pthread_self(void) {
     ULTDBG("pthread_self()\n");
-    return 1;
+    return (pthread_t) 1;
 }
 
 
@@ -212,7 +212,7 @@ pthread_setspecific (__unused pthread_key_t __key, __unused const void *__pointe
     return 0;
 }
 
-void pthread_equal() { }
+int pthread_equal(__unused pthread_t _Nullable a, __unused pthread_t _Nullable b) { return 0; }
 
 // swift_once_f() used to implemented swift_once() in the stdlib
 void

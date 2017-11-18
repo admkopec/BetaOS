@@ -9,26 +9,29 @@
 #ifndef vm_types_h
 #define vm_types_h
 
+#include <stdint.h>
+#include <mach/vm_types.h>
+
 /*
  * A vm_offset_t is a type-neutral pointer,
  * e.g. an offset into a virtual memory space.
  */
-#ifdef __LP64__
-typedef unsigned long		vm_offset_t;
-#else	/* __LP64__ */
-typedef	unsigned int		vm_offset_t;
-#endif	/* __LP64__ */
-
-/*
- * A vm_size_t is the proper type for e.g.
- * expressing the difference between two
- * vm_offset_t entities.
- */
-#ifdef __LP64__
-typedef unsigned long		vm_size_t;
-#else	/* __LP64__ */
-typedef	unsigned int		vm_size_t;
-#endif	/* __LP64__ */
+//#ifdef __LP64__
+//typedef unsigned long        vm_offset_t;
+//#else    /* __LP64__ */
+//typedef    unsigned int        vm_offset_t;
+//#endif    /* __LP64__ */
+//
+///*
+// * A vm_size_t is the proper type for e.g.
+// * expressing the difference between two
+// * vm_offset_t entities.
+// */
+//#ifdef __LP64__
+//typedef unsigned long        vm_size_t;
+//#else    /* __LP64__ */
+//typedef    unsigned int        vm_size_t;
+//#endif    /* __LP64__ */
 
 /*
  * To minimize the use of 64-bit fields, we keep some physical
@@ -54,7 +57,7 @@ typedef uint64_t		vm_map_size_t;
 typedef vm_offset_t     vm_address_t;
 
 typedef struct pmap                 *pmap_t;
-typedef struct _vm_map              *vm_map_t;
+//typedef struct _vm_map              *vm_map_t;
 typedef struct vm_object            *vm_object_t;
 //typedef struct vm_object_fault_info *vm_object_fault_info_t;
 

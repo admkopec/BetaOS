@@ -10,17 +10,14 @@
 #define kernel_header_h
 
 #include <mach-o/loader.h>
-
-#if	!KERNEL
-#error this header for kernel use only
-#endif
+#include <mach/vm_types.h>
 
 #ifdef __LP64__
 
-typedef struct mach_header_64       kernel_mach_header_t;
-typedef struct segment_command_64   kernel_segment_command_t;
-typedef struct section_64           kernel_section_t;
-typedef struct nlist_64             kernel_nlist_t;
+typedef const struct mach_header_64       kernel_mach_header_t;
+typedef const struct segment_command_64   kernel_segment_command_t;
+typedef const struct section_64           kernel_section_t;
+typedef const struct nlist_64             kernel_nlist_t;
 
 #define MH_MAGIC_KERNEL         MH_MAGIC_64
 #define LC_SEGMENT_KERNEL       LC_SEGMENT_64
@@ -49,12 +46,12 @@ vm_offset_t getlastaddr(void);
 kernel_segment_command_t *firstseg(void);
 kernel_segment_command_t *firstsegfromheader(kernel_mach_header_t     *header);
 kernel_segment_command_t *nextsegfromheader( kernel_mach_header_t	  *header, kernel_segment_command_t *seg);
-kernel_segment_command_t *getsegbyname(const char *seg_name);
+kernel_segment_command_t *getsegbyname(const char *segname);
 kernel_segment_command_t *getsegbynamefromheader(kernel_mach_header_t *header, const char *seg_name);
 void *getsegdatafromheader(kernel_mach_header_t*, const char*, unsigned long*);
-kernel_section_t *getsectbyname(const char *seg_name, const char *sect_name);
-kernel_section_t *getsectbynamefromheader(kernel_mach_header_t *header,const char *seg_name, const char *sect_name);
-void *getsectdatafromheader(kernel_mach_header_t *, const char *, const char *, unsigned long *);
+const struct section_64 *getsectbyname(const char *segname, const char *sectname);
+const struct section *getsectbynamefromheader(const struct mach_header *mhp, const char *segname, const char *sectname);
+char *getsectdatafromheader(const struct mach_header *mhp, const char *segname, const char *sectname, uint32_t *size);
 kernel_section_t *firstsect(kernel_segment_command_t *sgp);
 kernel_section_t *nextsect(kernel_segment_command_t *sgp, kernel_section_t *sp);
 void *getcommandfromheader(kernel_mach_header_t *, uint32_t);

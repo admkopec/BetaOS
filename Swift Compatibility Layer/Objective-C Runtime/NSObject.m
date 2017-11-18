@@ -5,7 +5,7 @@
 //  Created by Adam Kopeć on 10/13/17.
 //
 
-#import "NSObject.h"
+#import <objc/NSObject.h>
 
 id _objc_rootRetain(id a) {
     return nil;
@@ -21,8 +21,8 @@ id _objc_rootAutorelease(id a) {
 
 @implementation NSObject
 
-+ (id) initialize {
-    return self;
++ (void) initialize {
+//    return self;
 }
 
 - (id) class {
@@ -38,6 +38,22 @@ id _objc_rootAutorelease(id a) {
 }
 
 - (BOOL) isEqual:(id)object {
+    return NO;
+}
+
+- (BOOL) conformsToProtocol:(Protocol *)aProtocol {
+    return NO;
+}
+
+- (BOOL) isKindOfClass:(Class)aClass {
+    return NO;
+}
+
++ (BOOL) isKindOfClass:(Class)aClass {
+    return NO;
+}
+
++ (BOOL) conformsToProtocol:(Protocol *)aProtocol {
     return NO;
 }
 

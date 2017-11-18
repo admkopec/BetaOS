@@ -10,6 +10,17 @@
 #include "UDP.hpp"
 #include <OSNetwork.hpp>
 
+// Net defs
+
+// hton = Host To Network
+static inline short htons_(short v) {
+    __asm__("xchg %h0, %b0" : "+Q"(v));
+    return (v);
+}
+// ntoh = Network To Host
+#define ntohs_(v) htons(v)
+#define ntohl_(v) htonl(v)
+
 static uint32_t xid = 0x00E0FF0A; // Transaction Code for Identification
 
 void
@@ -19,7 +30,7 @@ DHCP::preparePacket(Packet* packet) {
     packet->hlen       = 6;
     packet->hops       = 0;
     packet->xid        = xid;       // AFFExx
-    packet->secs       = htons(0);  // must use the same value in Discover and Request
+    packet->secs       = htons_(0);  // must use the same value in Discover and Request
     packet->flags      = BROADCAST;
     packet->ciaddr.iIP4 = 0;
     packet->yiaddr.iIP4 = 0;
