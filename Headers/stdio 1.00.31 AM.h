@@ -19,7 +19,7 @@ extern "C" {
 int    printf   (const char*, ...);
 int    vasprintf(char **strp, const char * format, va_list argp);
 int    asprintf (char **strp, const char * format, ...);
-int    snprintf (char * buf, size_t size, const char * format, ...);
+//int    snprintf (char * buf, size_t size,  const char * format, ...);
 size_t write    (int fd, const void *buf, size_t nbyte);
 int    putchar  (int);
 int    puts     (const char*);

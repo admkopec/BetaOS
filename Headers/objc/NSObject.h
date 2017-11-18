@@ -23,9 +23,9 @@
 //
 //- (BOOL)isProxy;
 //
-//- (BOOL)isKindOfClass:(Class)aClass;
+- (BOOL)isKindOfClass:(Class)aClass;
 //- (BOOL)isMemberOfClass:(Class)aClass;
-//- (BOOL)conformsToProtocol:(Protocol *)aProtocol;
+- (BOOL)conformsToProtocol:(Protocol *)aProtocol;
 //
 //- (BOOL)respondsToSelector:(SEL)aSelector;
 

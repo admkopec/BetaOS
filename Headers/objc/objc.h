@@ -7,11 +7,11 @@
 
 #ifndef objc_h
 #define objc_h
-
+#undef KERNEL
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "runtime.h"
+#include <objc/runtime.h>
 
 struct objc_class {
     struct objc_class* isa;

@@ -2,13 +2,19 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/Loggable/Loggable.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/Addressing/Addressing.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Swift Compatibility Layer/Swift Compatibility Layer.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Libc++/Libc++.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/adamkopec/Library/Mobile Documents/com~apple~CloudDocs/BetaOS/Libc/Libc.xcodeproj">
+      location = "group:Libc/Libc.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Kernel/Kernel.xcodeproj">

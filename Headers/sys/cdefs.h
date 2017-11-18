@@ -9,6 +9,7 @@
 #ifndef cdefs_h
 #define cdefs_h
 
+#include_next <sys/cdefs.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -44,17 +45,17 @@ struct type *rbe_parent;	/* parent element */    \
 
 // Net defs
 
-// hton = Host To Network
-static inline short htons(short v) {
-    __asm__("xchg %h0, %b0" : "+Q"(v));
-    return (v);
-}
-static inline int htonl(int v) {
-    __asm__("bswap %0" : "+r"(v));
-    return (v);
-}
-// ntoh = Network To Host
-#define ntohs(v) htons(v)
-#define ntohl(v) htonl(v)
+//// hton = Host To Network
+//static inline short htons(short v) {
+//    __asm__("xchg %h0, %b0" : "+Q"(v));
+//    return (v);
+//}
+//static inline int htonl(int v) {
+//    __asm__("bswap %0" : "+r"(v));
+//    return (v);
+//}
+//// ntoh = Network To Host
+//#define ntohs(v) htons(v)
+//#define ntohl(v) htonl(v)
 
 #endif /* cdefs_h */
