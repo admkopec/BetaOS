@@ -6,7 +6,7 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-//import Addressing
+import Addressing
 import Loggable
 
 struct RSDT: Loggable, ACPITable {
@@ -39,7 +39,7 @@ struct RSDT: Loggable, ACPITable {
                 addr = Address(entry, baseAddress: addr.baseAddr)
                 let sdtptr = UnsafeMutablePointer<ACPISDTHeader_t>(bitPattern: addr.virtual)
                 if sdtptr != nil {
-                    //                SDTAddresses.append(addr)
+//                    SDTAddresses.append(addr)
                     SDTAddresses.append((addr.physical, addr.baseAddr))
                     let signature = String(&(sdtptr!).pointee.Signature.0, maxLength: 4)
                     if signature == "WSMT" {
@@ -56,7 +56,7 @@ struct RSDT: Loggable, ACPITable {
                 addr = Address(entry, baseAddress: addr.baseAddr)
                 let sdtptr = UnsafeMutablePointer<ACPISDTHeader_t>(bitPattern: addr.virtual)
                 if sdtptr != nil {
-                    //                SDTAddresses.append(addr)
+//                    SDTAddresses.append(addr)
                     SDTAddresses.append((addr.physical, addr.baseAddr))
                     let signature = String(&(sdtptr!).pointee.Signature.0, maxLength: 4)
                     if signature == "WSMT" {

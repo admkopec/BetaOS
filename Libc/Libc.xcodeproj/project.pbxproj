@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,28 +23,30 @@
 		3B588BFD1D95D0BC00087C38 /* strlen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B588BF71D95D0BC00087C38 /* strlen.cpp */; };
 		3B588C011D95D0D500087C38 /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B588C001D95D0D500087C38 /* time.c */; };
 		3BB14DF31FBCACB900EE6254 /* memcpy.s in Sources */ = {isa = PBXBuildFile; fileRef = 3BB14DF21FBCACB900EE6254 /* memcpy.s */; };
+		3BD219181FDD9FA30095A1FF /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BD219171FDD9FA30095A1FF /* math.cpp */; };
 		3BECD16C1F6596C300390092 /* pthread.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BECD16B1F6596C300390092 /* pthread.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3B1FE16D1FB7763B0001E858 /* printf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = printf.cpp; path = Libc/stdio/printf.cpp; sourceTree = "<group>"; };
-		3B588BE21D95D07A00087C38 /* putchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = putchar.c; path = Libc/stdio/putchar.c; sourceTree = "<group>"; };
-		3B588BE31D95D07A00087C38 /* getchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = getchar.c; path = Libc/stdio/getchar.c; sourceTree = "<group>"; };
-		3B588BE41D95D07A00087C38 /* gets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gets.cpp; path = Libc/stdio/gets.cpp; sourceTree = "<group>"; };
-		3B588BE51D95D07A00087C38 /* printf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = printf.c; path = Libc/stdio/printf.c; sourceTree = "<group>"; };
-		3B588BE61D95D07A00087C38 /* puts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = puts.cpp; path = Libc/stdio/puts.cpp; sourceTree = "<group>"; };
-		3B588BED1D95D0A500087C38 /* panic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = panic.c; path = Libc/stdlib/panic.c; sourceTree = "<group>"; };
-		3B588BEE1D95D0A500087C38 /* abort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = abort.cpp; path = Libc/stdlib/abort.cpp; sourceTree = "<group>"; };
-		3B588BF21D95D0BC00087C38 /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mem.cpp; path = Libc/string/mem.cpp; sourceTree = "<group>"; };
-		3B588BF31D95D0BC00087C38 /* strlcpy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strlcpy.cpp; path = Libc/string/strlcpy.cpp; sourceTree = "<group>"; };
-		3B588BF41D95D0BC00087C38 /* strncmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strncmp.cpp; path = Libc/string/strncmp.cpp; sourceTree = "<group>"; };
-		3B588BF51D95D0BC00087C38 /* itoa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = itoa.cpp; path = Libc/string/itoa.cpp; sourceTree = "<group>"; };
-		3B588BF61D95D0BC00087C38 /* strcmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strcmp.cpp; path = Libc/string/strcmp.cpp; sourceTree = "<group>"; };
-		3B588BF71D95D0BC00087C38 /* strlen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strlen.cpp; path = Libc/string/strlen.cpp; sourceTree = "<group>"; };
-		3B588C001D95D0D500087C38 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = time.c; path = Libc/time/time.c; sourceTree = "<group>"; };
+		3B1FE16D1FB7763B0001E858 /* printf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = printf.cpp; sourceTree = "<group>"; };
+		3B588BE21D95D07A00087C38 /* putchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = putchar.c; sourceTree = "<group>"; };
+		3B588BE31D95D07A00087C38 /* getchar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getchar.c; sourceTree = "<group>"; };
+		3B588BE41D95D07A00087C38 /* gets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gets.cpp; sourceTree = "<group>"; };
+		3B588BE51D95D07A00087C38 /* printf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = printf.c; sourceTree = "<group>"; };
+		3B588BE61D95D07A00087C38 /* puts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = puts.cpp; sourceTree = "<group>"; };
+		3B588BED1D95D0A500087C38 /* panic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = panic.c; sourceTree = "<group>"; };
+		3B588BEE1D95D0A500087C38 /* abort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abort.cpp; sourceTree = "<group>"; };
+		3B588BF21D95D0BC00087C38 /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
+		3B588BF31D95D0BC00087C38 /* strlcpy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strlcpy.cpp; sourceTree = "<group>"; };
+		3B588BF41D95D0BC00087C38 /* strncmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strncmp.cpp; sourceTree = "<group>"; };
+		3B588BF51D95D0BC00087C38 /* itoa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = itoa.cpp; sourceTree = "<group>"; };
+		3B588BF61D95D0BC00087C38 /* strcmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strcmp.cpp; sourceTree = "<group>"; };
+		3B588BF71D95D0BC00087C38 /* strlen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strlen.cpp; sourceTree = "<group>"; };
+		3B588C001D95D0D500087C38 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time.c; sourceTree = "<group>"; };
 		3B7865CF1D95903600C015DF /* libc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libc.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BB14DF21FBCACB900EE6254 /* memcpy.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; name = memcpy.s; path = Libc/string/memcpy.s; sourceTree = "<group>"; };
-		3BECD16B1F6596C300390092 /* pthread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pthread.c; path = Libc/stdlib/pthread.c; sourceTree = "<group>"; };
+		3BB14DF21FBCACB900EE6254 /* memcpy.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = memcpy.s; sourceTree = "<group>"; };
+		3BD219171FDD9FA30095A1FF /* math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = math.cpp; sourceTree = "<group>"; };
+		3BECD16B1F6596C300390092 /* pthread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pthread.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +70,7 @@
 				3B588BE51D95D07A00087C38 /* printf.c */,
 				3B588BE61D95D07A00087C38 /* puts.cpp */,
 			);
-			name = stdio;
+			path = stdio;
 			sourceTree = "<group>";
 		};
 		3B588BEC1D95D08000087C38 /* stdlib */ = {
@@ -77,8 +79,9 @@
 				3B588BED1D95D0A500087C38 /* panic.c */,
 				3B588BEE1D95D0A500087C38 /* abort.cpp */,
 				3BECD16B1F6596C300390092 /* pthread.c */,
+				3BD219171FDD9FA30095A1FF /* math.cpp */,
 			);
-			name = stdlib;
+			path = stdlib;
 			sourceTree = "<group>";
 		};
 		3B588BF11D95D0AA00087C38 /* string */ = {
@@ -92,7 +95,7 @@
 				3B588BF61D95D0BC00087C38 /* strcmp.cpp */,
 				3B588BF71D95D0BC00087C38 /* strlen.cpp */,
 			);
-			name = string;
+			path = string;
 			sourceTree = "<group>";
 		};
 		3B588BFE1D95D0C200087C38 /* time */ = {
@@ -100,7 +103,7 @@
 			children = (
 				3B588C001D95D0D500087C38 /* time.c */,
 			);
-			name = time;
+			path = time;
 			sourceTree = "<group>";
 		};
 		3B7865C61D95903600C015DF = {
@@ -127,7 +130,7 @@
 				3B588BF11D95D0AA00087C38 /* string */,
 				3B588BFE1D95D0C200087C38 /* time */,
 			);
-			name = Libc;
+			path = Libc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,7 +180,7 @@
 				};
 			};
 			buildConfigurationList = 3B7865CA1D95903600C015DF /* Build configuration list for PBXProject "Libc" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -209,6 +212,7 @@
 				3B588BE71D95D07A00087C38 /* putchar.c in Sources */,
 				3BB14DF31FBCACB900EE6254 /* memcpy.s in Sources */,
 				3B588BF81D95D0BC00087C38 /* mem.cpp in Sources */,
+				3BD219181FDD9FA30095A1FF /* math.cpp in Sources */,
 				3BECD16C1F6596C300390092 /* pthread.c in Sources */,
 				3B588BFC1D95D0BC00087C38 /* strcmp.cpp in Sources */,
 				3B588BF91D95D0BC00087C38 /* strlcpy.cpp in Sources */,
@@ -345,20 +349,8 @@
 					"$(PROJECT_DIR)/../Kernel/Kernel",
 					"$(PROJECT_DIR)/../Kernel",
 				);
-				OTHER_CFLAGS = (
-					"-ffreestanding",
-					"-fno-builtin",
-					"-nostdlib",
-					"-mkernel",
-					"-msoft-float",
-				);
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_MODULE_NAME = c;
 				PRODUCT_NAME = c;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wextra",
-				);
 			};
 			name = Debug;
 		};
@@ -379,20 +371,8 @@
 					"$(PROJECT_DIR)/../Kernel/Kernel",
 					"$(PROJECT_DIR)/../Kernel",
 				);
-				OTHER_CFLAGS = (
-					"-ffreestanding",
-					"-fno-builtin",
-					"-nostdlib",
-					"-mkernel",
-					"-msoft-float",
-				);
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_MODULE_NAME = c;
 				PRODUCT_NAME = c;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wextra",
-				);
 			};
 			name = Release;
 		};

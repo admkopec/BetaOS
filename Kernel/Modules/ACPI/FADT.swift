@@ -6,7 +6,7 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-//import Addressing
+import Addressing
 import Loggable
 
 struct FADT: Loggable, ACPITable {

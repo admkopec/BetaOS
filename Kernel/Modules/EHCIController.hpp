@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Controller.hpp"
+#include "USBCommon.hpp"
 
 #define PCI_USB_CLASS    0x0C
 #define PCI_USB_SUBCLASS 0x03
@@ -145,6 +146,7 @@ public:
     virtual int  init(PCI *pci) override;
     virtual void start() override;
     virtual void stop() override;
+    virtual void handleInterrupt() override;
 };
 
 #endif /* EHCIController_hpp */

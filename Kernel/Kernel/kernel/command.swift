@@ -6,6 +6,8 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
+import Loggable
+
 @_silgen_name("version")
 public func version() -> Void {
     kprint("\(OS_NAME) \(VERSION_MAJOR).\(VERSION_MINOR)", terminator: "");
@@ -181,23 +183,56 @@ public func set_color(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer
         let greenB = Int(arguments[5], radix: 16)
         let blueB  = Int(arguments[6], radix: 16)
         
-        var foreground = 0x00 as UInt32
-        var background = 0x00 as UInt32
+        let foreground = Color(red: (redF ?? 0), green: (greenF ?? 0), blue: (blueF ?? 0), alpha: 0xFF)
+        let background = Color(red: (redB ?? 0), green: (greenB ?? 0), blue: (blueB ?? 0), alpha: 0xFF)
         
-        foreground += UInt32(redF   ?? 0) << 16
-        foreground += UInt32(greenF ?? 0) << 8
-        foreground += UInt32(blueF  ?? 0) << 0
-        
-        background += UInt32(redB   ?? 0) << 16
-        background += UInt32(greenB ?? 0) << 8
-        background += UInt32(blueB  ?? 0) << 0
-        
-        if foreground == background {
+        if foreground.value == background.value {
             kprint("Foregroud can't be tha same as background")
         }
-        change_color(foreground, background)
+        change_color(foreground.value, background.value)
+    } else if arguments.count == 9 {
+        let redF   = Int(arguments[1], radix: 16)
+        let greenF = Int(arguments[2], radix: 16)
+        let blueF  = Int(arguments[3], radix: 16)
+        let alphaF = Int(arguments[4], radix: 16)
+        let redB   = Int(arguments[5], radix: 16)
+        let greenB = Int(arguments[6], radix: 16)
+        let blueB  = Int(arguments[7], radix: 16)
+        let alphaB = Int(arguments[8], radix: 16)
+        
+        let foreground = Color(red: (redF ?? 0), green: (greenF ?? 0), blue: (blueF ?? 0), alpha: (alphaF ?? 0))
+        let background = Color(red: (redB ?? 0), green: (greenB ?? 0), blue: (blueB ?? 0), alpha: (alphaB ?? 0))
+        
+        if foreground.value == background.value {
+            kprint("Foregroud can't be tha same as background")
+        }
+        change_color(foreground.value, background.value)
     } else {
-        kprint("Usage: setcolor RR GG BB RR GG BB")
-        kprint("                (Foregr) (Backgr)")
+        kprint("Usage: setcolor RR GG BB (AA) RR GG BB (AA)")
+        kprint("                (Foreground)   (Background)")
     }
+}
+
+@_silgen_name("tasks")
+public func tasks(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
+    kprint("Starting first task...")
+    runFirstTask()
+}
+
+@_silgen_name("test_graphics")
+public func test_graphics(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
+    System.sharedInstance.Video.draw(roundedRectangle: RoundedRectangle(position: Position(x: 200, y: 200), size: Size(width: 200, height: 200), color: Color(red: 0.9204662442, green: 0.1463340819, blue: 0.1714396775, alpha: 1), radius: 20, filled: true))
+    
+    System.sharedInstance.Video.draw(circle: Circle(position: Position(x: 500, y: 500), color: Color(red: 0.2560254931, green: 0.7153064609, blue: 0.2907235324, alpha: 1), filled: true, radius: 125))
+    
+//    let line = Line(from: Position(x: 0, y: 0), to: Position(x: 900, y: 900), color: Color(red: 0.6530236602, green: 0.8558481932, blue: 0.909222424,  alpha: 0.25))
+//    System.sharedInstance.Video.draw(line: line, thickness: 15)
+    System.sharedInstance.Video.draw(rectangle: Rectangle(position: Position.init(x: 120, y: 120), size: Size.init(width: 70, height: 70), color: Color(red: 0.9422255158, green: 0.4098693728, blue: 0.1537380219, alpha: 1), filled: true))
+//    let rect = Rectangle(position: Position(x: 0, y: 0), size: System.sharedInstance.Video.Display.Resolution, color: Color.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.50), filled: true)
+//    System.sharedInstance.Video.draw(rectangle: rect)
+}
+
+@_silgen_name("test_new_panic")
+public func test_new_graphical_panic(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
+    panic("That's a Test Panic")
 }

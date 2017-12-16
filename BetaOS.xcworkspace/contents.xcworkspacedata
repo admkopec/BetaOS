@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Kernel/Swift Extensions/Frameworks/Loggable/Loggable.xcodeproj">
+      location = "group:Kernel/Swift Extensions/Frameworks/Addressing/Addressing.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Kernel/Swift Extensions/Frameworks/Addressing/Addressing.xcodeproj">
+      location = "group:Kernel/Swift Extensions/Frameworks/Loggable/Loggable.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Swift Compatibility Layer/Swift Compatibility Layer.xcodeproj">
@@ -21,16 +21,16 @@
    </FileRef>
    <Group
       location = "container:"
-      name = "Readme">
+      name = "License">
       <FileRef
-         location = "group:README.md">
+         location = "group:LICENSE.txt">
       </FileRef>
    </Group>
    <Group
       location = "container:"
-      name = "License">
+      name = "Readme">
       <FileRef
-         location = "group:LICENSE.txt">
+         location = "group:README.md">
       </FileRef>
    </Group>
 </Workspace>

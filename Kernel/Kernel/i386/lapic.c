@@ -9,7 +9,9 @@
 #include "lapic.h"
 #include "mp.h"
 #include "misc_protos.h"
+#include "machine_routines.h"
 #include "proc_reg.h"
+#include "pal.h"
 #include "cpuid.h"
 #include "cpu_data.h"
 #include "vm_map.h"
@@ -19,10 +21,10 @@
 lapic_ops_table_t       *lapic_ops;     /* Lapic operations switch */
 static vm_map_offset_t	lapic_pbase;	/* Physical base memory-mapped regs */
 static vm_offset_t      lapic_vbase;	/* Virtual base memory-mapped regs */
-//static i386_intr_func_t	lapic_intr_func[LAPIC_FUNC_TABLE_SIZE];
+static i386_intr_func_t lapic_intr_func[LAPIC_FUNC_TABLE_SIZE];
 /* true if local APIC was enabled by the OS not by the EFI */
 //static bool     lapic_os_enabled = false;
-//static bool     lapic_errors_masked = false;
+static bool     lapic_errors_masked = false;
 //static uint64_t lapic_last_master_error = 0;
 //static uint64_t lapic_error_time_threshold = 0;
 //static unsigned lapic_master_error_count = 0;
@@ -33,7 +35,6 @@ int lapic_interrupt_base = LAPIC_DEFAULT_INTERRUPT_BASE;
 int		lapic_to_cpu[MAX_LAPICIDS];
 int		cpu_to_lapic[MAX_CPUS];
 
-extern void refresh_screen(void);
 extern bool use_screen_caching;
 extern bool experimental;
 extern bool early;
@@ -237,17 +238,18 @@ lapic_init(void) {
     
     LAPIC_WRITE(SVR, LAPIC_VECTOR(SPURIOUS) | LAPIC_SVR_ENABLE);
     
-    
-    
     LAPIC_WRITE(LVT_TIMER,   LAPIC_VECTOR(TIMER));
     LAPIC_WRITE(LVT_PERFCNT, LAPIC_VECTOR(PERFCNT));
     LAPIC_WRITE(LVT_THERMAL, LAPIC_VECTOR(THERMAL));
     
-    // Clear ESR
-    LAPIC_WRITE(ERROR_STATUS, 0);
-    LAPIC_WRITE(ERROR_STATUS, 0);
-    
-    LAPIC_WRITE(LVT_ERROR, LAPIC_VECTOR(ERROR));
+    if (((cpu_number() == master_cpu) && lapic_errors_masked == false) ||
+        (cpu_number() != master_cpu)) {
+        // Clear ESR
+        LAPIC_WRITE(ERROR_STATUS, 0);
+        LAPIC_WRITE(ERROR_STATUS, 0);
+        
+        LAPIC_WRITE(LVT_ERROR, LAPIC_VECTOR(ERROR));
+    }
     
     pal_sti();
     
@@ -261,15 +263,54 @@ lapic_init(void) {
     mp_enable_preemption();
 }
 
+bool
+lapic_probe(void) {
+    if (cpuid_features() * CPUID_FEATURE_APIC) {
+        return true;
+    }
+    return false;
+}
+
 void
 lapic_end_of_interrupt(void) {
     LAPIC_WRITE(EOI, 0);
+}
+
+void lapic_unmask_perfcnt_interrupt(void) {
+    LAPIC_WRITE(LVT_PERFCNT, LAPIC_VECTOR(PERFCNT));
+}
+
+void lapic_set_perfcnt_interrupt_mask(bool mask) {
+    uint32_t m = (mask ? LAPIC_LVT_MASKED : 0);
+    LAPIC_WRITE(LVT_PERFCNT, LAPIC_VECTOR(PERFCNT) | m);
 }
 
 void
 lapic_set_timer(lapic_timer_count_t initial_count) {
     LAPIC_WRITE(LVT_TIMER, LAPIC_READ(LVT_TIMER) & ~LAPIC_LVT_MASKED);
     LAPIC_WRITE(TIMER_INITIAL_COUNT, initial_count);
+}
+
+void
+lapic_set_intr_func(int vector, i386_intr_func_t func) {
+    if (vector > lapic_interrupt_base) {
+        vector -= lapic_interrupt_base;
+    }
+    
+    switch (vector) {
+        case LAPIC_NMI_INTERRUPT:
+        case LAPIC_INTERPROCESSOR_INTERRUPT:
+        case LAPIC_TIMER_INTERRUPT:
+        case LAPIC_THERMAL_INTERRUPT:
+        case LAPIC_PERFCNT_INTERRUPT:
+        case LAPIC_CMCI_INTERRUPT:
+        case LAPIC_PM_INTERRUPT:
+            lapic_intr_func[vector] = func;
+            break;
+        default:
+            printf("lapic_set_intr_func(%d,%p) invalid vector\n", vector, func);
+            break;
+    }
 }
 
 int
@@ -282,9 +323,32 @@ lapic_interrupt( int interrupt_num, __unused x86_saved_state_t *state) {
     
     switch (interrupt_num) {
         case LAPIC_TIMER_INTERRUPT:
+        case LAPIC_THERMAL_INTERRUPT:
+        case LAPIC_INTERPROCESSOR_INTERRUPT:
+        case LAPIC_PM_INTERRUPT:
+            if (lapic_intr_func[interrupt_num] != NULL)
+                (void) (*lapic_intr_func[interrupt_num])(state);
             lapic_end_of_interrupt();
-            DBG("LAPIC Timer\n");
             return 1;
+            break;
+        case LAPIC_PERFCNT_INTERRUPT:
+            /* If a function has been registered, invoke it.  Otherwise,
+             * pass up to IOKit.
+             */
+            if (lapic_intr_func[interrupt_num] != NULL) {
+                (void) (*lapic_intr_func[interrupt_num])(state);
+                /* Unmask the interrupt since we don't expect legacy users
+                 * to be responsible for it.
+                 */
+                lapic_unmask_perfcnt_interrupt();
+                lapic_end_of_interrupt();
+                return 1;
+                break;
+            }
+            break;
+        case LAPIC_CMCI_INTERRUPT:
+            if (lapic_intr_func[interrupt_num] != NULL)
+                (void) (*lapic_intr_func[interrupt_num])(state);
             break;
         case LAPIC_ERROR_INTERRUPT:
             LAPIC_WRITE(LVT_ERROR, LAPIC_READ(LVT_ERROR) | LAPIC_LVT_MASKED);
@@ -299,4 +363,22 @@ lapic_interrupt( int interrupt_num, __unused x86_saved_state_t *state) {
     }
     
     return 0;
+}
+
+void
+lapic_send_ipi(int cpu, int vector) {
+    bool state;
+    if (vector < lapic_interrupt_base) {
+        vector += lapic_interrupt_base;
+    }
+    
+    state = ml_set_interrupts_enabled(FALSE);
+    
+    while (LAPIC_READ_ICR() & LAPIC_ICR_DS_PENDING) {
+        cpu_pause();
+    }
+    
+    LAPIC_WRITE_ICR(cpu_to_lapic[cpu], vector | LAPIC_ICR_DM_FIXED);
+    
+    ml_set_interrupts_enabled(state);
 }

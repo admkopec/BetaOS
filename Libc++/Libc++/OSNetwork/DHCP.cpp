@@ -8,6 +8,7 @@
 
 #include "DHCP.hpp"
 #include "UDP.hpp"
+#include <Modules/NetworkController.hpp>
 #include <OSNetwork.hpp>
 
 // Net defs

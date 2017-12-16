@@ -35,7 +35,7 @@
 
 // USB Port Register
 
-#define	PS_CCS              0x00000001U             // RO - current connect status 
+#define	PS_CCS              0x00000001U             // RO - current connect status
 #define	PS_PED              0x00000002U             // RW1C - port enabled / disabled 
 #define	PS_OCA              0x00000008U             // RO - over current active 
 #define	PS_PR               0x00000010U             // RW1S - port reset 
@@ -256,8 +256,7 @@ XHCI::start() {
     Operationals->Configure = ((Operationals->Configure & ~CONFIG_SLOTS_MASK) | NumberOfSlots);
     Operationals->DeviceNotificationControl = UINT16_MAX;
     
-    Operationals->DeviceContextBaseAddressArrayPointer = (uint64_t)&DeviceBaseArray[0];
-    //Operationals->DeviceContextBaseAddressArrayPointer = (uint64_t)DeviceBaseArray[0];
+    Operationals->DeviceContextBaseAddressArrayPointer = (uintptr_t)malloc(sizeof(DeviceContext));
     
     Operationals->USBCommand |= CMD_HCRESET;
     

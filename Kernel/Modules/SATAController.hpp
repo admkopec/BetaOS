@@ -144,15 +144,51 @@ typedef struct tagHBA_CMD_HEADER {
     uint32_t   rsv1[4];    // Reserved
 } HBA_CMD_HEADER;
 
+typedef struct tagHBA_PRDT_ENTRY {
+    uint32_t dba;        // Data base address
+    uint32_t dbau;       // Data base address upper 32 bits
+    uint32_t rsv0;       // Reserved
+    
+    // DW3
+    uint32_t dbc:22;     // Byte count, 4M max
+    uint32_t rsv1:9;     // Reserved
+    uint32_t i:1;        // Interrupt on completion
+} HBA_PRDT_ENTRY;
+
+typedef struct tagHBA_CMD_TBL {
+    // 0x00
+    uint8_t  cfis[64];    // Command FIS
+    
+    // 0x40
+    uint8_t  acmd[16];    // ATAPI command, 12 or 16 bytes
+    
+    // 0x50
+    uint8_t  rsv[48];     // Reserved
+    
+    // 0x80
+    HBA_PRDT_ENTRY prdt_entry[1];    // Physical region descriptor table entries, 0 ~ 65535
+} HBA_CMD_TBL;
+
+class SATADevice : public OSObject {
+    HBA_PORT        *Port;
+    HBA_CMD_HEADER  *cmdHeader;
+    HBA_CMD_TBL     *cmdTable;
+    int PortNumber;
+    
+    void rebase();
+    void stop_cmd();
+    void start_cmd();
+    int find_cmdslot();
+public:
+    OSReturn init(HBA_PORT *port, int PortNum);
+    
+};
+
 class SATA : public Controller {
     HBA_MEM* address;
     static int      check_type(HBA_PORT* port);
-    static void     start_cmd(HBA_PORT* port);
-    static void     stop_cmd(HBA_PORT* port);
-    static void     port_rebase(HBA_PORT* port, int portno);
     
-    int find_cmdslot(HBA_PORT *port);
-    
+    SATADevice *SATADevices[255];
 public:
     virtual int  init(PCI *header) override;
     virtual void start() override;

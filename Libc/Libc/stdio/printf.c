@@ -20,7 +20,6 @@ extern "C" {
              extern void itoa(char *buf, unsigned long int n, int base);
              extern bool use_screen_caching;
              extern bool early;
-             extern void refresh_screen(void);
              extern bool experimental;
 #ifdef __cplusplus
 }

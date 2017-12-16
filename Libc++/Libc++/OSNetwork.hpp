@@ -10,8 +10,6 @@
 #define OSNetwork_hpp
 
 #include "OSObject.hpp"
-#include <Modules/NetworkController.hpp>
-
 #define kMaxNetworkControllers 25
 
 struct NetworkControllerTable {

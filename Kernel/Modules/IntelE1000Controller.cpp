@@ -10,6 +10,7 @@
 
 #include "IntelE1000Controller.hpp"
 #include "InterruptController.hpp"
+#include "NetworkController.hpp"
 #include "MMIOUtils.hpp"
 #include <stdint.h>
 #include <i386/pio.h>
@@ -176,7 +177,9 @@ void E1000::handleReceive() {
             Log("Packet has errors: (0x%X)\n", desc->errors);
         } else {
             DBG("Packet: %hu Bytes recived (status = 0x%X)\n", desc->length, desc->status);
+            #ifdef DEBUG
             uint8_t * buf = (uint8_t *)desc->addr;
+            #endif
             DBG("Packet: %s lebgth: %hu\n", buf, desc->length);
         }
         desc->status = 0;

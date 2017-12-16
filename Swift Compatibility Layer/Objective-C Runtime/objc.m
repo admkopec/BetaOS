@@ -16,96 +16,6 @@
 #define likely(x)      __builtin_expect(!!(x), 1)
 #define unlikely(x)    __builtin_expect(!!(x), 0)
 
-UNIMPLEMENTED(getline)
-UNIMPLEMENTED(getsectiondata)
-UNIMPLEMENTED(__error)
-UNIMPLEMENTED(malloc_zone_from_ptr)
-UNIMPLEMENTED(snprintf_l)
-UNIMPLEMENTED(vdprintf)
-UNIMPLEMENTED(fprintf)
-UNIMPLEMENTED(dlsym)
-UNIMPLEMENTED(dladdr)
-UNIMPLEMENTED(getenv)
-UNIMPLEMENTED(close)
-UNIMPLEMENTED(read)
-UNIMPLEMENTED(asl_log)
-UNIMPLEMENTED(__swbuf)
-UNIMPLEMENTED(_tlv_bootstrap)
-UNIMPLEMENTED(malloc_default_zone)
-
-/*
- * Math functions
- */
-
-
-UNIMPLEMENTED(arc4random)
-UNIMPLEMENTED(arc4random_uniform)
-UNIMPLEMENTED(ceil)
-UNIMPLEMENTED(ceill)
-UNIMPLEMENTED(cos)
-UNIMPLEMENTED(cosf)
-UNIMPLEMENTED(exp)
-UNIMPLEMENTED(exp2)
-UNIMPLEMENTED(exp2f)
-UNIMPLEMENTED(expf)
-UNIMPLEMENTED(floor)
-UNIMPLEMENTED(floorf)
-UNIMPLEMENTED(floorl)
-UNIMPLEMENTED(fma)
-UNIMPLEMENTED(fmaf)
-UNIMPLEMENTED(fmal)
-UNIMPLEMENTED(fmod)
-UNIMPLEMENTED(fmodf)
-UNIMPLEMENTED(fmodl)
-UNIMPLEMENTED(log)
-UNIMPLEMENTED(log10)
-UNIMPLEMENTED(log10f)
-UNIMPLEMENTED(log2)
-UNIMPLEMENTED(log2f)
-UNIMPLEMENTED(logf)
-UNIMPLEMENTED(nearbyint)
-UNIMPLEMENTED(nearbyintf)
-UNIMPLEMENTED(rint)
-UNIMPLEMENTED(rintf)
-UNIMPLEMENTED(rintl)
-UNIMPLEMENTED(round)
-UNIMPLEMENTED(roundf)
-UNIMPLEMENTED(roundl)
-UNIMPLEMENTED(sin)
-UNIMPLEMENTED(sinf)
-UNIMPLEMENTED(lgamma_r)
-UNIMPLEMENTED(lgammaf_r)
-UNIMPLEMENTED(lgammal_r)
-
-/*
- * Misc
- */
-
-UNIMPLEMENTED(strtod_l)
-UNIMPLEMENTED(strtof_l)
-UNIMPLEMENTED(strtold_l)
-UNIMPLEMENTED(remainder)
-UNIMPLEMENTED(remainderf)
-UNIMPLEMENTED(remainderl)
-UNIMPLEMENTED(__memcpy_chk)
-UNIMPLEMENTED(__memmove_chk)
-UNIMPLEMENTED(__strlcpy_chk)
-
-UNIMPLEMENTED(sysconf)
-UNIMPLEMENTED(trunc)
-UNIMPLEMENTED(truncf)
-UNIMPLEMENTED(truncl)
-
-UNIMPLEMENTED(fcntl)
-UNIMPLEMENTED(ioctl)
-
-UNIMPLEMENTED(open)
-UNIMPLEMENTED(openat)
-UNIMPLEMENTED(sem_open)
-
-UNIMPLEMENTED(__fpclassifyd)
-UNIMPLEMENTED(__fpclassifyf)
-
 id _Nullable
 objc_msgSend(id _Nullable self, SEL _Nonnull op, ...){
     ULTDBG("objc_msgSend!\n");
@@ -243,8 +153,6 @@ UNIMPLEMENTED(objc_moveWeak)
 UNIMPLEMENTED(objc_msgSendSuper2)
 UNIMPLEMENTED(objc_msgSend_stret)
 UNIMPLEMENTED(objc_readClassPair)
-UNIMPLEMENTED(objc_release)
-UNIMPLEMENTED(objc_retain)
 UNIMPLEMENTED(objc_retainAutoreleasedReturnValue)
 
 id _Nullable
@@ -338,29 +246,13 @@ fwrite(const void* buf, size_t size, size_t count, FILE *stream) {
 }
 
 BOOL class_conformsToProtocol(Class cls, Protocol *protocol) {
-    return NO;
-}
-
-BOOL object_isClass(id obj) {
-    return NO;
+    return YES;
 }
 
 UNIMPLEMENTED(__divti3)
 UNIMPLEMENTED(__udivti3)
 UNIMPLEMENTED(__modti3)
 UNIMPLEMENTED(__umodti3)
-
-
-float ceilf(float f) {
-    long result = (long)f;
-    if ((float)result < f) {
-        result++;
-    }
-    float resultf = (float)result;
-    //    printf("ceilf(%ld)=%ld\n", (long)f, (long)resultf);
-    
-    return resultf;
-}
 
 UNIMPLEMENTED(backtrace)
 

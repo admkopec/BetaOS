@@ -25,7 +25,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     fileprivate var rawValue: UInt
     fileprivate var rawValueVirt: UInt
     public var description: String {
-        return "Physical Address is 0x\(String(rawValue, radix: 16)), Virtual Address is 0x\(String(virtual, radix: 16))"
+        return "Physical Address is 0x\(String(physical, radix: 16)), Virtual Address is 0x\(String(virtual, radix: 16))"
     }
     /**
      Virtual address represented as a bit pattern.

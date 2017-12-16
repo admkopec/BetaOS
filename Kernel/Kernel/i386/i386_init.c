@@ -296,12 +296,11 @@ vstart(vm_offset_t boot_args_start) {
 extern bool enable;
 extern bool use_screen_caching;
 extern uint64_t Screen;
+extern uintptr_t swift_isaMask;
 extern RSDP_for_Swift RSDP_;
 extern SMBIOS_for_Swift SMBIOS_;
 extern SMBIOSHeader SmbiosHeaderForBiosSearch;
 extern ACPI_2_Description RsdpForBiosSearch;
-extern void APICInit(void);
-extern void PITInit(uint16_t divisor);
 extern bool experimental;
 void
 i386_init(void) {
@@ -355,11 +354,9 @@ i386_init(void) {
     } else if (SMBIOS_.OriginalAddress != 0) {
         SMBIOS_.SMBIOS = (SMBIOSHeader *)io_map(((vm_offset_t)SMBIOS_.OriginalAddress & ~3), round_page(sizeof(SMBIOSHeader)), VM_WIMG_IO);
     }
-    
+    swift_isaMask = 0xF;
     init_fpu();
     enable_sse();
-    lapic_init();
-    APICInit();
     //pmInit();
     
     kernelMain();
@@ -368,5 +365,8 @@ i386_init(void) {
 void
 i386_init_slave(void) {
     printf("Init Slave!\n");
+    for (; ;) {
+        pal_hlt();
+    }
     //i386_init();
 }

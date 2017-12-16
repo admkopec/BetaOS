@@ -342,6 +342,11 @@ EHCI::stop() {
     super::stop();
 }
 
+void
+EHCI::handleInterrupt() {
+    Log("Shouldn't handle any interrupts at this stage!");
+}
+
 OSReturn
 EHCI::Handshake(volatile const uint32_t* pReg, uint32_t test_mask, uint32_t test_target, int32_t msec) {
     for (int32_t count = 0; count < msec; ++count) {

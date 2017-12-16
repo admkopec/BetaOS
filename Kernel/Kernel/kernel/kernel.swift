@@ -17,20 +17,45 @@
 @_silgen_name("kernelMain")
 public func kernelMain() -> Void {
     // New kernelMain written in Swift
+    lapic_init()
+    APICInit()
     PIT8254.sharedInstance.setChannel(.CHANNEL_0, mode: .MODE_3, hz: 60)
     ModulesStartController()
     CommandInit()
+//    let fontcolor = get_font_color()
+//    let CopyrightNoticeColor = Color(red: 0x16, green: 0xF3, blue: 0xFF, alpha: 0xFF)
+//    change_font_color(CopyrightNoticeColor.value)
     kprint("Hello from Swift!" + "\n" + "Welcome to BetaOS in x86_64 MACH-O EFI mode :) !")
-    let username = "root"
+    kprint("Copyright © 2015-2017 Adam Kopec. All rights reserved.")
+//    change_font_color(fontcolor)
     _ = System.sharedInstance
+//    _ = addTask(name: "DummyTaskA", task: dummyA)
+//    _ = addTask(name: "DummyTaskB", task: dummyB)
+//    _ = addTask(name: "Console", task: console)
+    saveKernelState()
     if System.sharedInstance.DeviceVendor == "Apple Inc." {
         while true {
             hlt()
         }
     } else {
-        while true {
-            kprint(username + "$ ", terminator: "")
-            findcommand()
-        }
+        console()
+    }
+}
+
+func dummyA() {
+    tprint("A")
+}
+
+func dummyB() {
+//    while true {
+        tprint("B")
+//        yield()
+//    }
+}
+
+func console() -> Void {
+    while true {
+        kprint("root$ ", terminator: "")
+        findcommand()
     }
 }

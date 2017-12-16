@@ -8,6 +8,7 @@
 
 #include "ARP.hpp"
 #include "Ethernet.hpp"
+#include <Modules/NetworkController.hpp>
 #include <OSNetwork.hpp>
 #include <OSRuntime.hpp>
 

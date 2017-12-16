@@ -6,6 +6,7 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
+#include <Modules/NetworkController.hpp>
 #include <OSNetwork.hpp>
 #include "DHCP.hpp"
 

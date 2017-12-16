@@ -16,6 +16,7 @@ protocol Module: Loggable, CustomStringConvertible {
 
 protocol PCIModule: Module {
     static var CompatibleDevices: [PCIDevice] { get }
+    init?(pci: PCI)
 }
 
 final class ModulesController: CustomStringConvertible {
@@ -43,8 +44,11 @@ final class ModulesController: CustomStringConvertible {
     }
 }
 
+
+
 final class PCIModulesController: CustomStringConvertible {
     let Name = "PCIModulesController"
+    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, HDA.self]
     var description: String {
         return Name
     }
@@ -59,10 +63,12 @@ final class PCIModulesController: CustomStringConvertible {
                 for function in 0 ... 7 {
                     pci = PCI(bus: UInt8(bus), slot: UInt8(slot), function: UInt8(function))
                     if pci.isValid {
-                        for comptaibleDevice in SVGA.CompatibleDevices {
-                            if (pci.VendorID, pci.DeviceID) == comptaibleDevice {
-                                if let module = SVGA(pci: pci) {
-                                    System.sharedInstance.modulesController.modules.append(module)
+                        for controller in controllers {
+                            for comptaibleDevice in controller.CompatibleDevices {
+                                if (pci.VendorID, pci.DeviceID) == comptaibleDevice {
+                                    if let module = controller.init(pci: pci) {
+                                        System.sharedInstance.modulesController.modules.append(module)
+                                    }
                                 }
                             }
                         }

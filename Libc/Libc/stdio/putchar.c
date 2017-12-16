@@ -14,7 +14,6 @@
 extern void vsputc(int ch);
 extern void serial_putc(int c);
 extern bool early;
-extern void refresh_screen(void);
 extern void panic(const char*, ...);
 
 int putchar(int ic) {

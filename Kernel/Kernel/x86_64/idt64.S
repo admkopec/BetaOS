@@ -493,7 +493,7 @@ L_64bit_return:
 	mov	R64_RDX(%r15), %rdx
 	mov	R64_RCX(%r15), %rcx
 	mov	R64_RBX(%r15), %rbx
-	mov	R64_RAX(%r15), %rax
+    mov R64_RAX(%r15), %rax
 
 	/*
 	 * We must swap GS base if we're returning to user-space,
@@ -1109,12 +1109,12 @@ Entry(hndl_allintrs)
 	/*
 	 * test whether already on interrupt stack
 	 */
-	movq	%gs:CPU_INT_STACK_TOP,%rcx
-	cmpq	%rsp,%rcx
-	jb	1f
-	leaq	-INTSTACK_SIZE(%rcx),%rdx
-	cmpq	%rsp,%rdx
-	jb	int_from_intstack
+    movq    %gs:CPU_INT_STACK_TOP,%rcx
+    cmpq    %rsp,%rcx
+    jb    1f
+    leaq    -INTSTACK_SIZE(%rcx),%rdx
+    cmpq    %rsp,%rdx
+	jb  	int_from_intstack
 1:
 	xchgq	%rcx,%rsp		/* switch to interrupt stack */
 
@@ -1136,7 +1136,7 @@ Entry(hndl_allintrs)
 	//incl	%gs:CPU_PREEMPTION_LEVEL
 	//incl	%gs:CPU_INTERRUPT_LEVEL
 
-	CCALL1(interrupt, %r15)		/* call generic interrupt routine */
+    CCALL1(interrupt, %r15)     /* call generic interrupt routine */
 
 	.globl	EXT(return_to_iret)
 LEXT(return_to_iret)			/* (label for kdb_kintr and hardclock) */
@@ -1201,12 +1201,12 @@ int_from_intstack:
 	//incl	%gs:CPU_INTERRUPT_LEVEL
 	//incl	%gs:CPU_NESTED_ISTACK
 
-	push	%gs:CPU_INT_STATE
-	mov	%r15, %gs:CPU_INT_STATE
+    push    %gs:CPU_INT_STATE
+    mov    %r15, %gs:CPU_INT_STATE
 
 	CCALL1(interrupt, %r15)
 
-	pop	%gs:CPU_INT_STATE
+    pop    %gs:CPU_INT_STATE
 
 	//decl	%gs:CPU_INTERRUPT_LEVEL
 	//decl	%gs:CPU_PREEMPTION_LEVEL

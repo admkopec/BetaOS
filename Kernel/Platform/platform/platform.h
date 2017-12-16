@@ -43,8 +43,6 @@ typedef struct clock_frequency_info_t {
 
 extern clock_frequency_info_t gClockFrequencyInfo;
 
-typedef struct Boot_Video	Boot_Video;
-
 /*  Scale factor values for Platform_Video.v_scale */
 enum {
     kPScaleFactorUnknown = 0,

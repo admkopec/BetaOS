@@ -28,6 +28,8 @@ extern void refresh_screen(void);
 static void panic_trap(x86_saved_state64_t *regs, uint32_t pl);
 static void set_recovery_ip(x86_saved_state64_t  *saved_state, vm_offset_t ip);
 
+extern void switchTasks(void);
+
 #ifdef DEBUG
 void printf_state(x86_saved_state64_t *saved_state);
 #endif
@@ -107,7 +109,15 @@ interrupt(x86_saved_state_t *state) {
     if (!lapic_interrupt(interrupt_num, state)) {
         if (interrupt_num == LAPIC_DEFAULT_INTERRUPT_BASE) {
             refresh_screen();
+            printf("");
+            switchTasks();
         }
+//        if (interrupt_num == 51) {
+//            return_state = getFirstTask();
+//        }
+//        if (interrupt_num == 50) {
+//            return_state = getNextTask(state);
+//        }
         //Platform_incoming_interrupt(interrupt_num);
         if (interrupt_num >= LAPIC_DEFAULT_INTERRUPT_BASE && interrupt_num <= (LAPIC_DEFAULT_INTERRUPT_BASE + 0x0F)) {
             IncommingInterrupt(interrupt_num);
@@ -499,6 +509,11 @@ const char *	trap_type[] = {TRAP_NAMES};
 unsigned        TRAP_TYPES  = sizeof(trap_type)/sizeof(trap_type[0]);
 
 #if defined(__x86_64__) && DEBUG
+void
+printf_state_swift(x86_saved_state64_t state) {
+    return printf_state(&state);
+}
+
 void
 printf_state(x86_saved_state64_t *saved_state) {
     printf("current_cpu_datap() 0x%llx\n",  (uintptr_t)current_cpu_datap());

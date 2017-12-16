@@ -36,7 +36,9 @@ void version(int argc, char* argv[]);
 void time_(int argc, char* argv[]);
 void set_color(int argc, char* argv[]);
 void printLoadedModules(int argc, char* argv[]);
-//void swiftFunctionWrapper(void(*function)(void), int argc, char* argv[]);
+void test_graphics(int argc, char* argv[]);
+void test_new_panic(int argc, char* argv[]);
+void tasks(int argc, char* argv[]);
 void reboot_(__unused int argc,__unused char* argv[]) {
     reboot_system(false);
 }
@@ -83,6 +85,9 @@ void CommandInit() {
     addCommand("stop",          "Shut downs the computer",                                  shutdown_);
     addCommand("setcolor",      "Sets the terminal colors",                                 set_color);
     addCommand("loadedModules", "Displays Loaded Modules",                                  printLoadedModules);
+    addCommand("runTasks",      "Runs the tasks queue",                                     tasks);
+    addCommand("graphics",      "Test Graphics drawing",                                    test_graphics);
+    addCommand("panic",         "Test Graphical Panic",                                     test_new_panic);
 }
 
 void findcommand() {
@@ -126,7 +131,6 @@ void findcommand() {
             } else {
                 LastRunCommand = 1;
             }
-//            swiftFunctionWrapper((void(*)(void))command[i].run, argc, argv);
             command[i].run(argc, argv);
             return;
         }

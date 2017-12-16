@@ -22,6 +22,9 @@
 #define DBG(x...)
 #endif
 
+#define PROT_MODE_START 0x800
+#define REAL_MODE_BOOTSTRAP_OFFSET 0x2000
+
 #define    __probable(x)    __builtin_expect(!!((long)(x)), 1L)
 #define    __improbable(x)    __builtin_expect(!!((long)(x)), 0L)
 

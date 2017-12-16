@@ -6,6 +6,8 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
+import Addressing
+
 struct BAR {
     let address : Address
     let port    : Int16

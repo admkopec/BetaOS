@@ -55,14 +55,5 @@ objc_getClass(const char* aClassName) {
     if (!aClassName) {
         return Nil;
     }
-    return Nil;
-}
-
-Class
-object_getClass(id object) {
-    if (object != nil) {
-        return object->isa;
-    } else {
-        return Nil;
-    }
+    return objc_lookUpClass(aClassName);
 }

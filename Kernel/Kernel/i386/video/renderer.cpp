@@ -7,6 +7,7 @@
 //
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 extern "C" {
@@ -108,7 +109,7 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
     int       i;
     
     modified = true;
-    render_char(ch, rendered_char, 32);
+    render_char(ch, rendered_char, Platform_state.video.v_depth);
     theChar = (uint32_t*)(rendered_char);
     
     where = (uint32_t*)(Platform_state.video.v_baseAddr + (y * Platform_state.video.v_rowBytes) + (x * 4));
@@ -134,23 +135,24 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
 }
     
 void
-paint_rectangle(unsigned int x, unsigned int y, uint8_t r, uint8_t g, uint8_t b, uint8_t width, uint8_t height) {
-    // Not working very well right now
-    if (!use_screen_caching) {
+paint_pixel(unsigned int x, unsigned int y, uint32_t color) {
+    if (x > Platform_state.video.v_width || y > Platform_state.video.v_height) {
         return;
     }
-    uint32_t* where = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
-    int i, j;
-    for (i = 0; i < width; i++) {
-        for (j = 0; j < height; j++) {
-            //putpixel(vram, 64 + j, 64 + i, (r << 16) + (g << 8) + b);
-            where[j * 4] = r;
-            where[j * 4 + 1] = g;
-            where[j * 4 + 2] = b;
-        }
-//        where+=3200;
-        where+=Platform_state.video.v_rowBytes;
+    uint32_t* where  = (uint32_t*)(Platform_state.video.v_baseAddr + (y * Platform_state.video.v_rowBytes) + (x * 4));
+    uint32_t* where2 = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
+    if (!use_screen_caching || !experimental) {
+        *where = color;
     }
+    if (use_screen_caching) {
+        *where2 = color;
+    }
+}
+    
+uint32_t
+get_pixel(unsigned int x, unsigned int y) {
+    uint32_t* where2 = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
+    return *where2;
 }
 
 static void

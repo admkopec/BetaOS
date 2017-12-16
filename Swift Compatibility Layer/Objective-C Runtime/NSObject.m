@@ -6,6 +6,8 @@
 //
 
 #import <objc/NSObject.h>
+#import <objc/objc.h>
+#import <objc/runtime.h>
 
 id _objc_rootRetain(id a) {
     return nil;
@@ -42,6 +44,18 @@ id _objc_rootAutorelease(id a) {
 }
 
 - (BOOL) conformsToProtocol:(Protocol *)aProtocol {
+    if (!aProtocol) return NO;
+    for (Class tcls = [self class]; tcls; tcls = [[tcls superclass] class]) {
+        if (class_conformsToProtocol(tcls, aProtocol)) return YES;
+    }
+    return NO;
+}
+
++ (BOOL) conformsToProtocol:(Protocol *)aProtocol {
+    if (!aProtocol) return NO;
+    for (Class tcls = self; tcls; tcls = [tcls superclass]) {
+        if (class_conformsToProtocol(tcls, aProtocol)) return YES;
+    }
     return NO;
 }
 
@@ -53,10 +67,6 @@ id _objc_rootAutorelease(id a) {
     return NO;
 }
 
-+ (BOOL) conformsToProtocol:(Protocol *)aProtocol {
-    return NO;
-}
-
 - (id) retain {
     return _objc_rootRetain(self);
 }
@@ -65,7 +75,7 @@ id _objc_rootAutorelease(id a) {
     return 0;
 }
 
-- (void) release {
+- (oneway void) release {
     _objc_rootRelease(self);
 }
 

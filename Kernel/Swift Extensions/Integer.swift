@@ -6,6 +6,10 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
+let KB = (1024)
+let MB = (1024*KB)
+let GB = (1024*MB)
+
 extension UnsignedInteger {
     typealias Byte = UInt8
     typealias Word = UInt16

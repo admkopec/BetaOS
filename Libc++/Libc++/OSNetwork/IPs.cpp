@@ -8,6 +8,7 @@
 
 #include "IPs.hpp"
 #include "Ethernet.hpp"
+#include <Modules/NetworkController.hpp>
 #include <OSRuntime.hpp>
 #include <OSNetwork.hpp>
 

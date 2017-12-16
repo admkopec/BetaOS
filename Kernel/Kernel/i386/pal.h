@@ -25,6 +25,16 @@ void pal_stop_cpu(bool cli) {
     __asm__ volatile ( "wbinvd; hlt" );
 }
 
+static inline
+void cpu_halt(void) {
+    pal_stop_cpu(true);
+}
+
+static inline
+void cpu_pause(void) {
+    __builtin_ia32_pause();
+}
+
 typedef struct pal_rtc_nanotime {
     volatile uint64_t	tsc_base;	/* timestamp */
     volatile uint64_t	ns_base;	/* nanoseconds */

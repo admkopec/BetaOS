@@ -9,6 +9,7 @@
 #include <i386/pio.h>
 #include <i386/pal.h>
 #include <i386/cpuid.h>
+#include <i386/thread_status.h>
 
 
 #ifdef DEBUG
@@ -141,6 +142,40 @@ typedef struct {
     unsigned char bcd_revision;
 } SMBIOSHeader;
 
+struct x86_64_context_switch_frame {
+    uint64_t r15, r14, r13, r12;
+    uint64_t rbp;
+    uint64_t rbx;
+    uint64_t rip;
+};
+
+struct context_switch_regs {
+    uint64_t es;
+    uint64_t ds;
+    uint64_t rax;
+    uint64_t rbx;
+    uint64_t rcx;
+    uint64_t rdx;
+    uint64_t rsi;
+    uint64_t rdi;
+    uint64_t r8;
+    uint64_t r9;
+    uint64_t r10;
+    uint64_t r11;
+    uint64_t r12;
+    uint64_t r13;
+    uint64_t r14;
+    uint64_t r15;
+    uint64_t rbp;
+    uint64_t fs;
+    uint64_t gs;
+    uint64_t rip;
+    uint64_t cs;
+    uint64_t eflags;
+    uint64_t rsp;
+    uint64_t ss;
+};
+
 typedef struct {
     SMBIOSHeader * SMBIOS;
     unsigned long  OriginalAddress;
@@ -168,6 +203,7 @@ static inline void cli() {
 extern RSDP_for_Swift RSDP_;
 extern SMBIOS_for_Swift SMBIOS_;
 extern Platform_state_t  Platform_state;
+extern bool experimental;
 extern unsigned long inline ml_static_ptovirt(unsigned long paddr);
 extern void ModulesStartController(void);
 extern void PrintLoadedModules(void);
@@ -178,8 +214,30 @@ GetBaseAddr(unsigned char Bus, unsigned char Slot, unsigned char Function) {
 }
 extern void
 change_color(unsigned int foreground, unsigned int background);
+extern unsigned int
+get_pixel(unsigned int x, unsigned int y);
+extern void APICInit(void);
+extern void lapic_init(void);
+extern void serial_putc(int c);
+extern void paint_char(unsigned int x, unsigned int y, unsigned char ch);
+extern void paint_pixel(unsigned int x, unsigned int y, unsigned int color);
+extern void paint_circle(unsigned int x, unsigned int y, int radius, unsigned int color);
+extern void paint_rounded_rectangle(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, int radius, unsigned int color);
+extern void clear_screen(void);
+static inline void interr() {
+    __asm__("int $50");
+}
+static inline void interr51() {
+    __asm__("int $51");
+}
+static inline void interr52() {
+    __asm__("int $52");
+}
 extern void
-change_font_color(unsigned int foreground);
-extern unsigned int get_font_color(void);
+x86_64_context_switch(uintptr_t *oldsp, uintptr_t *newsp);
 extern void
-paint_rectangle(unsigned int x, unsigned int y, unsigned char r, unsigned char g, unsigned char b, unsigned char width, unsigned char height);
+x86_64_context_save_state(uintptr_t* oldsp);
+extern void
+x86_64_context_switch_first(uintptr_t* newsp);
+extern void
+printf_state_swift(x86_saved_state64_t saved_state);

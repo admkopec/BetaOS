@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "Controller.hpp"
+#include "USBCommon.hpp"
 
 #define PCI_USB_CLASS    0x0C
 #define PCI_USB_SUBCLASS 0x03
@@ -139,7 +140,6 @@ class XHCI : public Controller {
     OperationalRegisters*        Operationals;
     RuntimeRegisters*            Runtimes;
     uint32_t*                    DoorBells;
-    DeviceContext                DeviceBaseArray[2];
     
     uint16_t    RootHub3Address;
     uint16_t    RootHub2Address;

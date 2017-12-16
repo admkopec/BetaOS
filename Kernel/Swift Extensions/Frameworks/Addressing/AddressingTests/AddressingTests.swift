@@ -23,9 +23,9 @@ class AddressingTests: XCTestCase {
     
     func testExample() {
         var addr: UInt = 0x10000
-        let address = Address(addr, baseAddress: (0x10000, 0x40000))
-        XCTAssert(address.physical == 0x10000)
-        XCTAssert(address.virtual  == 0x40000)
+//        let address = Address(addr, baseAddress: (0x10000, 0x40000))
+//        XCTAssert(address.physical == 0x10000)
+//        XCTAssert(address.virtual  == 0x40000)
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }

@@ -7,7 +7,7 @@
 		<key>Objective-C Runtime.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>1</integer>
 		</dict>
 		<key>Unicode Support Mobile.xcscheme</key>
 		<dict>
@@ -18,6 +18,14 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>6</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>3B1A242E1F90C4ED00BF40FE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
