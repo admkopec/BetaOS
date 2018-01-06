@@ -15,6 +15,6 @@
 #define VERSION_XMINOR  0
 #define COPYRIGHT       "Copyright © 2015-2018 Adam Kopec. All rights reserved."
 #define BUILD_NUMBER    \
-98575
+98576
 
 #endif /* version_h */
