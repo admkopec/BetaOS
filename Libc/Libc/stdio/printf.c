@@ -63,6 +63,10 @@ int printf(const char *restrict s, ...) {
     return printedchs;
 }
 
+int vprintf(const char *restrict s, va_list list) {
+    return __doprnt(s, list, (void(*)(int))putchar, 16, false);
+}
+
 #define isdigit(d) ((d) >= '0' && (d) <= '9')
 #define Ctod(c) ((c) - '0')
 

@@ -251,7 +251,7 @@ lapic_init(void) {
         LAPIC_WRITE(LVT_ERROR, LAPIC_VECTOR(ERROR));
     }
     
-    pal_sti();
+//    pal_sti();
     
     uint32_t vec;
     mp_disable_preemption();

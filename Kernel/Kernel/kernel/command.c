@@ -25,8 +25,6 @@ char*     commands[256];
 uint16_t  LastRunCommand = 0;
 
 extern void
-change_color(uint32_t foreground, uint32_t background);
-extern void
 clear_screen(void);
 
 /* Commands prototypes */
@@ -38,6 +36,9 @@ void set_color(int argc, char* argv[]);
 void printLoadedModules(int argc, char* argv[]);
 void test_graphics(int argc, char* argv[]);
 void test_new_panic(int argc, char* argv[]);
+void openFile(int argc, char* argv[]);
+void writeFile(int argc, char* argv[]);
+void listFiles(int argc, char* argv[]);
 void tasks(int argc, char* argv[]);
 void reboot_(__unused int argc,__unused char* argv[]) {
     reboot_system(false);
@@ -87,6 +88,9 @@ void CommandInit() {
     addCommand("loadedModules", "Displays Loaded Modules",                                  printLoadedModules);
     addCommand("runTasks",      "Runs the tasks queue",                                     tasks);
     addCommand("graphics",      "Test Graphics drawing",                                    test_graphics);
+    addCommand("open",          "Opens a File from Disk",                                   openFile);
+    addCommand("write",         "Writes a File to Disk",                                    writeFile);
+    addCommand("list",          "Lists files and folders",                                  listFiles);
     addCommand("panic",         "Test Graphical Panic",                                     test_new_panic);
 }
 
@@ -100,22 +104,31 @@ void findcommand() {
     }
     char* p = comm;
     bool arg = false;
+    bool Escaping = false;
     for (; ;) {
         char ch = *p;
         if (!ch) {
             break;
         }
-        
-        bool Space = ch == ' ' || ch == '\t';
+        bool Escape = ch == '"' || ch == '\'';
+        bool Space  = (ch == ' ' || ch == '\t') && !Escaping;
+        if (Escape) {
+            Escaping = true;
+        }
         if (arg) {
-            if (Space) {
+            if (Space || (Escape && Escaping)) {
                 *p = '\0';
+                Escaping = false;
                 arg = false;
             }
         } else {
             if (!Space) {
                 if (argc < 16) {
-                    argv[argc] = p;
+                    if (Escaping) {
+                        argv[argc] = p+1;
+                    } else {
+                        argv[argc] = p;
+                    }
                     argc++;
                 }
                 arg = true;

@@ -19,6 +19,26 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
         return "ByteArray (size: \(count)) value: 0x\(String(rawValue, radix: 16))"
     }
     
+    var asInt: Int {
+        return Int(rawValue)
+    }
+    
+    var asUInt16: UInt16 {
+        return UInt16(rawValue)
+    }
+    
+    var BigEndianasUInt16: UInt16 {
+        return UInt16(bigEndian: UInt16(rawValue))
+    }
+    
+    var asUInt32: UInt32 {
+        return UInt32(rawValue)
+    }
+    
+    var BigEndianasUInt32: UInt32 {
+        return UInt32(bigEndian: UInt32(rawValue))
+    }
+    
     init() {
         rawValue = 0
     }
@@ -53,7 +73,8 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
     
     init(withBytes bytes: Element...) {
         precondition(bytes.count <= 8)
-        
+        count = bytes.count
+        endIndex = count
         self.rawValue = 0
         var shift: UInt16 = 0
         for byte in bytes {
@@ -64,7 +85,8 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
     
     init(_ bytes: [Element]) {
         precondition(bytes.count <= 8)
-        
+        count = bytes.count
+        endIndex = count
         self.rawValue = 0
         var shift: UInt16 = 0
         for byte in bytes {
@@ -121,9 +143,5 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
         precondition(i >= 0)
         precondition(i < endIndex)
         return i + 1
-    }
-    
-    func toInt() -> Int {
-        return Int(rawValue)
     }
 }

@@ -125,7 +125,7 @@ typedef struct {
 
 // Fix static declarations;
 
-class EHCI : public Controller {
+class EHCI : public Controller, private USBHostController {
     CapRegisters*    CapabilityRegisters;
     OpRegisters*     OperationalRegisters;
     uint32_t*        FrameList;

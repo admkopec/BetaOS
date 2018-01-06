@@ -1025,6 +1025,7 @@ struct objc_class : objc_object {
     bool requiresRawIsa() {
         return bits.requiresRawIsa();
     }
+    
     void setRequiresRawIsa(bool inherited = false);
     void printRequiresRawIsa(bool inherited);
     

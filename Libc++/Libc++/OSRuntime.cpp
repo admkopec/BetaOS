@@ -130,6 +130,7 @@ __cxa_atexit(void (*func) (void *), void *arg, void *dso_handle) {
 }
 
 extern "C" {
+#include <mach/vm_types.h>
 #include <i386/vm_param.h>
 #include <i386/vm_types.h>
     void * malloc(size_t size) {

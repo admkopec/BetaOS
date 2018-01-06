@@ -9,12 +9,13 @@
 import Addressing
 import Loggable
 
-struct HDA: PCIModule {
+final class HDA: PCIModule {
     var Name: String = "HDA"
     var description: String {
-        return Name
+        return "Intel High Definition Audio Device Controller"
     }
     static var CompatibleDevices: [PCIDevice] = [(0x8086, 0x2668), (0x8086, 0x27D8), (0x1002, 0x4383)]
+    static var CompatibleClasses: [PCIClass]? = nil
     
     init?(pci: PCI) {
         Log("Found Intel HDA", level: .Verbose)

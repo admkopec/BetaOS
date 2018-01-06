@@ -28,26 +28,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3B10465C1F47711B003B0CE5 /* UDP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UDP.cpp; path = "Libc++/OSNetwork/UDP.cpp"; sourceTree = "<group>"; };
-		3B10465D1F47711B003B0CE5 /* UDP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = UDP.hpp; path = "Libc++/OSNetwork/UDP.hpp"; sourceTree = "<group>"; };
-		3B1046601F47712E003B0CE5 /* TCP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TCP.cpp; path = "Libc++/OSNetwork/TCP.cpp"; sourceTree = "<group>"; };
-		3B1046611F47712E003B0CE5 /* TCP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TCP.hpp; path = "Libc++/OSNetwork/TCP.hpp"; sourceTree = "<group>"; };
-		3B1046641F478DF5003B0CE5 /* Ethernet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Ethernet.cpp; path = "Libc++/OSNetwork/Ethernet.cpp"; sourceTree = "<group>"; };
-		3B1046651F478DF5003B0CE5 /* Ethernet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Ethernet.hpp; path = "Libc++/OSNetwork/Ethernet.hpp"; sourceTree = "<group>"; };
-		3B1F2B321F47664E007E395C /* DHCP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DHCP.cpp; path = "Libc++/OSNetwork/DHCP.cpp"; sourceTree = "<group>"; };
-		3B1F2B331F47664E007E395C /* DHCP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DHCP.hpp; path = "Libc++/OSNetwork/DHCP.hpp"; sourceTree = "<group>"; };
-		3B1F2B361F47666B007E395C /* IPs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IPs.cpp; path = "Libc++/OSNetwork/IPs.cpp"; sourceTree = "<group>"; };
-		3B1F2B371F47666B007E395C /* IPs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IPs.hpp; path = "Libc++/OSNetwork/IPs.hpp"; sourceTree = "<group>"; };
+		3B10465C1F47711B003B0CE5 /* UDP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UDP.cpp; sourceTree = "<group>"; };
+		3B10465D1F47711B003B0CE5 /* UDP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UDP.hpp; sourceTree = "<group>"; };
+		3B1046601F47712E003B0CE5 /* TCP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TCP.cpp; sourceTree = "<group>"; };
+		3B1046611F47712E003B0CE5 /* TCP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TCP.hpp; sourceTree = "<group>"; };
+		3B1046641F478DF5003B0CE5 /* Ethernet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ethernet.cpp; sourceTree = "<group>"; };
+		3B1046651F478DF5003B0CE5 /* Ethernet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ethernet.hpp; sourceTree = "<group>"; };
+		3B1F2B321F47664E007E395C /* DHCP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DHCP.cpp; sourceTree = "<group>"; };
+		3B1F2B331F47664E007E395C /* DHCP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DHCP.hpp; sourceTree = "<group>"; };
+		3B1F2B361F47666B007E395C /* IPs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IPs.cpp; sourceTree = "<group>"; };
+		3B1F2B371F47666B007E395C /* IPs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IPs.hpp; sourceTree = "<group>"; };
 		3B4E199A1EE81E9700256BD0 /* libc++.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libc++.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4E19A61EE81F2200256BD0 /* OSRuntime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSRuntime.cpp; path = "Libc++/OSRuntime.cpp"; sourceTree = "<group>"; };
-		3B4E19A71EE81F2200256BD0 /* OSRuntime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OSRuntime.hpp; path = "Libc++/OSRuntime.hpp"; sourceTree = "<group>"; };
-		3B4E19AC1EE8223D00256BD0 /* OSObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSObject.cpp; path = "Libc++/OSObject.cpp"; sourceTree = "<group>"; };
-		3B4E19AD1EE8223D00256BD0 /* OSObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OSObject.hpp; path = "Libc++/OSObject.hpp"; sourceTree = "<group>"; };
-		3B5021B61F49D9D500BA8AF1 /* ARP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ARP.cpp; path = "Libc++/OSNetwork/ARP.cpp"; sourceTree = "<group>"; };
-		3B5021B71F49D9D500BA8AF1 /* ARP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ARP.hpp; path = "Libc++/OSNetwork/ARP.hpp"; sourceTree = "<group>"; };
-		3B5098971FB11B8800B9A90A /* libkern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libkern.h; path = "Libc++/libkern/libkern.h"; sourceTree = "<group>"; };
-		3B7EF03C1F4B449F00FEB086 /* OSNetwork.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OSNetwork.cpp; path = "Libc++/OSNetwork/OSNetwork.cpp"; sourceTree = "<group>"; };
-		3B89C0CB1F45F63200F4920E /* OSNetwork.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = OSNetwork.hpp; path = "Libc++/OSNetwork.hpp"; sourceTree = "<group>"; };
+		3B4E19A61EE81F2200256BD0 /* OSRuntime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OSRuntime.cpp; sourceTree = "<group>"; };
+		3B4E19A71EE81F2200256BD0 /* OSRuntime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OSRuntime.hpp; sourceTree = "<group>"; };
+		3B4E19AC1EE8223D00256BD0 /* OSObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OSObject.cpp; sourceTree = "<group>"; };
+		3B4E19AD1EE8223D00256BD0 /* OSObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OSObject.hpp; sourceTree = "<group>"; };
+		3B5021B61F49D9D500BA8AF1 /* ARP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARP.cpp; sourceTree = "<group>"; };
+		3B5021B71F49D9D500BA8AF1 /* ARP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ARP.hpp; sourceTree = "<group>"; };
+		3B5098971FB11B8800B9A90A /* libkern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libkern.h; path = libkern/libkern.h; sourceTree = "<group>"; };
+		3B7EF03C1F4B449F00FEB086 /* OSNetwork.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSNetwork.cpp; sourceTree = "<group>"; };
+		3B89C0CB1F45F63200F4920E /* OSNetwork.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = OSNetwork.hpp; path = ../OSNetwork.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +79,7 @@
 				3B1046651F478DF5003B0CE5 /* Ethernet.hpp */,
 				3B1046641F478DF5003B0CE5 /* Ethernet.cpp */,
 			);
-			name = OSNetwork;
+			path = OSNetwork;
 			sourceTree = "<group>";
 		};
 		3B4E19911EE81E9700256BD0 = {
@@ -108,7 +108,7 @@
 				3B1F2B311F4765EA007E395C /* OSNetwork */,
 				3B5098971FB11B8800B9A90A /* libkern.h */,
 			);
-			name = "Libc++";
+			path = "Libc++";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

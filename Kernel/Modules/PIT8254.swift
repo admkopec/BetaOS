@@ -14,7 +14,7 @@ final class PIT8254: Module {
     static let sharedInstance = PIT8254()
     var Name: String = "PIT8254"
     var description: String {
-        return Name + ": " + ""
+        return "Legacy PIT8254 Timer Device Controller"
     }
     
     // Raw Value is the I/O port
@@ -137,7 +137,7 @@ final class PIT8254: Module {
     }
     
     init() {
-        
+        sti()
     }
     
     // Interrupt Handler

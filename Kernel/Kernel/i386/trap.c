@@ -200,7 +200,7 @@ kernel_trap(x86_saved_state_t	*state,
 	int                 code;
 	user_addr_t         vaddr;
 	int                 type;
-	//vm_map_t            map = 0;	/* protected by T_PAGE_FAULT */
+//    vm_map_t            map = 0;    /* protected by T_PAGE_FAULT */
 	kern_return_t		result = KERN_FAILURE;
 	//thread_t            thread;
 	//ast_t               *myast;
@@ -211,7 +211,7 @@ kernel_trap(x86_saved_state_t	*state,
 #if NCOPY_WINDOWS > 0
 	int			fault_in_copy_window = -1;
 #endif
-	//int			is_user = 0;
+    int         is_user = 0;
 	int			trap_pl = get_preemption_level();
     
 	//thread = current_thread();
@@ -269,11 +269,10 @@ kernel_trap(x86_saved_state_t	*state,
 	
 	if (T_PAGE_FAULT == type) {
         printf("Page Fault!\n");
-        goto debugger_entry;
 		/*
 		 * assume we're faulting in the kernel map
 		 */
-		//map = kernel_map;
+//        map = kernel_map;
         
 		/*if (__probable(thread != THREAD_NULL && thread->map != kernel_map)) {
 #if NCOPY_WINDOWS > 0
@@ -350,7 +349,8 @@ kernel_trap(x86_saved_state_t	*state,
 #endif
 		}*/
 	}
-	//user_addr_t	kd_vaddr = is_user ? vaddr : VM_KERNEL_UNSLIDE(vaddr);
+    user_addr_t    kd_vaddr = is_user ? vaddr : VM_KERNEL_UNSLIDE(vaddr);
+    printf("Faulty address = 0x%llx\n", kd_vaddr);
 	//KERNEL_DEBUG_CONSTANT_IST(KDEBUG_TRACE, (MACHDBG_CODE(DBG_MACH_EXCP_KTRAP_x86, type)) | DBG_FUNC_NONE, (unsigned)(kd_vaddr >> 32), (unsigned)kd_vaddr, is_user, VM_KERNEL_UNSLIDE(kern_ip), 0);
     
     
@@ -377,7 +377,7 @@ kernel_trap(x86_saved_state_t	*state,
             return;
             
 	    case T_SSE_FLOAT_ERROR:
-	        //fpSSEexterrflt();
+            //fpSSEexterrflt();
             printf("T_SSE_FLOAT_ERROR!\n");
             goto debugger_entry;
             return;
@@ -421,7 +421,7 @@ kernel_trap(x86_saved_state_t	*state,
             if (code & T_PF_EXECUTE)
 		        prot |= VM_PROT_EXECUTE;
             
-            //result = vm_fault(map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, false, THREAD_UNINT, NULL, 0);
+//            result = vm_fault(map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, false, THREAD_UNINT, NULL, 0);
             
             if (result == KERN_SUCCESS) {
 #if NCOPY_WINDOWS > 0
@@ -658,26 +658,31 @@ panic_trap(x86_saved_state64_t *regs, __unused uint32_t pl) {
      //}
     
 #undef panic
-	panic("Kernel trap at 0x%016llx, type %d=%s, registers:\n"
-	      "CR0: 0x%016llx, CR2: 0x%016llx, CR3: 0x%016llx, CR4: 0x%016llx\n"
-	      "RAX: 0x%016llx, RBX: 0x%016llx, RCX: 0x%016llx, RDX: 0x%016llx\n"
-	      "RSP: 0x%016llx, RBP: 0x%016llx, RSI: 0x%016llx, RDI: 0x%016llx\n"
-	      "R8:  0x%016llx, R9:  0x%016llx, R10: 0x%016llx, R11: 0x%016llx\n"
-	      "R12: 0x%016llx, R13: 0x%016llx, R14: 0x%016llx, R15: 0x%016llx\n"
-	      "RFL: 0x%016llx, RIP: 0x%016llx, CS:  0x%016llx, SS:  0x%016llx\n"
-	      "Fault CR2: 0x%016llx, Error code: 0x%016llx, Fault CPU: 0x%x%s%s%s%s, PL: %d\n",
-	      regs->isf.rip, regs->isf.trapno, trapname,
-	      cr0, cr2, cr3, cr4,
-	      regs->rax, regs->rbx, regs->rcx, regs->rdx,
-	      regs->isf.rsp, regs->rbp, regs->rsi, regs->rdi,
-	      regs->r8,  regs->r9,  regs->r10, regs->r11,
-	      regs->r12, regs->r13, regs->r14, regs->r15,
-	      regs->isf.rflags, regs->isf.rip, regs->isf.cs & 0xFFFF,
-	      regs->isf.ss & 0xFFFF,regs->cr2, regs->isf.err, regs->isf.cpu,
-	      /*virtualized ? " VMM" : */"",
-	      potential_kernel_NX_fault ? " Kernel NX fault" : "",
-	      potential_smep_fault ? " SMEP/User NX fault" : "",
-	      potential_smap_fault ? " SMAP fault" : "", pl);
+//    panic("Kernel trap at 0x%016llx, type %d=%s\n"
+//          "Error code: 0x%016llx, Fault CPU: 0x%x\n",
+//          regs->isf.rip, regs->isf.trapno, trapname,
+//          regs->isf.err, regs->isf.cpu);
+    
+    panic("Kernel trap at 0x%016llx, type %d=%s, registers:\n"
+          "CR0: 0x%016llx, CR2: 0x%016llx, CR3: 0x%016llx, CR4: 0x%016llx\n"
+          "RAX: 0x%016llx, RBX: 0x%016llx, RCX: 0x%016llx, RDX: 0x%016llx\n"
+          "RSP: 0x%016llx, RBP: 0x%016llx, RSI: 0x%016llx, RDI: 0x%016llx\n"
+          "R8:  0x%016llx, R9:  0x%016llx, R10: 0x%016llx, R11: 0x%016llx\n"
+          "R12: 0x%016llx, R13: 0x%016llx, R14: 0x%016llx, R15: 0x%016llx\n"
+          "RFL: 0x%016llx, RIP: 0x%016llx, CS:  0x%016llx, SS:  0x%016llx\n"
+          "Fault CR2: 0x%016llx, Error code: 0x%016llx, Fault CPU: 0x%x%s%s%s%s, PL: %d\n",
+          regs->isf.rip, regs->isf.trapno, trapname,
+          cr0, cr2, cr3, cr4,
+          regs->rax, regs->rbx, regs->rcx, regs->rdx,
+          regs->isf.rsp, regs->rbp, regs->rsi, regs->rdi,
+          regs->r8,  regs->r9,  regs->r10, regs->r11,
+          regs->r12, regs->r13, regs->r14, regs->r15,
+          regs->isf.rflags, regs->isf.rip, regs->isf.cs & 0xFFFF,
+          regs->isf.ss & 0xFFFF,regs->cr2, regs->isf.err, regs->isf.cpu,
+          /*virtualized ? " VMM" : */"",
+          potential_kernel_NX_fault ? " Kernel NX fault" : "",
+          potential_smep_fault ? " SMEP/User NX fault" : "",
+          potential_smap_fault ? " SMAP fault" : "", pl);
 	/*
 	 * This next statement is not executed,
 	 * but it's needed to stop the compiler using tail call optimization
@@ -889,10 +894,8 @@ user_trap(x86_saved_state_t *saved_state) {
             
             if (err & T_PF_WRITE)
 		        prot |= VM_PROT_WRITE;
-#if     PAE
             if (__improbable(err & T_PF_EXECUTE))
 		        prot |= VM_PROT_EXECUTE;
-#endif
             //kret = vm_fault(thread->map, vm_map_trunc_page(vaddr, PAGE_MASK), prot, false, THREAD_ABORTSAFE, NULL, 0);
             
             if (__probable((kret == KERN_SUCCESS) || (kret == KERN_ABORTED))) {

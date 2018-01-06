@@ -16,7 +16,6 @@
 #include "EHCIController.hpp"
 #include "XHCIController.hpp"
 #include "MMIOUtils.hpp"
-#include "SATAController.hpp"
 #include "PS2Controller.hpp"
 #include "PCIController.hpp"
 
@@ -71,15 +70,6 @@ void Modules::start() {
                             delete module;
                         }
                         module = new EHCI;
-                        if (!module->init(&h)) {
-                            Controllers[i] = module;
-                            Controllers[i]->start();
-                            LastLoadedModule = i;
-                            break;
-                        } else {
-                            delete module;
-                        }
-                        module = new SATA;
                         if (!module->init(&h)) {
                             Controllers[i] = module;
                             Controllers[i]->start();

@@ -7,6 +7,7 @@
 //
 
 #include "PCIController.hpp"
+#include <OSObject.hpp>
 #include <i386/pio.h>
 #include <i386/machine_routines.h>
 
@@ -137,6 +138,52 @@ void PCI::EnableBusMastering() {
     uint32_t Command = Read32(0x04);
     Command |= 0x04;
     Write32(0x04, Command);
+}
+
+bool PCI::ReadExtendedCapabilities(uint8_t ID, uint8_t* Value) {
+    uint8_t xCP = (uint8_t)Read32(0x34);
+    while (xCP) {
+        uint8_t ThisID = (uint8_t)Read32(xCP);
+        if (ThisID == ID) {
+            *Value = (uintptr_t)(ThisID | (xCP << 8));
+            return true;
+        }
+        xCP = (uint8_t)Read32(xCP + 1);
+    }
+    return false;
+}
+
+bool PCI::TrySettingMSIVector(int IRQ) {
+    uint8_t xCP;
+    if (ReadExtendedCapabilities(5, &xCP)) {
+        uint8_t MessageAddressLo;
+        uint8_t MessageAddressHi;
+        uint8_t MessageData;
+        uint8_t MessageControl;
+        MessageControl   = xCP + 2;
+        MessageAddressLo = xCP + 4;
+        
+        uint16_t msiMessageControl = (uint16_t)Read32(MessageControl);
+        
+        if (msiMessageControl & 0x80) {
+            MessageAddressHi = xCP + 8;
+            MessageData = xCP + 12;
+        } else {
+            MessageAddressHi = 0;
+            MessageData = xCP + 8;
+        }
+        
+        uint32_t address = 0xFEE00000 | 0 << 12;
+        uint16_t data = IRQ + 32;
+        data |= ((uint16_t)Read32(MessageData)) & 0x3800;
+        Write32(MessageAddressLo, address);
+        if (MessageAddressHi) {
+            Write32(MessageAddressHi, 0);
+        }
+        Write16(MessageData, data);
+        return true;
+    }
+    return false;
 }
 
 uint16_t PCI::VendorID()    { return VendorID_;  }

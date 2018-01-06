@@ -6,17 +6,10 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
-import Addressing
-import Loggable
-
 protocol Video {
     var Display: (Resolution: Size, Depth: Int) { get }
     
     func draw(point: Point) -> Void
-    func draw(circle: Circle) -> Void
-    func draw(rectangle: Rectangle) -> Void
-    func draw(line: Line, thickness: Int) -> Void
-    func draw(roundedRectangle: RoundedRectangle) -> Void
     func draw(character: UnicodeScalar, position: Position) -> Void
 }
 
@@ -24,52 +17,44 @@ extension Video {
     func draw(line: Line) -> Void {
         draw(line: line, thickness: 1)
     }
-}
-
-struct VESA: Video, Loggable {
-    let Name: String = "VESA"
-    fileprivate(set) var Display: (Resolution: Size, Depth: Int)
-    fileprivate var BAR: Address
-    
-    init() {
-        let BootVideo = Platform_state.video
-        
-        Display.Resolution = Size(width: Int(BootVideo.v_width), height: Int(BootVideo.v_height))
-        Display.Depth      = Int(BootVideo.v_depth)
-
-        BAR = Address(BootVideo.v_baseAddr)
-    }
-    
-    func draw(point: Point) -> Void {
-        if ((point.position.X >= 0) && (point.position.X <= Display.Resolution.Width)) && ((point.position.Y >= 0) && (point.position.Y <= Display.Resolution.Height)) {
-            let val = get_pixel(UInt32(point.position.X), UInt32(point.position.Y))
-            let prevRed = UInt8(truncatingIfNeeded: val >> 16)
-            let prevGreen = UInt8(truncatingIfNeeded: val >> 8)
-            let prevBlue = UInt8(truncatingIfNeeded: val)
-            let valRed = UInt8(point.color.alpha * Float(point.color.red) + (1 - point.color.alpha) * Float(prevRed))
-            let valGreen = UInt8(point.color.alpha * Float(point.color.green) + (1 - point.color.alpha) * Float(prevGreen))
-            let valBlue = UInt8(point.color.alpha * Float(point.color.blue) + (1 - point.color.alpha) * Float(prevBlue))
-            let value = UInt32((0xFF * 0x1000000) + (UInt32(valRed) * 0x10000) + (UInt32(valGreen) * 0x100) + (UInt32(valBlue) * 0x1))
-
-            paint_pixel(UInt32(point.position.X), UInt32(point.position.Y), value)
-        }
-    }
     
     func draw(line: Line, thickness: Int) -> Void {
         if line.from.X == line.to.X {
             for y in line.from.Y ... line.to.Y {
-                for x in line.to.X ... line.to.X + thickness {
+                for x in line.to.X ... line.to.X + thickness - 1 {
                     draw(point: Point(position: Position.init(x: x, y: y), color: line.color))
                 }
             }
         } else if line.from.Y == line.to.Y {
             for x in line.from.X ... line.to.X {
-                for y in line.to.Y ... line.to.Y + thickness {
+                for y in line.to.Y ... line.to.Y + thickness - 1 {
                     draw(point: Point(position: Position.init(x: x, y: y), color: line.color))
                 }
             }
         } else {
-            draw(diagonalLine: line, thickness: thickness)
+            let deltax = +(line.to.X - line.from.X)
+            let deltay = +(line.to.Y - line.from.Y)
+            let sx = (line.from.X < line.to.X) ? 1 : -1
+            let sy = (line.from.Y < line.to.Y) ? 1 : -1
+            var error = deltax - deltay
+            var x = line.from.X
+            var y = line.from.Y
+            while x != line.to.X && y != line.to.Y {
+                for j in -(thickness - 1) ... (thickness - 1) {
+                    for i in -(thickness - 1) ... (thickness - 1) {
+                        draw(point: Point(position: Position.init(x: x + i, y: y + j), color: line.color))
+                    }
+                }
+                let e2 = error * 2
+                if e2 > -deltay {
+                    error -= deltay
+                    x += sx
+                }
+                if e2 < deltax {
+                    error += deltax
+                    y += sy
+                }
+            }
         }
     }
     
@@ -87,27 +72,19 @@ struct VESA: Video, Loggable {
     }
     
     func draw(circle: Circle) -> Void {
+        if !circle.filled {
+            return draw(circle3: circle)
+        }
         var x   = circle.radius - 1
         var y   = 0
         var dx  = 1
         var dy  = 1
         var err = dx - (circle.radius << 1)
         while x >= y {
-            if circle.filled == true {
-                draw(line: Line(from: Position.init(x: circle.position.X - x, y: circle.position.Y + y), to: Position.init(x: circle.position.X + x, y: circle.position.Y + y), color: circle.color))
-                draw(line: Line(from: Position.init(x: circle.position.X - y, y: circle.position.Y + x), to: Position.init(x: circle.position.X + y, y: circle.position.Y + x), color: circle.color))
-                draw(line: Line(from: Position.init(x: circle.position.X - x, y: circle.position.Y - y), to: Position.init(x: circle.position.X + x, y: circle.position.Y - y), color: circle.color))
-                draw(line: Line(from: Position.init(x: circle.position.X - y, y: circle.position.Y - x), to: Position.init(x: circle.position.X + y, y: circle.position.Y - x), color: circle.color))
-            } else {
-                draw(point: Point(position: Position.init(x: circle.position.X + x, y: circle.position.Y + y), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X - x, y: circle.position.Y + y), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X + y, y: circle.position.Y + x), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X - y, y: circle.position.Y + x), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X + x, y: circle.position.Y - y), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X - x, y: circle.position.Y - y), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X + y, y: circle.position.Y - x), color: circle.color))
-                draw(point: Point(position: Position.init(x: circle.position.X - y, y: circle.position.Y - x), color: circle.color))
-            }
+            draw(line: Line(from: Position.init(x: circle.position.X - x, y: circle.position.Y + y), to: Position.init(x: circle.position.X + x, y: circle.position.Y + y), color: circle.color))
+            draw(line: Line(from: Position.init(x: circle.position.X - y, y: circle.position.Y + x), to: Position.init(x: circle.position.X + y, y: circle.position.Y + x), color: circle.color))
+            draw(line: Line(from: Position.init(x: circle.position.X - x, y: circle.position.Y - y), to: Position.init(x: circle.position.X + x, y: circle.position.Y - y), color: circle.color))
+            draw(line: Line(from: Position.init(x: circle.position.X - y, y: circle.position.Y - x), to: Position.init(x: circle.position.X + y, y: circle.position.Y - x), color: circle.color))
             if err <= 0 {
                 y   += 1
                 err += dy
@@ -121,29 +98,60 @@ struct VESA: Video, Loggable {
         }
     }
     
-    func draw(diagonalLine: Line, thickness: Int) -> Void {
-        let deltax = (diagonalLine.to.X - diagonalLine.from.X)
-        let deltay = (diagonalLine.to.Y - diagonalLine.from.Y)
-        let sx = (diagonalLine.from.X < diagonalLine.to.X) ? 1 : -1
-        let sy = (diagonalLine.from.Y < diagonalLine.to.Y) ? 1 : -1
-        var error = deltax - deltay
-        var x = diagonalLine.from.X
-        var y = diagonalLine.from.Y
-        while x != diagonalLine.to.X && y != diagonalLine.to.Y {
-            for j in -thickness ... thickness {
-                for i in -thickness ... thickness {
-                    draw(point: Point(position: Position.init(x: x + i, y: y + j), color: diagonalLine.color))
-                }
-            }
-            let e2 = error * 2
-            if e2 > -deltay {
-                error -= deltay
-                x += sx
-            }
-            if e2 < deltax {
-                error += deltax
-                y += sy
-            }
+    func draw(quadraticBézier: QuadraticBézier) -> Void {
+        let NUMBER_OF_SEGMENTS = quadraticBézier.position2.X - quadraticBézier.position0.X - 1
+        var pts = [Position]()
+        for i in 0 ... NUMBER_OF_SEGMENTS {
+            let t = Double(i) / Double(NUMBER_OF_SEGMENTS)
+            let a = (1.0 - t) * (1.0 - t)
+            let b = 2.0 * t * (1.0 - t)
+            let c = t * t
+            let x = a * Double(quadraticBézier.position0.X) + b * Double(quadraticBézier.position1.X) + c * Double(quadraticBézier.position2.X)
+            let y = a * Double(quadraticBézier.position0.Y) + b * Double(quadraticBézier.position1.Y) + c * Double(quadraticBézier.position2.Y)
+            pts.append(Position(x: Int(x), y: Int(y)))
+        }
+        for i in 0 ... NUMBER_OF_SEGMENTS-1 {
+//            draw(point: Point(position: pts[i], color: quadraticBézier.color))
+            let j = i + 1
+            draw(line: Line(from: pts[i], to: pts[j], color: quadraticBézier.color))
+        }
+    }
+    
+    fileprivate func point4(center: Position, delta: Position, color: Color) -> Void {
+        draw(point: Point(position: Position.init(x: center.X + delta.X, y: center.Y + delta.Y), color: color))
+        draw(point: Point(position: Position.init(x: center.X - delta.X, y: center.Y + delta.Y), color: color))
+        draw(point: Point(position: Position.init(x: center.X + delta.X, y: center.Y - delta.Y), color: color))
+        draw(point: Point(position: Position.init(x: center.X - delta.X, y: center.Y - delta.Y), color: color))
+    }
+    
+//    fileprivate func line4(center: Position, delta: Position, color: Color) -> Void {
+//        draw(line: Line(from: Position(x: center.X - delta.X, y: center.Y + delta.Y), to: Position(x: center.X + delta.X, y: center.Y + delta.Y), color: color))
+//        draw(line: Line(from: Position(x: center.X - delta.X, y: center.Y - delta.Y), to: Position(x: center.X + delta.X, y: center.Y - delta.Y), color: color))
+//    }
+    
+    fileprivate func draw(circle3: Circle) -> Void {
+        let diameter = circle3.radius * circle3.radius
+        let quarter = Int(Float(diameter) / sqrtf(Float(2*diameter)))
+        for x in 0 ... quarter {
+            let y = sqrtf(+(Float(circle3.radius * circle3.radius) - Float(x * x)))
+            
+            let error  = y - floorf(y)
+            let alpha  = error
+            let alpha2 = (1 - error)
+
+            point4(center: circle3.position, delta: Position.init(x: x, y: Int(floorf(y))), color: Color(red: circle3.color.Red, green: circle3.color.Green, blue: circle3.color.Blue, alpha: alpha))
+            point4(center: circle3.position, delta: Position.init(x: x, y: Int(floorf(y) - 1)), color: Color(red: circle3.color.Red, green: circle3.color.Green, blue: circle3.color.Blue, alpha: alpha2))
+        }
+//        quarter = Int(Float(diameter) / sqrtf(Float(2*diameter)))
+        for y in 0 ... quarter {
+            let x = sqrtf(+(Float(circle3.radius * circle3.radius) - Float(y * y)))
+            
+            let error  = x - floorf(x)
+            let alpha  = error
+            let alpha2 = (1 - error)
+        
+            point4(center: circle3.position, delta: Position.init(x: Int(floorf(x)), y: y), color: Color(red: circle3.color.Red, green: circle3.color.Green, blue: circle3.color.Blue, alpha: alpha))
+            point4(center: circle3.position, delta: Position.init(x: Int(floorf(x) - 1), y: y), color: Color(red: circle3.color.Red, green: circle3.color.Green, blue: circle3.color.Blue, alpha: alpha2))
         }
     }
     
@@ -188,20 +196,17 @@ struct VESA: Video, Loggable {
             draw(line: Line(from: Position.init(x: roundedRectangle.position.X + roundedRectangle.size.Width, y: roundedRectangle.position.Y + roundedRectangle.radius), to: Position.init(x: roundedRectangle.position.X + roundedRectangle.size.Width, y: roundedRectangle.position.Y + roundedRectangle.size.Height - roundedRectangle.radius), color: roundedRectangle.color))
         }
     }
-    
-    func draw(character: UnicodeScalar, position: Position) -> Void {
-        if character.value > 255 {
-            Log("Character is bigger than maximum element in font!", level: .Error)
-            return
-        }
-        paint_char(UInt32(position.X), UInt32(position.Y), UInt8(character.value))
-    }
 }
 
 internal struct _Stdout: TextOutputStream {
     mutating func write(_ string: String) {
         for scalar in string.unicodeScalars {
-            System.sharedInstance.Video.draw(character: scalar, position: Position(x: 0, y: 0))
+            System.sharedInstance.Video.mainView.draw(character: scalar, position: Position(x: 0, y: 0))
         }
     }
+}
+
+@_silgen_name("refresh_screen")
+public func refresh_screen() -> Void {
+    System.sharedInstance.Video.refresh()
 }

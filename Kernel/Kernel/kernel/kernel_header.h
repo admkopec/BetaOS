@@ -9,6 +9,7 @@
 #ifndef kernel_header_h
 #define kernel_header_h
 
+#include <mach-o/ldsyms.h>
 #include <mach-o/loader.h>
 #include <mach/vm_types.h>
 
@@ -38,8 +39,6 @@ typedef struct nlist            kernel_nlist_t;
 
 #define SECT_MODINITFUNC		"__mod_init_func"
 #define SECT_MODTERMFUNC		"__mod_term_func"
-
-extern kernel_mach_header_t _mh_execute_header;
 
 vm_offset_t getlastaddr(void);
 

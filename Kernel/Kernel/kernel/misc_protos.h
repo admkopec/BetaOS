@@ -18,8 +18,6 @@
 #define    __probable(x)    __builtin_expect(!!((long)(x)), 1L)
 #define    __improbable(x)    __builtin_expect(!!((long)(x)), 0L)
 
-extern bool can_use_serial;
-extern bool is_new_paging_enabled;
 extern void panic(const char* errormsg, ...);
 extern void kernelMain(void);
 extern uint64_t tmrCvt(uint64_t time, uint64_t conversion);

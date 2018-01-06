@@ -10,7 +10,7 @@ import Addressing
 import Loggable
 
 struct SMBIOS: Module {
-    static let SMBIOS_Signature: String = "_SM_"
+    fileprivate let SMBIOS_Signature: String = "_SM_"
     
     let Name = "SMBIOS"
     
@@ -41,7 +41,7 @@ struct SMBIOS: Module {
     fileprivate(set) var ChassisSerial:      String = "000000000000"
     
     var description: String {
-        return Name + " " + "\(VersionMajor).\(VersionMinor): \(EntryCount) entries @ \(TableAddress), Length: \(Length)"
+        return "\(VersionMajor).\(VersionMinor): \(EntryCount) entries @ \(TableAddress), Length: \(Length)"
     }
     
     init?(structure: SMBIOS_for_Swift) {
@@ -54,7 +54,7 @@ struct SMBIOS: Module {
             Log("Legacy BIOSes don't fully support SMBIOS, so we're going to skip it for now...", level: .Warning)
             return nil
         }
-        if String(&structure.SMBIOS.pointee.anchor.0, maxLength: 4) != SMBIOS.SMBIOS_Signature {
+        if String(&structure.SMBIOS.pointee.anchor.0, maxLength: 4) != SMBIOS_Signature {
             Log("Original Address is \(String(structure.OriginalAddress, radix: 16)), Mapped Address is \(String(UInt(bitPattern: structure.SMBIOS), radix: 16))", level: .Error)
             Log("Anchor is \(String(&structure.SMBIOS.pointee.anchor.0, maxLength: 4))", level: .Error)
             return nil

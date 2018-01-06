@@ -22,10 +22,10 @@ class AddressingTests: XCTestCase {
     }
     
     func testExample() {
-        var addr: UInt = 0x10000
-//        let address = Address(addr, baseAddress: (0x10000, 0x40000))
-//        XCTAssert(address.physical == 0x10000)
-//        XCTAssert(address.virtual  == 0x40000)
+        let addr: UInt = 0x10001
+        let address = Address(addr, baseAddress: (0x10000, 0x40000))
+        XCTAssert(address.physical == 0x10001)
+        XCTAssert(address.virtual  == 0x40001)
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
@@ -37,4 +37,9 @@ class AddressingTests: XCTestCase {
         }
     }
     
+}
+
+@_silgen_name("io_map")
+public func io_map(_ phys_addr: UInt64, _ size: UInt, _ flags: UInt32) -> UInt64 {
+    return 0xffffff8000ff2345
 }

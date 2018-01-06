@@ -92,23 +92,23 @@ struct BitArray {
         }
     }
     
-    func toUInt8() -> UInt8 {
+    var asUInt8: UInt8 {
         return UInt8(truncatingIfNeeded: rawValue)
     }
     
-    func toUInt16() -> UInt16 {
+    var asUInt16: UInt16 {
         return UInt16(truncatingIfNeeded: rawValue)
     }
     
-    func toUInt32() -> UInt32 {
+    var asUInt32: UInt32 {
         return UInt32(truncatingIfNeeded: rawValue)
     }
     
-    func toUInt64() -> UInt64 {
+    var asUInt64: UInt64 {
         return UInt64(rawValue)
     }
     
-    func toInt() -> Int {
+    var asInt: Int {
         return Int(rawValue)
     }
 }

@@ -8,6 +8,7 @@
 
 #include <stdarg.h>
 #include <string.h>
+#include <stdlib.h>
 #include "misc_protos.h"
 #include <i386/pal.h>
 #include <i386/proc_reg.h>
@@ -19,51 +20,50 @@
 bool enable = true;
 bool early  = false;
 
-extern void vsputc(int ch);
 extern bool experimental;
 
 bool can_use_serial;
-bool is_new_paging_enabled  = false;
-int  __doprnt(const char	*fmt, va_list argp, void (*putc)(int), int radix, int is_log);
 
 int
 _doprnt_log(register const char	*fmt, va_list *argp, void (*putc)(int), int radix)/* default radix - for '%r' */;
 
-int
-_doprnt(register const char	*fmt, va_list *argp, void (*putc)(int), int radix)/* default radix - for '%r' */;
-
 bool kRebootOnPanic = true;
-
+#undef vsprintf
+extern void panic_C_wrapper(const char* fmt);
 extern void reboot_system(bool ispanic);
 void __attribute__((noreturn))
 panic(const char *errormsg, ...) {
     experimental = false;
     va_list list;
-    printf("\nKERNEL PANIC: ");
     if (rdmsr64(MSR_IA32_GS_BASE) == 0 && enable == false) {
         early = true;
     }
     if (early) {
+        printf("\nKERNEL PANIC: ");
         va_start(list, errormsg);
-        _doprnt_log(errormsg, &list, serial_putc, 16);
+        if (can_use_serial) {
+            _doprnt_log(errormsg, &list, serial_putc, 16);
+        }
         va_end(list);
-        goto panicing;
+        if (!kRebootOnPanic) {
+            printf("\nCPU Halted\n");
+            pal_stop_cpu(true);
+        } else {
+            printf("\nRebooting in 3 seconds...\n");
+            time_t start_time = time(&start_time);
+            time_t tmp;
+            while ((start_time + 3) > time(&tmp)) { }
+            reboot_system(true);
+        }
     } else {
+        experimental = false;
+        early = true;
+        char * buffer = (char *)malloc(2048);
         va_start(list, errormsg);
-        _doprnt(errormsg, &list, vsputc, 16);
+        vsprintf(buffer, errormsg, list);
         va_end(list);
-        goto panicing;
-    }
-panicing:
-    if (!kRebootOnPanic) {
-        printf("\nCPU Halted\n");
-        pal_stop_cpu(true);
-    } else {
-        printf("\nRebooting in 3 seconds...\n");
-        time_t start_time = time(&start_time);
-        time_t tmp;
-        while ((start_time + 3) > time(&tmp)) { }
-        reboot_system(true);
+        panic_C_wrapper(buffer);
+        early = false;
     }
     for (; ;) { }
 }

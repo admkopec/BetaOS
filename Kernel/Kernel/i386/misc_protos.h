@@ -16,10 +16,12 @@
 #include <i386/vm_types.h>
 #include <platform/boot.h>
 
+#ifndef __cplusplus
 #if DEBUG
 #define DBG(x...)   printf(x)
 #else
 #define DBG(x...)
+#endif
 #endif
 
 #define PROT_MODE_START 0x800
@@ -29,7 +31,6 @@
 #define    __improbable(x)    __builtin_expect(!!((long)(x)), 0L)
 
 extern bool can_use_serial;
-extern bool is_new_paging_enabled;
 extern void panic(const char* errormsg, ...);
 extern void kernelMain(void);
 extern void enable_sse(void);

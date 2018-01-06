@@ -18,17 +18,11 @@ final class System: Loggable {
     fileprivate(set) var DeviceID      = "Generic1,1"
     fileprivate(set) var SerialNumber  = "000000000000"
     
-    static fileprivate let vesa = VESA()
-    
-    internal var Video: Video {
-        if let i = modulesController.modules.index(where: {$0 is Video}) {
-            return (modulesController.modules[i] as! Video)
-        } else {
-            return System.vesa
-        }
-    }
+    internal var Video: VideoModule = VESA()
+    internal var Disks = [PartitionTable]()
     
     internal var ACPI: ACPI? {
+//        return modulesController.modules.first(where: {$0 is ACPI}) as? ACPI
         if let i = modulesController.modules.index(where: {$0 is ACPI}) {
             return (modulesController.modules[i] as! ACPI)
         } else {
@@ -37,6 +31,7 @@ final class System: Loggable {
     }
     
     internal var SMBIOS: SMBIOS? {
+//        return modulesController.modules.first(where: {$0 is SMBIOS}) as? SMBIOS
         if let i = modulesController.modules.index(where: {$0 is SMBIOS}) {
             return (modulesController.modules[i] as! SMBIOS)
         } else {
@@ -46,9 +41,13 @@ final class System: Loggable {
     
     init() {
         modulesController = ModulesController()
-        DeviceVendor = SMBIOS?.SystemVendor         ?? DeviceVendor
-        DeviceName   = SMBIOS?.ProductDisplayName   ?? DeviceName
-        DeviceID     = SMBIOS?.ProductName          ?? DeviceID
-        SerialNumber = SMBIOS?.ProductSerial        ?? SerialNumber
+        DeviceVendor = SMBIOS?.SystemVendor       ?? DeviceVendor
+        DeviceName   = SMBIOS?.ProductDisplayName ?? DeviceName
+        DeviceID     = SMBIOS?.ProductName        ?? DeviceID
+        SerialNumber = SMBIOS?.ProductSerial      ?? SerialNumber
+    }
+    
+    func initializePCIDevices() {
+        modulesController.companionController = PCIModulesController()
     }
 }

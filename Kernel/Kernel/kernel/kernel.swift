@@ -19,20 +19,23 @@ public func kernelMain() -> Void {
     // New kernelMain written in Swift
     lapic_init()
     APICInit()
-    PIT8254.sharedInstance.setChannel(.CHANNEL_0, mode: .MODE_3, hz: 60)
     ModulesStartController()
     CommandInit()
+    PIT8254.sharedInstance.setChannel(.CHANNEL_0, mode: .MODE_3, hz: 60)
 //    let fontcolor = get_font_color()
 //    let CopyrightNoticeColor = Color(red: 0x16, green: 0xF3, blue: 0xFF, alpha: 0xFF)
 //    change_font_color(CopyrightNoticeColor.value)
     kprint("Hello from Swift!" + "\n" + "Welcome to BetaOS in x86_64 MACH-O EFI mode :) !")
-    kprint("Copyright © 2015-2017 Adam Kopec. All rights reserved.")
+    kprint("Copyright © 2015-2018 Adam Kopec. All rights reserved.")
 //    change_font_color(fontcolor)
     _ = System.sharedInstance
+    System.sharedInstance.initializePCIDevices()
 //    _ = addTask(name: "DummyTaskA", task: dummyA)
 //    _ = addTask(name: "DummyTaskB", task: dummyB)
 //    _ = addTask(name: "Console", task: console)
-    saveKernelState()
+//    saveKernelState()
+//    experimental = false
+//    runFirstTask()
     if System.sharedInstance.DeviceVendor == "Apple Inc." {
         while true {
             hlt()
@@ -43,14 +46,17 @@ public func kernelMain() -> Void {
 }
 
 func dummyA() {
-    tprint("A")
+    while true {
+        tprint("A")
+        yield()
+    }
 }
 
 func dummyB() {
-//    while true {
+    while true {
         tprint("B")
-//        yield()
-//    }
+        yield()
+    }
 }
 
 func console() -> Void {

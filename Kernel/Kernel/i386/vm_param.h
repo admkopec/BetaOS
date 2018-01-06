@@ -86,7 +86,59 @@
 #define VM_MAX_KERNEL_ADDRESS_EFI32     ((vm_offset_t) 0xFFFFFF80FFFFEFFFUL)
 
 #ifndef __ASSEMBLY__
-extern uint64_t vm_last_addr;
+#include <mach/vm_types.h>
+extern vm_offset_t vm_last_addr;
+
+extern const vm_offset_t    vm_min_kernel_address;
+extern const vm_offset_t    vm_max_kernel_address;
+
+extern vm_offset_t        vm_kernel_stext;
+extern vm_offset_t        vm_kernel_etext;
+extern vm_offset_t        vm_kernel_base;
+extern vm_offset_t        vm_kernel_top;
+extern vm_offset_t        vm_kernel_slide;
+extern vm_offset_t        vm_hib_base;
+extern vm_offset_t        vm_kernel_addrperm;
+
+extern vm_offset_t        vm_kext_base;
+extern vm_offset_t        vm_kext_top;
+extern vm_offset_t      vm_prelink_stext;
+extern vm_offset_t      vm_prelink_etext;
+extern vm_offset_t      vm_prelink_sinfo;
+extern vm_offset_t      vm_prelink_einfo;
+extern vm_offset_t      vm_slinkedit;
+extern vm_offset_t      vm_elinkedit;
+
+#define VM_KERNEL_IS_SLID(_o)                               \
+(((vm_offset_t)(_o) >= vm_kernel_base) &&               \
+((vm_offset_t)(_o) <=  vm_kernel_top))
+#define VM_KERNEL_IS_KEXT(_o)      \
+(((vm_offset_t)(_o) >= vm_kext_base) &&   \
+((vm_offset_t)(_o) <  vm_kext_top))
+
+#define VM_KERNEL_IS_PRELINKTEXT(_o)        \
+(((vm_offset_t)(_o) >= vm_prelink_stext) &&     \
+((vm_offset_t)(_o) <  vm_prelink_etext))
+
+#define VM_KERNEL_IS_PRELINKINFO(_o)        \
+(((vm_offset_t)(_o) >= vm_prelink_sinfo) &&     \
+((vm_offset_t)(_o) <  vm_prelink_einfo))
+
+#define VM_KERNEL_IS_KEXT_LINKEDIT(_o)        \
+(((vm_offset_t)(_o) >= vm_slinkedit) &&     \
+((vm_offset_t)(_o) <  vm_elinkedit))
+
+#define VM_KERNEL_SLIDE(_u)                               \
+((vm_offset_t)(_u) + vm_kernel_slide)
+
+#define VM_KERNEL_UNSLIDE(_v)                               \
+((VM_KERNEL_IS_SLID(_v) ||                       \
+VM_KERNEL_IS_KEXT(_v) ||      \
+VM_KERNEL_IS_PRELINKTEXT(_v) ||   \
+VM_KERNEL_IS_PRELINKINFO(_v) ||   \
+VM_KERNEL_IS_KEXT_LINKEDIT(_v)) ?      \
+(vm_offset_t)(_v) - vm_kernel_slide :    \
+(vm_offset_t)(_v))
 
 #endif /* __ASSEMBLY__ */
 #endif /* vm_param_h */

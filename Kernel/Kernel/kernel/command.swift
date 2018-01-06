@@ -22,6 +22,7 @@ public func version() -> Void {
     kprint("    CPU Vendor \(String(&cpuid_info().pointee.cpuid_vendor.0, maxLength: MemoryLayout.size(ofValue: cpuid_info().pointee.cpuid_vendor)))")
     kprint("    CPU \(String(&cpuid_info().pointee.cpuid_brand_string.0, maxLength: MemoryLayout.size(ofValue: cpuid_info().pointee.cpuid_brand_string)))")
     kprint("    Memory \(Int(Platform_state.bootArgs.pointee.PhysicalMemorySize) / GB) GB")
+    kprint("    GPU \(System.sharedInstance.Video.description)")
     kprint("    Serial Number: \(System.sharedInstance.SerialNumber)")
     
     kprint(" ")
@@ -221,18 +222,161 @@ public func tasks(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int
 
 @_silgen_name("test_graphics")
 public func test_graphics(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
-    System.sharedInstance.Video.draw(roundedRectangle: RoundedRectangle(position: Position(x: 200, y: 200), size: Size(width: 200, height: 200), color: Color(red: 0.9204662442, green: 0.1463340819, blue: 0.1714396775, alpha: 1), radius: 20, filled: true))
+    System.sharedInstance.Video.mainView.draw(roundedRectangle: RoundedRectangle(position: Position(x: 200, y: 200), size: Size(width: 200, height: 200), color: Color(red: 0.9204662442, green: 0.1463340819, blue: 0.1714396775, alpha: 1), radius: 20, filled: true))
     
-    System.sharedInstance.Video.draw(circle: Circle(position: Position(x: 500, y: 500), color: Color(red: 0.2560254931, green: 0.7153064609, blue: 0.2907235324, alpha: 1), filled: true, radius: 125))
+    System.sharedInstance.Video.mainView.draw(circle: Circle(position: Position(x: 500, y: 500), color: Color(red: 0.2560254931, green: 0.7153064609, blue: 0.2907235324, alpha: 1), filled: true, radius: 100))
+    
+    System.sharedInstance.Video.mainView.draw(circle: Circle(position: Position(x: 500, y: 500), color: Color(red: 0.2560254931, green: 0.7153064609, blue: 0.2907235324, alpha: 1), filled: false, radius: 125))
     
 //    let line = Line(from: Position(x: 0, y: 0), to: Position(x: 900, y: 900), color: Color(red: 0.6530236602, green: 0.8558481932, blue: 0.909222424,  alpha: 0.25))
 //    System.sharedInstance.Video.draw(line: line, thickness: 15)
-    System.sharedInstance.Video.draw(rectangle: Rectangle(position: Position.init(x: 120, y: 120), size: Size.init(width: 70, height: 70), color: Color(red: 0.9422255158, green: 0.4098693728, blue: 0.1537380219, alpha: 1), filled: true))
+    System.sharedInstance.Video.mainView.draw(rectangle: Rectangle(position: Position.init(x: 120, y: 120), size: Size.init(width: 70, height: 70), color: Color(red: 0.9422255158, green: 0.4098693728, blue: 0.1537380219, alpha: 1), filled: true))
 //    let rect = Rectangle(position: Position(x: 0, y: 0), size: System.sharedInstance.Video.Display.Resolution, color: Color.init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.50), filled: true)
 //    System.sharedInstance.Video.draw(rectangle: rect)
+    System.sharedInstance.Video.mainView.draw(quadraticBézier: QuadraticBézier(p0: Position.init(x: 100, y: 100), p1: Position.init(x: 150, y: 50), p2: Position.init(x: 200, y: 100), color: Color(red: 0.9204662442, green: 0.1463340819, blue: 0.1714396775, alpha: 1)))
+    let newView = View(position: Position.init(x: 250, y: 250), size: Size.init(width: 300, height: 100))
+    newView.draw(line: Line.init(from: Position.init(x: 10, y: 10), to: Position.init(x: 290, y: 10), color: Color(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), thickness: 70)
+    System.sharedInstance.Video.mainView += newView
+
+//    let newWindow = Window.Popup
+//    newWindow.view.draw(roundedRectangle: RoundedRectangle(position: Position(x: 0, y: 0), size: newWindow.view.Display.Resolution, color: Color(red: 0, green: 0.9810667634, blue: 0.5736914277, alpha: 1), radius: 15, filled: true))
+//    newWindow.windowView += newWindow.view
+//    System.sharedInstance.Video.mainView += newWindow.windowView
+    let size = Size(width: 500, height: 275)
+    let newTitleBarWindow = Window(size: size)
+    newTitleBarWindow.view.draw(roundedRectangle: RoundedRectangle(position: Position(x: 0, y: 0), size: newTitleBarWindow.view.Display.Resolution, color: Color(red: 0, green: 0.9810667634, blue: 0.5736914277, alpha: 1), radius: 15, filled: true))
+    newTitleBarWindow.windowView += newTitleBarWindow.view
+    System.sharedInstance.Video.mainView += newTitleBarWindow.windowView
 }
 
 @_silgen_name("test_new_panic")
 public func test_new_graphical_panic(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Void {
     panic("That's a Test Panic")
+}
+
+@_silgen_name("openFile")
+public func openFile(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) {
+    var arguments : [String] = [String(cString: argv[0]!)]
+    if argc > 1 {
+        for arg in 1 ..< argc {
+            arguments.append(String(cString: argv[arg]!))
+        }
+    }
+    if arguments.count < 2 || arguments.count != 3 || arguments[1] == "help" {
+        kprint("Usage: open PartitionName PathToFile ")
+        kprint("       Opens file for reading")
+        return
+    }
+    guard System.sharedInstance.Disks.count >= 1 else {
+        kprint("No Disks available")
+        return
+    }
+    var partition: Partition?
+    for disk in System.sharedInstance.Disks {
+        for partition_ in disk.Partitions {
+            if partition_.VolumeName == arguments[1] || partition_.AlternateName == arguments[1] {
+                partition = partition_
+            }
+        }
+    }
+    guard partition != nil else {
+        kprint("Partition not found!")
+        return
+    }
+
+    if let file = partition!.ReadFile(fromPath: arguments[2]) {
+        var j = 0
+        var array = [UInt8]()
+        while j < file.Info.Size {
+            if file.Data[j] != 0 {
+                array.append(file.Data[j])
+            }
+            j += 1
+        }
+        let contents = String.init(utf8Characters: array) ?? ""
+        kprint("\(file.Info.Name).\(file.Info.Extension):")
+        kprint("\(contents)")
+    } else {
+        kprint("Couldn't open the file")
+    }
+}
+
+@_silgen_name("writeFile")
+public func writeFile(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) {
+    var arguments : [String] = [String(cString: argv[0]!)]
+    if argc > 1 {
+        for arg in 1 ..< argc {
+            arguments.append(String(cString: argv[arg]!))
+        }
+    }
+    if arguments.count < 2 || arguments.count != 4 || arguments[1] == "help" {
+        kprint("Usage: write PartitionName PathToFile Contents Of File")
+        kprint("       Writes file to disk")
+        return
+    }
+    guard System.sharedInstance.Disks.count >= 1 else {
+        kprint("No Disks available")
+        return
+    }
+    var partition: Partition?
+    for disk in System.sharedInstance.Disks {
+        for partition_ in disk.Partitions {
+            if partition_.VolumeName == arguments[1] || partition_.AlternateName == arguments[1] {
+                partition = partition_
+            }
+        }
+    }
+    guard partition != nil else {
+        kprint("Partition not found!")
+        return
+    }
+    guard let file = partition!.ReadFile(fromPath: arguments[2]) else { kprint("Can't write a new file yet!"); return }
+    guard file.Info.Extension == "TXT" else {
+        kprint("Can't write other files than plain text yet!")
+        return
+    }
+    var buf = ContiguousArray<UInt8>(arguments[3].utf8)
+    var File = file
+    File.Info.Size = arguments[3].utf8.count
+    File.Data = UnsafeMutableBufferPointer(start: &buf[0], count: buf.count)
+    partition!.WriteFile(fromPath: arguments[2], file: File)
+}
+
+@_silgen_name("listFiles")
+public func listFiles(argc: Int, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) {
+    var arguments : [String] = [String(cString: argv[0]!)]
+    if argc > 1 {
+        for arg in 1 ..< argc {
+            arguments.append(String(cString: argv[arg]!))
+        }
+    }
+    if arguments.count < 2 || arguments.count != 3 || arguments[1] == "help" {
+        kprint("Usage: list PartitionName PathToFolder")
+        kprint("       Lists all files and folders in selected directory")
+        return
+    }
+    guard System.sharedInstance.Disks.count >= 1 else {
+        kprint("No Disks available")
+        return
+    }
+    var partition: Partition?
+    for disk in System.sharedInstance.Disks {
+        for partition_ in disk.Partitions {
+            if partition_.VolumeName == arguments[1] || partition_.AlternateName == arguments[1] {
+                partition = partition_
+            }
+        }
+    }
+    guard partition != nil else {
+        kprint("Partition not found!")
+        return
+    }
+    if let entries = partition!.ReadFolder(fromPath: arguments[2]) {
+        for entry in entries {
+            kprint("Name: \(entry.Name + (entry.Extension != " " ? "." + entry.Extension : ""))      \(entry.Size) Bytes")
+        }
+    } else {
+        kprint("Couldn't find selected folder")
+        return
+    }
 }

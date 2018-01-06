@@ -6,6 +6,8 @@
 //  Copyright © 2017 Adam Kopeć. All rights reserved.
 //
 
+import Loggable
+
 /**
  Writes the textual representations of the given items in kernel space.
  
@@ -52,9 +54,10 @@ func writeString(atLocation: Position, string: String) -> Void {
         if 😀.value <= 255 {
             if 😀 == "\n" {
                 y += 16
+                x = atLocation.X
                 continue
             }
-            paint_char(UInt32(x), UInt32(y), UInt8(😀.value))
+            System.sharedInstance.Video.mainView.draw(character: 😀, position: Position.init(x: x, y: y))
             x += 8
         }
     }
@@ -66,14 +69,45 @@ internal func panic(_ items: String..., separator: String = " ") -> Void {
 }
 
 @_silgen_name("panic_C_wrapper")
-internal func panic_C_wrapper(_ item: UnsafePointer<CChar>) -> Void {
+public func panic_C_wrapper(_ item: UnsafePointer<CChar>) -> Void {
     panic_common(String(cString: item))
 }
 
 internal func panic_common(_ item: String) -> Void {
     experimental = false
-    System.sharedInstance.Video.draw(rectangle: Rectangle(position: Position.init(x: 0, y: 0), size: System.sharedInstance.Video.Display.Resolution, color: Color.init(red: 0, green: 0, blue: 0, alpha: 0.4), filled: true))
-    let Center = Position(x: System.sharedInstance.Video.Display.Resolution.Width / 2, y: System.sharedInstance.Video.Display.Resolution.Height / 2)
-    System.sharedInstance.Video.draw(roundedRectangle: RoundedRectangle(position: Position.init(x: Center.X - 253, y: Center.Y - 140), size: Size.init(width: 506, height: 281), color: Color(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.95), radius: 15, filled: true))
-    System.sharedInstance.Video.draw(roundedRectangle: RoundedRectangle(position: Position.init(x: Center.X - 250, y: Center.Y - 137), size: Size.init(width: 500, height: 275), color: Color(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 1), radius: 15, filled: true))
+    System.sharedInstance.Video.mainView.draw(rectangle: Rectangle(position: Position.init(x: 0, y: 0), size: System.sharedInstance.Video.mainView.Display.Resolution, color: Color.init(red: 0, green: 0, blue: 0, alpha: 0.4), filled: true))
+    let outsideSize = Size.init(width: 506, height: 281)
+    System.sharedInstance.Video.mainView.draw(roundedRectangle: RoundedRectangle(position: Position.Center - outsideSize / 2, size: outsideSize, color: Color(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.95), radius: 15, filled: true))
+    let insideColor = Color(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 1)
+    let insideSize = Size.init(width: 500, height: 275)
+    System.sharedInstance.Video.mainView.draw(roundedRectangle: RoundedRectangle(position: Position.Center - insideSize / 2, size: insideSize, color: insideColor, radius: 15, filled: true))
+    let KernelPanicMessage = "Kernel Panic"
+    change_font_color(0xFFFFFF)
+    writeString(atLocation: Position.init(x: Position.Center.X - ((KernelPanicMessage.count * 8) / 2), y: Position.Center.Y - 133), string: KernelPanicMessage)
+    writeString(atLocation: Position.init(x: Position.Center.X - 245, y: Position.Center.Y - 112), string: item)
+    if (!kRebootOnPanic) {
+        writeString(atLocation: Position.init(x: Position.Center.X - 237, y: Position.Center.Y + 117), string: "CPU Halted")
+        System.sharedInstance.Video.refresh()
+        cli()
+        hlt()
+    } else {
+        writeString(atLocation: Position.init(x: Position.Center.X - 237, y: Position.Center.Y + 117), string: "Rebooting in 3 seconds.")
+        System.sharedInstance.Video.refresh()
+        let startTime = time(nil)
+        var Dot1Printed = false
+        var Dot2Printed = false
+        while startTime + 3 > time(nil) {
+            if startTime + 0 < time(nil) && !Dot1Printed {
+                writeString(atLocation: Position.init(x: Position.Center.X - 237 + ("Rebooting in 3 seconds.".count * 8), y: Position.Center.Y + 117), string: ".")
+                System.sharedInstance.Video.refresh()
+                Dot1Printed = true
+            }
+            if startTime + 1 < time(nil) && !Dot2Printed {
+                writeString(atLocation: Position.init(x: Position.Center.X - 237 + ("Rebooting in 3 seconds..".count * 8), y: Position.Center.Y + 117), string: ".")
+                System.sharedInstance.Video.refresh()
+                Dot2Printed = true
+            }
+        }
+        reboot_system(true)
+    }
 }

@@ -17,9 +17,9 @@
 #define unlikely(x)    __builtin_expect(!!(x), 0)
 
 id _Nullable
-objc_msgSend(id _Nullable self, SEL _Nonnull op, ...){
+objc_msgSend(id _Nullable obj, SEL _Nonnull op, ...){
     ULTDBG("objc_msgSend!\n");
-    return 0;
+    return obj;
 }
 
 #import <objc/objc.h>
@@ -90,34 +90,17 @@ class_copyIvarList(Class _Nullable cls, unsigned int * _Nullable outCount)  {
     return (Ivar *) 0;
 }
 
-id
-class_createInstance(Class cls, size_t extraBytes) {
-    return nil;
-}
-
 size_t
 class_getInstanceSize(Class _Nullable cls) {
     return 0;
 }
 
-const char * _Nonnull
-class_getName(Class _Nullable cls) {
-    return "NSObject";
-}
-
-Class _Nullable
-class_getSuperclass(Class _Nullable cls) {
-    return Nil;
-}
-
-BOOL
-class_isMetaClass(Class _Nullable cls) {
-    return NO;
-}
-
 BOOL
 class_respondsToSelector(Class _Nullable cls, SEL _Nonnull sel) {
-    return NO;
+//    if (cls != 0 && sel != 0 && __objc_responds_to((id) & cls, sel) != 0) {
+//        return YES;
+//    }
+    return YES;
 }
 
 ptrdiff_t
@@ -126,26 +109,13 @@ ivar_getOffset(Ivar _Nonnull v) {
 }
 
 //UNIMPLEMENTED(class_copyIvarList)
-//UNIMPLEMENTED(class_createInstance)
 //UNIMPLEMENTED(class_getInstanceSize)
-//UNIMPLEMENTED(class_getName)
-//UNIMPLEMENTED(class_getSuperclass)
-//UNIMPLEMENTED(class_isMetaClass)
-//UNIMPLEMENTED(class_respondsToSelector)
 //UNIMPLEMENTED(ivar_getOffset)
 
-UNIMPLEMENTED(objc_autorelease)
 UNIMPLEMENTED(objc_autoreleaseReturnValue)
 UNIMPLEMENTED(objc_copyWeak)
 UNIMPLEMENTED(objc_debug_isa_class_mask)
 UNIMPLEMENTED(objc_destroyWeak)
-
-void * _Nullable
-objc_destructInstance(id _Nullable obj) {
-    return NULL;
-}
-
-//UNIMPLEMENTED(objc_destructInstance)
 
 UNIMPLEMENTED(objc_initWeak)
 UNIMPLEMENTED(objc_loadWeakRetained)
@@ -157,21 +127,6 @@ UNIMPLEMENTED(objc_retainAutoreleasedReturnValue)
 
 id _Nullable
 objc_storeWeak(id _Nullable * _Nonnull location, id _Nullable obj) {
-    return nil;
-}
-
-Class _Nullable
-objc_lookUpClass(const char * _Nonnull name) {
-    return Nil;
-}
-
-id _Nullable
-objc_constructInstance(Class _Nullable cls, void * _Nullable bytes) {
-    return nil;
-}
-
-id _Nullable
-object_dispose(id _Nullable obj) {
     return nil;
 }
 
@@ -191,9 +146,6 @@ sel_getName(SEL _Nonnull sel) {
 }
 
 //UNIMPLEMENTED(objc_storeWeak)
-//UNIMPLEMENTED(objc_lookUpClass)
-//UNIMPLEMENTED(objc_constructInstance)
-//UNIMPLEMENTED(object_dispose)
 //UNIMPLEMENTED(object_setClass)
 //UNIMPLEMENTED(protocol_getName)
 //UNIMPLEMENTED(sel_getName)
@@ -243,10 +195,6 @@ fwrite(const void* buf, size_t size, size_t count, FILE *stream) {
     write(1, buf, size);
     funlockfile(stream);
     return count;
-}
-
-BOOL class_conformsToProtocol(Class cls, Protocol *protocol) {
-    return YES;
 }
 
 UNIMPLEMENTED(__divti3)

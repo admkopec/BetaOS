@@ -17,6 +17,7 @@
 #define KALLOC_MAP_SIZE_MAX  (128 * 1024 * 1024)
 
 extern uint64_t first_avail;
+extern vm_offset_t virtual_avail;
 vm_map_t  kalloc_map;
 vm_size_t kalloc_max;
 vm_size_t kalloc_max_prerounded;
@@ -46,7 +47,8 @@ void * kalloc_(uint32_t size) {
 }
 
 void free_(void * data, uint32_t size) {
-    if (data + round_page(size) == (void *) first_avail) {
+    if (data + round_page(size) == (void *) virtual_avail) {
         first_avail -= round_page(size);
+        virtual_avail -= round_page(size);
     }
 }

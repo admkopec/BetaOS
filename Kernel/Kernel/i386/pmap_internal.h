@@ -9,6 +9,10 @@
 #ifndef pmap_internal_h
 #define pmap_internal_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <i386/vm_types.h>
 #include <i386/cpu_data.h>
 #include <stddef.h>
@@ -130,5 +134,9 @@ static inline pd_entry_t* pmap_pde(pmap_t m, vm_map_offset_t v) {
 ppnum_t pmap_find_phys(pmap_t pmap, uint64_t va);
 
 uint64_t kvtophys(vm_offset_t addr);
+    
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* pmap_internal_h */

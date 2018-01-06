@@ -18,3 +18,4 @@
 
 extern void change_font_color(unsigned int color);
 extern unsigned int get_font_color(void);
+

@@ -18,7 +18,7 @@ extern "C" {
 #define MAX_NUMBER_OF_SCREENS 25
 
 static uint32_t color_foreground = 0x00FFFFFF;
-static uint32_t color_background = 0x00000000;
+static uint32_t color_background = 0xFF000000;
     
 extern bool canUseSSEmemcpy;
 
@@ -123,36 +123,31 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
             uint32_t val = *theChar++;
             val = (color_background & ~val) | (color_foreground & val);
             if (!use_screen_caching || !experimental) {
-                *store++  = val;
+                if (color_background < 0xFF000000) {
+                    *store++  = val;
+                } else {
+                    if (val == color_background && ch != '\0') {
+                        store++;
+                    } else {
+                        *store++ = val;
+                    }
+                }
             }
             if (use_screen_caching) {
-                *store2++ = val;
+                if (color_background < 0xFF000000) {
+                    *store2++  = val;
+                } else {
+                    if (val == color_background && ch != '\0') {
+                        store2++;
+                    } else {
+                        *store2++ = val;
+                    }
+                }
             }
         }
         where = (uint32_t *)(((unsigned char*)where)+Platform_state.video.v_rowBytes);
         where_screen = (uint32_t *)(((unsigned char*) where_screen) + Platform_state.video.v_rowBytes);
     }
-}
-    
-void
-paint_pixel(unsigned int x, unsigned int y, uint32_t color) {
-    if (x > Platform_state.video.v_width || y > Platform_state.video.v_height) {
-        return;
-    }
-    uint32_t* where  = (uint32_t*)(Platform_state.video.v_baseAddr + (y * Platform_state.video.v_rowBytes) + (x * 4));
-    uint32_t* where2 = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
-    if (!use_screen_caching || !experimental) {
-        *where = color;
-    }
-    if (use_screen_caching) {
-        *where2 = color;
-    }
-}
-    
-uint32_t
-get_pixel(unsigned int x, unsigned int y) {
-    uint32_t* where2 = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
-    return *where2;
 }
 
 static void
@@ -162,7 +157,7 @@ clear_line(unsigned int xx, unsigned int yy) {
     end = (unsigned int)((Platform_state.video.v_width) - 1);
     
     for (i = start; i <= end; i+=ISO_CHAR_WIDTH) {
-        paint_char(i, yy, ' ');
+        paint_char(i, yy, '\0');
     }
 }
 
@@ -230,16 +225,16 @@ scroll_up() {
     canUseSSEmemcpy = false;
 }
 
-void
-refresh_screen() {
-    if (!modified) {
-        return;
-    }
-    modified = false;
-    canUseSSEmemcpy = true;
-    memcpy((void *) Platform_state.video.v_baseAddr, (void *) Screen, Platform_state.video.v_length);
-    canUseSSEmemcpy = false;
-}
+//void
+//refresh_screen() {
+//    if (!modified) {
+//        return;
+//    }
+//    modified = false;
+//    canUseSSEmemcpy = true;
+//    memcpy((void *) Platform_state.video.v_baseAddr, (void *) Screen, Platform_state.video.v_length);
+//    canUseSSEmemcpy = false;
+//}
 
 void
 vsputc(int ch) {

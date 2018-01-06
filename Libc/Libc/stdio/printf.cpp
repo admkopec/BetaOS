@@ -83,6 +83,11 @@ snprintf(char *buf, size_t size, const char *fmt, ...) {
 }
 
 int
+vsprintf(char *buf, const char *fmt, va_list args) {
+    return vsnprintf(buf, 2048, fmt, args);
+}
+
+int
 vsnprintf(char *buf, size_t size, const char *fmt, va_list args) {
     struct string_buf string_buf = { .data = buf, .count = 0, .max_len = size };
     if (size < 1) {

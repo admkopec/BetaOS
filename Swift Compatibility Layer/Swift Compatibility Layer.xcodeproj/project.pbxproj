@@ -21,21 +21,21 @@
 
 /* Begin PBXFileReference section */
 		3B1A242F1F90C4ED00BF40FE /* libobjc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libobjc.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B1A24351F90C59B00BF40FE /* objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = objc.m; path = "Objective-C Runtime/objc.m"; sourceTree = "<group>"; };
-		3B1A24391F90C60800BF40FE /* runtime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = runtime.m; path = "Objective-C Runtime/runtime.m"; sourceTree = "<group>"; };
-		3B1A243E1F90DCB200BF40FE /* NSObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NSObject.m; path = "Objective-C Runtime/NSObject.m"; sourceTree = "<group>"; };
-		3B1A24421F90DD4200BF40FE /* Protocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Protocol.m; path = "Objective-C Runtime/Protocol.m"; sourceTree = "<group>"; };
+		3B1A24351F90C59B00BF40FE /* objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = objc.m; sourceTree = "<group>"; };
+		3B1A24391F90C60800BF40FE /* runtime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = runtime.m; sourceTree = "<group>"; };
+		3B1A243E1F90DCB200BF40FE /* NSObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSObject.m; sourceTree = "<group>"; };
+		3B1A24421F90DD4200BF40FE /* Protocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Protocol.m; sourceTree = "<group>"; };
 		3B33ADC51FAD1F9C00C4D9BE /* libc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libc.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BC7874E1FC1A4FA00BACC7D /* objc-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "objc-private.h"; path = "Objective-C Runtime/objc-private.h"; sourceTree = "<group>"; };
-		3BC7874F1FC1A62400BACC7D /* object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = object.mm; path = "Objective-C Runtime/object.mm"; sourceTree = "<group>"; };
-		3BC787511FC1ADF300BACC7D /* runtime-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "runtime-private.h"; path = "Objective-C Runtime/runtime-private.h"; sourceTree = "<group>"; };
-		3BC787C81FCDE7F500BACC7D /* unimplemented.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = unimplemented.m; path = "Objective-C Runtime/unimplemented.m"; sourceTree = "<group>"; };
+		3BC7874E1FC1A4FA00BACC7D /* objc-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "objc-private.h"; sourceTree = "<group>"; };
+		3BC7874F1FC1A62400BACC7D /* object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = object.mm; sourceTree = "<group>"; };
+		3BC787511FC1ADF300BACC7D /* runtime-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "runtime-private.h"; sourceTree = "<group>"; };
+		3BC787C81FCDE7F500BACC7D /* unimplemented.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = unimplemented.m; sourceTree = "<group>"; };
 		3BD8AA751F90EA0C00A7ADBC /* libcucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA7E1F90EA3200A7ADBC /* libicucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libicucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Unicode Support.h"; path = "Objective-C Runtime/Unicode Support/Unicode Support.h"; sourceTree = "<group>"; };
-		3BD8AA831F90EA8300A7ADBC /* Unicode Support.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Unicode Support.m"; path = "Objective-C Runtime/Unicode Support/Unicode Support.m"; sourceTree = "<group>"; };
-		3BD8AA861F90EB0D00A7ADBC /* Mobile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mobile.h; path = "Objective-C Runtime/Unicode Support/Mobile/Mobile.h"; sourceTree = "<group>"; };
-		3BD8AA871F90EB0D00A7ADBC /* Mobile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Mobile.m; path = "Objective-C Runtime/Unicode Support/Mobile/Mobile.m"; sourceTree = "<group>"; };
+		3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Unicode Support.h"; sourceTree = "<group>"; };
+		3BD8AA831F90EA8300A7ADBC /* Unicode Support.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Unicode Support.m"; sourceTree = "<group>"; };
+		3BD8AA861F90EB0D00A7ADBC /* Mobile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mobile.h; sourceTree = "<group>"; };
+		3BD8AA871F90EB0D00A7ADBC /* Mobile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Mobile.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +95,7 @@
 				3B1A24391F90C60800BF40FE /* runtime.m */,
 				3BC7874F1FC1A62400BACC7D /* object.mm */,
 			);
-			name = "Objective-C Runtime";
+			path = "Objective-C Runtime";
 			sourceTree = "<group>";
 		};
 		3B1A24451F90E7B600BF40FE /* Unicode Support */ = {
@@ -106,13 +106,14 @@
 				3BD8AA791F90EA1F00A7ADBC /* Mobile */,
 			);
 			name = "Unicode Support";
+			path = "Objective-C Runtime/Unicode Support";
 			sourceTree = "<group>";
 		};
 		3B27FFBD1FB362D1008452AC /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			name = Foundation;
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 		3B33ADC31FAD1F9C00C4D9BE /* Frameworks */ = {
@@ -138,7 +139,7 @@
 				3BD8AA861F90EB0D00A7ADBC /* Mobile.h */,
 				3BD8AA871F90EB0D00A7ADBC /* Mobile.m */,
 			);
-			name = Mobile;
+			path = Mobile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

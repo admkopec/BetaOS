@@ -240,16 +240,18 @@ vstart(vm_offset_t boot_args_start) {
         lphysfree       = kernelBootArgs->kaddr + kernelBootArgs->ksize;
         physfree        = (void *)(unsigned long)((lphysfree + PAGE_SIZE - 1) &~ (PAGE_SIZE - 1));
 
-#if DEBUG
+        #if DEBUG
         serial_init();
         can_use_serial = true;
-#endif
+        #endif
         
         kernelBootArgs = (boot_args *)ml_static_ptovirt(boot_args_start);
         DBG("i386_init(0x%lx) kernelBootArgs=%p\n", (unsigned long)boot_args_start, kernelBootArgs);
         Platform_init(false, kernelBootArgs);
         
+        #ifdef DEBUG
         clear_screen();
+        #endif
         acpi();
         
         DBG("revision      0x%X\n", kernelBootArgs->Revision);
@@ -322,7 +324,7 @@ i386_init(void) {
     vm_offset_t v_physAddr = Platform_state.video.v_baseAddr & ~3;
     vm_offset_t v_newAddr  = 0;
     vm_size_t   fbsize     = 0;
-    
+    DBG("v_baseAddr = 0x%lx\n", Platform_state.video.v_baseAddr);
     if (!v_physAddr) {
         panic("v_physAddr == 0\n");
     } else {
@@ -348,11 +350,11 @@ i386_init(void) {
     if (RSDP_.foundInBios) {
         RSDP_.RSDP = &RsdpForBiosSearch;
     } else if (RSDP_.OriginalAddress != 0) {
-        RSDP_.RSDP     = (ACPI_2_Description *)io_map(((vm_offset_t)RSDP_.OriginalAddress & ~3), round_page(sizeof(ACPI_2_Description)), VM_WIMG_IO);
+        RSDP_.RSDP     = (ACPI_2_Description *)io_map(((vm_offset_t)RSDP_.OriginalAddress & ~3), sizeof(ACPI_2_Description), VM_WIMG_IO);
     } if (SMBIOS_.foundInBios) {
         SMBIOS_.SMBIOS = &SmbiosHeaderForBiosSearch;
     } else if (SMBIOS_.OriginalAddress != 0) {
-        SMBIOS_.SMBIOS = (SMBIOSHeader *)io_map(((vm_offset_t)SMBIOS_.OriginalAddress & ~3), round_page(sizeof(SMBIOSHeader)), VM_WIMG_IO);
+        SMBIOS_.SMBIOS = (SMBIOSHeader *)io_map(((vm_offset_t)SMBIOS_.OriginalAddress & ~3), sizeof(SMBIOSHeader), VM_WIMG_IO);
     }
     swift_isaMask = 0xF;
     init_fpu();

@@ -18,10 +18,26 @@
 #define PAL_RTC_SHIFT       0x14
 #define PAL_RTC_GENERATION  0x18
 
+#define CPU_ACTIVE_STACK    0x18    // offsetof(cpu_data_t, cpu_kernel_stack)
+#define CPU_KERNEL_STACK    0x20    // offsetof(cpu_data_t, cpu_kernel_stack)
+
+//Entry(Load_context)
+//    movq    %rdi, %rcx
+//    leaq    -IKS_SIZE(%rcx), %rdx
+//    movq    %rcx, %gs:CPU_ACTIVE_STACK
+//    movq    %rdx, %gs:CPU_KERNEL_STACK
+//    movq    %rdx, %rsp
+//    xorl    %ebp, %ebp
+//    xorl    %edi,%edi
+//
+//    movq    %rax, %rdi
+//    xorq    %rbp,%rbp
+//    call    *%rbx
+
 Entry(x86_64_context_switch)
     /* save the old context and restore the new */
 
-    pushq    %gs
+//    pushq    %gs
     pushq    %fs
     pushq    %rbp
     pushq    %r15
@@ -67,14 +83,17 @@ Entry(x86_64_context_switch)
     popq     %r15
     popq     %rbp
     popq     %fs
-    popq     %gs
+//    popq     %gs
+
+    movq    %rsp, %gs:CPU_ACTIVE_STACK
 
     retq
 
 Entry(x86_64_context_switch_first)
+    movq %rsp, %gs:CPU_KERNEL_STACK
     movq 8(%rdi), %rsp
 
-    swapgs
+//    swapgs
 
     popq     %rax
     mov      %es, %ax
@@ -96,12 +115,13 @@ Entry(x86_64_context_switch_first)
     popq     %r15
     popq     %rbp
     popq     %fs
-    popq     %gs
+//    popq     %gs
+    movq    %rsp, %gs:CPU_ACTIVE_STACK
 
     retq
 
 Entry(x86_64_context_save_state)
-    pushq    %gs
+//    pushq    %gs
     pushq    %fs
     pushq    %rbp
     pushq    %r15
@@ -139,7 +159,7 @@ Entry(halt_cpu)
     /* x86_init_wrapper */
 
 Entry(x86_init_wrapper)
-	xor	%rbp, %rbp
+	xor	    %rbp, %rbp
 	movq	%rsi, %rsp
 	callq	*%rdi
 /*

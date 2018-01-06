@@ -16,7 +16,7 @@ struct ACPI: Module {
     let Name = "ACPI"
     fileprivate(set) var tables = [ACPITable]()
     var description: String {
-        return Name + " " + "Module"
+        return "Module"
     }
     
     init?(rsdp: RSDP?) {
@@ -35,7 +35,14 @@ struct ACPI: Module {
             case "MCFG":
                 tables.append(MCFG(ptr: addr))
             case "FACP":
-                tables.append(FADT(ptr: addr))
+                let fadt = FADT(ptr: addr)
+                tables.append(fadt)
+                if fadt.DSDTAddress != 0 {
+                    tables.append(DSDT(ptr: fadt.DSDTAddress))
+                }
+                if fadt.FACSAddress != 0 {
+//                    tables.append(FACS(ptr: fadt.FACSAddress))
+                }
             case "APIC":
                 tables.append(MADT(ptr: addr))
             case "HPET":

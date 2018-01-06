@@ -31,12 +31,92 @@
 #define THREAD_STATE_NONE		13
 /* 14 and 15 are used for the internal x86_SAVED_STATE flavours */
 #define x86_AVX_STATE32			16
-#define x86_AVX_STATE64			17
-#define x86_AVX_STATE			18
+#define x86_AVX_STATE64			(x86_AVX_STATE32 + 1)
+#define x86_AVX_STATE			(x86_AVX_STATE32 + 2)
 
 #define x86_SAVED_STATE32		THREAD_STATE_NONE + 1
 #define x86_SAVED_STATE64		THREAD_STATE_NONE + 2
 #ifndef __ASSEMBLY__
+
+//typedef struct x86_kernel_state x86_kernel_state_t;
+//
+//struct thread_kernel_state {
+//    x86_kernel_state_t      machine;           /* must be first */
+////    kern_allocation_name_t  allocation_name;
+//} __attribute__((aligned(16)));
+//
+//typedef struct thread_kernel_state * thread_kernel_state_t;
+
+#define thread_get_kernel_state(thread) ((thread_kernel_state_t) \
+((thread)->kernel_stack + kernel_stack_size - sizeof(struct thread_kernel_state)))
+
+/*
+ * Default segment register values.
+ */
+
+#define USER_CODE_SELECTOR    0x0017
+#define USER_DATA_SELECTOR    0x001f
+#define KERN_CODE_SELECTOR    0x0008
+#define KERN_DATA_SELECTOR    0x0010
+
+//typedef struct {
+//    uint32_t    flavor;
+//    uint32_t    count;
+//} x86_state_header_t;
+//
+//struct x86_thread_state32 {
+//    unsigned int    eax;
+//    unsigned int    ebx;
+//    unsigned int    ecx;
+//    unsigned int    edx;
+//    unsigned int    edi;
+//    unsigned int    esi;
+//    unsigned int    ebp;
+//    unsigned int    esp;
+//    unsigned int    ss;
+//    unsigned int    eflags;
+//    unsigned int    eip;
+//    unsigned int    cs;
+//    unsigned int    ds;
+//    unsigned int    es;
+//    unsigned int    fs;
+//    unsigned int    gs;
+//};
+//typedef struct x86_thread_state32 x86_thread_state32_t;
+//
+//struct x86_thread_state64 {
+//    uint64_t    rax;
+//    uint64_t    rbx;
+//    uint64_t    rcx;
+//    uint64_t    rdx;
+//    uint64_t    rdi;
+//    uint64_t    rsi;
+//    uint64_t    rbp;
+//    uint64_t    rsp;
+//    uint64_t    r8;
+//    uint64_t    r9;
+//    uint64_t    r10;
+//    uint64_t    r11;
+//    uint64_t    r12;
+//    uint64_t    r13;
+//    uint64_t    r14;
+//    uint64_t    r15;
+//    uint64_t    rip;
+//    uint64_t    rflags;
+//    uint64_t    cs;
+//    uint64_t    fs;
+//    uint64_t    gs;
+//};
+//typedef struct x86_thread_state64 x86_thread_state64_t;
+//
+//typedef struct {
+//    x86_state_header_t tsh;
+//    union {
+//        x86_thread_state32_t ts32;
+//        x86_thread_state64_t ts64;
+//    } uts;
+//} x86_thread_state_t;
+
 /*
  * The format in which thread state is saved on this machine. This state
  * flavor is most efficient for exception RPC's to kernel-loaded servers,

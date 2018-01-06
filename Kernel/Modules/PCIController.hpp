@@ -36,6 +36,7 @@ class PCI {
     void getVendor();
     void getDevice();
     void getHeader();
+    bool ReadExtendedCapabilities(uint8_t ID, uint8_t* Value);
 public:
     uint16_t VendorID();
     uint16_t DeviceID();
@@ -45,6 +46,7 @@ public:
     uint8_t  IntLine();
     BAR      BAR();
     void     EnableBusMastering();
+    bool     TrySettingMSIVector(int IRQ);
     int      getBAR (uint16_t index);
     uint32_t Read32 (uint8_t offset);
     void     Write32(uint8_t offset, uint32_t data);

@@ -9,25 +9,34 @@
 import Loggable
 
 typealias PCIDevice = (VendorID: UInt16, DeviceID: UInt16)
+typealias PCIClass  = (Class: UInt8, Subclass: UInt8)
 
 protocol Module: Loggable, CustomStringConvertible {
     
 }
 
-protocol PCIModule: Module {
+protocol PCIModule: Module, AnyObject {
     static var CompatibleDevices: [PCIDevice] { get }
+    static var CompatibleClasses: [PCIClass]? { get }
     init?(pci: PCI)
+}
+
+protocol VideoModule: Module, AnyObject {
+    var mainView: View { get set }
+    var childViews: [View] { get set }
+    
+    func refresh() -> Void
 }
 
 final class ModulesController: CustomStringConvertible {
     let Name: String = "ModulesController"
-    let companionController: PCIModulesController
+    var companionController: PCIModulesController? = nil
     fileprivate(set) var modules = [Module]()
     
     var description: String {
         var retValue = "Swift Modules Controller - loaded modules:"
         for module in modules {
-            retValue += "\n" + module.description
+            retValue += "\n" + module.Name + ": " + module.description
         }
         return retValue
     }
@@ -39,8 +48,11 @@ final class ModulesController: CustomStringConvertible {
         
         if let smbios = SMBIOS(structure: SMBIOS_) {
             modules.append(smbios)
+            // Place it in a better place
+            if smbios.ProductName == "VMware7,1" {
+                modules.append(VMwareTools())
+            }
         }
-        companionController = PCIModulesController()
     }
 }
 
@@ -48,11 +60,11 @@ final class ModulesController: CustomStringConvertible {
 
 final class PCIModulesController: CustomStringConvertible {
     let Name = "PCIModulesController"
-    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, HDA.self]
+    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, AHCI.self, HDA.self]
     var description: String {
         return Name
     }
-    
+
     init() {
         for bus in 0 ... 255 {
             var pci = PCI(bus: UInt8(bus))
@@ -64,10 +76,22 @@ final class PCIModulesController: CustomStringConvertible {
                     pci = PCI(bus: UInt8(bus), slot: UInt8(slot), function: UInt8(function))
                     if pci.isValid {
                         for controller in controllers {
-                            for comptaibleDevice in controller.CompatibleDevices {
-                                if (pci.VendorID, pci.DeviceID) == comptaibleDevice {
-                                    if let module = controller.init(pci: pci) {
-                                        System.sharedInstance.modulesController.modules.append(module)
+                            if controller.CompatibleDevices.count > 0 {
+                                for comptaibleDevice in controller.CompatibleDevices {
+                                    if (pci.VendorID, pci.DeviceID) == comptaibleDevice {
+                                        if let module = controller.init(pci: pci) {
+                                            System.sharedInstance.modulesController.modules.append(module)
+                                        }
+                                    }
+                                }
+                            } else {
+                                if controller.CompatibleClasses != nil {
+                                    for compatibleClass in controller.CompatibleClasses! {
+                                        if (pci.Class, pci.Subclass) == compatibleClass {
+                                            if let module = controller.init(pci: pci) {
+                                                System.sharedInstance.modulesController.modules.append(module)
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -78,3 +102,4 @@ final class PCIModulesController: CustomStringConvertible {
         }
     }
 }
+

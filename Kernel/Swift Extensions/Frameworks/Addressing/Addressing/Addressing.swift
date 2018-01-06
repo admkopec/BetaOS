@@ -9,6 +9,9 @@
 import Darwin
 
 fileprivate func mapAddress(start: UInt, size: UInt) -> UInt {
+    guard start != 0 else {
+        return 0
+    }
     return UInt(io_map(UInt64(start & ~3), UInt((size + vm_page_mask) & ~vm_page_mask), (0x2 | 0x4 | 0x1)))
 }
 
@@ -24,6 +27,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
     public typealias Words = UInt.Words
     fileprivate var rawValue: UInt
     fileprivate var rawValueVirt: UInt
+    fileprivate var sizeTomap: vm_size_t = vm_page_size
     public var description: String {
         return "Physical Address is 0x\(String(physical, radix: 16)), Virtual Address is 0x\(String(virtual, radix: 16))"
     }
@@ -35,7 +39,7 @@ public final class Address: Numeric, Comparable, BinaryInteger {
             return rawValueVirt
         } else {
             guard baseAddr != (0x0, 0x0) else {
-                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                rawValueVirt = mapAddress(start: physical, size: sizeTomap)
                 baseAddr = (physical, rawValueVirt)
                 return rawValueVirt
             }
@@ -45,12 +49,12 @@ public final class Address: Numeric, Comparable, BinaryInteger {
                 return rawValueVirt
             }
             guard Int(Int(physical) - Int(baseAddr.original)) > Int(0) else {
-                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                rawValueVirt = mapAddress(start: physical, size: sizeTomap)
                 baseAddr = (physical, rawValueVirt)
                 return rawValueVirt
             }
             guard UInt64((UInt64(physical) + UInt64(baseAddr.mapped) - UInt64(baseAddr.original))) > UInt64(0) else {
-                rawValueVirt = mapAddress(start: physical, size: vm_page_size)
+                rawValueVirt = mapAddress(start: physical, size: sizeTomap)
                 baseAddr = (physical, rawValueVirt)
                 return rawValueVirt
             }
@@ -159,9 +163,13 @@ public final class Address: Numeric, Comparable, BinaryInteger {
         lhs.magnitude  = lhs.rawValue
     }
     
-    public init(_ address: UInt, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
+    public init(_ address: UInt, size: vm_size_t = vm_page_size, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
         rawValue             = address
         rawValueVirt         = rawValue
+        sizeTomap            = size
+        if sizeTomap < vm_page_size {
+            sizeTomap = vm_page_size
+        }
         baseAddr             = baseAddress
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
@@ -170,9 +178,13 @@ public final class Address: Numeric, Comparable, BinaryInteger {
         trailingZeroBitCount = rawValue.trailingZeroBitCount
     }
     
-    public init(_ address64: UInt64, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
+    public init(_ address64: UInt64, size: vm_size_t = vm_page_size, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
         rawValue             = UInt(address64)
         rawValueVirt         = rawValue
+        sizeTomap            = size
+        if sizeTomap < vm_page_size {
+            sizeTomap = vm_page_size
+        }
         baseAddr             = baseAddress
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
@@ -181,9 +193,13 @@ public final class Address: Numeric, Comparable, BinaryInteger {
         trailingZeroBitCount = rawValue.trailingZeroBitCount
     }
     
-    public init(_ address32: UInt32, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
+    public init(_ address32: UInt32, size: vm_size_t = vm_page_size, baseAddress: (UInt, UInt) = (0x0, 0x0)) {
         rawValue             = UInt(address32)
         rawValueVirt         = rawValue
+        sizeTomap            = size
+        if sizeTomap < vm_page_size {
+            sizeTomap = vm_page_size
+        }
         baseAddr             = baseAddress
         magnitude            = rawValue
         hashValue            = rawValue.hashValue
