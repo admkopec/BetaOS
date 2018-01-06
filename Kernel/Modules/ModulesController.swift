@@ -60,7 +60,7 @@ final class ModulesController: CustomStringConvertible {
 
 final class PCIModulesController: CustomStringConvertible {
     let Name = "PCIModulesController"
-    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, AHCI.self, HDA.self]
+    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, AHCI.self, NVMe.self, HDA.self]
     var description: String {
         return Name
     }

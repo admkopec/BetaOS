@@ -12,9 +12,9 @@
 #define OS_NAME         "BetaOS"
 #define VERSION_MAJOR   0
 #define VERSION_MINOR   40
-#define VERSION_XMINOR  1
+#define VERSION_XMINOR  2
 #define COPYRIGHT       "Copyright © 2015-2018 Adam Kopec. All rights reserved."
 #define BUILD_NUMBER    \
-98585
+98635
 
 #endif /* version_h */

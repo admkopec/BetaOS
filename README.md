@@ -6,8 +6,14 @@ Now installation got even easier with dmg disk for VMs (or you can restore it to
 PC users should use Clover bootloader to boot the MACH-O binary through included boot.efi(Apple).
 
 ## Changelog:
+### Version 0.40.2:
+* Improved data recieving from disk.
+* Added an early work in progress NVMe module.
+
 ### Version 0.40.1:
 * Small runtime fix for proper class manipulation on release builds.
+
+### Version 0.40:
 * Added better runtime support with simple class management and retaining.
 * Added SATA in AHCI mode (needs a little bit more refining but it's working).
 * Added FAT32 filesystem support with reading and writing (writing needs more refining and needs to support LFN).

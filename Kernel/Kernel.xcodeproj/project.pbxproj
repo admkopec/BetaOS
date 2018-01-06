@@ -17,6 +17,7 @@
 		3B2347391FFD5297007D6CB0 /* exFAT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2347381FFD5297007D6CB0 /* exFAT.swift */; };
 		3B23473D2000DC7E007D6CB0 /* Partition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B23473C2000DC7E007D6CB0 /* Partition.swift */; };
 		3B23473F2000DCB1007D6CB0 /* Disk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B23473E2000DCB1007D6CB0 /* Disk.swift */; };
+		3B234741200133A9007D6CB0 /* NVMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B234740200133A9007D6CB0 /* NVMe.swift */; };
 		3B2576581F522483002EBB98 /* fpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2576561F522483002EBB98 /* fpu.c */; };
 		3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC01E4FCACB000204B1 /* kdp.c */; };
 		3B2D0EC61E4FCB11000204B1 /* EHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */; };
@@ -136,6 +137,7 @@
 		3B2347381FFD5297007D6CB0 /* exFAT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exFAT.swift; sourceTree = "<group>"; };
 		3B23473C2000DC7E007D6CB0 /* Partition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Partition.swift; sourceTree = "<group>"; };
 		3B23473E2000DCB1007D6CB0 /* Disk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disk.swift; sourceTree = "<group>"; };
+		3B234740200133A9007D6CB0 /* NVMe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVMe.swift; sourceTree = "<group>"; };
 		3B2576561F522483002EBB98 /* fpu.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = fpu.c; sourceTree = "<group>"; };
 		3B2576571F522483002EBB98 /* fpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fpu.h; sourceTree = "<group>"; };
 		3B2D0EC01E4FCACB000204B1 /* kdp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kdp.c; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				3B645EF41FE5C517009EBA75 /* VESA.swift */,
 				3BD219151FDB420C0095A1FF /* HDA.swift */,
 				3BC3C9FE1FF1662E00B8F5A7 /* AHCI.swift */,
+				3B234740200133A9007D6CB0 /* NVMe.swift */,
 				3B201B1F1FC03D860057E713 /* PIT8254.swift */,
 				3B2347361FF968A6007D6CB0 /* VMwareTools.swift */,
 				3B389A591E6DD817009F1DE6 /* Controller.hpp */,
@@ -741,7 +744,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(sed -n -e \"18 p\" \"$PROJECT_DIR/Kernel/version.h\")\necho \"Debug: ${buildNumber}\"\nbuildNumber=$(($buildNumber + 1))\necho \"Debug: ${buildNumber}\"\nsed -i -e \"18s/.*/${buildNumber}/\" \"$PROJECT_DIR/Kernel/version.h\"";
+			shellScript = "lockfile -r 0 \"$PROJECT_DIR/Kernel/version.h\"\nflock -x \"$PROJECT_DIR/Kernel/version.h\"\nbuildNumber=$(sed -n -e \"18 p\" \"$PROJECT_DIR/Kernel/version.h\")\necho \"Debug: ${buildNumber}\"\nbuildNumber=$(($buildNumber + 1))\necho \"Debug: ${buildNumber}\"\nsed -i -e \"18s/.*/${buildNumber}/\" \"$PROJECT_DIR/Kernel/version.h\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -819,6 +822,7 @@
 				3B0B3E201FAA358E00964779 /* FADT.swift in Sources */,
 				3BE184B71FA8ABEE003B745C /* MADT.swift in Sources */,
 				3BE184B31FA880F3003B745C /* MCFG.swift in Sources */,
+				3B234741200133A9007D6CB0 /* NVMe.swift in Sources */,
 				3BE184BB1FA8AC56003B745C /* HPET.swift in Sources */,
 				3BED40E01F9503F300D019AA /* ModulesController.swift in Sources */,
 				3BD219161FDB420C0095A1FF /* HDA.swift in Sources */,
@@ -1003,7 +1007,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 0.40.1;
+				CURRENT_PROJECT_VERSION = 0.40.2;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1063,7 +1067,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 0.40.1;
+				CURRENT_PROJECT_VERSION = 0.40.2;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_PREPROCESSOR_DEFINITIONS = "KERNEL_BASE_OFFSET=0x1000";
 				HEADER_SEARCH_PATHS = (
