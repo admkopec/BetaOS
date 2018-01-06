@@ -457,7 +457,8 @@ struct protocol_list_t {
 // class's instances requires raw isa
 #define FAST_REQUIRES_RAW_ISA   (1UL<<2)
 // data pointer
-#define FAST_DATA_MASK          0x00007ffffffffff8UL
+//#define FAST_DATA_MASK          0x00007ffffffffff8UL
+#define FAST_DATA_MASK          0xfffffffffffffff8UL
 
 #else
 // Leaks-incompatible version that steals lots of bits.
@@ -470,7 +471,8 @@ struct protocol_list_t {
 //   This bit is aligned with isa_t->hasCxxDtor to save an instruction.
 #define FAST_HAS_CXX_DTOR       (1UL<<2)
 // data pointer
-#define FAST_DATA_MASK          0x00007ffffffffff8UL
+//#define FAST_DATA_MASK          0x00007ffffffffff8UL
+#define FAST_DATA_MASK          0xfffffffffffffff8UL
 // class or superclass has .cxx_construct implementation
 #define FAST_HAS_CXX_CTOR       (1UL<<47)
 // class or superclass has default alloc/allocWithZone: implementation
@@ -1041,7 +1043,7 @@ struct objc_class : objc_object {
     
     bool hasCxxCtor() {
         // addSubclass() propagates this flag from the superclass.
-        assert(isRealized());
+//        assert(isRealized());
         return bits.hasCxxCtor();
     }
 //    void setHasCxxCtor() {
@@ -1050,7 +1052,7 @@ struct objc_class : objc_object {
     
     bool hasCxxDtor() {
         // addSubclass() propagates this flag from the superclass.
-        assert(isRealized());
+//        assert(isRealized());
         return bits.hasCxxDtor();
     }
 //    void setHasCxxDtor() {
