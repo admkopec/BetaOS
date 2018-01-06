@@ -6,6 +6,13 @@ Now installation got even easier with dmg disk for VMs (or you can restore it to
 PC users should use Clover bootloader to boot the MACH-O binary through included boot.efi(Apple).
 
 ## Changelog:
+### Version 0.40:
+* Added better runtime support with simple class management and retaining.
+* Added SATA in AHCI mode (needs a little bit more refining but it's working).
+* Added FAT32 filesystem support with reading and writing (writing needs more refining and needs to support LFN).
+* Added SVGA II driver.
+* And lots of overall improvements.
+
 ### Version 0.36:
 * Fixed broken time command.
 * Translated more code into Swift.
