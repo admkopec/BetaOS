@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/31/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
@@ -54,15 +54,14 @@ struct MADT: Loggable, ACPITable {
                                         while position < controllers.count {
                                             let bytesRemaining = controllers.count - position
                                             guard bytesRemaining > 2 else {
-                                                fatalError("error: bytesRemaining: \(bytesRemaining) "
-                                                    + "count: \(controllers.count) position: \(position)")
+                                                Log("BytesRemaining: \(bytesRemaining), count: \(controllers.count), position: \(position)", level: .Error)
+                                                fatalError()
                                             }
                                             let tableLen = Int(controllers[position + 1])
                                             guard tableLen > 0 && tableLen <= controllers.count - position
                                                 else {
-                                                    fatalError("error: tableLen: \(tableLen) "
-                                                        + "position: \(position) "
-                                                        + "controllers.count: \(controllers.count)")
+                                                    Log("Table Length: \(tableLen), position: \(position), controllers.count: \(controllers.count)", level: .Error)
+                                                    fatalError()
                                             }
                                             
                                             let start: UnsafeMutablePointer<UInt8> = $0.advanced(by: position)

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/15/15.
-//  Copyright © 2015-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2018 Adam Kopeć. All rights reserved.
 //
 
 #include <stdio.h>
@@ -39,13 +39,12 @@ void test_new_panic(int argc, char* argv[]);
 void openFile(int argc, char* argv[]);
 void writeFile(int argc, char* argv[]);
 void listFiles(int argc, char* argv[]);
+void runExec(int argc, char* argv[]);
 void tasks(int argc, char* argv[]);
 void reboot_(__unused int argc,__unused char* argv[]) {
     reboot_system(false);
 }
-void shutdown_(__unused int argc, __unused char* argv[]) {
-    shutdown_system();
-}
+void shutdown_(__unused int argc, __unused char* argv[]);
 void clear_screen_(__unused int argc, __unused char* argv[]) {
     clear_screen();
 }
@@ -92,6 +91,7 @@ void CommandInit() {
     addCommand("write",         "Writes a File to Disk",                                    writeFile);
     addCommand("list",          "Lists files and folders",                                  listFiles);
     addCommand("panic",         "Test Graphical Panic",                                     test_new_panic);
+    addCommand("run",           "Runs an executable from disk",                             runExec);
 }
 
 void findcommand() {

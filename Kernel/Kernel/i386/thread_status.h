@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/30/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #ifndef thread_status_h
@@ -53,11 +53,6 @@
 /*
  * Default segment register values.
  */
-
-#define USER_CODE_SELECTOR    0x0017
-#define USER_DATA_SELECTOR    0x001f
-#define KERN_CODE_SELECTOR    0x0008
-#define KERN_DATA_SELECTOR    0x0010
 
 //typedef struct {
 //    uint32_t    flavor;

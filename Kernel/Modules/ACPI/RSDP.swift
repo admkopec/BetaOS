@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/16/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
@@ -44,7 +44,7 @@ struct RSDP: Loggable, CustomStringConvertible {
                 return nil
             }
             MappedAddress   = Address(UInt(bitPattern: structure.RSDP))
-            baseAddr = (OriginalAddress.physical, MappedAddress.physical)
+            baseAddr = (OriginalAddress.physical, MappedAddress.virtual)
         }
         Signature       = String(&structure.RSDP.pointee.Signature.0, maxLength: 8)
         if Signature != "RSD PTR " {

@@ -2,7 +2,6 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#include <version.h>
 #include <kernel/command.h>
 #include <platform/platform.h>
 
@@ -10,6 +9,8 @@
 #include <i386/pal.h>
 #include <i386/cpuid.h>
 #include <i386/thread_status.h>
+#include <i386/proc_reg.h>
+#include <objc/NSObject.h>
 
 
 #ifdef DEBUG
@@ -17,6 +18,12 @@
 #else
 #define BUILD_TYPE ""
 #endif
+
+#define USER_CS    0x002b
+#define USER32_CS  0x001b
+#define USER_DS    0x0023
+#define KERN_CS    0x0008
+#define KERN_DS    0x0068
 
 typedef struct {
     char           Signature[8];
@@ -324,7 +331,7 @@ struct context_switch_regs {
     uint64_t r14;
     uint64_t r15;
     uint64_t rbp;
-    uint64_t fs;
+//    uint64_t fs;
 //    uint64_t gs;
     uint64_t rip;
     uint64_t cs;
@@ -332,6 +339,25 @@ struct context_switch_regs {
     uint64_t rsp;
     uint64_t ss;
 };
+
+struct e1000_rx_descriptor {
+    uint64_t            buffer;
+    uint16_t            length;
+    uint16_t            padding;
+    uint8_t             status;
+    uint8_t             error;
+    uint16_t            padding2;
+} __attribute__((packed)) __attribute__((aligned (4)));
+
+struct e1000_tx_descriptor {
+    uint64_t            buffer;
+    uint16_t            length;
+    uint8_t             checksum_offset;
+    uint8_t             cmd;
+    uint8_t             status;
+    uint8_t             checksum_start;
+    uint16_t            special;
+} __attribute__((packed)) __attribute__((aligned (4)));
 
 typedef struct {
     SMBIOSHeader * SMBIOS;
@@ -348,11 +374,9 @@ typedef struct {
 static inline void hlt() {
     pal_hlt();
 }
-
 static inline void sti() {
     pal_sti();
 }
-
 static inline void cli() {
     pal_cli();
 }
@@ -447,18 +471,22 @@ static inline void BackdoorHighBandwidthIn(uint32_t* rax, uint32_t* rbx, uint32_
     __asm__ volatile ("cld; rep; insb" : "+a" (*rax), "+b" (*rbx), "+c" (*rcx), "+d" (*rdx), "+S" (*rsi), "+D" (*rdi));
 }
 
+extern void testObjc(void);
 extern RSDP_for_Swift RSDP_;
 extern SMBIOS_for_Swift SMBIOS_;
 extern Platform_state_t  Platform_state;
-extern uintptr_t Screen;
+extern bool VendorisApple;
 extern bool modified;
 extern bool experimental;
 extern bool early;
+extern bool beforeInited;
+extern int cliCalled;
 extern bool canUseSSEmemcpy;
 extern bool kRebootOnPanic;
 extern unsigned long inline ml_static_ptovirt(unsigned long paddr);
 extern void ModulesStartController(void);
 extern void PrintLoadedModules(void);
+extern void IncommingInterrupt(int InterruptNumber);
 extern unsigned long long io_map(unsigned long long phys_addr, unsigned long size, unsigned int flags);
 static inline unsigned int
 GetBaseAddr(unsigned char Bus, unsigned char Slot, unsigned char Function) {
@@ -469,24 +497,15 @@ change_color(unsigned int foreground, unsigned int background);
 extern void APICInit(void);
 extern void lapic_init(void);
 extern void reboot_system(bool ispanic);
+extern void shutdown_system();
 extern void serial_putc(int c);
-extern void paint_char(unsigned int x, unsigned int y, unsigned char ch);
 extern void clear_screen(void);
-extern uint64_t kvtophys(uint64_t addr);
-static inline void interr() {
-    __asm__("int $50");
-}
-static inline void interr51() {
-    __asm__("int $51");
-}
-static inline void interr52() {
-    __asm__("int $52");
-}
 extern void
 x86_64_context_switch(uintptr_t *oldsp, uintptr_t *newsp);
-extern void
-x86_64_context_save_state(uintptr_t* oldsp);
 extern void
 x86_64_context_switch_first(uintptr_t* newsp);
 extern void
 printf_state_swift(x86_saved_state64_t saved_state);
+
+extern unsigned long Screen;
+extern void paint_char(unsigned int x, unsigned int y, unsigned char ch);

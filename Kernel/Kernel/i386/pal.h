@@ -13,8 +13,23 @@
 #include <stdbool.h>
 
 #define pal_hlt()			__asm__ volatile ("sti; hlt")
-#define pal_sti()			__asm__ volatile ("sti")
-#define pal_cli()			__asm__ volatile ("cli")
+extern int cliCalled;
+
+static inline void pal_cli() {
+    if (cliCalled >= 0) {
+        cliCalled++;
+    }
+    __asm__ volatile ("cli");
+}
+
+static inline void pal_sti() {
+    if (cliCalled > 0) {
+        cliCalled--;
+    }
+    if (cliCalled == 0) {
+        __asm__ volatile ("sti");
+    }
+}
 
 typedef uint64_t pal_cr_t;
 

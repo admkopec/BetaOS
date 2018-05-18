@@ -7,12 +7,18 @@
 //
 
 protocol Disk: CustomStringConvertible {
-    func read(lba: UInt64, count: Int) -> UnsafeMutableBufferPointer<UInt8>
+    func read(lba: UInt64, count: Int, buffer: UnsafeMutableBufferPointer<UInt8>) -> MutableData
     func write(lba: UInt64, count: Int, buffer: UnsafeMutablePointer<UInt8>)
+    func PutDriveToSleep()
 }
 
 extension Disk {
-    func read(lba: UInt64) -> UnsafeMutableBufferPointer<UInt8> {
+    func read(lba: UInt64, count: Int) -> MutableData {
+        let LBA = UnsafeMutableBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>.allocate(capacity: 512 * count), count: 512 * count)
+        return read(lba: lba, count: count, buffer: LBA)
+    }
+    
+    func read(lba: UInt64) -> MutableData {
         return read(lba: lba, count: 1)
     }
     

@@ -10,7 +10,7 @@ final class EFS: FAT32 {
     override init(partitionEntry: GPTPartitionEntry, onDisk disk: Disk) {
         super.init(partitionEntry: partitionEntry, onDisk: disk)!
         guard Header.BytesPerSector == 512 else {
-            kprint("Sector sizes do not match! Can't support it yet")
+            kprint("Sector sizes do not match! Can't support that yet")
             return
         }
     }

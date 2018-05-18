@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/31/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
@@ -58,25 +58,16 @@ struct FADT: Loggable, ACPITable {
     init(ptr: Address) {
         Header = SDTHeader(ptr: (UnsafeMutablePointer<ACPISDTHeader_t>(bitPattern: ptr.virtual))!)
         tablePointer = UnsafeMutablePointer<ACPIFADT>(bitPattern: ptr.virtual)!
-        if tablePointer.pointee.header.Length >= 140 {
-            FACSAddress = Address(tablePointer.pointee.x_firmware_ctrl != 0 ? tablePointer.pointee.x_dsdt : UInt(tablePointer.pointee.firmware_ctrl), baseAddress: ptr.baseAddr)
-        } else if tablePointer.pointee.header.Length >= 40  {
+        if tablePointer.pointee.header.Length >= 44  {
+            DSDTAddress = Address(tablePointer.pointee.dsdt, baseAddress: ptr.baseAddr)
             FACSAddress = Address(tablePointer.pointee.firmware_ctrl, baseAddress: ptr.baseAddr)
         } else {
+            DSDTAddress = 0
             FACSAddress = 0
-            DSDTAddress = 0
-            Log("Couldn't find DSDT Address!", level: .Error)
-            return
-        }
-//        if tablePointer.pointee.header.Length >= 148 {
-//            DSDTAddress = Address(tablePointer.pointee.x_dsdt != 0 ? tablePointer.pointee.x_dsdt : UInt(tablePointer.pointee.dsdt), baseAddress: ptr.baseAddr)
-        /*} else*/ if tablePointer.pointee.header.Length >= 44  {
-            DSDTAddress = Address(tablePointer.pointee.dsdt, baseAddress: ptr.baseAddr)
-        } else {
-            DSDTAddress = 0
             Log("Couldn't find DSDT Address!", level: .Error)
         }
         Log("FADT: \(ptr), DSDT: \(DSDTAddress)", level: .Debug)
         Log("XDSDT: 0x\(String(tablePointer.pointee.x_dsdt, radix: 16)), DSDT: 0x\(String(tablePointer.pointee.dsdt, radix: 16))", level: .Debug)
+        Log("XFACS: 0\(String(tablePointer.pointee.x_firmware_ctrl, radix: 16)), FACS: 0x\(String(tablePointer.pointee.firmware_ctrl, radix: 16))", level: .Debug)
     }
 }

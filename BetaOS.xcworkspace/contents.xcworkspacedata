@@ -5,7 +5,22 @@
       location = "group:Kernel/Swift Extensions/Frameworks/Addressing/Addressing.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/CommonExtensions/CommonExtensions.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/CustomArrays/CustomArrays.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Kernel/Swift Extensions/Frameworks/Loggable/Loggable.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/Graphics/Graphics.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/Networking/Networking.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Kernel/Swift Extensions/Frameworks/UUID/UUID.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Swift Compatibility Layer/Swift Compatibility Layer.xcodeproj">

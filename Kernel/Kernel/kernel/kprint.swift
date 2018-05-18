@@ -3,10 +3,11 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/13/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Loggable
+import Graphics
 
 /**
  Writes the textual representations of the given items in kernel space.
@@ -44,7 +45,7 @@ func tprint(_ item: String, terminator: String = "\n") -> Void {
     tprint(terminator, terminator: "")
 }
 
-func writeString(atLocation: Position, string: String) -> Void {
+func writeString(atLocation: Position, string: String, view: View = System.sharedInstance.Video.mainView) -> Void {
     if string.isEmpty {
         return
     }
@@ -57,7 +58,11 @@ func writeString(atLocation: Position, string: String) -> Void {
                 x = atLocation.X
                 continue
             }
-            System.sharedInstance.Video.mainView.draw(character: 😀, position: Position.init(x: x, y: y))
+            if view.Display.Resolution.Width < x {
+                y += 16
+                x = atLocation.X
+            }
+            view.draw(character: 😀, position: Position.init(x: x, y: y))
             x += 8
         }
     }
@@ -75,10 +80,10 @@ public func panic_C_wrapper(_ item: UnsafePointer<CChar>) -> Void {
 
 internal func panic_common(_ item: String) -> Void {
     experimental = false
-    System.sharedInstance.Video.mainView.draw(rectangle: Rectangle(position: Position.init(x: 0, y: 0), size: System.sharedInstance.Video.mainView.Display.Resolution, color: Color.init(red: 0, green: 0, blue: 0, alpha: 0.4), filled: true))
+    System.sharedInstance.Video.mainView.draw(rectangle: Rectangle(position: Position.init(x: 0, y: 0), size: System.sharedInstance.Video.mainView.Display.Resolution, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4), filled: true))
     let outsideSize = Size.init(width: 506, height: 281)
-    System.sharedInstance.Video.mainView.draw(roundedRectangle: RoundedRectangle(position: Position.Center - outsideSize / 2, size: outsideSize, color: Color(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.95), radius: 15, filled: true))
-    let insideColor = Color(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 1)
+    System.sharedInstance.Video.mainView.draw(roundedRectangle: RoundedRectangle(position: Position.Center - outsideSize / 2, size: outsideSize, color: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.95), radius: 15, filled: true))
+    let insideColor: Color = #colorLiteral(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 1)
     let insideSize = Size.init(width: 500, height: 275)
     System.sharedInstance.Video.mainView.draw(roundedRectangle: RoundedRectangle(position: Position.Center - insideSize / 2, size: insideSize, color: insideColor, radius: 15, filled: true))
     let KernelPanicMessage = "Kernel Panic"

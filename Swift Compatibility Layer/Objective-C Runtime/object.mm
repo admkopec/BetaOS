@@ -1,5 +1,5 @@
 //
-//  object.m
+//  object.mm
 //  Objective-C Runtime
 //
 //  Created by Adam Kopeć on 11/19/17.
@@ -10,6 +10,8 @@
 #import <objc/objc.h>
 #import <stdio.h>
 #import <ctype.h>
+#import <malloc/malloc.h>
+
 
 extern "C" {
     extern id _Nullable
@@ -21,6 +23,7 @@ extern "C" {
 }
 
 extern bool DisableNonpointerIsa;
+static Class remapClass(Class cls);
 
 
 #define fastpath(x) (__builtin_expect(bool(x), 1))
@@ -95,19 +98,20 @@ StoreReleaseExclusive(uintptr_t *dst, uintptr_t oldvalue, uintptr_t value) {
 inline bool
 objc_object::isClass() {
     if (isTaggedPointer()) return false;
+    if (!ISA()->isRealized()) return false;
     return ISA()->isMetaClass();
 }
 
 inline bool
 objc_object::isTaggedPointer() {
-    return ((uintptr_t)this & TAG_MASK);
+//    return ((uintptr_t)this & TAG_MASK);
+    return false;
 }
 
 inline Class
 objc_object::ISA() {
     assert(!isTaggedPointer());
-//    return (Class)(isa.bits & ISA_MASK);
-    return (Class)(isa.bits);
+    return (Class)(isa.bits & ISA_MASK);
 }
 
 inline void
@@ -456,11 +460,10 @@ objc_object::hasIndexedIsa() {
 
 inline Class
 objc_object::getIsa() {
-    if (isTaggedPointer()) {
+//    if (isTaggedPointer()) {
 //        uintptr_t slot = ((uintptr_t)this >> TAG_SLOT_SHIFT) & TAG_SLOT_MASK;
-        return ISA();
 //        return objc_tag_classes[slot];
-    }
+//    }
     return ISA();
 }
 
@@ -692,7 +695,119 @@ objc_object::sidetable_release(bool performDealloc) {
 //    return sidetable_release_slow(table, performDealloc);
 }
 
+static void methodizeClass(Class cls) {
+    bool isMeta = cls->isMetaClass();
+    auto rw = cls->data();
+    auto ro = rw->ro;
+    
+    method_list_t *list = ro->baseMethods();
+    if (list) {
+//        prepareMethodLists(cls, &list, 1, YES, isBundleClass(cls));
+//        rw->methods.attachLists(&list, 1);
+    }
+}
 
+static void addSubclass(Class supercls, Class subcls) {
+    if (supercls && subcls) {
+        assert(supercls->isRealized());
+        assert(subcls->isRealized());
+        subcls->data()->nextSiblingClass = supercls->data()->firstSubclass;
+        supercls->data()->firstSubclass  = subcls;
+        
+        if (supercls->hasCxxCtor()) {
+            subcls->setHasCxxCtor();
+        }
+        
+        if (supercls->hasCxxDtor()) {
+            subcls->setHasCxxDtor();
+        }
+        
+        if (supercls->hasCustomRR()) {
+            subcls->setHasCustomRR(true);
+        }
+        
+        if (supercls->hasCustomAWZ()) {
+            subcls->setHasCustomAWZ(true);
+        }
+        
+        if (supercls->requiresRawIsa()) {
+            subcls->setRequiresRawIsa(true);
+        }
+    }
+}
+
+static void removeSubClass(Class supercls, Class subcls) {
+    assert(supercls->isRealized());
+    assert(subcls->isRealized());
+    assert(subcls->superclass == supercls);
+    
+    Class *cp;
+    for (cp = &supercls->data()->firstSubclass; *cp && *cp != subcls; cp = &(*cp)->data()->nextSiblingClass);
+    assert(*cp == subcls);
+    *cp = subcls->data()->nextSiblingClass;
+}
+
+static Class realizeClass(Class cls) {
+    const class_ro_t *ro;
+    class_rw_t *rw;
+    Class supercls;
+    Class metacls;
+    bool  isMeta;
+
+    if (!cls) {
+        return nil;
+    }
+    if (cls->isRealized()) {
+        return cls;
+    }
+    assert(cls == remapClass(cls));
+    
+    ro = (const class_ro_t *)cls->data();
+    if (ro->flags & RO_FUTURE) {
+        rw = cls->data();
+        ro = cls->data()->ro;
+        cls->changeInfo(RW_REALIZED|RW_REALIZING, RW_FUTURE);
+    } else {
+        rw = (class_rw_t *)malloc(sizeof(class_rw_t));
+        rw->ro = ro;
+        rw->flags = RW_REALIZED|RW_REALIZING;
+        cls->setData(rw);
+    }
+    
+    isMeta = ro->flags & RO_META;
+    
+    rw->version = isMeta ? 7 : 0;
+    supercls = realizeClass(remapClass(cls->superclass));
+    metacls  = realizeClass(remapClass(cls->ISA()));
+    
+    cls->superclass = supercls;
+    cls->initClassIsa(metacls);
+    
+    if (supercls && !isMeta) {
+//        reconcileInstanceVariables(cls, supercls, ro);
+    }
+    cls->setInstanceSize(ro->instanceSize);
+    if (ro->flags & RO_HAS_CXX_STRUCTORS) {
+        cls->setHasCxxDtor();
+        if (!(ro->flags & RO_HAS_CXX_DTOR_ONLY)) {
+            cls->setHasCxxCtor();
+        }
+    }
+            
+    if (supercls) {
+        addSubclass(supercls, cls);
+    }
+    
+    methodizeClass(cls);
+    
+    if (!isMeta) {
+//        addRealizedClass(cls);
+    } else {
+//        addRealizedMetaclass(cls);
+    }
+    
+    return cls;
+}
 
 static bool
 scanMangledField(const char *&string, const char *end,
@@ -754,6 +869,64 @@ copySwiftV1DemangledName(const char *string, bool isProtocol = false) {
     return result;
 }
 
+void
+objc_class::setHasCustomRR(bool inherited) {
+    Class cls = (Class)this;
+    
+    if (hasCustomRR()) {
+        return;
+    }
+    
+    foreach_realized_class_and_subclass(cls, ^(Class c) {
+        if (c != cls && !c->isInitialized()) {
+            return;
+        }
+        if (c->hasCustomRR()) {
+            return;
+        }
+        c->bits.setHasCustomRR();
+    });
+}
+
+void
+objc_class::setHasCustomAWZ(bool inherited) {
+    Class cls = (Class)this;
+    
+    if (hasCustomAWZ()) {
+        return;
+    }
+    
+    foreach_realized_class_and_subclass(cls, ^(Class c) {
+        if (c != cls && !c->isInitialized()) {
+            return;
+        }
+        if (c->hasCustomAWZ()) {
+            return;
+        }
+        c->bits.setHasCustomAWZ();
+    });
+}
+
+void
+objc_class::setRequiresRawIsa(bool inherited) {
+    Class cls = (Class)this;
+    
+    if (requiresRawIsa()) {
+        return;
+    }
+    
+    foreach_realized_class_and_subclass(cls, ^(Class c) {
+        if (c->isInitialized()) {
+            assert(false);
+            return;
+        }
+        if (c->requiresRawIsa()) {
+            return;
+        }
+        c->bits.setRequiresRawIsa();
+    });
+}
+
 const char *
 objc_class::demangledName(bool realize) {
     // Return previously demangled name if available.
@@ -790,7 +963,7 @@ objc_class::demangledName(bool realize) {
     
     if (realize) {
 //        runtimeLock.assertWriting();
-//        realizeClass((Class)this);
+        realizeClass((Class)this);
         data()->demangledName = de;
         return de;
     }
@@ -900,7 +1073,7 @@ look_up_class(const char *name,
     }
     if (unrealized) {
 //        rwlock_writer_t lock(runtimeLock);
-//        realizeClass(result);
+        realizeClass(result);
     }
     return result;
 }
@@ -1013,7 +1186,6 @@ _class_createInstanceFromZone(Class cls, size_t extraBytes, void *zone,
     if (!cls) return nil;
     
     assert(cls->isRealized());
-    
     // Read class's info bits all at once for performance
     bool hasCxxCtor = cls->hasCxxCtor();
 //    bool hasCxxDtor = cls->hasCxxDtor();
@@ -1070,6 +1242,15 @@ static protocol_t *remapProtocol(protocol_ref_t proto) {
     return newproto ? newproto : (protocol_t *)proto;
 }
 
+static Class remapClass(Class cls) {
+//    Class c2;
+    if (!cls) {
+        return nil;
+    }
+    return cls;
+//    return c2;
+}
+
 static bool
 protocol_conformsToProtocol_nolock(protocol_t *self, protocol_t *other) {
     if (!self  ||  !other) {
@@ -1105,8 +1286,11 @@ BOOL object_isClass(id obj) {
 }
 
 Class object_getClass(id obj) {
-    if (obj) return obj->getIsa();
-    else return Nil;
+    if (obj) {
+        return obj->getIsa();
+    } else {
+        return Nil;
+    }
 }
     
 Class _Nullable
@@ -1138,6 +1322,11 @@ class_createInstance(Class cls, size_t extraBytes) {
     return _class_createInstanceFromZone(cls, extraBytes, nil);
 }
     
+id
+class_createInstanceFromZone(Class cls, size_t extraBytes, void* zone) {
+    return _class_createInstanceFromZone(cls, extraBytes, zone);
+}
+    
 __attribute__((aligned(16)))
 id
 objc_retain(id obj) {
@@ -1160,6 +1349,13 @@ id _objc_rootAutorelease(id a) {
     assert(a);
     return a->rootAutorelease();
 }
+    
+id _objc_rootAllocWithZone(Class cls, malloc_zone_t *zone) {
+    id obj;
+    (void)zone;
+    obj = class_createInstance(cls, 0);
+    return obj;
+}
 
 void _objc_rootDealloc(id a) {
     assert(a);
@@ -1174,8 +1370,17 @@ id _objc_rootInit(id a) {
     return a;
 }
     
+uintptr_t _objc_rootHash(id a) {
+    return (uintptr_t)a;
+}
+    
 uintptr_t _objc_rootRetainCount(id a) {
     return a->rootRetainCount();
+}
+
+malloc_zone_t * _objc_rootZone(id a) {
+    (void)a;
+    return malloc_default_zone();
 }
     
 __attribute__((aligned(16)))
@@ -1266,4 +1471,5 @@ _objc_constructOrFree(id bytes, Class cls) {
         
     return obj;
 }
+    
 }

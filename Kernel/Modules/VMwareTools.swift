@@ -3,8 +3,10 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/31/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
+
+import Addressing
 
 class VMwareTools: Module {
     let Name = "VMware Tools"
@@ -38,8 +40,8 @@ class VMwareTools: Module {
         let replyLength = RPCI(request: request, size: size, replyBuffer: replyBuffer, replyBufferLength: 16)
         if replyLength < 1 || replyBuffer.pointee != 0 {
             Log("RPCI response invalid!", level: .Error)
-            return
         }
+        replyBuffer.deallocate()
     }
     
     fileprivate func MessageOpen(withProtocol: UInt32) {

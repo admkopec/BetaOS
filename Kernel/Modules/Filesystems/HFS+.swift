@@ -3,8 +3,10 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/30/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
+
+import CustomArrays
 
 struct HFSPlusHeader {
     var Signature: String /* == kHFSPlusSigWord */
@@ -52,17 +54,28 @@ final class HFSPlus: Partition {
     let Header: HFSPlusHeader
     let VolumeName: String
     let AlternateName: String
+    let CaseSensitive: Bool
     
     init?(data: UnsafeMutableBufferPointer<UInt8>) {
         Header = HFSPlusHeader(data: data)
         VolumeName = "Unknown"
         AlternateName = "Unknown"
+        if Header.Signature == "HX" {
+            CaseSensitive = true
+        } else {
+            CaseSensitive = false
+        }
     }
     
     init?(partitionEntry: GPTPartitionEntry, onDisk disk: Disk) {
         VolumeName = partitionEntry.Name
         AlternateName = partitionEntry.Name
         Header = HFSPlusHeader(data: disk.read(lba: UInt64(partitionEntry.FirstLBA + 2)))
+        if Header.Signature == "HX" {
+            CaseSensitive = true
+        } else {
+            CaseSensitive = false
+        }
     }
     
     func ReadDirectory(fromCluster: UInt32) -> [DirectoryEntry] {

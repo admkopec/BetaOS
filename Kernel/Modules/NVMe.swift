@@ -26,8 +26,9 @@ class NVMe: PCIModule {
         }
         BAR = pci.GetBAR(BARNumber: 0).address
         let buffer = MemoryBuffer(BAR.virtual, size: 0x40)
-//        guard let capabilities = try? buffer.readAtIndex(0) as UInt64 else { return nil }
-        guard let version = try? buffer.readAtIndex(8) as UInt32 else { return nil }
+        guard let capabilities: UInt64 = /*try?*/ buffer.readAtIndex(0) else { return nil }
+        guard let version: UInt32 = /*try?*/ buffer.readAtIndex(8) else { return nil }
         Log("Version is \(String(version, radix: 16))", level: .Debug)
+        Log("Capabilities: \(String(capabilities, radix: 16))", level: .Debug)
     }
 }

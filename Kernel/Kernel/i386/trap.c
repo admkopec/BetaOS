@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 7/7/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #include <stdio.h>
@@ -22,8 +22,9 @@
 #include "pio.h"
 
 extern uint64_t col, line;
-extern void IncommingInterrupt(int InterruptNumber);
-extern void refresh_screen(void);
+//extern void IncommingInterrupt(int InterruptNumber);
+//extern void refresh_screen(void);
+extern void InterruptHandler(long InterruptNumber);
 
 static void panic_trap(x86_saved_state64_t *regs, uint32_t pl);
 static void set_recovery_ip(x86_saved_state64_t  *saved_state, vm_offset_t ip);
@@ -106,28 +107,17 @@ interrupt(x86_saved_state_t *state) {
      * else call platform expert for devices.
      */
     
-    if (!lapic_interrupt(interrupt_num, state)) {
-        if (interrupt_num == LAPIC_DEFAULT_INTERRUPT_BASE) {
-            refresh_screen();
-            printf("");
-            switchTasks();
-        }
-//        if (interrupt_num == 51) {
-//            return_state = getFirstTask();
-//        }
-//        if (interrupt_num == 50) {
-//            return_state = getNextTask(state);
+//    if (!lapic_interrupt(interrupt_num, state)) {
+//        if (interrupt_num == LAPIC_DEFAULT_INTERRUPT_BASE) {
+//            refresh_screen();
+//            printf("");
+//            switchTasks();
 //        }
         //Platform_incoming_interrupt(interrupt_num);
-        if (interrupt_num >= LAPIC_DEFAULT_INTERRUPT_BASE && interrupt_num <= (LAPIC_DEFAULT_INTERRUPT_BASE + 0x0F)) {
-            IncommingInterrupt(interrupt_num);
-            if (interrupt_num < (LAPIC_DEFAULT_INTERRUPT_BASE + 8)) {
-                outb(0x20,0x20);
-            } else {
-                outb(0x20, 0x20); outb(0xA0, 0x20);
-            }
-        }
-    }
+//        if (interrupt_num >= LAPIC_DEFAULT_INTERRUPT_BASE && interrupt_num <= (LAPIC_DEFAULT_INTERRUPT_BASE + 0x0F)) {
+            InterruptHandler(interrupt_num);
+//        }
+//    }
     
     if (__improbable(get_preemption_level() != ipl)) {
         panic("Preemption level altered by interrupt vector 0x%x: initial 0x%x, final: 0x%x\n", interrupt_num, ipl, get_preemption_level());
@@ -348,9 +338,9 @@ kernel_trap(x86_saved_state_t	*state,
 			}
 #endif
 		}*/
+        user_addr_t    kd_vaddr = is_user ? vaddr : VM_KERNEL_UNSLIDE(vaddr);
+        printf("Faulty address = 0x%llx\n", kd_vaddr);
 	}
-    user_addr_t    kd_vaddr = is_user ? vaddr : VM_KERNEL_UNSLIDE(vaddr);
-    printf("Faulty address = 0x%llx\n", kd_vaddr);
 	//KERNEL_DEBUG_CONSTANT_IST(KDEBUG_TRACE, (MACHDBG_CODE(DBG_MACH_EXCP_KTRAP_x86, type)) | DBG_FUNC_NONE, (unsigned)(kd_vaddr >> 32), (unsigned)kd_vaddr, is_user, VM_KERNEL_UNSLIDE(kern_ip), 0);
     
     
@@ -516,10 +506,10 @@ printf_state_swift(x86_saved_state64_t state) {
 
 void
 printf_state(x86_saved_state64_t *saved_state) {
-    printf("current_cpu_datap() 0x%llx\n",  (uintptr_t)current_cpu_datap());
+    printf("current_cpu_datap() 0x%lx\n",  (uintptr_t)current_cpu_datap());
 	printf("Current GS base MSR 0x%llx\n", rdmsr64(MSR_IA32_GS_BASE));
 	printf("Kernel  GS base MSR 0x%llx\n", rdmsr64(MSR_IA32_KERNEL_GS_BASE));
-    printf("state at 0x%llx:\n",            (uintptr_t) saved_state);
+    printf("state at 0x%lx:\n",            (uintptr_t) saved_state);
     
 	printf("      rdi    0x%llx\n", saved_state->rdi);
 	printf("      rsi    0x%llx\n", saved_state->rsi);
@@ -757,7 +747,7 @@ user_trap(x86_saved_state_t *saved_state) {
 	exc     = 0;
     
 #if DEBUG
-    printf("user_trap(0x%08llx) type=%d vaddr=0x%016llx\n", (uintptr_t)saved_state, type, vaddr);
+    printf("user_trap(0x%08lx) type=%d vaddr=0x%016llx\n", (uintptr_t)saved_state, type, vaddr);
 #endif
     
 	//perfASTCallback astfn = perfASTHook;

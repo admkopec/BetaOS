@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/16/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
@@ -41,10 +41,6 @@ struct RSDT: Loggable, ACPITable {
                 if sdtptr != nil {
 //                    SDTAddresses.append(addr)
                     SDTAddresses.append((addr.physical, addr.baseAddr))
-                    let signature = String(&(sdtptr!).pointee.Signature.0, maxLength: 4)
-                    if signature == "WSMT" {
-                        break
-                    }
                 }
             }
         } else {
@@ -58,10 +54,6 @@ struct RSDT: Loggable, ACPITable {
                 if sdtptr != nil {
 //                    SDTAddresses.append(addr)
                     SDTAddresses.append((addr.physical, addr.baseAddr))
-                    let signature = String(&(sdtptr!).pointee.Signature.0, maxLength: 4)
-                    if signature == "WSMT" {
-                        break
-                    }
                 }
             }
         }

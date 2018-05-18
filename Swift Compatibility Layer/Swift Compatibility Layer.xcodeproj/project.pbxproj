@@ -11,6 +11,8 @@
 		3B1A243B1F90C60800BF40FE /* runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24391F90C60800BF40FE /* runtime.m */; };
 		3B1A24401F90DCB200BF40FE /* NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A243E1F90DCB200BF40FE /* NSObject.m */; };
 		3B1A24441F90DD4200BF40FE /* Protocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1A24421F90DD4200BF40FE /* Protocol.m */; };
+		3BA73AC62021EE6900BF1138 /* NSBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA73AC52021EE6900BF1138 /* NSBlocks.m */; };
+		3BA73ACA2022B43A00BF1138 /* sel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA73AC92022B43A00BF1138 /* sel.m */; };
 		3BC787501FC1A62400BACC7D /* object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3BC7874F1FC1A62400BACC7D /* object.mm */; };
 		3BC787C91FCDE7F500BACC7D /* unimplemented.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BC787C81FCDE7F500BACC7D /* unimplemented.m */; };
 		3BD8AA841F90EA8300A7ADBC /* Unicode Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BD8AA821F90EA8300A7ADBC /* Unicode Support.h */; };
@@ -26,6 +28,8 @@
 		3B1A243E1F90DCB200BF40FE /* NSObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSObject.m; sourceTree = "<group>"; };
 		3B1A24421F90DD4200BF40FE /* Protocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Protocol.m; sourceTree = "<group>"; };
 		3B33ADC51FAD1F9C00C4D9BE /* libc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BA73AC52021EE6900BF1138 /* NSBlocks.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSBlocks.m; sourceTree = "<group>"; };
+		3BA73AC92022B43A00BF1138 /* sel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = sel.m; sourceTree = "<group>"; };
 		3BC7874E1FC1A4FA00BACC7D /* objc-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "objc-private.h"; sourceTree = "<group>"; };
 		3BC7874F1FC1A62400BACC7D /* object.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = object.mm; sourceTree = "<group>"; };
 		3BC787511FC1ADF300BACC7D /* runtime-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "runtime-private.h"; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 				3BC787C81FCDE7F500BACC7D /* unimplemented.m */,
 				3B1A24391F90C60800BF40FE /* runtime.m */,
 				3BC7874F1FC1A62400BACC7D /* object.mm */,
+				3BA73AC92022B43A00BF1138 /* sel.m */,
+				3BA73AC52021EE6900BF1138 /* NSBlocks.m */,
 			);
 			path = "Objective-C Runtime";
 			sourceTree = "<group>";
@@ -229,7 +235,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0930;
 				TargetAttributes = {
 					3B1A242E1F90C4ED00BF40FE = {
 						CreatedOnToolsVersion = 9.0;
@@ -271,7 +277,9 @@
 			files = (
 				3B1A24401F90DCB200BF40FE /* NSObject.m in Sources */,
 				3B1A243B1F90C60800BF40FE /* runtime.m in Sources */,
+				3BA73AC62021EE6900BF1138 /* NSBlocks.m in Sources */,
 				3BC787501FC1A62400BACC7D /* object.mm in Sources */,
+				3BA73ACA2022B43A00BF1138 /* sel.m in Sources */,
 				3B1A24361F90C59B00BF40FE /* objc.m in Sources */,
 				3B1A24441F90DD4200BF40FE /* Protocol.m in Sources */,
 				3BC787C91FCDE7F500BACC7D /* unimplemented.m in Sources */,
@@ -308,11 +316,13 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -347,11 +357,13 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -379,6 +391,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -402,7 +415,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				ENABLE_TESTABILITY = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -430,6 +443,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -454,7 +468,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				EXECUTABLE_PREFIX = lib;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
@@ -476,6 +490,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -524,6 +539,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -568,6 +584,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -616,6 +633,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;

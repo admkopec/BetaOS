@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/16/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Loggable
@@ -11,9 +11,7 @@ import Loggable
 typealias PCIDevice = (VendorID: UInt16, DeviceID: UInt16)
 typealias PCIClass  = (Class: UInt8, Subclass: UInt8)
 
-protocol Module: Loggable, CustomStringConvertible {
-    
-}
+protocol Module: Loggable, CustomStringConvertible { }
 
 protocol PCIModule: Module, AnyObject {
     static var CompatibleDevices: [PCIDevice] { get }
@@ -22,8 +20,7 @@ protocol PCIModule: Module, AnyObject {
 }
 
 protocol VideoModule: Module, AnyObject {
-    var mainView: View { get set }
-    var childViews: [View] { get set }
+    var mainView: MainView { get set }
     
     func refresh() -> Void
 }
@@ -31,7 +28,7 @@ protocol VideoModule: Module, AnyObject {
 final class ModulesController: CustomStringConvertible {
     let Name: String = "ModulesController"
     var companionController: PCIModulesController? = nil
-    fileprivate(set) var modules = [Module]()
+    internal var modules = [Module]()
     
     var description: String {
         var retValue = "Swift Modules Controller - loaded modules:"
@@ -41,18 +38,18 @@ final class ModulesController: CustomStringConvertible {
         return retValue
     }
     
-    init() {
+    func initialize() {
         if let acpi = ACPI(rsdp: RSDP(structure: RSDP_)) {
             modules.append(acpi)
         }
-        
         if let smbios = SMBIOS(structure: SMBIOS_) {
             modules.append(smbios)
-            // Place it in a better place
-            if smbios.ProductName == "VMware7,1" {
-                modules.append(VMwareTools())
-            }
         }
+    }
+    
+    func stop() {
+        companionController = nil
+        modules = []
     }
 }
 
@@ -60,7 +57,7 @@ final class ModulesController: CustomStringConvertible {
 
 final class PCIModulesController: CustomStringConvertible {
     let Name = "PCIModulesController"
-    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, AHCI.self, NVMe.self, HDA.self]
+    fileprivate var controllers: [PCIModule.Type] = [SVGA.self, AHCI.self, NVMe.self, E1000.self, HDA.self]
     var description: String {
         return Name
     }

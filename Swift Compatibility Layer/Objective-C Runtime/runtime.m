@@ -5,6 +5,7 @@
 //  Created by Adam Kopeć on 10/13/17.
 //
 
+#import <objc/NSObject.h>
 #import <objc/runtime.h>
 #import <objc/objc.h>
 
@@ -45,9 +46,42 @@ objc_storeStrong(id *location, id obj) {
     objc_release(prev);
 }
 
+id
+objc_alloc(Class cls) {
+    if (!cls) {
+        return Nil;
+    }
+    return [cls alloc];
+}
+
+id
+objc_allocWithZone(Class cls) {
+    if (!cls) {
+        return Nil;
+    }
+    return [cls alloc];
+//    return [cls allocWithZone];
+}
+
+id
+objc_storeWeak(id *location, id obj) {
+    *location = obj;
+    return obj;
+}
+
 void
 objc_getProperty() {
     
+}
+
+id
+objc_initWeak(id *location, id newObj) {
+    if (!newObj) {
+        *location = nil;
+        return nil;
+    }
+    *location = [[newObj alloc] init];
+    return newObj;
 }
 
 Class

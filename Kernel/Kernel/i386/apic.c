@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 5/8/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 #include "apic.h"
@@ -30,31 +30,31 @@ uint32_t ReadReg(uint8_t offset) {
 void APICInit(void) {
     IOAPICAddressV = io_map(IOAPICAddressPhys, IOAPIC_SIZE, VM_WIMG_IO);
     
-    // Mask PIC IRQs
-    outb(0x20, 0x10 | 0x01);
-    io_wait();
-    outb(0xA0, 0x10 | 0x01);
-    io_wait();
-    outb(0x21, 0xD0);
-    io_wait();
-    outb(0xA1, 0xD8);
-    io_wait();
-    outb(0x21, 4);
-    io_wait();
-    outb(0xA1, 2);
-    io_wait();
-    
-    
-    outb(0x21, 0x01);
-    io_wait();
-    outb(0xA1, 0x01);
-    io_wait();
-    if (!VendorisApple) {
-        outb(0x21, ((0xFF & ~(1 << 0)) & ~(1 << 1)));
-    } else {
-        outb(0x21, (0xFF & ~(1 << 0)));
-    }
-    outb(0xA1, 0xFF);
+//    // Mask PIC IRQs
+//    outb(0x20, 0x10 | 0x01);
+//    io_wait();
+//    outb(0xA0, 0x10 | 0x01);
+//    io_wait();
+//    outb(0x21, 0xD0);
+//    io_wait();
+//    outb(0xA1, 0xD8);
+//    io_wait();
+//    outb(0x21, 4);
+//    io_wait();
+//    outb(0xA1, 2);
+//    io_wait();
+//    
+//    
+//    outb(0x21, 0x01);
+//    io_wait();
+//    outb(0xA1, 0x01);
+//    io_wait();
+//    if (!VendorisApple) {
+//        outb(0x21, ((0xFF & ~(1 << 0)) & ~(1 << 1)));
+//    } else {
+//        outb(0x21, (0xFF & ~(1 << 0)));
+//    }
+//    outb(0xA1, 0xFF);
     
     uint32_t NumberOfIRQs = ((ReadReg(IOA_R_VERSION) >> IOA_R_VERSION_ME_SHIFT) & IOA_R_VERSION_ME_MASK) + 1;
     

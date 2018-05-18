@@ -3,13 +3,12 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 11/19/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 fileprivate let stackPages = 2
 fileprivate let stackSize = stackPages * Int(vm_page_size)
 fileprivate var tasks: [Task] = []
-fileprivate var KernelTask: [Task] = []
 fileprivate var currentTask  = 0
 fileprivate var previousTask = 0
 fileprivate var nextPID: UInt = 1
@@ -30,11 +29,6 @@ public func yield() -> Int {
     return 0
 }
 
-func saveKernelState() -> Void {
-    KernelTask.append(Task(name: "Kernel", entry: kernelMain))
-//    x86_64_context_save_state(KernelTask[0].rsp)
-}
-
 func runFirstTask() -> Void {
     switchNow = true
     x86_64_context_switch_first(tasks[currentTask].rsp)
@@ -50,9 +44,9 @@ func switchTasks() -> Void {
         if tasks.count > 0 {
             previousTask = currentTask
             currentTask = (currentTask + 1) % tasks.count
-            x86_64_context_switch(tasks[previousTask].rsp, tasks[currentTask].rsp)
-        } else {
-//            x86_64_context_switch_first(KernelTask[0].rsp)
+            if currentTask != previousTask {
+                x86_64_context_switch(tasks[previousTask].rsp, tasks[currentTask].rsp)
+            }
         }
     }
 }
@@ -75,7 +69,7 @@ struct Task: CustomStringConvertible {
         pid = nextPID
         nextPID += 1
         let addr = unsafeBitCast(entry, to: UInt64.self)
-        stack = malloc(stackPages)
+        stack = UnsafeMutableRawPointer.allocate(byteCount: stackPages, alignment: MemoryLayout<UInt8>.alignment)
         kprint("")
         let stateOffset = stackSize - MemoryLayout<context_switch_regs>.size
 //        let stateOffset = stackSize - MemoryLayout<x86_kernel_state_t>.size
@@ -91,21 +85,22 @@ struct Task: CustomStringConvertible {
 //        state.pointee.k_rip = UInt64(addr)
         state = stack.advanced(by: stateOffset).bindMemory(to: context_switch_regs.self, capacity: 1)
         state.initialize(to: context_switch_regs())
-        state.pointee.es = UInt64(USER_DATA_SELECTOR) // UInt64(0x68)
-        state.pointee.ds = UInt64(USER_DATA_SELECTOR)
-        state.pointee.ss = UInt64(USER_DATA_SELECTOR)
+        state.pointee.es = UInt64(USER_DS)
+        state.pointee.ds = UInt64(USER_DS)
+        state.pointee.ss = UInt64(USER_DS)
         state.pointee.rax = 0xaaaaaaaaaaaaaaaa
         state.pointee.rbx = 0xbbbbbbbbbbbbbbbb
         state.pointee.rcx = 0xcccccccccccccccc
         state.pointee.rdx = 0xdddddddddddddddd
-        state.pointee.fs  = 0
-//        state.pointee.gs  = 0
+//        state.pointee.fs  = UInt64(USER_DS)
+//        state.pointee.gs  = UInt64(USER_DS)
         state.pointee.rip = UInt64(addr)
-        state.pointee.cs = UInt64(USER_CODE_SELECTOR)
+        state.pointee.cs  = UInt64(USER_CS)
         state.pointee.eflags = 514
 //      Alignment hack. See ALIGN_STACK / UNALIGN_STACK in entry.asm
         let topOfStack = stack.advanced(by: stackSize)
         state.pointee.rsp = UInt64(UInt(bitPattern: topOfStack))
+        state.pointee.rbp = UInt64(UInt(bitPattern: stack))
 //        state.pointee.k_rsp = UInt64(UInt(bitPattern: topOfStack))
         rsp.pointee = UInt(bitPattern: state)
         rsp -= 1

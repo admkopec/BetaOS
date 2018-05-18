@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/20/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 // To be implemented properly
@@ -24,8 +24,11 @@
 #define DBG(x ...)
 #endif
 
+extern "C" { extern unsigned long long kvtophys(unsigned long long addr); }
+
 OSReturn
 E1000::init(PCI * pciConfigHeader) {
+    return kOSReturnFailed;
     for (size_t i = 0; i < sizeof(SupportedVendorIDs); i++) {
         if (pciConfigHeader->VendorID() == SupportedVendorIDs[i]) {
             break;
@@ -93,7 +96,7 @@ void E1000::rxinit() {
     void * ptr;
     struct e1000_rx_desc *descs;
     
-    ptr = (void *)OSRuntime::OSMalloc((sizeof(struct e1000_rx_desc)*E1000_NUM_RX_DESC + 16)); // Should be a physical address
+    ptr = (void *)kvtophys((uintptr_t)OSRuntime::OSMalloc((sizeof(struct e1000_rx_desc)*E1000_NUM_RX_DESC + 16))); // Should be a physical address
     
     descs = (struct e1000_rx_desc *)ptr;
     for(int i = 0; i < E1000_NUM_RX_DESC; i++) {
@@ -102,8 +105,8 @@ void E1000::rxinit() {
         rx_descs[i]->status = 0;
     }
     
-    writeCommand(REG_TXDESCLO, (uint32_t)((uint64_t)ptr >> 32) );
-    writeCommand(REG_TXDESCHI, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
+    writeCommand(REG_TXDESCHI, (uint32_t)((uint64_t)ptr >> 32) );
+    writeCommand(REG_TXDESCLO, (uint32_t)((uint64_t)ptr & 0xFFFFFFFF));
     
     writeCommand(REG_RXDESCLO, (uint32_t)((uint64_t)ptr));
     writeCommand(REG_RXDESCHI, 0);
@@ -122,7 +125,7 @@ void E1000::txinit() {
     void *  ptr;
     struct e1000_tx_desc *descs;
     
-    ptr = (void *)OSRuntime::OSMalloc((sizeof(struct e1000_tx_desc)*E1000_NUM_TX_DESC + 16)); // Should be a physical address
+    ptr = (void *)kvtophys((uintptr_t)OSRuntime::OSMalloc((sizeof(struct e1000_tx_desc)*E1000_NUM_TX_DESC + 16))); // Should be a physical address
     
     descs = (struct e1000_tx_desc *)ptr;
     for(int i = 0; i < E1000_NUM_TX_DESC; i++) {
@@ -355,4 +358,5 @@ E1000::SupportedDeviceIDs[] = { 0x100E, 0x153A, 0x10D3, 0x10EA, 0x1502, 0x1503, 
                                 0x1016, 0x1017, 0x101E, 0x100F, 0x1011, 0x1026, 0x1027,
                                 0x1028, 0x1010, 0x1012, 0x101D, 0x1013, 0x1018, 0x1014,
                                 0x1078, 0x1075, 0x1076, 0x1077, 0x107C, 0x1079, 0x107A,
-                                0x107B, 0x108A, 0x1099, 0x1019, 0x101A, 0x10B5, 0x2E6E };
+                                0x107B, 0x108A, 0x1099, 0x1019, 0x101A, 0x10B5, 0x2E6E,
+                                0x10F6 };

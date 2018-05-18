@@ -16,12 +16,6 @@
 #define likely(x)      __builtin_expect(!!(x), 1)
 #define unlikely(x)    __builtin_expect(!!(x), 0)
 
-id _Nullable
-objc_msgSend(id _Nullable obj, SEL _Nonnull op, ...){
-    ULTDBG("objc_msgSend!\n");
-    return obj;
-}
-
 #import <objc/objc.h>
 #import <objc/runtime.h>
 #import <stdlib.h>
@@ -34,6 +28,43 @@ objc_msgSend(id _Nullable obj, SEL _Nonnull op, ...){
 
 int kCFNull;
 
+extern bool early;
+extern bool beforeInited;
+id _Nullable
+objc_msgSend(id _Nullable obj, SEL _Nonnull op, ...){
+    early = true;
+    /*ULTDBG*/printf("objc_msgSend(%s)!\n", sel_getName(op));
+    early = false;
+    if (sel_isEqual(op, @selector(class))) {
+        if (beforeInited) {
+            return obj;
+        }
+        if (object_isClass(obj)) {
+            return obj;
+        }
+        id class = object_getClass(obj);
+        if (class == nil && obj != nil) {
+            return obj;
+        }
+        return class;
+    } else if (sel_isEqual(op, @selector(superclass))) {
+        id class = object_getClass(obj);
+        if (class != nil) {
+            id superclass = class_getSuperclass(class);
+            return superclass;
+        } else {
+            return nil;
+        }
+    }
+    return nil;
+}
+
+
+void objc_msgSend_stret(id obj, SEL op, ...) {
+//    early = true;
+//    /*ULTDBG*/printf("objc_msgSend_stret(%s)!\n", sel_getName(op));
+//    early = false;
+}
 // Temp values
 
 // Default FILE * for stdio, faked values
@@ -41,11 +72,6 @@ int kCFNull;
 FILE *__stderrp = (void *)0xF2;
 FILE *__stdinp  = (void *)0xF0;
 FILE *__stdoutp = (void *)0xF1;
-
-// Linux symbol names
-//FILE *stderr = (void *)0xF2;
-//FILE *stdin  = (void *)0xF0;
-//FILE *stdout = (void *)0xF1;
 
 extern void panic(const char*, ...);
 
@@ -108,6 +134,11 @@ ivar_getOffset(Ivar _Nonnull v) {
     return (ptrdiff_t) 0;
 }
 
+IMP _Nullable
+class_getMethodImplementation(Class _Nullable cls, SEL _Nonnull name) {
+    return nil;
+}
+
 //UNIMPLEMENTED(class_copyIvarList)
 //UNIMPLEMENTED(class_getInstanceSize)
 //UNIMPLEMENTED(ivar_getOffset)
@@ -117,18 +148,16 @@ UNIMPLEMENTED(objc_copyWeak)
 UNIMPLEMENTED(objc_debug_isa_class_mask)
 UNIMPLEMENTED(objc_destroyWeak)
 
-UNIMPLEMENTED(objc_initWeak)
+//UNIMPLEMENTED(objc_initWeak)
 UNIMPLEMENTED(objc_loadWeakRetained)
 UNIMPLEMENTED(objc_moveWeak)
 UNIMPLEMENTED(objc_msgSendSuper2)
-UNIMPLEMENTED(objc_msgSend_stret)
+//UNIMPLEMENTED(objc_msgSend_stret)
 UNIMPLEMENTED(objc_readClassPair)
 UNIMPLEMENTED(objc_retainAutoreleasedReturnValue)
+UNIMPLEMENTED(objc_autoreleasePoolPop)
+UNIMPLEMENTED(objc_autoreleasePoolPush)
 
-id _Nullable
-objc_storeWeak(id _Nullable * _Nonnull location, id _Nullable obj) {
-    return nil;
-}
 
 Class _Nullable
 object_setClass(id _Nullable obj, Class _Nonnull cls) {
@@ -140,24 +169,11 @@ protocol_getName(Protocol * _Nonnull proto) {
     return "Protocol";
 }
 
-const char * _Nonnull
-sel_getName(SEL _Nonnull sel) {
-    return "SEL";
-}
-
 //UNIMPLEMENTED(objc_storeWeak)
 //UNIMPLEMENTED(object_setClass)
 //UNIMPLEMENTED(protocol_getName)
 //UNIMPLEMENTED(sel_getName)
 
-void *
-_Block_copy(const void *aBlock) {
-    return NULL;
-}
-
-//UNIMPLEMENTED(_Block_copy)
-
-UNIMPLEMENTED(_Block_release)
 UNIMPLEMENTED(_NSGetArgc)
 UNIMPLEMENTED(_NSGetArgv)
 

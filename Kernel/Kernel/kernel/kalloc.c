@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 5/14/16.
-//  Copyright © 2016 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #include <kernel/kalloc.h>
@@ -40,14 +40,14 @@ vm_offset_t	kalloc_map_max;
 // Simple allocation and free methods that need to be changed as soon as possible
 
 void * kalloc_(uint32_t size) {
-	uint64_t res;
-	res = (uint64_t) io_map(first_avail, round_page(size), 0);
-	first_avail += round_page(size);
+    uint64_t res;
+    res = (uint64_t) io_map(first_avail, round_page(size), 0);
+    first_avail += round_page(size);
 	return (void *) res;
 }
 
 void free_(void * data, uint32_t size) {
-    if (data + round_page(size) == (void *) virtual_avail) {
+    if ((uintptr_t) data + round_page(size) == virtual_avail) {
         first_avail -= round_page(size);
         virtual_avail -= round_page(size);
     }

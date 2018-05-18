@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B834C5F201A398C00BC3FFA /* CRequirements.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B834C5E201A398C00BC3FFA /* CRequirements.m */; };
 		3BD67D991FAFA03C00883DA7 /* Addressing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD67D8F1FAFA03C00883DA7 /* Addressing.framework */; };
 		3BD67D9E1FAFA03C00883DA7 /* AddressingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD67D9D1FAFA03C00883DA7 /* AddressingTests.swift */; };
 		3BD67DA01FAFA03C00883DA7 /* Addressing.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BD67D921FAFA03C00883DA7 /* Addressing.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B834C5E201A398C00BC3FFA /* CRequirements.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRequirements.m; sourceTree = "<group>"; };
 		3BD67D8F1FAFA03C00883DA7 /* Addressing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Addressing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD67D921FAFA03C00883DA7 /* Addressing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Addressing.h; sourceTree = "<group>"; };
 		3BD67D931FAFA03C00883DA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				3BD67D9D1FAFA03C00883DA7 /* AddressingTests.swift */,
+				3B834C5E201A398C00BC3FFA /* CRequirements.m */,
 				3BD67D9F1FAFA03C00883DA7 /* Info.plist */,
 			);
 			path = AddressingTests;
@@ -125,6 +128,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BD67DA61FAFA03C00883DA7 /* Build configuration list for PBXNativeTarget "AddressingTests" */;
 			buildPhases = (
+				3BF207BC2017D22000D1ED64 /* ShellScript */,
 				3BD67D941FAFA03C00883DA7 /* Sources */,
 				3BD67D951FAFA03C00883DA7 /* Frameworks */,
 				3BD67D961FAFA03C00883DA7 /* Resources */,
@@ -146,7 +150,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Adam Kopeć";
 				TargetAttributes = {
 					3BD67D8E1FAFA03C00883DA7 = {
@@ -156,6 +160,7 @@
 					};
 					3BD67D971FAFA03C00883DA7 = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -195,6 +200,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3BF207BC2017D22000D1ED64 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -f \"$BUILD_DIR/Debug/libobjc.a\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3BD67D8A1FAFA03C00883DA7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -209,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BD67D9E1FAFA03C00883DA7 /* AddressingTests.swift in Sources */,
+				3B834C5F201A398C00BC3FFA /* CRequirements.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,7 +249,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -238,6 +259,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -245,6 +267,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -279,7 +302,6 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "compile-time";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -289,7 +311,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -300,6 +321,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -307,6 +329,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -342,7 +365,6 @@
 		3BD67DA41FAFA03C00883DA7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -358,7 +380,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = adamkopec.Addressing;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -366,7 +387,6 @@
 		3BD67DA51FAFA03C00883DA7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -390,6 +410,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
@@ -398,6 +419,7 @@
 				MACH_O_TYPE = mh_bundle;
 				PRODUCT_BUNDLE_IDENTIFIER = adamkopec.AddressingTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -406,6 +428,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = S73MBXSV7H;

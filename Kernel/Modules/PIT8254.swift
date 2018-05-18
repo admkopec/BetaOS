@@ -3,15 +3,15 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 11/18/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
+import CustomArrays
 import Loggable
 
 final class PIT8254: Module {
     fileprivate let BaseFrequency = 1193182
     fileprivate let CommandPort   = 0x43 as UInt32
-    static let sharedInstance = PIT8254()
     var Name: String = "PIT8254"
     var description: String {
         return "Legacy PIT8254 Timer Device Controller"
@@ -96,6 +96,10 @@ final class PIT8254: Module {
         }
     }
     
+    init() {
+        setChannel(.CHANNEL_0, mode: .MODE_3, hz: 60)
+    }
+    
     fileprivate func toCommandByte(_ channel: ChannelSelect, _ access: AccessMode,
                                _ mode: OperatingMode, _ number: NumberMode) -> UInt8 {
         return channel.rawValue | access.rawValue | mode.rawValue | number.rawValue
@@ -134,14 +138,12 @@ final class PIT8254: Module {
         outb(CommandPort, command)
         setHz(channel, hz)
         // Enable IRQ
-    }
-    
-    init() {
-        sti()
+        System.sharedInstance.interruptManager.setIrqHandler(0, handler: Handler)
     }
     
     // Interrupt Handler
-    func InterruptHandler(irq: Int) {
+    public func Handler(irq: Int) {
         // Do some timer specific interrupt stuff, like screen refresh or ticks
+        System.sharedInstance.Video.refresh()
     }
 }

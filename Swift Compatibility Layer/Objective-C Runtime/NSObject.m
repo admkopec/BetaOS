@@ -8,20 +8,26 @@
 #import <objc/NSObject.h>
 #import <objc/objc.h>
 #import <objc/runtime.h>
+#import <malloc/malloc.h>
 #import <assert.h>
 
 extern id _objc_rootRetain(id a);
 extern void _objc_rootRelease(id a);
 extern id _objc_rootAutorelease(id a);
 extern id _objc_rootInit(id a);
+extern id _objc_rootAllocWithZone(Class cls, malloc_zone_t *zone);
 extern void _objc_rootDealloc(id a);
 extern BOOL _objc_rootTryRetain(id a);
+extern malloc_zone_t * _objc_rootZone(id a);
+extern uintptr_t _objc_rootHash(id a);
 extern NSUInteger _objc_rootRetainCount(id a);
 
 @implementation NSObject
 
-+ (void) initialize {
-//    return self;
++ (void) initialize { }
+
++ (id) new {
+    return [[self alloc] init];
 }
 
 + (Class) class {
@@ -33,93 +39,59 @@ extern NSUInteger _objc_rootRetainCount(id a);
 }
 
 - (id) self {
-    return (id)self;
-}
-
-+ (id) self {
     return self;
 }
 
-+ (BOOL)_tryRetain {
-    return YES;
-}
-
-- (BOOL) _tryRetain {
-    return _objc_rootTryRetain((id)self);
++ (id) self {
+    return (id)self;
 }
 
 - (Class)superclass {
-    return class_getSuperclass(object_getClass(self));
+    return class_getSuperclass([self class]);
 }
 
 + (Class)superclass {
     return class_getSuperclass(self);
 }
 
-+ (id)copy {
-    return (id)self;
+- (NSUInteger) hash {
+    return _objc_rootHash(self);
 }
 
-+ (id)copyWithZone:(struct _NSZone *)zone {
-    return (id)self;
++ (NSUInteger) hash {
+    return _objc_rootHash(self);
 }
 
-- (id) copy {
-    return [(id)self copyWithZone:nil];
-}
-
-- (BOOL)isEqual:(id)object {
+- (BOOL) isEqual:(id)object {
     return object == self;
 }
 
-+ (BOOL)isEqual:(id)object {
++ (BOOL) isEqual:(id)object {
     return object == (id)self;
 }
 
-- (BOOL)isFault {
+- (BOOL) isFault {
     return NO;
 }
 
-+ (BOOL)isFault {
++ (BOOL) isFault {
     return NO;
 }
 
-- (BOOL)isProxy {
+- (BOOL) isProxy {
     return NO;
 }
 
-+ (BOOL)isProxy {
++ (BOOL) isProxy {
     return NO;
 }
 
-- (BOOL) conformsToProtocol:(Protocol *)aProtocol {
-    if (!aProtocol) return NO;
-    for (Class tcls = [self class]; tcls; tcls = class_getSuperclass(object_getClass(tcls))) {
-        if (class_conformsToProtocol(tcls, aProtocol)) return YES;
-    }
++ (BOOL) isBlock {
     return NO;
 }
 
-+ (BOOL) conformsToProtocol:(Protocol *)aProtocol {
-    if (!aProtocol) return NO;
-    for (Class tcls = self; tcls; tcls = class_getSuperclass(tcls)) {
-        if (class_conformsToProtocol(tcls, aProtocol)) return YES;
-    }
+- (BOOL) isBlock {
     return NO;
-}
-
-- (BOOL)respondsToSelector:(SEL)aSelector {
-    if (!aSelector) {
-        return NO;
-    }
-    return class_respondsToSelector([self class], aSelector);
-}
-
-+ (BOOL)respondsToSelector:(SEL)aSelector {
-    if (!aSelector) {
-        return NO;
-    }
-    return class_respondsToSelector(object_getClass(self), aSelector);
 }
 
 - (BOOL) isMemberOfClass:(Class)aClass {
@@ -131,7 +103,7 @@ extern NSUInteger _objc_rootRetainCount(id a);
 }
 
 - (BOOL) isKindOfClass:(Class)aClass {
-    for (Class tcls = [self class]; tcls; tcls = class_getSuperclass(object_getClass(tcls))) {
+    for (Class tcls = [self class]; tcls; tcls = class_getSuperclass(tcls)) {
         if (tcls == aClass) {
             return YES;
         }
@@ -148,6 +120,52 @@ extern NSUInteger _objc_rootRetainCount(id a);
     return NO;
 }
 
++ (BOOL) isSubclassOfClass:(Class)aClass {
+    for (Class tcls = self; tcls; tcls = class_getSuperclass(tcls)) {
+        if (tcls == aClass) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
++ (BOOL) instancesRespondToSelector:(SEL)aSelector {
+    if (!aSelector) {
+        return NO;
+    }
+    return class_respondsToSelector(self, aSelector);
+}
+
+- (BOOL) respondsToSelector:(SEL)aSelector {
+    if (!aSelector) {
+        return NO;
+    }
+    return class_respondsToSelector([self class], aSelector);
+}
+
++ (BOOL) respondsToSelector:(SEL)aSelector {
+    if (!aSelector) {
+        return NO;
+    }
+    return class_respondsToSelector(object_getClass(self), aSelector);
+}
+
+- (BOOL) conformsToProtocol:(Protocol *)aProtocol {
+    if (!aProtocol) return NO;
+    for (Class tcls = [self class]; tcls; tcls = class_getSuperclass(tcls)) {
+        if (class_conformsToProtocol(tcls, aProtocol)) return YES;
+    }
+    return NO;
+}
+
++ (BOOL) conformsToProtocol:(Protocol *)aProtocol {
+    if (!aProtocol) return NO;
+    for (Class tcls = self; tcls; tcls = class_getSuperclass(tcls)) {
+        if (class_conformsToProtocol(tcls, aProtocol)) return YES;
+    }
+    return NO;
+}
+
 - (id) retain {
     return _objc_rootRetain((id)self);
 }
@@ -156,13 +174,68 @@ extern NSUInteger _objc_rootRetainCount(id a);
     return self;
 }
 
+- (BOOL) _tryRetain {
+    return _objc_rootTryRetain((id)self);
+}
+
++ (BOOL) _tryRetain {
+    return YES;
+}
+
++ (NSUInteger) retainCount {
+    return __LONG_MAX__;
+}
+
 - (NSUInteger) retainCount {
-    return _objc_rootRetainCount((id)self);
+    return _objc_rootRetainCount(self);
+}
+
++ (id)copyWithZone:(struct _NSZone *)zone {
+    return (id)self;
+}
+
+- (id) copy {
+    return [(id)self copyWithZone: nil];
+}
+
++ (id)copy {
+    return (id)self;
+}
+
++ (id) mutableCopyWithZone:(struct _NSZone *)zone {
+    return (id)self;
+}
+
+- (id) mutableCopy {
+    return [(id)self mutableCopyWithZone: nil];
+}
+
++ (id) mutableCopy {
+    return (id)self;
+}
+
++ (id) alloc {
+    return [self allocWithZone: nil];
+}
+
++ (id) allocWithZone:(struct _NSZone *)zone {
+    return _objc_rootAllocWithZone(self, (malloc_zone_t *)zone);
+}
+
+- (struct _NSZone *)zone {
+    return (struct _NSZone *)_objc_rootZone(self);
+}
+
++ (struct _NSZone *)zone {
+    return (struct _NSZone *)_objc_rootZone(self);
 }
 
 - (oneway void) release {
     _objc_rootRelease(self);
+    [self dealloc];
 }
+
++ (oneway void) release { }
 
 - (id) autorelease {
     return _objc_rootAutorelease(self);
@@ -172,6 +245,8 @@ extern NSUInteger _objc_rootRetainCount(id a);
     _objc_rootDealloc(self);
 }
 
++ (void) dealloc { }
+
 - (id)init {
     return _objc_rootInit(self);
 }
@@ -180,16 +255,8 @@ extern NSUInteger _objc_rootRetainCount(id a);
     return (id)self;
 }
 
-+ (void) release {
-    
-}
-
 + (id) autorelease {
     return self;
-}
-
-+ (void) dealloc {
-    
 }
 
 @end

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 3/13/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #ifndef __ASSEMBLY__
@@ -36,9 +36,9 @@
 
 Entry(x86_64_context_switch)
     /* save the old context and restore the new */
-
+    cli
 //    pushq    %gs
-    pushq    %fs
+//    pushq    %fs
     pushq    %rbp
     pushq    %r15
     pushq    %r14
@@ -82,23 +82,26 @@ Entry(x86_64_context_switch)
     popq     %r14
     popq     %r15
     popq     %rbp
-    popq     %fs
+//    popq     %fs
 //    popq     %gs
 
-    movq    %rsp, %gs:CPU_ACTIVE_STACK
+//    movq    %rsp, %gs:CPU_ACTIVE_STACK
+//    movq    %rbp, %gs:CPU_KERNEL_STACK
 
-    retq
+    iretq
 
 Entry(x86_64_context_switch_first)
-    movq %rsp, %gs:CPU_KERNEL_STACK
+    movq %rsp, %gs:CPU_ACTIVE_STACK
+    movq %rbp, %gs:CPU_KERNEL_STACK
+
     movq 8(%rdi), %rsp
 
-//    swapgs
-
+    swapgs
+    cli
     popq     %rax
-    mov      %es, %ax
+    mov      %ax, %es
     popq     %rax
-    mov      %ds, %ax
+    mov      %ax, %ds
     popq     %rax
     popq     %rbx
     popq     %rcx
@@ -114,39 +117,17 @@ Entry(x86_64_context_switch_first)
     popq     %r14
     popq     %r15
     popq     %rbp
-    popq     %fs
+//    popq     %fs
 //    popq     %gs
-    movq    %rsp, %gs:CPU_ACTIVE_STACK
 
-    retq
+//    movq    %rsp, %gs:CPU_ACTIVE_STACK
+//    movq    %rbp, %gs:CPU_KERNEL_STACK
 
-Entry(x86_64_context_save_state)
-//    pushq    %gs
-    pushq    %fs
-    pushq    %rbp
-    pushq    %r15
-    pushq    %r14
-    pushq    %r13
-    pushq    %r12
-    pushq    %r11
-    pushq    %r10
-    pushq    %r9
-    pushq    %r8
-    pushq    %rdi
-    pushq    %rsi
-    pushq    %rdx
-    pushq    %rcx
-    pushq    %rbx
-    pushq    %rax
-    xor      %rax, %rax
-    mov      %ax, %ds
-    pushq    %rax
-    mov      %ax, %es
-    pushq    %rax
+//    xorl    %ebp, %ebp
+//    xorl    %edi,%edi
+//    xorq    %rbp,%rbp
 
-    movq  %rsp, 8(%rdi)
-
-    retq
+    iretq
 
     /* halt_cpu */
 

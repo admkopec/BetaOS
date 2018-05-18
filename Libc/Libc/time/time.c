@@ -7,6 +7,7 @@
 //
 
 #include <time.h>
+#include <math.h>
 #include <i386/pio.h>
 
 #define CURRENT_CENTURY 21
@@ -39,7 +40,8 @@ unsigned char get_RTC_register(int reg);
 time_t absolute_UNIX = 0; // 0 - 1 January 1970
 time_t absolute_Beta = 0;
 //
-#define Is_leap_year(year)  (((1970+year)>0)&&!((1970+year)%4)&&(((1970+year)%100)||!((1970+year)%400)))
+#define Is_leap_yearUNIX(y)   (((1970+y)>0) && (!((1970+y)%4)) && (((1970+y)%100) || (!((1970+y)%400))))
+#define Is_leap_year(y)  (((y)>0) && (!((y)%4)) && (((y)%100) || (!((y)%400))))
 #define Seconds_in_a_day    86400
 #define Seconds_in_an_hour   3600
 #define Seconds_in_a_minute    60
@@ -47,11 +49,25 @@ time_t absolute_Beta = 0;
 static const uint8_t monthDays[]={31,28,31,30,31,30,31,31,30,31,30,31};
 //
 
+//static inline bool Is_leap_year(int y) {
+//    float Year = y;
+//    if (fmodf(Year, 4) == 0.00) {
+//        if (fmodf(Year, 100) == 0.00) {
+//            if (fmodf(Year, 400) == 0.00)
+//                return true;
+//            else
+//                return false;
+//        } else
+//            return true;
+//    } else
+//        return false;
+//}
+
 time_t time(time_t * value) {
     read_rtc();
     absolute_UNIX = (year - 1970) * (Seconds_in_a_day * 365);
     for (uint32_t i = 1971; i < year; i++) {
-        if (Is_leap_year(i)) {
+        if (Is_leap_yearUNIX(i)) {
             absolute_UNIX += Seconds_in_a_day;
         }
     }
@@ -156,6 +172,9 @@ void read_rtc() {
     }
 }
 
+// FIXME: Don't use this ugly hack
+#include <stdio.h>
+extern bool early;
 struct tm *gmtime_r(const time_t * timer __unused, struct tm * ptm) {
     ptm->tm_hour = hour;
     ptm->tm_min  = minute;
@@ -168,7 +187,9 @@ struct tm *gmtime_r(const time_t * timer __unused, struct tm * ptm) {
     y -= month < 3;
     int dayofweek = (y + y/4 - y/100 + y/400 + t[month-1] + day) % 7;
     ptm->tm_wday = dayofweek;
-    
+    early = true;
+    printf("H: %d M: %d S: %d D: %d m: %d Y: %d W: %d\n", hour, minute, second, day, month, year - 1900, dayofweek);
+    early = false;
     return ptm;
 }
 

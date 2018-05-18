@@ -3,46 +3,26 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/31/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
-struct BitArray {
+public struct BitArray {
     fileprivate var rawValue: UInt64
     
-    var description: String {
+    public var description: String {
         return String(rawValue, radix: 2)
         
     }
     
-    init() {
+    public init() {
         rawValue = 0
     }
     
-    init(_ rawValue: Int) {
+    public init<T: BinaryInteger>(_ rawValue: T) {
         self.rawValue = UInt64(rawValue)
     }
     
-    init(_ rawValue: UInt) {
-        self.rawValue = UInt64(rawValue)
-    }
-    
-    init(_ rawValue: UInt64) {
-        self.rawValue = UInt64(rawValue)
-    }
-    
-    init(_ rawValue: UInt32) {
-        self.rawValue = UInt64(rawValue)
-    }
-    
-    init(_ rawValue: UInt16) {
-        self.rawValue = UInt64(rawValue)
-    }
-    
-    init(_ rawValue: UInt8) {
-        self.rawValue = UInt64(rawValue)
-    }
-    
-    subscript(index: Int) -> Int {
+    public subscript(index: Int) -> Int {
         get {
             precondition(index >= 0)
             precondition(index < 64)
@@ -64,7 +44,7 @@ struct BitArray {
         }
     }
     
-    subscript(index: CountableClosedRange<Int>) -> UInt64 {
+    public subscript(index: CountableClosedRange<Int>) -> UInt64 {
         get {
             var ret: UInt64 = 0
             var bit: UInt64 = 1
@@ -92,23 +72,23 @@ struct BitArray {
         }
     }
     
-    var asUInt8: UInt8 {
+    public var asUInt8: UInt8 {
         return UInt8(truncatingIfNeeded: rawValue)
     }
     
-    var asUInt16: UInt16 {
+    public var asUInt16: UInt16 {
         return UInt16(truncatingIfNeeded: rawValue)
     }
     
-    var asUInt32: UInt32 {
+    public var asUInt32: UInt32 {
         return UInt32(truncatingIfNeeded: rawValue)
     }
     
-    var asUInt64: UInt64 {
+    public var asUInt64: UInt64 {
         return UInt64(rawValue)
     }
     
-    var asInt: Int {
+    public var asInt: Int {
         return Int(rawValue)
     }
 }

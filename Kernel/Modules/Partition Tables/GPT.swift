@@ -3,8 +3,10 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/29/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
+
+import UUID
 
 final class GPT: PartitionTable {
     let Header: GPTHeader
@@ -28,7 +30,7 @@ final class GPT: PartitionTable {
         let data = disk.read(lba: UInt64(Header.StartingLBAOfArrayOfPartitionEntries))
         var i = 0
         while i < 512 {
-            if let partitionEntry = GPTPartitionEntry(data: UnsafeMutableBufferPointer<UInt8>(start: data.baseAddress!.advanced(by: i), count: 128)) {
+            if let partitionEntry = GPTPartitionEntry(data: MutableData(rebasing: data[i ... i + 128])) {
                 PartitionEntries.append(partitionEntry)
                 switch partitionEntry.PartitionType {
                 case .EFS:
@@ -62,10 +64,10 @@ final class GPT: PartitionTable {
                 break
             }
         }
-        System.sharedInstance.Disks.append(self)
+        System.sharedInstance.Drives.append(self)
     }
     
-    enum PartitionTypes: String, CustomStringConvertible {
+    enum PartitionTypes: UUID, CustomStringConvertible {
         case Nil     = "00000000-0000-0000-0000-000000000000"
         case EFS     = "C12A7328-F81F-11D2-BA4B-00A0C93EC93B"
         case HFSPlus = "48465300-0000-11AA-AA11-00306543ECAC"
@@ -109,7 +111,7 @@ struct GPTHeader: CustomStringConvertible {
         return "GPT (\"\(Signature)\"): Revision: \(String(Revision, radix: 16)) Current LBA: \(CurrentLBA) Disk UUID: \(DiskUUID.description)"
     }
     
-    init(data: UnsafeMutableBufferPointer<UInt8>) {
+    init(data: MutableData) {
         var i = 0
         var sig = ""
         while i < 8 {
@@ -124,7 +126,7 @@ struct GPTHeader: CustomStringConvertible {
         BackupLBA = ByteArray(withBytes: data[32], data[33], data[34], data[35], data[36], data[37], data[38], data[39]).asInt
         FirstUsableLBA = ByteArray(withBytes: data[40], data[41], data[42], data[43], data[44], data[45], data[46], data[47]).asInt
         LastUsableLBA = ByteArray(withBytes: data[48], data[49], data[50], data[51], data[52], data[53], data[54], data[55]).asInt
-        DiskUUID = UUID(ptr: data.baseAddress!.advanced(by: 56))
+        DiskUUID = UUID(dataMixedEndian: Data(rebasing: data[56...71])/*data.baseAddress!.advanced(by: 56)*/)
         StartingLBAOfArrayOfPartitionEntries = ByteArray(withBytes: data[72], data[73], data[74], data[75], data[76], data[77], data[78], data[79]).asInt
         NumberOfPartitionEntriesInArray = ByteArray(withBytes: data[80], data[81], data[82], data[83]).asInt
         SizeOfPartitionEntry = ByteArray(withBytes: data[84], data[85], data[86], data[87]).asInt
@@ -141,19 +143,15 @@ struct GPTPartitionEntry: CustomStringConvertible {
     let Name: String
     
     var description: String {
-        var typeStr = "\(PartitionType.description)"
-        if let type = GPT.PartitionTypes(rawValue: PartitionType.description) {
-            typeStr = type.description
-        }
-        return Name + " (\(typeStr)) First LBA: \(FirstLBA), Last LBA: \(LastLBA)"
+        return Name + " (\(PartitionType.description)) First LBA: \(FirstLBA), Last LBA: \(LastLBA)"
     }
     
-    init?(data: UnsafeMutableBufferPointer<UInt8>) {
-        PartitionType = GPT.PartitionTypes(rawValue: UUID(ptr: data.baseAddress!).description) ?? GPT.PartitionTypes.Nil
+    init?(data: MutableData) {
+        PartitionType = GPT.PartitionTypes(rawValue: UUID(dataMixedEndian: Data(rebasing: data[0...15]))) ?? GPT.PartitionTypes.Nil
         guard PartitionType != GPT.PartitionTypes.Nil else {
             return nil
         }
-        UniquePartitionUUID = UUID(ptr: data.baseAddress!.advanced(by: 16))
+        UniquePartitionUUID = UUID(dataMixedEndian: Data(rebasing: data[16...31])/*data.baseAddress!.advanced(by: 16)*/)
         FirstLBA = ByteArray(withBytes: data[32], data[33], data[34], data[35], data[36], data[37], data[38], data[39]).asInt
         LastLBA = ByteArray(withBytes: data[40], data[41], data[42], data[43], data[44], data[45], data[46], data[47]).asInt
         Flags = ByteArray(withBytes: data[48], data[49], data[50], data[51], data[52], data[53], data[54], data[55]).asInt

@@ -3,20 +3,19 @@
 //  Loggable
 //
 //  Created by Adam Kopeć on 11/5/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 public protocol Loggable {
     var Name: String { get }
 }
 
-
-public enum LogLevel: Int, CustomStringConvertible {
-    case Verbose = 0
-    case Debug   = 1
-    case Info    = 2
-    case Warning = 3
-    case Error   = 4
+public enum LogLevel: CustomStringConvertible {
+    case Verbose
+    case Debug
+    case Info
+    case Warning
+    case Error
     
     public var description: String {
         get {

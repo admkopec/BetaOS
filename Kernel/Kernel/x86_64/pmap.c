@@ -39,7 +39,7 @@ const bool cpu_64bit  = true;
 
 uint64_t max_preemption_latency_tsc = 0;
 
-uint64_t vm_last_addr;
+vm_offset_t vm_last_addr;
 uint32_t npvhashmask = 0, npvhashbuckets = 0;
 
 struct pmap	kernel_pmap_store;

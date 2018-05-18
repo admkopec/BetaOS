@@ -212,12 +212,12 @@ i386_vm_init(uint64_t maxmem, bool IA32e, boot_args *args) {
     base_address        = ml_static_ptovirt(args->kaddr);
     vm_kernel_slide     = base_address - static_base_address;
     if (args->kslide) {
-        printf("KASLR slide: 0x%016llx dynamic\n", vm_kernel_slide);
+        printf("KASLR slide: 0x%016lx dynamic\n", vm_kernel_slide);
         if (vm_kernel_slide != ((vm_offset_t)args->kslide))
             panic("Kernel base inconsistent with slide - rebased?");
     } else {
         /* No slide relative to on-disk symbols */
-        printf("KASLR slide: 0x%016llx static and ignored\n", vm_kernel_slide);
+        printf("KASLR slide: 0x%016lx static and ignored\n", vm_kernel_slide);
         vm_kernel_slide = 0;
     }
     

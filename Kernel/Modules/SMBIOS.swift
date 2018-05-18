@@ -3,11 +3,12 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/16/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
 import Loggable
+import UUID
 
 struct SMBIOS: Module {
     fileprivate let SMBIOS_Signature: String = "_SM_"
@@ -21,7 +22,9 @@ struct SMBIOS: Module {
     fileprivate var TableAddress: Address = Address(0)
     fileprivate var Tables = [Entry]()
     
-    fileprivate(set) var ProductDisplayName: String = "Generic Device"
+    fileprivate(set) var ProductDisplayName: String /*{
+        return ConversionDictionary[ProductName] ??*/ = "Generic Device"
+    //}
     
     fileprivate(set) var BIOSVendor:         String = "Generic"
     fileprivate(set) var BIOSVersion:        String = "0.0"
@@ -30,7 +33,7 @@ struct SMBIOS: Module {
     fileprivate(set) var ProductName:        String = "Generic1,1"
     fileprivate(set) var ProductVersion:     String = "1.0"
     fileprivate(set) var ProductSerial:      String = "000000000000"
-    fileprivate(set) var ProductUUID:        String = "UUID"
+    fileprivate(set) var ProductUUID:        UUID   = UUID.Nil
     fileprivate(set) var BoardVendor:        String = "Generic"
     fileprivate(set) var BoardName:          String = "Generic0,1"
     fileprivate(set) var BoardVersion:       String = "1.0"
@@ -50,9 +53,6 @@ struct SMBIOS: Module {
                 Log("Original Address is not valid", level: .Error)
                 return nil
             }
-        } else {
-            Log("Legacy BIOSes don't fully support SMBIOS, so we're going to skip it for now...", level: .Warning)
-            return nil
         }
         if String(&structure.SMBIOS.pointee.anchor.0, maxLength: 4) != SMBIOS_Signature {
             Log("Original Address is \(String(structure.OriginalAddress, radix: 16)), Mapped Address is \(String(UInt(bitPattern: structure.SMBIOS), radix: 16))", level: .Error)
@@ -76,28 +76,24 @@ struct SMBIOS: Module {
             Log("Table Address is not valid", level: .Error)
             return nil
         }
-        
         Tables.reserveCapacity(EntryCount)
-        
         let buffer = MemoryBuffer(TableAddress.virtual, size: Length)
-        
         for _ in 1 ... EntryCount {
-            do {
-                let type:   UInt8  = try buffer.read()
-                let length: UInt8  = try buffer.read()
-                let handle: UInt16 = try buffer.read()
-                let Length         = Int(length) - 4
+                guard let type:   UInt8  = buffer.read() else { continue }
+                guard let length: UInt8  = buffer.read() else { continue }
+                guard let handle: UInt16 = buffer.read() else { continue }
+                      let Length         = Int(length) - 4
                 guard Length >= 0 else {
                     continue
                 }
                 let data        = buffer.subBufferAtOffset(buffer.offset, size: Length)
                 let stringTable = buffer.subBufferAtOffset(buffer.offset + Length)
-                let terminator: UInt16 = try stringTable.read()
+                guard let terminator: UInt16 = stringTable.read() else { continue }
                 var strings = [String]()
                 if terminator != 0 {
                     stringTable.offset = 0
                     repeat {
-                        let string = try stringTable.scanASCIIZString()
+                        guard let string = stringTable.scanASCIIZString() else { break }
                         if string != "" {
                             strings.append(string)
                         } else {
@@ -107,9 +103,6 @@ struct SMBIOS: Module {
                 }
                 Tables.append(Entry(type: type, Length: length, Handle: handle, Data: data, Strings: strings))
                 buffer.offset = buffer.offset + Length + stringTable.offset
-            } catch {
-                Log("Invalid offset", level: .Warning)
-            }
         }
         
         for entry in Tables {
@@ -124,8 +117,8 @@ struct SMBIOS: Module {
                 ProductName     = entry.getString(from: 5) ?? ProductName
                 ProductVersion  = entry.getString(from: 6) ?? ProductVersion
                 ProductSerial   = entry.getString(from: 7) ?? ProductSerial
-                ProductUUID     = entry.getString(from: 8) ?? ProductUUID
-                Log("System Information: " + "\n" + "Vendor: \(SystemVendor) Product: \(ProductName) Version: \(ProductVersion)" + "\n" + "Serial: \(ProductSerial) UUID: \(ProductUUID)", level: .Debug)
+                ProductUUID     = UUID(asString: entry.getString(from: 8) ?? "") ?? UUID.Nil
+                Log("System Information: " + "\n" + "Vendor: \(SystemVendor) Product: \(ProductName) Version: \(ProductVersion)" + "\n" + "Serial: \(ProductSerial) UUID: \(ProductUUID.description)", level: .Debug)
             case 2:
                 BoardVendor     = entry.getString(from: 4) ?? BoardVendor
                 BoardName       = entry.getString(from: 5) ?? BoardName
@@ -139,28 +132,11 @@ struct SMBIOS: Module {
                 ChassisSerial   = entry.getString(from: 7) ?? ChassisSerial
                 Log("Chassis Information: " + "\n" + "Venodr: \(ChassisVendor) Type: \(ChassisType) Version: \(ChassisVersion)" + "\n" + "Serial: \(ChassisSerial)", level: .Debug)
             default:
-                break
+                continue
             }
         }
-        
-        switch ProductName {
-        case "VMware7,1":
-            ProductDisplayName = "VMware Virtual Machine"
-        case "MacBookPro14,3":
-            ProductDisplayName = "MacBook Pro (15-inch, Mid 2017)"
-        case "MacBookPro14,2":
-            ProductDisplayName = "MacBook Pro (13-inch, Mid 2017)"
-        case "MacBookPro14,1":
-            ProductDisplayName = "MacBook Pro (13-inch, Mid 2017)"
-        case "MacBookPro13,3":
-            ProductDisplayName = "MacBook Pro (15-inch, Late 2016)"
-        case "MacBookPro13,2":
-            ProductDisplayName = "MacBook Pro (13-inch, Late 2016)"
-        case "MacBookPro13,1":
-            ProductDisplayName = "MacBook Pro (13-inch, Late 2016)"
-        default:
-            ProductDisplayName = "Generic Device"
-        }
+        var ConversionDictionary = ["VMware7,1" : "VMware Virtual Machine", "MacBookPro14,3" : "MacBook Pro (15-inch, Mid 2017)", "MacBookPro14,2" : "MacBook Pro (13-inch, Mid 2017)", "MacBookPro14,1" : "MacBook Pro (13-inch, Mid 2017)", "MacBookPro13,3" : "MacBook Pro (15-inch, Late 2016)", "MacBookPro13,2" : "MacBook Pro (13-inch, Late 2016)", "MacBookPro13,1" : "MacBook Pro (13-inch, Late 2016)"]
+        ProductDisplayName = ConversionDictionary[ProductName] ?? "Generic Device"
     }
     
     fileprivate struct Entry: Loggable, CustomStringConvertible {
@@ -176,16 +152,11 @@ struct SMBIOS: Module {
         }
         
         func getString(from offset: UInt8) -> String? {
-            guard offset >= 4 else {
-                return nil
-            }
+            guard offset >= 4 else { return nil }
             let Index = Int(offset) - 4
-            if let index: UInt8 = try? Data.readAtIndex(Index) {
+            if let index: UInt8 = Data.readAtIndex(Index) {
                 let StringID = Int(index)
-                guard StringID > 0 && StringID <= Strings.count else {
-                    return nil
-                }
-                
+                guard StringID > 0 && StringID <= Strings.count else { return nil }
                 return Strings[StringID - 1]
             } else {
                 Log("Error reading ID", level: .Error)

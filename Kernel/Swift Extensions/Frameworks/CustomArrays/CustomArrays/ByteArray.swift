@@ -3,75 +3,94 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 11/18/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
-struct ByteArray: Collection, Sequence, CustomStringConvertible {
-    typealias Index   =  Int
-    typealias Element = UInt8
+public struct ByteArray: Collection, Sequence, CustomStringConvertible {
+    public typealias Index   =  Int
+    public typealias Element = UInt8
     
     fileprivate var rawValue: UInt64
-    var count: Int    = 2
-    var isEmpty: Bool = true
-    var startIndex: Index = 0
-    var endIndex: Index   = 2
-    var description: String {
+    public var count: Int    = 2
+    public var isEmpty: Bool = true
+    public var startIndex: Index = 0
+    public var endIndex: Index   = 1
+    public var description: String {
         return "ByteArray (size: \(count)) value: 0x\(String(rawValue, radix: 16))"
     }
     
-    var asInt: Int {
+    public var asInt: Int {
         return Int(rawValue)
     }
     
-    var asUInt16: UInt16 {
+    public var BigEndianasInt: Int {
+        return Int(bigEndian: Int(rawValue))
+    }
+    
+    public var LittleEndianasInt: Int {
+        return Int(littleEndian: Int(rawValue))
+    }
+    
+    public var asUInt: UInt {
+        return UInt(rawValue)
+    }
+    
+    public var BigEndianasUInt: UInt {
+        return UInt(bigEndian: UInt(rawValue))
+    }
+    
+    public var LittleEndianasUInt: UInt {
+        return UInt(littleEndian: UInt(rawValue))
+    }
+    
+    public var asUInt16: UInt16 {
         return UInt16(rawValue)
     }
     
-    var BigEndianasUInt16: UInt16 {
+    public var BigEndianasUInt16: UInt16 {
         return UInt16(bigEndian: UInt16(rawValue))
     }
     
-    var asUInt32: UInt32 {
+    public var LittleEndianasUInt16: UInt16 {
+        return UInt16(littleEndian: UInt16(rawValue))
+    }
+    
+    public var asUInt32: UInt32 {
         return UInt32(rawValue)
     }
     
-    var BigEndianasUInt32: UInt32 {
+    public var BigEndianasUInt32: UInt32 {
         return UInt32(bigEndian: UInt32(rawValue))
     }
     
-    init() {
+    public var LittleEndianasUInt32: UInt32 {
+        return UInt32(littleEndian: UInt32(rawValue))
+    }
+    
+    public var asUInt64: UInt64 {
+        return rawValue
+    }
+    
+    public var BigEndianasUInt64: UInt64 {
+        return UInt64(bigEndian: rawValue)
+    }
+    
+    public var LittleEndianasUInt64: UInt64 {
+        return UInt64(littleEndian: rawValue)
+    }
+    
+    public init() {
         rawValue = 0
     }
     
-    init(_ rawValue: Int) {
+    public init<T: BinaryInteger>(_ rawValue: T) {
         self.rawValue = UInt64(rawValue)
         isEmpty  = false
-        count    = MemoryLayout<Int>.size / MemoryLayout<UInt8>.size
+        count    = MemoryLayout<T>.size / MemoryLayout<UInt8>.size
         endIndex = count
     }
     
-    init(_ rawValue: UInt16) {
-        self.rawValue = UInt64(rawValue)
-        isEmpty  = false
-        count    = MemoryLayout<UInt16>.size / MemoryLayout<UInt8>.size
-        endIndex = count
-    }
-    
-    init(_ rawValue: UInt32) {
-        self.rawValue = UInt64(rawValue)
-        isEmpty  = false
-        count    = MemoryLayout<UInt32>.size / MemoryLayout<UInt8>.size
-        endIndex = count
-    }
-    
-    init(_ rawValue: UInt64) {
-        self.rawValue = rawValue
-        isEmpty  = false
-        count    = MemoryLayout<UInt64>.size / MemoryLayout<UInt8>.size
-        endIndex = count
-    }
-    
-    init(withBytes bytes: Element...) {
+    public init(withBytes bytes: Element...) {
         precondition(bytes.count <= 8)
         count = bytes.count
         endIndex = count
@@ -83,9 +102,9 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
         }
     }
     
-    init(_ bytes: [Element]) {
+    public init<T: Collection>(_ bytes: T) where T.Element == Element {
         precondition(bytes.count <= 8)
-        count = bytes.count
+        count = Int(bytes.count)
         endIndex = count
         self.rawValue = 0
         var shift: UInt16 = 0
@@ -95,7 +114,7 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
         }
     }
     
-    subscript(index: Int) -> Element {
+    public subscript(index: Int) -> Element {
         get {
             precondition(index >= 0)
             precondition(index < endIndex)
@@ -117,7 +136,7 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
         }
     }
     
-    struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         var index = 0
         let array: ByteArray
         
@@ -125,7 +144,7 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
             array = value
         }
         
-        mutating func next() -> Element? {
+        mutating public func next() -> Element? {
             if index < array.endIndex {
                 defer { index += 1 }
                 return array[index]
@@ -135,11 +154,11 @@ struct ByteArray: Collection, Sequence, CustomStringConvertible {
         }
     }
     
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         return Iterator(self)
     }
     
-    func index(after i: Index) -> Index {
+    public func index(after i: Index) -> Index {
         precondition(i >= 0)
         precondition(i < endIndex)
         return i + 1

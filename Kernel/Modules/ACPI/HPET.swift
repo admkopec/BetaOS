@@ -3,10 +3,11 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 10/31/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
+import CustomArrays
 import Loggable
 
 struct HPET: Loggable, ACPITable {

@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/30/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 final class MBR: PartitionTable {
@@ -16,6 +16,7 @@ final class MBR: PartitionTable {
     init?(disk: Disk) {
         Header = MBRHeader(data: disk.read(lba: 0))
         guard Header.Signature == (0x55, 0xAA) else { return nil }
+        System.sharedInstance.Drives.append(self)
     }
     
     enum PartitionTypes: Int, CustomStringConvertible {

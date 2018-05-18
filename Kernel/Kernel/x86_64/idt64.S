@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/24/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #ifndef __ASSEMBLY__
@@ -301,7 +301,7 @@ L_dispatch_U32_after_fault:
     mov	R64_TRAPFN(%r15), %rdx		/* %rdx := trapfn for later */
 
 L_common_dispatch:
-    jmp     *%rdx   // There's a problem somewhere below
+    jmp     *%rdx   // There's a problem somewhere below on real hardware (VM works fine without this skip)
 	cld         /* Ensure the direction flag is clear in the kernel */
 	cmpl    $0, EXT(pmap_smap_enabled)(%rip)
 	je	1f
@@ -1358,14 +1358,14 @@ Entry(hndl_unix_scall64)
 Entry(hndl_mach_scall64)
 	//incl TH_SYSCALLS_MACH(%rcx)     /* increment call count   */
 	sti
-	//CCALL1(mach_call_munger64, %r15)
+    CCALL1(mach_call_munger64, %r15)
 	/*
 	 * always returns through thread_exception_return
 	 */
 
 Entry(hndl_mdep_scall64)
 	sti
-	//CCALL1(machdep_syscall64, %r15)
+    CCALL1(machdep_syscall64, %r15)
 	/*
 	 * always returns through thread_exception_return
 	 */

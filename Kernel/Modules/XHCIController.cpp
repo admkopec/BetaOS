@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 1/16/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 #include "XHCIController.hpp"
@@ -662,7 +662,6 @@ XHCI::RingDoorbellForHostAndWait() {
     RingDoorbellForDevice(0, 0, 0);
     uint16_t timeout = 20;
     while (CommandPending > 0) {
-//        pal_hlt();
         if (timeout == 0) {
             Log("Timeout, Command didn't finish!\n");
             CommandPending = 0;
@@ -865,7 +864,7 @@ XHCI::WaitForTransfer(Transfer *transfer) {
     
     while (Slots[SlotNumber - 1]->Endpoints[DCI - 1].PendingTransfer) {
         if (timeoutCounter > 0) {
-            pal_hlt();
+//            pal_hlt();
         } else {
             Log("Timeout while waiting for transfer completion!\n");
             transfer->Success = kOSReturnTimeout;

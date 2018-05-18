@@ -11,22 +11,25 @@
 		3B0B3E201FAA358E00964779 /* FADT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B3E1F1FAA358E00964779 /* FADT.swift */; };
 		3B1BBCC71F44BE740001347A /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BBCC51F44BE740001347A /* NetworkController.cpp */; };
 		3B201B201FC03D860057E713 /* PIT8254.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B201B1F1FC03D860057E713 /* PIT8254.swift */; };
-		3B201B221FC0430F0057E713 /* ByteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B201B211FC0430F0057E713 /* ByteArray.swift */; };
+		3B206B44206CEC32000F872D /* TextFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B206B43206CEC32000F872D /* TextFile.swift */; };
+		3B206B46206CEC3E000F872D /* Executable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B206B45206CEC3E000F872D /* Executable.swift */; };
+		3B21FC44204F4B4500AE53FA /* IOAPIC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B21FC43204F4B4500AE53FA /* IOAPIC.swift */; };
 		3B2347351FF8F975007D6CB0 /* FAT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2347341FF8F975007D6CB0 /* FAT.swift */; };
 		3B2347371FF968A6007D6CB0 /* VMwareTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2347361FF968A6007D6CB0 /* VMwareTools.swift */; };
 		3B2347391FFD5297007D6CB0 /* exFAT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2347381FFD5297007D6CB0 /* exFAT.swift */; };
 		3B23473D2000DC7E007D6CB0 /* Partition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B23473C2000DC7E007D6CB0 /* Partition.swift */; };
 		3B23473F2000DCB1007D6CB0 /* Disk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B23473E2000DCB1007D6CB0 /* Disk.swift */; };
 		3B234741200133A9007D6CB0 /* NVMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B234740200133A9007D6CB0 /* NVMe.swift */; };
+		3B24C287204EB65C00DA7EBB /* APIC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B24C286204EB65C00DA7EBB /* APIC.swift */; };
 		3B2576581F522483002EBB98 /* fpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2576561F522483002EBB98 /* fpu.c */; };
+		3B287C8E204B41C300C89124 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B287C8F204B41C300C89124 /* Networking.framework */; };
 		3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC01E4FCACB000204B1 /* kdp.c */; };
 		3B2D0EC61E4FCB11000204B1 /* EHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */; };
 		3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC41E4FCB11000204B1 /* PCIController.cpp */; };
 		3B2D0ECD1E4FCB3D000204B1 /* UHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0EC91E4FCB3D000204B1 /* UHCIController.cpp */; };
 		3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */; };
-		3B3309E41F9601640096E787 /* MemoryBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3309E31F9601640096E787 /* MemoryBuffer.swift */; };
+		3B2E5EB2206BB61D004A1336 /* PNG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E5EB1206BB61D004A1336 /* PNG.swift */; };
 		3B33ADE71FAD27BF00C4D9BE /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B33ADE61FAD27BF00C4D9BE /* Tests.swift */; };
-		3B35906E1FBA294B00A9BEFF /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B35906D1FBA294B00A9BEFF /* Video.swift */; };
 		3B3590701FBA295D00A9BEFF /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B35906F1FBA295D00A9BEFF /* System.swift */; };
 		3B3590721FBA527B00A9BEFF /* SVGA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3590711FBA527B00A9BEFF /* SVGA.swift */; };
 		3B3590741FBA52FA00A9BEFF /* PCI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3590731FBA52FA00A9BEFF /* PCI.swift */; };
@@ -49,9 +52,20 @@
 		3B5F79791D9597EC006EC205 /* DeviceTree.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79761D9597EC006EC205 /* DeviceTree.c */; };
 		3B5F797A1D9597EC006EC205 /* platform_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79771D9597EC006EC205 /* platform_init.c */; };
 		3B5F797B1D9597EC006EC205 /* bootargs.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B5F79781D9597EC006EC205 /* bootargs.c */; };
+		3B60CDC42079516E00AA7F0E /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B60CDC32079516E00AA7F0E /* File.swift */; };
 		3B645EF51FE5C517009EBA75 /* VESA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B645EF41FE5C517009EBA75 /* VESA.swift */; };
+		3B65BA1D20488D7A00D3A98D /* E1000.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B65BA1C20488D7A00D3A98D /* E1000.swift */; };
+		3B65E110207A1EBD00A10313 /* Graphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BF207B42017CECF00D1ED64 /* Graphics.framework */; };
+		3B65E111207A1F7B00A10313 /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF207D42018A34C00D1ED64 /* Graphics.swift */; };
+		3B65E112207A1F7C00A10313 /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF207D42018A34C00D1ED64 /* Graphics.swift */; };
+		3B65E113207A8AF600A10313 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1D785B200F4F990051471C /* Parser.swift */; };
 		3B6BC4171F56DE7D00F12220 /* libc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7865DC1D9591B800C015DF /* libc.a */; };
 		3B6BC4181F56DE8200F12220 /* libc++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B45ABBA1EED69350035FC5D /* libc++.a */; };
+		3B729A67201B4A3600711E55 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B729A66201B4A3600711E55 /* Types.swift */; };
+		3B729A69201B4B1500711E55 /* Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B729A68201B4B1500711E55 /* Method.swift */; };
+		3B729A6B201B4B6800711E55 /* Type1Opcodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B729A6A201B4B6800711E55 /* Type1Opcodes.swift */; };
+		3B729A6D201B4B7C00711E55 /* Type2Opcodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B729A6C201B4B7C00711E55 /* Type2Opcodes.swift */; };
+		3B729A6F201B4E7500711E55 /* NamedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B729A6E201B4E7500711E55 /* NamedObject.swift */; };
 		3B7865E91D9592F500C015DF /* low_mem_vectors.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865DF1D9592F500C015DF /* low_mem_vectors.c */; };
 		3B7865EA1D9592F500C015DF /* idt64.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865E01D9592F500C015DF /* idt64.S */; };
 		3B7865EB1D9592F500C015DF /* bcopy.S in Sources */ = {isa = PBXBuildFile; fileRef = 3B7865E11D9592F500C015DF /* bcopy.S */; };
@@ -77,25 +91,24 @@
 		3B7866361D95947500C015DF /* ldt.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661E1D95947500C015DF /* ldt.c */; };
 		3B7866371D95947500C015DF /* mp.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B78661F1D95947500C015DF /* mp.c */; };
 		3B78663C1D95948B00C015DF /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B7866391D95948B00C015DF /* renderer.cpp */; };
+		3B834C63201A619600BC3FFA /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B834C62201A619600BC3FFA /* Symbols.swift */; };
+		3B849288202E19FC00BCCBE9 /* OSVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B849287202E19FC00BCCBE9 /* OSVersion.swift */; };
 		3B8D46BB1F65914700AC1679 /* sse.c in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D46BA1F65914700AC1679 /* sse.c */; };
-		3B9FC2C71FC0C629007777E2 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9FC2C61FC0C629007777E2 /* Integer.swift */; };
-		3BA700CC1FA8F4B9006B9196 /* BitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA700CB1FA8F4B9006B9196 /* BitArray.swift */; };
+		3B98E551201BD4400066A901 /* GlobalObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B98E550201BD4400066A901 /* GlobalObjects.swift */; };
+		3B98E553201BEABE0066A901 /* ResourceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B98E552201BEABE0066A901 /* ResourceData.swift */; };
+		3B98E555201BEC830066A901 /* SSDT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B98E554201BEC830066A901 /* SSDT.swift */; };
 		3BACBC2F1EC0A73000977F9F /* apic.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BACBC2E1EC0A73000977F9F /* apic.c */; };
 		3BC3C9FF1FF1662E00B8F5A7 /* AHCI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC3C9FE1FF1662E00B8F5A7 /* AHCI.swift */; };
 		3BC787531FC202FC00BACC7D /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC787521FC202FC00BACC7D /* Tasks.swift */; };
 		3BC787561FC8CA8700BACC7D /* USBCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BC787541FC8CA8700BACC7D /* USBCommon.cpp */; };
 		3BD219161FDB420C0095A1FF /* HDA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD219151FDB420C0095A1FF /* HDA.swift */; };
-		3BD2191A1FDDC9FB0095A1FF /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD219191FDDC9FB0095A1FF /* Graphics.swift */; };
 		3BD8AA8C1F90EBA100A7ADBC /* kernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA8B1F90EBA100A7ADBC /* kernel.swift */; };
 		3BD8AA901F90EC8300A7ADBC /* kprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA8F1F90EC8300A7ADBC /* kprint.swift */; };
 		3BD8AA921F90EDD800A7ADBC /* command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA911F90EDD800A7ADBC /* command.swift */; };
-		3BD8AA951F90EE5C00A7ADBC /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA941F90EE5C00A7ADBC /* String.swift */; };
 		3BD8AA961F90EF2F00A7ADBC /* libobjc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD8AA971F90EF2F00A7ADBC /* libobjc.a */; };
 		3BD8AA981F90EF3300A7ADBC /* libcucore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD8AA991F90EF3300A7ADBC /* libcucore.a */; };
 		3BD8AA9A1F90EF3600A7ADBC /* libicucore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD8AA9B1F90EF3600A7ADBC /* libicucore.a */; };
 		3BD8AA9E1F920E0800A7ADBC /* ACPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD8AA9D1F920E0800A7ADBC /* ACPI.swift */; };
-		3BDF5D821FF671B300A2E38B /* DSDT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDF5D811FF671B300A2E38B /* DSDT.swift */; };
-		3BDF5D841FF6A92C00A2E38B /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDF5D831FF6A92C00A2E38B /* UUID.swift */; };
 		3BDF5D861FF6DE6500A2E38B /* GPT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDF5D851FF6DE6500A2E38B /* GPT.swift */; };
 		3BDF5D881FF7D0BF00A2E38B /* EFS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDF5D871FF7D0BF00A2E38B /* EFS.swift */; };
 		3BDF5D8A1FF7E57F00A2E38B /* MBR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDF5D891FF7E57F00A2E38B /* MBR.swift */; };
@@ -109,6 +122,16 @@
 		3BED40E41F9529B400D019AA /* SDTHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED40E31F9529B400D019AA /* SDTHeader.swift */; };
 		3BED40E61F952A9700D019AA /* RSDT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED40E51F952A9700D019AA /* RSDT.swift */; };
 		3BF071D11E59E75000BFF155 /* io_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF071D01E59E75000BFF155 /* io_map.c */; };
+		3BF206EF2014C5A200D1ED64 /* PIC8259.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA8E053200A902200C40765 /* PIC8259.swift */; };
+		3BF206F02014C5AF00D1ED64 /* InterruptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA8E051200A897F00C40765 /* InterruptManager.swift */; };
+		3BF2077B2017C3A600D1ED64 /* PrivateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2077A2017C3A600D1ED64 /* PrivateExtensions.swift */; };
+		3BF207B72017CF6700D1ED64 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF207B62017CF6700D1ED64 /* Window.swift */; };
+		3BF207B92017CF8200D1ED64 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF207B82017CF8200D1ED64 /* View.swift */; };
+		3BF207CE20189DEE00D1ED64 /* CommonExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BF207B22017CECF00D1ED64 /* CommonExtensions.framework */; };
+		3BF207CF20189E9500D1ED64 /* CustomArrays.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BF207B32017CECF00D1ED64 /* CustomArrays.framework */; };
+		3BF207D12018A0BC00D1ED64 /* MemoryBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF207D02018A0BC00D1ED64 /* MemoryBuffer.swift */; };
+		3BF207D22018A13E00D1ED64 /* UUID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BF207B52017CECF00D1ED64 /* UUID.framework */; };
+		3BF207D72018A34D00D1ED64 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF207D52018A34C00D1ED64 /* Video.swift */; };
 		3BF2954B1E003EF8006716EB /* acpi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3BF295491E003EF8006716EB /* acpi.c */; };
 /* End PBXBuildFile section */
 
@@ -130,16 +153,21 @@
 		3B0B3E1F1FAA358E00964779 /* FADT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FADT.swift; sourceTree = "<group>"; };
 		3B1BBCC51F44BE740001347A /* NetworkController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NetworkController.cpp; path = Modules/NetworkController.cpp; sourceTree = SOURCE_ROOT; };
 		3B1BBCC61F44BE740001347A /* NetworkController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NetworkController.hpp; path = Modules/NetworkController.hpp; sourceTree = SOURCE_ROOT; };
+		3B1D785B200F4F990051471C /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		3B201B1F1FC03D860057E713 /* PIT8254.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PIT8254.swift; path = Modules/PIT8254.swift; sourceTree = SOURCE_ROOT; };
-		3B201B211FC0430F0057E713 /* ByteArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteArray.swift; sourceTree = "<group>"; };
+		3B206B43206CEC32000F872D /* TextFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFile.swift; sourceTree = "<group>"; };
+		3B206B45206CEC3E000F872D /* Executable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executable.swift; sourceTree = "<group>"; };
+		3B21FC43204F4B4500AE53FA /* IOAPIC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOAPIC.swift; sourceTree = "<group>"; };
 		3B2347341FF8F975007D6CB0 /* FAT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAT.swift; sourceTree = "<group>"; };
 		3B2347361FF968A6007D6CB0 /* VMwareTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMwareTools.swift; sourceTree = "<group>"; };
 		3B2347381FFD5297007D6CB0 /* exFAT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exFAT.swift; sourceTree = "<group>"; };
 		3B23473C2000DC7E007D6CB0 /* Partition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Partition.swift; sourceTree = "<group>"; };
 		3B23473E2000DCB1007D6CB0 /* Disk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disk.swift; sourceTree = "<group>"; };
 		3B234740200133A9007D6CB0 /* NVMe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVMe.swift; sourceTree = "<group>"; };
+		3B24C286204EB65C00DA7EBB /* APIC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIC.swift; sourceTree = "<group>"; };
 		3B2576561F522483002EBB98 /* fpu.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = fpu.c; sourceTree = "<group>"; };
 		3B2576571F522483002EBB98 /* fpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fpu.h; sourceTree = "<group>"; };
+		3B287C8F204B41C300C89124 /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B2D0EC01E4FCACB000204B1 /* kdp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kdp.c; sourceTree = "<group>"; };
 		3B2D0EC21E4FCB11000204B1 /* EHCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EHCIController.cpp; path = Modules/EHCIController.cpp; sourceTree = SOURCE_ROOT; };
 		3B2D0EC31E4FCB11000204B1 /* EHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EHCIController.hpp; path = Modules/EHCIController.hpp; sourceTree = SOURCE_ROOT; };
@@ -149,12 +177,11 @@
 		3B2D0ECA1E4FCB3D000204B1 /* UHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UHCIController.hpp; path = Modules/UHCIController.hpp; sourceTree = SOURCE_ROOT; };
 		3B2D0ECB1E4FCB3D000204B1 /* XHCIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XHCIController.cpp; path = Modules/XHCIController.cpp; sourceTree = SOURCE_ROOT; };
 		3B2D0ECC1E4FCB3D000204B1 /* XHCIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = XHCIController.hpp; path = Modules/XHCIController.hpp; sourceTree = SOURCE_ROOT; };
-		3B3309E31F9601640096E787 /* MemoryBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryBuffer.swift; sourceTree = "<group>"; };
+		3B2E5EB1206BB61D004A1336 /* PNG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNG.swift; sourceTree = "<group>"; };
 		3B33ADE41FAD27BF00C4D9BE /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B33ADE61FAD27BF00C4D9BE /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		3B33ADE81FAD27BF00C4D9BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B3440B01EAEA459001E2475 /* vm_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_object.h; sourceTree = "<group>"; };
-		3B35906D1FBA294B00A9BEFF /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Video.swift; path = ../Video.swift; sourceTree = "<group>"; };
 		3B35906F1FBA295D00A9BEFF /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = System.swift; path = ../System.swift; sourceTree = "<group>"; };
 		3B3590711FBA527B00A9BEFF /* SVGA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SVGA.swift; path = Modules/SVGA.swift; sourceTree = SOURCE_ROOT; };
 		3B3590731FBA52FA00A9BEFF /* PCI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PCI.swift; path = Modules/PCI.swift; sourceTree = SOURCE_ROOT; };
@@ -201,7 +228,14 @@
 		3B5F797D1D9597F8006EC205 /* boot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boot.h; path = platform/boot.h; sourceTree = "<group>"; };
 		3B5F797E1D9597F8006EC205 /* device_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = device_tree.h; path = platform/device_tree.h; sourceTree = "<group>"; };
 		3B5F797F1D9597F8006EC205 /* efi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = efi.h; path = platform/efi.h; sourceTree = "<group>"; };
+		3B60CDC32079516E00AA7F0E /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		3B645EF41FE5C517009EBA75 /* VESA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VESA.swift; sourceTree = "<group>"; };
+		3B65BA1C20488D7A00D3A98D /* E1000.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E1000.swift; sourceTree = "<group>"; };
+		3B729A66201B4A3600711E55 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		3B729A68201B4B1500711E55 /* Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Method.swift; sourceTree = "<group>"; };
+		3B729A6A201B4B6800711E55 /* Type1Opcodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type1Opcodes.swift; sourceTree = "<group>"; };
+		3B729A6C201B4B7C00711E55 /* Type2Opcodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type2Opcodes.swift; sourceTree = "<group>"; };
+		3B729A6E201B4E7500711E55 /* NamedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedObject.swift; sourceTree = "<group>"; };
 		3B7381A61D984A1C0001846F /* PS2Keymap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PS2Keymap.hpp; path = Modules/PS2Keymap.hpp; sourceTree = SOURCE_ROOT; };
 		3B7865BC1D958FEE00C015DF /* Kernel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Kernel; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B7865DC1D9591B800C015DF /* libc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libc.a; path = "../../../../Developer/Xcode/DerivedData/BetaOS-gapbhrzafomgsbfxbixzumnpbwhr/Build/Products/Debug/libc.a"; sourceTree = "<group>"; };
@@ -265,27 +299,28 @@
 		3B7866391D95948B00C015DF /* renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = renderer.cpp; sourceTree = "<group>"; };
 		3B78663A1D95948B00C015DF /* colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colors.h; sourceTree = "<group>"; };
 		3B78663B1D95948B00C015DF /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font.h; sourceTree = "<group>"; };
+		3B834C62201A619600BC3FFA /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
+		3B849287202E19FC00BCCBE9 /* OSVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVersion.swift; sourceTree = "<group>"; };
 		3B8D46BA1F65914700AC1679 /* sse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sse.c; sourceTree = "<group>"; };
-		3B9FC2C61FC0C629007777E2 /* Integer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
-		3BA700CB1FA8F4B9006B9196 /* BitArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitArray.swift; sourceTree = "<group>"; };
+		3B98E550201BD4400066A901 /* GlobalObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalObjects.swift; sourceTree = "<group>"; };
+		3B98E552201BEABE0066A901 /* ResourceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceData.swift; sourceTree = "<group>"; };
+		3B98E554201BEC830066A901 /* SSDT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSDT.swift; sourceTree = "<group>"; };
+		3BA8E051200A897F00C40765 /* InterruptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterruptManager.swift; sourceTree = "<group>"; };
+		3BA8E053200A902200C40765 /* PIC8259.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIC8259.swift; sourceTree = "<group>"; };
 		3BACBC2E1EC0A73000977F9F /* apic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = apic.c; sourceTree = "<group>"; };
 		3BC3C9FE1FF1662E00B8F5A7 /* AHCI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHCI.swift; sourceTree = "<group>"; };
 		3BC787521FC202FC00BACC7D /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Tasks.swift; path = ../Tasks.swift; sourceTree = "<group>"; };
 		3BC787541FC8CA8700BACC7D /* USBCommon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = USBCommon.cpp; path = Modules/USBCommon.cpp; sourceTree = SOURCE_ROOT; };
 		3BC787551FC8CA8700BACC7D /* USBCommon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = USBCommon.hpp; path = Modules/USBCommon.hpp; sourceTree = SOURCE_ROOT; };
 		3BD219151FDB420C0095A1FF /* HDA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HDA.swift; path = Modules/HDA.swift; sourceTree = SOURCE_ROOT; };
-		3BD219191FDDC9FB0095A1FF /* Graphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphics.swift; sourceTree = "<group>"; };
 		3BD8AA8A1F90EBA100A7ADBC /* Kernel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Kernel-Bridging-Header.h"; sourceTree = "<group>"; };
 		3BD8AA8B1F90EBA100A7ADBC /* kernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kernel.swift; sourceTree = "<group>"; };
 		3BD8AA8F1F90EC8300A7ADBC /* kprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kprint.swift; sourceTree = "<group>"; };
 		3BD8AA911F90EDD800A7ADBC /* command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = command.swift; sourceTree = "<group>"; };
-		3BD8AA941F90EE5C00A7ADBC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		3BD8AA971F90EF2F00A7ADBC /* libobjc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libobjc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA991F90EF3300A7ADBC /* libcucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libcucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA9B1F90EF3600A7ADBC /* libicucore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libicucore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD8AA9D1F920E0800A7ADBC /* ACPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACPI.swift; sourceTree = "<group>"; };
-		3BDF5D811FF671B300A2E38B /* DSDT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSDT.swift; sourceTree = "<group>"; };
-		3BDF5D831FF6A92C00A2E38B /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
 		3BDF5D851FF6DE6500A2E38B /* GPT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPT.swift; sourceTree = "<group>"; };
 		3BDF5D871FF7D0BF00A2E38B /* EFS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EFS.swift; sourceTree = "<group>"; };
 		3BDF5D891FF7E57F00A2E38B /* MBR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBR.swift; sourceTree = "<group>"; };
@@ -300,6 +335,16 @@
 		3BED40E31F9529B400D019AA /* SDTHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDTHeader.swift; sourceTree = "<group>"; };
 		3BED40E51F952A9700D019AA /* RSDT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSDT.swift; sourceTree = "<group>"; };
 		3BF071D01E59E75000BFF155 /* io_map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = io_map.c; sourceTree = "<group>"; };
+		3BF2077A2017C3A600D1ED64 /* PrivateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateExtensions.swift; sourceTree = "<group>"; };
+		3BF207B22017CECF00D1ED64 /* CommonExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CommonExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BF207B32017CECF00D1ED64 /* CustomArrays.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CustomArrays.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BF207B42017CECF00D1ED64 /* Graphics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Graphics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BF207B52017CECF00D1ED64 /* UUID.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUID.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BF207B62017CF6700D1ED64 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
+		3BF207B82017CF8200D1ED64 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		3BF207D02018A0BC00D1ED64 /* MemoryBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemoryBuffer.swift; path = Frameworks/CustomArrays/CustomArrays/../../../MemoryBuffer.swift; sourceTree = "<group>"; };
+		3BF207D42018A34C00D1ED64 /* Graphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Graphics.swift; path = Frameworks/Graphics/Graphics/Graphics.swift; sourceTree = "<group>"; };
+		3BF207D52018A34C00D1ED64 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		3BF295491E003EF8006716EB /* acpi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = acpi.c; sourceTree = "<group>"; };
 		3BF2954A1E003EF8006716EB /* acpi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = acpi.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -317,7 +362,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B4805A51FB1DBFA0044DAB7 /* Addressing.framework in Frameworks */,
+				3BF207CE20189DEE00D1ED64 /* CommonExtensions.framework in Frameworks */,
+				3BF207CF20189E9500D1ED64 /* CustomArrays.framework in Frameworks */,
 				3B4805A71FB1DDDE0044DAB7 /* Loggable.framework in Frameworks */,
+				3B65E110207A1EBD00A10313 /* Graphics.framework in Frameworks */,
+				3B287C8E204B41C300C89124 /* Networking.framework in Frameworks */,
+				3BF207D22018A13E00D1ED64 /* UUID.framework in Frameworks */,
 				3B6BC4171F56DE7D00F12220 /* libc.a in Frameworks */,
 				3B6BC4181F56DE8200F12220 /* libc++.a in Frameworks */,
 				3BD8AA961F90EF2F00A7ADBC /* libobjc.a in Frameworks */,
@@ -329,6 +379,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B1D785A200F4E4B0051471C /* AML */ = {
+			isa = PBXGroup;
+			children = (
+				3B98E550201BD4400066A901 /* GlobalObjects.swift */,
+				3B1D785B200F4F990051471C /* Parser.swift */,
+				3B729A68201B4B1500711E55 /* Method.swift */,
+				3B729A6E201B4E7500711E55 /* NamedObject.swift */,
+				3B98E552201BEABE0066A901 /* ResourceData.swift */,
+				3B834C62201A619600BC3FFA /* Symbols.swift */,
+				3B729A66201B4A3600711E55 /* Types.swift */,
+				3B729A6A201B4B6800711E55 /* Type1Opcodes.swift */,
+				3B729A6C201B4B7C00711E55 /* Type2Opcodes.swift */,
+			);
+			path = AML;
+			sourceTree = "<group>";
+		};
 		3B2347331FF8F94E007D6CB0 /* Filesystems */ = {
 			isa = PBXGroup;
 			children = (
@@ -378,17 +444,23 @@
 			isa = PBXGroup;
 			children = (
 				3BED40DE1F9503C800D019AA /* ACPI */,
+				3BA8E04C20095E2400C40765 /* USB */,
 				3B2347331FF8F94E007D6CB0 /* Filesystems */,
 				3B23473B2000DC30007D6CB0 /* Partition Tables */,
 				3B3590731FBA52FA00A9BEFF /* PCI.swift */,
+				3B24C286204EB65C00DA7EBB /* APIC.swift */,
+				3B21FC43204F4B4500AE53FA /* IOAPIC.swift */,
 				3BED40DF1F9503F300D019AA /* ModulesController.swift */,
+				3BA8E051200A897F00C40765 /* InterruptManager.swift */,
 				3B0360EF1F953E1F003DE9F8 /* SMBIOS.swift */,
 				3B3590711FBA527B00A9BEFF /* SVGA.swift */,
 				3B645EF41FE5C517009EBA75 /* VESA.swift */,
 				3BD219151FDB420C0095A1FF /* HDA.swift */,
 				3BC3C9FE1FF1662E00B8F5A7 /* AHCI.swift */,
 				3B234740200133A9007D6CB0 /* NVMe.swift */,
+				3B65BA1C20488D7A00D3A98D /* E1000.swift */,
 				3B201B1F1FC03D860057E713 /* PIT8254.swift */,
+				3BA8E053200A902200C40765 /* PIC8259.swift */,
 				3B2347361FF968A6007D6CB0 /* VMwareTools.swift */,
 				3B389A591E6DD817009F1DE6 /* Controller.hpp */,
 				3B389A581E6DD817009F1DE6 /* Controller.cpp */,
@@ -435,7 +507,6 @@
 				3BD8AA8F1F90EC8300A7ADBC /* kprint.swift */,
 				3BD8AA8B1F90EBA100A7ADBC /* kernel.swift */,
 				3B35906F1FBA295D00A9BEFF /* System.swift */,
-				3B35906D1FBA294B00A9BEFF /* Video.swift */,
 				3B23473E2000DCB1007D6CB0 /* Disk.swift */,
 				3BC787521FC202FC00BACC7D /* Tasks.swift */,
 				3BD8AA911F90EDD800A7ADBC /* command.swift */,
@@ -499,6 +570,7 @@
 				3B588BBF1D95C76300087C38 /* Modules */,
 				3B7865DE1D95927D00C015DF /* x86_64 */,
 				3B588BDB1D95CF0500087C38 /* version.h */,
+				3B849287202E19FC00BCCBE9 /* OSVersion.swift */,
 				3B588BDC1D95CF0500087C38 /* asmlib.S */,
 				3B588BDD1D95CF0500087C38 /* arch.c */,
 				3B588BDE1D95CF0500087C38 /* arch.h */,
@@ -509,6 +581,11 @@
 		3B7865DB1D9591B800C015DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3B287C8F204B41C300C89124 /* Networking.framework */,
+				3BF207B22017CECF00D1ED64 /* CommonExtensions.framework */,
+				3BF207B32017CECF00D1ED64 /* CustomArrays.framework */,
+				3BF207B42017CECF00D1ED64 /* Graphics.framework */,
+				3BF207B52017CECF00D1ED64 /* UUID.framework */,
 				3B4805A61FB1DBFA0044DAB7 /* Addressing.framework */,
 				3B5098761FB0AD5A00B9A90A /* Loggable.framework */,
 				3B45ABBA1EED69350035FC5D /* libc++.a */,
@@ -612,16 +689,26 @@
 			path = video;
 			sourceTree = "<group>";
 		};
+		3BA8E04C20095E2400C40765 /* USB */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = USB;
+			sourceTree = "<group>";
+		};
 		3BD8AA931F90EE2D00A7ADBC /* Swift Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				3BD8AA941F90EE5C00A7ADBC /* String.swift */,
-				3B9FC2C61FC0C629007777E2 /* Integer.swift */,
-				3B3309E31F9601640096E787 /* MemoryBuffer.swift */,
-				3BA700CB1FA8F4B9006B9196 /* BitArray.swift */,
-				3B201B211FC0430F0057E713 /* ByteArray.swift */,
-				3BD219191FDDC9FB0095A1FF /* Graphics.swift */,
-				3BDF5D831FF6A92C00A2E38B /* UUID.swift */,
+				3BF2077A2017C3A600D1ED64 /* PrivateExtensions.swift */,
+				3BF207D02018A0BC00D1ED64 /* MemoryBuffer.swift */,
+				3BF207D42018A34C00D1ED64 /* Graphics.swift */,
+				3B2E5EB1206BB61D004A1336 /* PNG.swift */,
+				3BF207B62017CF6700D1ED64 /* Window.swift */,
+				3BF207D52018A34C00D1ED64 /* Video.swift */,
+				3BF207B82017CF8200D1ED64 /* View.swift */,
+				3B60CDC32079516E00AA7F0E /* File.swift */,
+				3B206B43206CEC32000F872D /* TextFile.swift */,
+				3B206B45206CEC3E000F872D /* Executable.swift */,
 			);
 			path = "Swift Extensions";
 			sourceTree = "<group>";
@@ -629,6 +716,7 @@
 		3BED40DE1F9503C800D019AA /* ACPI */ = {
 			isa = PBXGroup;
 			children = (
+				3B1D785A200F4E4B0051471C /* AML */,
 				3BD8AA9D1F920E0800A7ADBC /* ACPI.swift */,
 				3BED40E11F95279400D019AA /* RSDP.swift */,
 				3BED40E51F952A9700D019AA /* RSDT.swift */,
@@ -637,7 +725,7 @@
 				3BE184B61FA8ABEE003B745C /* MADT.swift */,
 				3BE184B21FA880F3003B745C /* MCFG.swift */,
 				3BE184BA1FA8AC56003B745C /* HPET.swift */,
-				3BDF5D811FF671B300A2E38B /* DSDT.swift */,
+				3B98E554201BEC830066A901 /* SSDT.swift */,
 			);
 			path = ACPI;
 			sourceTree = "<group>";
@@ -649,6 +737,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3B33ADE91FAD27BF00C4D9BE /* Build configuration list for PBXNativeTarget "Tests" */;
 			buildPhases = (
+				3BF207C32017D5B700D1ED64 /* ShellScript */,
 				3B33ADE01FAD27BF00C4D9BE /* Sources */,
 				3B33ADE11FAD27BF00C4D9BE /* Frameworks */,
 				3B33ADE21FAD27BF00C4D9BE /* Resources */,
@@ -687,7 +776,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Adam Kopeć";
 				TargetAttributes = {
 					3B33ADE31FAD27BF00C4D9BE = {
@@ -744,7 +833,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "lockfile -r 0 \"$PROJECT_DIR/Kernel/version.h\"\nflock -x \"$PROJECT_DIR/Kernel/version.h\"\nbuildNumber=$(sed -n -e \"18 p\" \"$PROJECT_DIR/Kernel/version.h\")\necho \"Debug: ${buildNumber}\"\nbuildNumber=$(($buildNumber + 1))\necho \"Debug: ${buildNumber}\"\nsed -i -e \"18s/.*/${buildNumber}/\" \"$PROJECT_DIR/Kernel/version.h\"";
+			shellScript = "lockfile -r 0 \"$PROJECT_DIR/Kernel/version.h\"\nlockfile -r 0 \"$PROJECT_DIR/Kernel/OSVersion.swift\"\nflock -x \"$PROJECT_DIR/Kernel/version.h\"\nflock -x \"$PROJECT_DIR/Kernel/OSVersion.swift\"\nbuildNumber=$(sed -n -e \"15 p\" \"$PROJECT_DIR/Kernel/OSVersion.swift\")\necho \"Debug: ${buildNumber}\"\nbuildNumber=$(($buildNumber + 1))\necho \"Debug: ${buildNumber}\"\nsed -i -e \"15s/.*/${buildNumber}/\" \"$PROJECT_DIR/Kernel/OSVersion.swift\"\nsed -i -e \"18s/.*/${buildNumber}/\" \"$PROJECT_DIR/Kernel/version.h\"";
+		};
+		3BF207C32017D5B700D1ED64 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -f \"$BUILD_DIR/Debug/libobjc.a\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -753,6 +855,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B65E112207A1F7C00A10313 /* Graphics.swift in Sources */,
 				3B33ADE71FAD27BF00C4D9BE /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -761,12 +864,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B21FC44204F4B4500AE53FA /* IOAPIC.swift in Sources */,
+				3B834C63201A619600BC3FFA /* Symbols.swift in Sources */,
 				3B7865ED1D9592F500C015DF /* start.S in Sources */,
 				3B7866251D95947500C015DF /* i386_init.c in Sources */,
 				3BD8AA8C1F90EBA100A7ADBC /* kernel.swift in Sources */,
+				3B98E555201BEC830066A901 /* SSDT.swift in Sources */,
 				3BACBC2F1EC0A73000977F9F /* apic.c in Sources */,
+				3B729A6B201B4B6800711E55 /* Type1Opcodes.swift in Sources */,
 				3B78662C1D95947500C015DF /* machine_routines.c in Sources */,
 				3B5F79721D9596E7006EC205 /* kernel_header.c in Sources */,
+				3B65E111207A1F7B00A10313 /* Graphics.swift in Sources */,
 				3B5F79791D9597EC006EC205 /* DeviceTree.c in Sources */,
 				3B7866321D95947500C015DF /* cpu_threads.c in Sources */,
 				3B5F796E1D9596E7006EC205 /* command.c in Sources */,
@@ -774,34 +882,38 @@
 				3B2576581F522483002EBB98 /* fpu.c in Sources */,
 				3B588BCF1D95C89C00087C38 /* RTL8111Controller.cpp in Sources */,
 				3B3F42031F588A640059964E /* SPIController.cpp in Sources */,
-				3B9FC2C71FC0C629007777E2 /* Integer.swift in Sources */,
-				3BD2191A1FDDC9FB0095A1FF /* Graphics.swift in Sources */,
+				3BF2077B2017C3A600D1ED64 /* PrivateExtensions.swift in Sources */,
 				3B0360F01F953E1F003DE9F8 /* SMBIOS.swift in Sources */,
+				3B65E113207A8AF600A10313 /* Parser.swift in Sources */,
 				3B7866371D95947500C015DF /* mp.c in Sources */,
+				3B729A67201B4A3600711E55 /* Types.swift in Sources */,
 				3BDF5D861FF6DE6500A2E38B /* GPT.swift in Sources */,
-				3B201B221FC0430F0057E713 /* ByteArray.swift in Sources */,
+				3B729A6F201B4E7500711E55 /* NamedObject.swift in Sources */,
 				3B588BD11D95C89C00087C38 /* PS2Controller.cpp in Sources */,
 				3B23473D2000DC7E007D6CB0 /* Partition.swift in Sources */,
+				3B24C287204EB65C00DA7EBB /* APIC.swift in Sources */,
 				3B201B201FC03D860057E713 /* PIT8254.swift in Sources */,
 				3B3590741FBA52FA00A9BEFF /* PCI.swift in Sources */,
+				3B849288202E19FC00BCCBE9 /* OSVersion.swift in Sources */,
 				3B3590721FBA527B00A9BEFF /* SVGA.swift in Sources */,
 				3B389A5A1E6DD817009F1DE6 /* Controller.cpp in Sources */,
 				3BF071D11E59E75000BFF155 /* io_map.c in Sources */,
 				3B588BD01D95C89C00087C38 /* MMIOUtils.cpp in Sources */,
+				3B729A6D201B4B7C00711E55 /* Type2Opcodes.swift in Sources */,
 				3B7866301D95947500C015DF /* tsc.c in Sources */,
 				3B7866331D95947500C015DF /* pal.c in Sources */,
+				3B60CDC42079516E00AA7F0E /* File.swift in Sources */,
 				3B588BDA1D95CEF200087C38 /* assert.c in Sources */,
-				3BDF5D821FF671B300A2E38B /* DSDT.swift in Sources */,
 				3B588BDF1D95CF0500087C38 /* asmlib.S in Sources */,
+				3BF206EF2014C5A200D1ED64 /* PIC8259.swift in Sources */,
 				3B2D0EC71E4FCB11000204B1 /* PCIController.cpp in Sources */,
-				3B3309E41F9601640096E787 /* MemoryBuffer.swift in Sources */,
 				3B7865EF1D9592F500C015DF /* pmap_pcid.c in Sources */,
 				3B8D46BB1F65914700AC1679 /* sse.c in Sources */,
 				3BDF5D881FF7D0BF00A2E38B /* EFS.swift in Sources */,
 				3B78663C1D95948B00C015DF /* renderer.cpp in Sources */,
 				3B1BBCC71F44BE740001347A /* NetworkController.cpp in Sources */,
-				3BDF5D841FF6A92C00A2E38B /* UUID.swift in Sources */,
 				3B78662D1D95947500C015DF /* cpuid.c in Sources */,
+				3B2E5EB2206BB61D004A1336 /* PNG.swift in Sources */,
 				3BF2954B1E003EF8006716EB /* acpi.c in Sources */,
 				3B7865F01D9592F500C015DF /* boot_pt.c in Sources */,
 				3B78662F1D95947500C015DF /* i386_vm_init.c in Sources */,
@@ -810,17 +922,22 @@
 				3BDF5D8A1FF7E57F00A2E38B /* MBR.swift in Sources */,
 				3BD8AA901F90EC8300A7ADBC /* kprint.swift in Sources */,
 				3B2347371FF968A6007D6CB0 /* VMwareTools.swift in Sources */,
+				3B206B44206CEC32000F872D /* TextFile.swift in Sources */,
 				3BE700E11EE71DE50063D66A /* InterruptController.cpp in Sources */,
 				3B7865EE1D9592F500C015DF /* pmap.c in Sources */,
 				3B5F79731D9596E7006EC205 /* kalloc.c in Sources */,
 				3B3590701FBA295D00A9BEFF /* System.swift in Sources */,
+				3BF207B72017CF6700D1ED64 /* Window.swift in Sources */,
 				3BED40E41F9529B400D019AA /* SDTHeader.swift in Sources */,
 				3BD8AA9E1F920E0800A7ADBC /* ACPI.swift in Sources */,
+				3BF206F02014C5AF00D1ED64 /* InterruptManager.swift in Sources */,
 				3B2347351FF8F975007D6CB0 /* FAT.swift in Sources */,
 				3BED40E21F95279400D019AA /* RSDP.swift in Sources */,
 				3BED40E61F952A9700D019AA /* RSDT.swift in Sources */,
 				3B0B3E201FAA358E00964779 /* FADT.swift in Sources */,
 				3BE184B71FA8ABEE003B745C /* MADT.swift in Sources */,
+				3BF207D12018A0BC00D1ED64 /* MemoryBuffer.swift in Sources */,
+				3BF207D72018A34D00D1ED64 /* Video.swift in Sources */,
 				3BE184B31FA880F3003B745C /* MCFG.swift in Sources */,
 				3B234741200133A9007D6CB0 /* NVMe.swift in Sources */,
 				3BE184BB1FA8AC56003B745C /* HPET.swift in Sources */,
@@ -828,21 +945,20 @@
 				3BD219161FDB420C0095A1FF /* HDA.swift in Sources */,
 				3BDF5D8C1FF7E92C00A2E38B /* HFS+.swift in Sources */,
 				3B588BCC1D95C89C00087C38 /* ModulesController.cpp in Sources */,
-				3BD8AA951F90EE5C00A7ADBC /* String.swift in Sources */,
-				3B35906E1FBA294B00A9BEFF /* Video.swift in Sources */,
 				3B7866351D95947500C015DF /* ktss.c in Sources */,
 				3B7866361D95947500C015DF /* ldt.c in Sources */,
 				3B23473F2000DCB1007D6CB0 /* Disk.swift in Sources */,
 				3B2D0ECE1E4FCB3D000204B1 /* XHCIController.cpp in Sources */,
 				3B2D0ECD1E4FCB3D000204B1 /* UHCIController.cpp in Sources */,
+				3B65BA1D20488D7A00D3A98D /* E1000.swift in Sources */,
 				3B645EF51FE5C517009EBA75 /* VESA.swift in Sources */,
 				3B588BE01D95CF0500087C38 /* arch.c in Sources */,
 				3B7866261D95947500C015DF /* mp_desc.c in Sources */,
 				3B2347391FFD5297007D6CB0 /* exFAT.swift in Sources */,
 				3B5F79711D9596E7006EC205 /* kprintf.c in Sources */,
-				3BA700CC1FA8F4B9006B9196 /* BitArray.swift in Sources */,
 				3BC787561FC8CA8700BACC7D /* USBCommon.cpp in Sources */,
 				3B2D0EC11E4FCACB000204B1 /* kdp.c in Sources */,
+				3B206B46206CEC3E000F872D /* Executable.swift in Sources */,
 				3B5F797A1D9597EC006EC205 /* platform_init.c in Sources */,
 				3BD8AA921F90EDD800A7ADBC /* command.swift in Sources */,
 				3BC787531FC202FC00BACC7D /* Tasks.swift in Sources */,
@@ -851,11 +967,15 @@
 				3B588BCD1D95C89C00087C38 /* IntelE1000Controller.cpp in Sources */,
 				3B7865EB1D9592F500C015DF /* bcopy.S in Sources */,
 				3BC3C9FF1FF1662E00B8F5A7 /* AHCI.swift in Sources */,
+				3B98E553201BEABE0066A901 /* ResourceData.swift in Sources */,
 				3B7865E91D9592F500C015DF /* low_mem_vectors.c in Sources */,
 				3B78662E1D95947500C015DF /* lapic.c in Sources */,
+				3BF207B92017CF8200D1ED64 /* View.swift in Sources */,
+				3B98E551201BD4400066A901 /* GlobalObjects.swift in Sources */,
 				3B7866341D95947500C015DF /* gdt.c in Sources */,
 				3B7865EC1D9592F500C015DF /* bzero.S in Sources */,
 				3B7865EA1D9592F500C015DF /* idt64.S in Sources */,
+				3B729A69201B4B1500711E55 /* Method.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,6 +1035,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -922,6 +1043,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -949,6 +1071,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Kernel",
+					"$(PROJECT_DIR)/Platform",
+					"$(PROJECT_DIR)/../Libc++/Libc++",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -969,6 +1096,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -976,6 +1104,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -997,6 +1126,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Kernel",
+					"$(PROJECT_DIR)/Platform",
+					"$(PROJECT_DIR)/../Libc++/Libc++",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1006,19 +1140,12 @@
 		3B7865C41D958FEE00C015DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 0.40.2;
+				CURRENT_PROJECT_VERSION = 0.41;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"KERNEL_BASE_OFFSET=0x1000",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Kernel",
-					"$(PROJECT_DIR)/Platform",
-					"$(PROJECT_DIR)/../Libc++/Libc++",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = "-mkernel";
 				OTHER_LDFLAGS = (
 					"-nostdlib",
@@ -1044,7 +1171,7 @@
 					"-Wl,-sectalign,__HIB,__bootPT,0x1000",
 					"-Wl,-sectalign,__HIB,__desc,0x1000",
 					"-Wl,-sectalign,__HIB,__data,0x1000",
-					"-Wl,-sectalign,__HIB,_text,0x1000",
+					"-Wl,-sectalign,__HIB,__text,0x1000",
 					"-Wl,-sectalign,__HIB,__const,0x1000",
 					"-Wl,-sectalign,__HIB,__bss,0x1000",
 					"-Wl,-sectalign,__HIB,__common,0x1000",
@@ -1056,7 +1183,6 @@
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Kernel/Kernel-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				VERSION_INFO_BUILDER = "Adam Kopeć";
@@ -1066,16 +1192,9 @@
 		3B7865C51D958FEE00C015DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 0.40.2;
+				CURRENT_PROJECT_VERSION = 0.41;
 				DEVELOPMENT_TEAM = S73MBXSV7H;
 				GCC_PREPROCESSOR_DEFINITIONS = "KERNEL_BASE_OFFSET=0x1000";
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Kernel",
-					"$(PROJECT_DIR)/Platform",
-					"$(PROJECT_DIR)/../Libc++/Libc++",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = "-mkernel";
 				OTHER_LDFLAGS = (
 					"-nostdlib",
@@ -1101,7 +1220,7 @@
 					"-Wl,-sectalign,__HIB,__bootPT,0x1000",
 					"-Wl,-sectalign,__HIB,__desc,0x1000",
 					"-Wl,-sectalign,__HIB,__data,0x1000",
-					"-Wl,-sectalign,__HIB,_text,0x1000",
+					"-Wl,-sectalign,__HIB,__text,0x1000",
 					"-Wl,-sectalign,__HIB,__const,0x1000",
 					"-Wl,-sectalign,__HIB,__bss,0x1000",
 					"-Wl,-sectalign,__HIB,__common,0x1000",
@@ -1112,7 +1231,6 @@
 				);
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Kernel/Kernel-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				VERSION_INFO_BUILDER = "Adam Kopeć";

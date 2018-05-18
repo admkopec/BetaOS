@@ -3,11 +3,13 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 11/13/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
+import CommonExtensions
 import Loggable
+import Graphics
 
 class SVGA: VideoModule, PCIModule {
     let Name: String = "SVGA"
@@ -29,8 +31,7 @@ class SVGA: VideoModule, PCIModule {
     
     var Capabilities    = 0 as UInt32
     
-    var mainView: View = View(mainView: (size: Size.init(width: 1280, height: 720), depth: 0))
-    var childViews = [View]()
+    var mainView: MainView = MainView(size: Size.init(width: 1280, height: 720), depth: 0)
     
     enum Registers: UInt32 {
         case ID = 0
@@ -58,7 +59,7 @@ class SVGA: VideoModule, PCIModule {
     
     var ReservedSize: UInt32 = 0
     var UsingBounceBuffer: Bool = false
-    var BounceBuffer: UnsafeMutableRawPointer = malloc(1024*1024)
+    var BounceBuffer: UnsafeMutableRawPointer = UnsafeMutableRawPointer.allocate(byteCount: 1024 * 1024, alignment: 16)
     var NextFence: UInt32 = 0
     
     required init?(pci: PCI) {
@@ -70,7 +71,6 @@ class SVGA: VideoModule, PCIModule {
         IOBase          = pci.GetBAR(BARNumber: 0).port
         FrameBufferBase = pci.GetBAR(BARNumber: 1).address
         FIFOBase        = pci.GetBAR(BARNumber: 2).address
-        Log("Addresses: IO: \(IOBase), FrameBuffer: \(FrameBufferBase), FIFO: \(FIFOBase)", level: .Debug)
         
         let id2: UInt32 = UInt32(UInt32(0x900000) << 8 | 2)
         Write(register: .ID, value: id2)
@@ -84,7 +84,7 @@ class SVGA: VideoModule, PCIModule {
         FrameBufferSize = Int(Read(register: .FBSize))
         FIFOSize        = Int(Read(register: .MemSize))
         
-        Log("Sizes: VRAM: \(VRAMSize/MB)MB, FB: \(FrameBufferSize/MB)MB, FIFO: \(FIFOSize/KB)KB", level: .Debug)
+        Log("Sizes: VRAM: \(VRAMSize/MB)MB, FB: \(FrameBufferSize/MB)MB, FIFO: \(FIFOSize/KB)KB", level: .Verbose)
         
         if FrameBufferSize < MB {
             Log("Framebuffer size too small!", level: .Error)
@@ -119,8 +119,14 @@ class SVGA: VideoModule, PCIModule {
         Write(register: .BitsPerPixel, value: 32)
         Write(register: .Enable, value: 1)
 
-        mainView = View(mainView: (size: Size.init(width: Int(Read(register: .Width)), height: Int(Read(register: .Height))), depth: Int(Read(register: .BitsPerPixel))))
+        mainView = MainView(size: Size.init(width: Int(Read(register: .Width)), height: Int(Read(register: .Height))), depth: Int(Read(register: .BitsPerPixel)))
         System.sharedInstance.Video = self
+        if let tools = System.sharedInstance.modulesController.modules.first(where: {$0 is VMwareTools}) as? VMwareTools {
+            Log("Got Tools: \(tools.self)", level: .Debug)
+        }
+//        if let tools = System.sharedInstance.modulesController.modules.first(where: {type(of: $0) == VMwareTools.self}) {
+//            Log("Got Tools: \(type(of: tools))", level: .Debug)
+//        }
 //        if let tools = System.sharedInstance.modulesController.modules.first(where: {$0 is VMwareTools}) as? VMwareTools {
 //            tools.RegisterResolutionCapabilities()
 //        }

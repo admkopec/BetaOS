@@ -295,6 +295,7 @@ vstart(vm_offset_t boot_args_start) {
     x86_init_wrapper(is_boot_cpu ? (uintptr_t) i386_init : (uintptr_t) i386_init_slave, cpu_datap(cpu)->cpu_int_stack_top);
 }
 #include "acpi.h"
+bool beforeInited = true;
 extern bool enable;
 extern bool use_screen_caching;
 extern uint64_t Screen;

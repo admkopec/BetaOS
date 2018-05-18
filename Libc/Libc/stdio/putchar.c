@@ -3,13 +3,12 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 12/8/15.
-//  Copyright © 2015 Adam Kopeć. All rights reserved.
+//  Copyright © 2015-2018 Adam Kopeć. All rights reserved.
 //
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-//#include <kernel/tty.h>
 
 extern void vsputc(int ch);
 extern void serial_putc(int c);

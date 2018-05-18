@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 11/13/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
@@ -25,6 +25,24 @@ final class PCI {
     fileprivate(set) public var Class    : UInt8  = 0x00
     fileprivate(set) public var Subclass : UInt8  = 0x00
     fileprivate(set) public var ProgIF   : UInt8  = 0x00
+    var InterruptLine: UInt8 {
+        get {
+            return UInt8(truncatingIfNeeded: GetConfig(offset: 0x3C))
+        }
+        set {
+            let data = GetConfig(offset: 0x3C) & 0xFFFFFF00
+            WriteConfig(offset: 0x3C, data: data + UInt32(newValue))
+        }
+    }
+    var InterruptPin: UInt8 {
+        get {
+            return UInt8(truncatingIfNeeded: (GetConfig(offset: 0x3C) << 2))
+        }
+        set {
+            let data = GetConfig(offset: 0x3C) & 0xFFFF00FF
+            WriteConfig(offset: 0x3C, data: data + UInt32(newValue << 2))
+        }
+    }
     public var isValid: Bool {
         if VendorID == 0x0000 {
             return false

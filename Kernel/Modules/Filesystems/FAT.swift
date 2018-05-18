@@ -3,8 +3,10 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/31/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
+
+import CustomArrays
 
 class FATHeader {
     let BootJMP: (UInt8, UInt8, UInt8)
@@ -22,7 +24,7 @@ class FATHeader {
     
     let TotalSectors: Int
     
-    init(data: UnsafeMutableBufferPointer<UInt8>) {
+    init(data: MutableData) {
         BootJMP = (data[0], data[1], data[2])
         var i = 3
         while i < 11 {
@@ -57,7 +59,7 @@ final class FAT16Header: FATHeader { // and also FAT12
     var VolumeLabel  = ""
     var FATTypeLabel = ""
     
-    override init(data: UnsafeMutableBufferPointer<UInt8>) {
+    override init(data: MutableData) {
         BiosDriveNumber = data[36]
         BootSignature   = data[38]
         VolumeID        = ByteArray(withBytes: data[39], data[40], data[41], data[42]).asUInt32
@@ -91,7 +93,7 @@ final class FAT32Header: FATHeader {
     var VolumeLabel  = ""
     var FATTypeLabel = ""
     
-    override init(data: UnsafeMutableBufferPointer<UInt8>) {
+    override init(data: MutableData) {
         let TableSize32 = ByteArray(withBytes: data[36], data[37], data[38], data[39]).asInt
         ExtendedFlags   = ByteArray(withBytes: data[40], data[41]).asUInt16
         FATVersion      = (Major: data[42], Minor: data[43])
@@ -133,7 +135,7 @@ struct DirectoryEntry {
     var Size: Int
     var FirstCluster: UInt32
     
-    init?(data: UnsafeMutableBufferPointer<UInt8>, offset: Int) {
+    init?(data: MutableData, offset: Int) {
         Offset = offset
         Name = ""
         Extension = ""
@@ -150,12 +152,18 @@ struct DirectoryEntry {
             i += 1
         }
         Name = Name.trim()
+        if Name == " " {
+            Name = ""
+        }
         i = 8
         while i < 11 {
             Extension.append(String(UnicodeScalar(data[i])))
             i += 1
         }
         Extension = Extension.trim()
+        if Extension == " " {
+            Extension = ""
+        }
         Flags = data[11]
         CreationTime = data[13]
         var timeBits = BitArray(ByteArray(withBytes: data[14], data[15]).asUInt16)
@@ -166,9 +174,9 @@ struct DirectoryEntry {
         FirstCluster = ByteArray([data[20], data[21]]).asUInt32 << 32 + ByteArray([data[26], data[27]]).asUInt32
     }
     
-    var computed: UnsafeMutableBufferPointer<UInt8> {
-        let buffer = UnsafeMutableBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>.allocate(capacity: 32), count: 32)
-        var bytes = ByteArray(Array<UInt8>(Name.utf8))
+    var computed: [UInt8] {
+        var buffer = [UInt8](repeating: 0, count: 32)
+        var bytes = ByteArray([UInt8](Name.utf8))
         var i = 0
         for byte in bytes {
             buffer[i] = byte
@@ -180,7 +188,7 @@ struct DirectoryEntry {
             }
         }
         i = 8
-        bytes = ByteArray(Array<UInt8>(Extension.utf8))
+        bytes = ByteArray([UInt8](Extension.utf8))
         for byte in bytes {
             buffer[i] = byte
             i += 1
@@ -207,10 +215,11 @@ struct DirectoryEntry {
     }
 }
 
-final class FAT12: Partition {
+class FAT12: Partition {
     let Header: FAT16Header
     let VolumeName: String
     let AlternateName: String
+    var CaseSensitive: Bool { return false }
     fileprivate let DiskDevice: Disk
     fileprivate let FirstLBA: UInt64
     fileprivate let FirstUsableCluster: Int
@@ -247,19 +256,20 @@ final class FAT12: Partition {
         //
     }
     
-    func ReadFile(fromCluster: UInt32) -> UnsafeMutableBufferPointer<UInt8>? {
+    func ReadFile(fromCluster: UInt32) -> MutableData? {
         return nil
     }
     
-    func WriteFile(fromCluster: UInt32, file: UnsafeMutableBufferPointer<UInt8>) {
+    func WriteFile(fromCluster: UInt32, file: MutableData) {
         //
     }
 }
 
-final class FAT16: Partition {
+class FAT16: Partition {
     let Header: FAT16Header
     let VolumeName: String
     let AlternateName: String
+    var CaseSensitive: Bool { return false }
     fileprivate let DiskDevice: Disk
     fileprivate let FirstLBA: UInt64
     fileprivate let FirstUsableCluster: Int
@@ -296,11 +306,11 @@ final class FAT16: Partition {
         //
     }
     
-    func ReadFile(fromCluster: UInt32) -> UnsafeMutableBufferPointer<UInt8>? {
+    func ReadFile(fromCluster: UInt32) -> MutableData? {
         return nil
     }
     
-    func WriteFile(fromCluster: UInt32, file: UnsafeMutableBufferPointer<UInt8>) {
+    func WriteFile(fromCluster: UInt32, file: MutableData) {
         //
     }
 }
@@ -309,14 +319,17 @@ class FAT32: Partition {
     let Header: FAT32Header
     let VolumeName: String
     let AlternateName: String
+    var CaseSensitive: Bool { return false }
     fileprivate let DiskDevice: Disk
     fileprivate let FirstLBA: UInt64
+    fileprivate let LastLBA: UInt64
     fileprivate let FirstUsableCluster: Int
     fileprivate let SectorsPerCluster: Int
     
     init?(partitionEntry: GPTPartitionEntry, onDisk disk: Disk) {
         DiskDevice = disk
         FirstLBA   = UInt64(partitionEntry.FirstLBA)
+        LastLBA    = UInt64(partitionEntry.LastLBA)
         Header = FAT32Header(data: disk.read(lba: FirstLBA))
         guard Header.FATTypeLabel == "FAT32" else {
             return nil
@@ -330,7 +343,7 @@ class FAT32: Partition {
         FirstUsableCluster = partitionEntry.FirstLBA + Int(Header.ReservedSectorCount) + (Int(Header.NumberOfAllocationTables) * (Header.TableSize))
         SectorsPerCluster = Int(Header.SectorsPerCluster)
         guard Header.BytesPerSector == 512 else {
-            kprint("Sector sizes do not match! Can't support it yet")
+            kprint("Sector sizes do not match! Can't support that yet")
             return nil
         }
     }
@@ -390,18 +403,16 @@ class FAT32: Partition {
     
     func ReadFile(fromCluster: UInt32) -> UnsafeMutableBufferPointer<UInt8>? {
         guard fromCluster != 0 else {
-            kprint("It's a ditrectory!")
+            kprint("It's a directory!")
             return nil
         }
         let clusters = GetClusterChain(firstCluster: fromCluster)
-        guard clusters.count == 1 else {
-            kprint("Cannot read a file that is longer than one sector")
-            return nil
+        let count = clusters.count * 512
+        let File = UnsafeMutableBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>.allocate(capacity: count), count: count)
+        for (i, cluster) in clusters.enumerated() {
+            _ = DiskDevice.read(lba: GetLBA(fromCluster: cluster), count: SectorsPerCluster, buffer: UnsafeMutableBufferPointer<UInt8>(start: File.baseAddress!.advanced(by: i * 512 * SectorsPerCluster), count: 512 * SectorsPerCluster))
         }
-        for cluster in clusters {
-            return DiskDevice.read(lba: GetLBA(fromCluster: cluster), count: SectorsPerCluster)
-        }
-        return nil
+        return File
     }
     
     func WriteFile(fromCluster: UInt32, file: UnsafeMutableBufferPointer<UInt8>) {
@@ -415,8 +426,8 @@ class FAT32: Partition {
             if i >= file.count {
                 let buf = UnsafeMutableBufferPointer<UInt8>(start: UnsafeMutablePointer<UInt8>.allocate(capacity: 512), count: 512)
                 DiskDevice.write(lba: GetLBA(fromCluster: cluster), count: SectorsPerCluster, buffer: buf.baseAddress!)
+                buf.deallocate()
                 continue
-                
             }
             DiskDevice.write(lba: GetLBA(fromCluster: cluster), count: SectorsPerCluster, buffer: file.baseAddress!.advanced(by: i))
             i += 512
@@ -434,11 +445,12 @@ class FAT32: Partition {
         
         while (chain != 0) && (chain & 0x0FFFFFFF) < 0x0FFFFFF8 {
             let FATSector = FirstLBA + UInt64(Header.ReservedSectorCount) + (UInt64(cluster * 4) / 512)
-            let FATOffset = Int(cluster % 512)
-            
-            let buffer = UnsafeBufferPointer<UInt32>(start: UnsafeMutablePointer<UInt32>(bitPattern: UInt(bitPattern: DiskDevice.read(lba: FATSector).baseAddress)) , count: 128)
+            let FATOffset = Int((cluster * 4) % 512) / 4
+            let buffer = UnsafeBufferPointer<UInt32>(start: UnsafeMutablePointer<UInt32>(bitPattern: UInt(bitPattern: DiskDevice.read(lba: FATSector).baseAddress)), count: 128)
             chain = buffer[FATOffset] & 0x0FFFFFFF
-            array.append(cluster)
+            if cluster <= LastLBA {
+                array.append(cluster)
+            }
             cluster = chain
         }
         return array
@@ -451,7 +463,6 @@ class FAT32: Partition {
         while (chain != 0) && (chain & 0x0FFFFFFF) < 0x0FFFFFF8 {
             let FATSector = FirstLBA + UInt64(Header.ReservedSectorCount) + (UInt64(cluster * 4) / 512)
             let FATOffset = Int(cluster % 512)
-            
             let buffer = UnsafeMutableBufferPointer<UInt32>(start: UnsafeMutablePointer<UInt32>(bitPattern: UInt(bitPattern: DiskDevice.read(lba: FATSector).baseAddress)) , count: 128)
             chain = buffer[FATOffset] & 0x0FFFFFFF
             buffer[FATOffset] = 0

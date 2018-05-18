@@ -3,18 +3,19 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/16/17.
-//  Copyright © 2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2017-2018 Adam Kopeć. All rights reserved.
 //
 
 import Addressing
+import CommonExtensions
 import Loggable
+import Graphics
 
 class VESA: VideoModule {
     let Name: String = "VESA"
     fileprivate let VRAMSize: Int
     fileprivate(set) var Display: (Resolution: Size, Depth: Int)
-    var mainView: View
-    var childViews = [View]()
+    var mainView: MainView
     
     fileprivate var FrameBufferBase: Address
     
@@ -27,7 +28,7 @@ class VESA: VideoModule {
         
         Display.Resolution = Size(width: Int(BootVideo.v_width), height: Int(BootVideo.v_height))
         Display.Depth      = Int(BootVideo.v_depth)
-        mainView = View(mainView: (size: Display.Resolution, depth: Display.Depth))
+        mainView = MainView(size: Display.Resolution, depth: Display.Depth)
         FrameBufferBase = Address(BootVideo.v_baseAddr, size: vm_size_t(BootVideo.v_length))
         VRAMSize = Int(BootVideo.v_length)
     }

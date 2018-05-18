@@ -10,6 +10,7 @@
 #include <i386/proc_reg.h>
 
 /* nanotime convertion info */
+int cliCalled = -1;
 pal_rtc_nanotime_t pal_rtc_nanotime_info = {0,0,0,0,1,0};
 
 void
@@ -20,13 +21,16 @@ pal_get_control_registers(pal_cr_t *cr0, pal_cr_t *cr2, pal_cr_t *cr3, pal_cr_t 
     *cr4 = get_cr4();
 }
 
-
 /* <Temporary> */
 #include <i386/pio.h>
 /* standard port addresses */
 enum {
-    COM1_PORT_ADDR = 0x3f8,
-    COM2_PORT_ADDR = 0x2f8
+    COM1_PORT_ADDR = 0x3F8,
+    COM2_PORT_ADDR = 0x2F8,
+    COM3_PORT_ADDR = 0x3E8,
+    LPT1_PORT_ADDR = 0x378,
+    LPT2_PORT_ADDR = 0x278,
+    LPT3_PORT_ADDR = 0x3BC
 };
 
 /* UART register offsets */

@@ -3,7 +3,7 @@
 //  Kernel
 //
 //  Created by Adam Kopeć on 12/13/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #include "acpi.h"
@@ -62,6 +62,7 @@ typedef uint8_t byte;
 typedef uint16_t word;
 typedef uint32_t dword;
 
+bool isAHCI = false;
 RSDP_for_Swift   RSDP_   = {.RSDP   = (void*) 0, .OriginalAddress = 0, .foundInBios = false};
 SMBIOS_for_Swift SMBIOS_ = {.SMBIOS = (void*) 0, .OriginalAddress = 0, .foundInBios = false};
 

@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 6/20/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #ifndef IntelE1000Controller_hpp
@@ -16,6 +16,7 @@
 #define E1000_82540EM               0x100E  // Device ID for the e1000 Qemu, Bochs, and VirtualBox emmulated NICs
 #define E1000_I217                  0x153A  // Device ID for Intel I217
 #define E1000_82574                 0x10D3  // Device ID for Intel 82574 (not sure if it'll work)
+#define E1000_82574LA               0x10F6  // Device ID for Intel 82574LA
 #define E1000_82577LM               0x10EA  // Device ID for Intel 82577LM
 #define E1000_82579LM               0x1502  // Device ID for Intel 82579LM
 #define E1000_82579V                0x1503  // Device ID for Intel 82579V
@@ -191,7 +192,7 @@ private:
     uint16_t    tx_cur;         // Current Transmit Descriptor Buffer
     
     static const int SupportedVendorIDs[1];
-    static const int SupportedDeviceIDs[42];
+    static const int SupportedDeviceIDs[43];
     
     // Send Commands and read results From NICs either using MMIO or IO Ports
     void     writeCommand(uint16_t p_address, uint32_t p_value);

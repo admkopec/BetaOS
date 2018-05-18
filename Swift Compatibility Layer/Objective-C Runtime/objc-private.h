@@ -13,7 +13,7 @@
 #endif
 
 #define OBJC_TYPES_DEFINED 1
-#define OBJC_OLD_DISPATCH_PROTOTYPES 0
+#define OBJC_OLD_DISPATCH_PROTOTYPES 1
 
 #include <stdint.h>
 #include <assert.h>
@@ -47,7 +47,8 @@ union isa_t {
     // uintptr_t lock : 2;        // lock for atomic property, @synch
     // uintptr_t extraBytes : 1;  // allocated with extra bytes
     
-#   define ISA_MASK        0x00007ffffffffff8ULL
+//#   define ISA_MASK        0x00007ffffffffff8ULL
+#   define ISA_MASK        0xfffffffffffffff8ULL
 #   define ISA_MAGIC_MASK  0x001f800000000001ULL
 #   define ISA_MAGIC_VALUE 0x001d800000000001ULL
     struct {

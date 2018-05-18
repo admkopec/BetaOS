@@ -21,6 +21,6 @@ io_map(vm_offset_t phys_addr, vm_size_t size, unsigned int flags) {
     vm_offset_t	start;
     start = virtual_avail;
     virtual_avail += round_page(size);
-    (void) pmap_map_bd(start, phys_addr, phys_addr + round_page(size), VM_PROT_READ | VM_PROT_WRITE, flags);
+    (void) pmap_map_bd(start, phys_addr, phys_addr + round_page(size), VM_PROT_READ | VM_PROT_WRITE | VM_PROT_EXECUTE, flags);
     return (start);
 }

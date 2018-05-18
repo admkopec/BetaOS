@@ -46,7 +46,6 @@ memdup(const void *mem, size_t len) {
     return dup;
 }
 
-
 struct bucket_t {
 private:
     cache_key_t _key;
@@ -88,6 +87,8 @@ public:
     
     static void bad_cache(id receiver, SEL sel, Class isa) __attribute__((noreturn));
 };
+
+typedef struct classref * classref_t;
 
 template <typename Element, typename List, uint32_t FlagMask>
 struct entsize_list_tt {
@@ -295,8 +296,7 @@ struct protocol_t : objc_object {
     void setFixedUp();
     
     bool hasExtendedMethodTypesField() const {
-        return size >= (offsetof(protocol_t, extendedMethodTypes)
-                        + sizeof(extendedMethodTypes));
+        return size >= (offsetof(protocol_t, extendedMethodTypes) + sizeof(extendedMethodTypes));
     }
     bool hasExtendedMethodTypes() const {
         return hasExtendedMethodTypesField() && extendedMethodTypes;
@@ -766,13 +766,15 @@ struct class_rw_t {
     
     char *demangledName;
     
-//    void setFlags(uint32_t set) {
+    void setFlags(uint32_t set) {
+        flags |= set;
 //        OSAtomicOr32Barrier(set, &flags);
-//    }
+    }
     
-//    void clearFlags(uint32_t clear) {
+    void clearFlags(uint32_t clear) {
+        flags ^= clear;
 //        OSAtomicXor32Barrier(clear, &flags);
-//    }
+    }
     
     // set and clear must not overlap
     void changeFlags(uint32_t set, uint32_t clear) {
@@ -814,23 +816,25 @@ private:
     }
 #endif
     
-//    void setBits(uintptr_t set) {
+    void setBits(uintptr_t set) {
 //        uintptr_t oldBits;
 //        uintptr_t newBits;
 //        do {
 //            oldBits = LoadExclusive(&bits);
 //            newBits = updateFastAlloc(oldBits | set, set);
 //        } while (!StoreReleaseExclusive(&bits, oldBits, newBits));
-//    }
-//
-//    void clearBits(uintptr_t clear) {
+        bits |= set;
+    }
+
+    void clearBits(uintptr_t clear) {
 //        uintptr_t oldBits;
 //        uintptr_t newBits;
 //        do {
 //            oldBits = LoadExclusive(&bits);
 //            newBits = updateFastAlloc(oldBits & ~clear, clear);
 //        } while (!StoreReleaseExclusive(&bits, oldBits, newBits));
-//    }
+        bits &= ~clear;
+    }
     
 public:
     
@@ -846,33 +850,33 @@ public:
     bool hasDefaultRR() {
         return getBit(FAST_HAS_DEFAULT_RR);
     }
-//    void setHasDefaultRR() {
-//        setBits(FAST_HAS_DEFAULT_RR);
-//    }
-//    void setHasCustomRR() {
-//        clearBits(FAST_HAS_DEFAULT_RR);
-//    }
+    void setHasDefaultRR() {
+        setBits(FAST_HAS_DEFAULT_RR);
+    }
+    void setHasCustomRR() {
+        clearBits(FAST_HAS_DEFAULT_RR);
+    }
     
 #if FAST_HAS_DEFAULT_AWZ
     bool hasDefaultAWZ() {
         return getBit(FAST_HAS_DEFAULT_AWZ);
     }
-//    void setHasDefaultAWZ() {
-//        setBits(FAST_HAS_DEFAULT_AWZ);
-//    }
-//    void setHasCustomAWZ() {
-//        clearBits(FAST_HAS_DEFAULT_AWZ);
-//    }
+    void setHasDefaultAWZ() {
+        setBits(FAST_HAS_DEFAULT_AWZ);
+    }
+    void setHasCustomAWZ() {
+        clearBits(FAST_HAS_DEFAULT_AWZ);
+    }
 #else
     bool hasDefaultAWZ() {
         return data()->flags & RW_HAS_DEFAULT_AWZ;
     }
-//    void setHasDefaultAWZ() {
-//        data()->setFlags(RW_HAS_DEFAULT_AWZ);
-//    }
-//    void setHasCustomAWZ() {
-//        data()->clearFlags(RW_HAS_DEFAULT_AWZ);
-//    }
+    void setHasDefaultAWZ() {
+        data()->setFlags(RW_HAS_DEFAULT_AWZ);
+    }
+    void setHasCustomAWZ() {
+        data()->clearFlags(RW_HAS_DEFAULT_AWZ);
+    }
 #endif
     
 #if FAST_HAS_CXX_CTOR
@@ -886,9 +890,9 @@ public:
     bool hasCxxCtor() {
         return data()->flags & RW_HAS_CXX_CTOR;
     }
-//    void setHasCxxCtor() {
-//        data()->setFlags(RW_HAS_CXX_CTOR);
-//    }
+    void setHasCxxCtor() {
+        data()->setFlags(RW_HAS_CXX_CTOR);
+    }
 #endif
     
 #if FAST_HAS_CXX_DTOR
@@ -902,18 +906,18 @@ public:
     bool hasCxxDtor() {
         return data()->flags & RW_HAS_CXX_DTOR;
     }
-//    void setHasCxxDtor() {
-//        data()->setFlags(RW_HAS_CXX_DTOR);
-//    }
+    void setHasCxxDtor() {
+        data()->setFlags(RW_HAS_CXX_DTOR);
+    }
 #endif
     
 #if FAST_REQUIRES_RAW_ISA
     bool requiresRawIsa() {
         return getBit(FAST_REQUIRES_RAW_ISA);
     }
-//    void setRequiresRawIsa() {
-//        setBits(FAST_REQUIRES_RAW_ISA);
-//    }
+    void setRequiresRawIsa() {
+        setBits(FAST_REQUIRES_RAW_ISA);
+    }
 #else
 # if SUPPORT_NONPOINTER_ISA
 #   error oops
@@ -968,12 +972,12 @@ public:
         return getBit(FAST_IS_SWIFT);
     }
     
-//    void setIsSwift() {
-//        setBits(FAST_IS_SWIFT);
-//    }
+    void setIsSwift() {
+        setBits(FAST_IS_SWIFT);
+    }
 };
 
-
+static Class realizeClass(Class cls);
 struct objc_class : objc_object {
     // Class ISA;
     Class superclass;
@@ -987,15 +991,15 @@ struct objc_class : objc_object {
         bits.setData(newData);
     }
     
-//    void setInfo(uint32_t set) {
-//        assert(isFuture()  ||  isRealized());
-//        data()->setFlags(set);
-//    }
+    void setInfo(uint32_t set) {
+        assert(isFuture()  ||  isRealized());
+        data()->setFlags(set);
+    }
     
-//    void clearInfo(uint32_t clear) {
-//        assert(isFuture()  ||  isRealized());
-//        data()->clearFlags(clear);
-//    }
+    void clearInfo(uint32_t clear) {
+        assert(isFuture()  ||  isRealized());
+        data()->clearFlags(clear);
+    }
     
     // set and clear must not overlap
     void changeInfo(uint32_t set, uint32_t clear) {
@@ -1007,20 +1011,20 @@ struct objc_class : objc_object {
     bool hasCustomRR() {
         return ! bits.hasDefaultRR();
     }
-//    void setHasDefaultRR() {
-//        assert(isInitializing());
-//        bits.setHasDefaultRR();
-//    }
+    void setHasDefaultRR() {
+        assert(isInitializing());
+        bits.setHasDefaultRR();
+    }
     void setHasCustomRR(bool inherited = false);
     void printCustomRR(bool inherited);
     
     bool hasCustomAWZ() {
         return ! bits.hasDefaultAWZ();
     }
-//    void setHasDefaultAWZ() {
-//        assert(isInitializing());
-//        bits.setHasDefaultAWZ();
-//    }
+    void setHasDefaultAWZ() {
+        assert(isInitializing());
+        bits.setHasDefaultAWZ();
+    }
     void setHasCustomAWZ(bool inherited = false);
     void printCustomAWZ(bool inherited);
     
@@ -1046,18 +1050,18 @@ struct objc_class : objc_object {
 //        assert(isRealized());
         return bits.hasCxxCtor();
     }
-//    void setHasCxxCtor() {
-//        bits.setHasCxxCtor();
-//    }
+    void setHasCxxCtor() {
+        bits.setHasCxxCtor();
+    }
     
     bool hasCxxDtor() {
         // addSubclass() propagates this flag from the superclass.
 //        assert(isRealized());
         return bits.hasCxxDtor();
     }
-//    void setHasCxxDtor() {
-//        bits.setHasCxxDtor();
-//    }
+    void setHasCxxDtor() {
+        bits.setHasCxxDtor();
+    }
     
     
     bool isSwift() {
@@ -1078,19 +1082,19 @@ struct objc_class : objc_object {
         return data()->flags & RW_FINALIZE_ON_MAIN_THREAD;
     }
     
-//    void setShouldFinalizeOnMainThread() {
-//        assert(isRealized());
-//        setInfo(RW_FINALIZE_ON_MAIN_THREAD);
-//    }
+    void setShouldFinalizeOnMainThread() {
+        assert(isRealized());
+        setInfo(RW_FINALIZE_ON_MAIN_THREAD);
+    }
     
     bool isInitializing() {
         return getMeta()->data()->flags & RW_INITIALIZING;
     }
     
-//    void setInitializing() {
-//        assert(!isMetaClass());
-//        ISA()->setInfo(RW_INITIALIZING);
-//    }
+    void setInitializing() {
+        assert(!isMetaClass());
+        ISA()->setInfo(RW_INITIALIZING);
+    }
     
     bool isInitialized() {
         return getMeta()->data()->flags & RW_INITIALIZED;
@@ -1107,6 +1111,8 @@ struct objc_class : objc_object {
     
     // Locking: To prevent concurrent realization, hold runtimeLock.
     bool isRealized() {
+//        if (!(data()->flags & RW_REALIZED))
+//            realizeClass((Class)this);
         return data()->flags & RW_REALIZED;
     }
     
@@ -1195,4 +1201,54 @@ struct swift_class_t : objc_class {
     }
 };
 
+
+struct category_t {
+    const char *name;
+    classref_t cls;
+    struct method_list_t   *instanceMethods;
+    struct method_list_t   *classMethods;
+    struct protocol_list_t *protocols;
+    struct property_list_t *instanceProperties;
+    
+    method_list_t *methodsForMeta(bool isMeta) {
+        if (isMeta) return classMethods;
+            else return instanceMethods;
+    }
+    
+    property_list_t *propertiesForMeta(bool isMeta) {
+        if (isMeta) return 0;
+        else return instanceProperties;
+    }
+};
+
+struct message_ref_t {
+//    IMP imp;
+    SEL sel;
+};
+
+static inline void
+foreach_realized_class_and_subclass_2(Class top, bool (^code)(Class)) {
+    assert(top);
+    Class cls = top;
+    while (1) {
+        if (!code(cls)) break;
+        
+        if (cls->data()->firstSubclass) {
+            cls = cls->data()->firstSubclass;
+        } else {
+            while (!cls->data()->nextSiblingClass  &&  cls != top) {
+                cls = cls->superclass;
+            }
+            if (cls == top) break;
+            cls = cls->data()->nextSiblingClass;
+        }
+    }
+}
+
+static inline void
+foreach_realized_class_and_subclass(Class top, void (^code)(Class)) {
+    foreach_realized_class_and_subclass_2(top, ^bool(Class cls) {
+        code(cls); return true;
+    });
+}
 #endif /* runtime_private_h */

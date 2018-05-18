@@ -85,7 +85,7 @@ pmap_pcid_configure(void) {
         return;
     }
     if (pcid_present == true) {
-        pmap_pcid_log("Pre-PCID:CR0: 0x%lx, CR3: 0x%lx, CR4(CPU %d): 0x%llx\n", get_cr0(), get_cr3_raw(), ccpu, cr4);
+        pmap_pcid_log("Pre-PCID:CR0: 0x%lx, CR3: 0x%lx, CR4(CPU %d): 0x%lx\n", get_cr0(), get_cr3_raw(), ccpu, cr4);
         
         if (cpu_number() >= PMAP_PCID_MAX_CPUS) {
             panic("PMAP_PCID_MAX_CPUS %d\n", cpu_number());

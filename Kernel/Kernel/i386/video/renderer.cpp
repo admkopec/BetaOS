@@ -3,7 +3,7 @@
 //  BetaOS
 //
 //  Created by Adam Kopeć on 9/12/16.
-//  Copyright © 2016-2017 Adam Kopeć. All rights reserved.
+//  Copyright © 2016-2018 Adam Kopeć. All rights reserved.
 //
 
 #include <stdint.h>
@@ -12,6 +12,7 @@
 #include <string.h>
 extern "C" {
 #include <platform/platform.h>
+#include <i386/pal.h>
 #include "font.h"
 //#include "../misc_protos.h"
 
@@ -57,6 +58,7 @@ uint32_t line = 0;
 uint32_t col  = 0;
 void
 clear_screen() {
+    pal_cli();
     for (/*uint32_t */line = 0; line + ISO_CHAR_HEIGHT < Platform_state.video.v_height; line+=ISO_CHAR_HEIGHT) {
         for (/*uint32_t */col = 0; col < Platform_state.video.v_width; col+=ISO_CHAR_WIDTH) {
             paint_char(col, line, '\0');
@@ -64,6 +66,7 @@ clear_screen() {
     }
     row=0;
     column=0;
+    pal_sti();
 }
 
 static void
@@ -114,7 +117,7 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
     
     where = (uint32_t*)(Platform_state.video.v_baseAddr + (y * Platform_state.video.v_rowBytes) + (x * 4));
     where_screen = (uint32_t*)(Screen + (y * Platform_state.video.v_rowBytes) + (x * 4));
-    
+    pal_cli();
     for (i = 0; i < ISO_CHAR_HEIGHT; i++) {
         uint32_t *store  = where;
         uint32_t *store2 = where_screen;
@@ -148,6 +151,7 @@ paint_char(unsigned int x, unsigned int y, unsigned char ch) {
         where = (uint32_t *)(((unsigned char*)where)+Platform_state.video.v_rowBytes);
         where_screen = (uint32_t *)(((unsigned char*) where_screen) + Platform_state.video.v_rowBytes);
     }
+    pal_sti();
 }
 
 static void
@@ -203,6 +207,7 @@ scroll_up() {
         from = to + linelongs;
     }
     i    = (uint32_t)((Platform_state.video.v_height / ISO_CHAR_HEIGHT) - 1);
+    pal_cli();
     canUseSSEmemcpy = true;
     while (i-- > 0) {
         for (line = 0; line < ISO_CHAR_HEIGHT; line++) {
@@ -219,22 +224,9 @@ scroll_up() {
     }
     clear_screen_(0, row, (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
     clear_screen_(0, (uint32_t)((Platform_state.video.v_height) - ISO_CHAR_HEIGHT), (uint32_t)(Platform_state.video.v_height / ISO_CHAR_HEIGHT));
-    if (!experimental) {
-        refresh_screen();
-    }
     canUseSSEmemcpy = false;
+    pal_sti();
 }
-
-//void
-//refresh_screen() {
-//    if (!modified) {
-//        return;
-//    }
-//    modified = false;
-//    canUseSSEmemcpy = true;
-//    memcpy((void *) Platform_state.video.v_baseAddr, (void *) Screen, Platform_state.video.v_length);
-//    canUseSSEmemcpy = false;
-//}
 
 void
 vsputc(int ch) {
@@ -246,6 +238,15 @@ vsputc(int ch) {
         }
         row+=ISO_CHAR_HEIGHT;
         column=0;
+        return;
+    }
+    if (ch=='\t') {
+        if (column + 5 * ISO_CHAR_WIDTH + ISO_CHAR_WIDTH < Platform_state.video.v_width) {
+            column += 5 * ISO_CHAR_WIDTH;
+            return;
+        }
+        row += ISO_CHAR_HEIGHT;
+        column = 0;
         return;
     }
     if (ch=='\b') {
