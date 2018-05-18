@@ -1,11 +1,19 @@
 # BetaOS
 The BetaOS in this version is not yet officially ready for use on real hardware. It shouldn't break your machine, although use with caution.<br />
 For your and your hardware safety use it only as VM.<br />
-To compile the source code you need Apple's Xcode 9.0 or later.<br />
+To compile the source code you need Apple's Xcode 9.3 or later.<br />
 Now installation got even easier with dmg disk for VMs (or you can restore it to USB) and USB directory which contents you only need to copy to your USB to make it bootable, proper blessing is required on Mac.<br />
 PC users should use Clover bootloader to boot the MACH-O binary through included boot.efi(Apple).
 
 ## Changelog:
+### Version 0.41:
+* Added APIC support.
+* Added an AML Parser (Needs a few fixes).
+* Added a PNG Reader Class which needs more work to read files properly.
+* Made a few changes to Objective C Runtime.
+* Migrated to Swift 4.1.
+* And a lot of minor changes and improvements.
+
 ### Version 0.40.2:
 * Improved data recieving from disk.
 * Added an early work in progress NVMe module.
