@@ -4,7 +4,7 @@ For your and your hardware safety use it only as VM.<br />
 To compile the source code you need Apple's/LLVM's clang and binutils (ld and ar) for target x86_64-elf for instructions how to build the cross compiler (ld and ar) visit this [page](http://wiki.osdev.org/GCC_Cross-Compiler).<br />
 Now you can run the BetaOS from ISO.
 
-###Changelog:
+### Changelog:
 * Screen printing is working.
 * Keyboard input is working.
 * Commands are working.
